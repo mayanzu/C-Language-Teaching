@@ -176,6 +176,28 @@ main {
     border-radius: 8px;
     padding: 20px;
     position: relative;
+    border: 1px solid #3e3e3e;
+}
+
+.code-example-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3e3e3e;
+}
+
+.code-language-label {
+    color: #61dafb;
+    font-size: 0.85em;
+    font-weight: bold;
+    background: rgba(97, 218, 251, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(97, 218, 251, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .code-example-container h3 {
@@ -186,16 +208,113 @@ main {
 
 .code-example-container pre {
     background: #1e1e1e;
-    padding: 15px;
-    border-radius: 5px;
+    padding: 20px;
+    border-radius: 6px;
     overflow-x: auto;
-    margin-bottom: 15px;
+    margin: 0;
+    border: 1px solid #3e3e3e;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.code-example-container pre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #667eea, transparent);
 }
 
 .code-example-container code {
     color: #d4d4d4;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 0.95em;
+    line-height: 1.6;
+    tab-size: 4;
+    white-space: pre;
+}
+
+/* 语法高亮样式 */
+.code-keyword {
+    color: #569cd6;
+    font-weight: bold;
+}
+
+.code-function {
+    color: #dcdcaa;
+}
+
+.code-string {
+    color: #ce9178;
+}
+
+.code-comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.code-number {
+    color: #b5cea8;
+}
+
+.code-operator {
+    color: #d4d4d4;
+}
+
+.code-type {
+    color: #4ec9b0;
+}
+
+.code-variable {
+    color: #9cdcfe;
+}
+
+.code-macro {
+    color: #c586c0;
+}
+
+.code-include {
+    color: #4ec9b0;
+}
+
+/* 确保题目文本中的其他内容正确显示 */
+#question-text {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 题目文本的段落样式 */
+#question-text p {
+    margin: 10px 0;
+}
+
+/* 代码行号样式 */
+.code-with-line-numbers {
+    counter-reset: line;
+}
+
+.code-line {
+    display: block;
+    padding-left: 2.5em;
+    position: relative;
+}
+
+.code-line::before {
+    counter-increment: line;
+    content: counter(line);
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2em;
+    color: #6a6a6a;
+    text-align: right;
+    padding-right: 1em;
+    border-right: 1px solid #3e3e3e;
+    background: #1a1a1a;
+    font-size: 0.8em;
     line-height: 1.6;
 }
 

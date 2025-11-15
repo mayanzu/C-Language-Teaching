@@ -28,6 +28,7 @@ class PracticeApp {
             feedback: document.getElementById('feedback'),
             codeExample: document.getElementById('code-example'),
             codeExampleContainer: document.getElementById('code-example-container'),
+            codeLanguageLabel: document.getElementById('code-language-label'),
             copyBtn: document.getElementById('copy-btn'),
             currentQuestionSpan: document.getElementById('current-question'),
             totalQuestionsSpan: document.getElementById('total-questions'),
@@ -102,7 +103,10 @@ class PracticeApp {
 
         // 更新题目信息
         this.elements.currentQuestionSpan.textContent = index + 1;
-        this.elements.questionText.textContent = `${question.id}. ${question.question}`;
+        
+        // 处理题目描述中的代码块（markdown格式转换为格式化代码）
+        const formattedQuestion = this.formatQuestionText(`${question.id}. ${question.question}`);
+        this.elements.questionText.innerHTML = formattedQuestion;
 
         // 清空并生成选项
         this.elements.optionsContainer.innerHTML = '';
@@ -176,10 +180,13 @@ class PracticeApp {
 
         // 显示代码示例
         this.currentCodeText = question.codeExample;
-        this.elements.codeExample.textContent = this.currentCodeText;
         
-        // 简单的语法高亮
-        this.highlightCode();
+        // 自动检测代码语言
+        const language = this.detectCodeLanguage(this.currentCodeText);
+        this.elements.codeLanguageLabel.textContent = language.toUpperCase();
+        
+        // 应用代码格式化和高亮
+        this.formatAndHighlightCode(this.currentCodeText, language);
 
         // 更新按钮
         this.elements.submitBtn.style.display = 'none';
@@ -190,11 +197,219 @@ class PracticeApp {
         }
     }
 
-    // 简单的语法高亮
-    highlightCode() {
-        const code = this.elements.codeExample;
-        // 直接显示原始代码，不添加HTML标签
-        code.textContent = this.currentCodeText;
+    // 格式化题目文本（处理markdown代码块）
+    formatQuestionText(questionText) {
+        // 使用更精确的方法处理markdown代码块
+        const codeBlockRegex = /```(\w*)\n([\s\S]*?)\n```/g;
+        
+        // 首先分割文本，处理代码块和普通文本
+        let result = '';
+        let lastIndex = 0;
+        let match;
+        
+        while ((match = codeBlockRegex.exec(questionText)) !== null) {
+            const [fullMatch, language, code] = match;
+            const matchStart = match.index;
+            const matchEnd = matchStart + fullMatch.length;
+            
+            // 处理代码块之前的普通文本
+            if (matchStart > lastIndex) {
+                const normalText = questionText.slice(lastIndex, matchStart);
+                result += normalText.replace(/\n/g, '<br>');
+            }
+            
+            // 处理代码块
+            const detectedLanguage = this.detectCodeLanguage(code.trim()) || language || 'c';
+            const formattedCode = code.replace(/\t/g, '    ').trim();
+            const highlightedCode = this.applySyntaxHighlighting(formattedCode, detectedLanguage);
+            
+            result += `<div class="code-example-container">
+                    <div class="code-example-header">
+                        <span class="code-language-label">${detectedLanguage.toUpperCase()}</span>
+                    </div>
+                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
+                </div>`;
+            
+            lastIndex = matchEnd;
+        }
+        
+        // 处理剩余的普通文本
+        if (lastIndex < questionText.length) {
+            const remainingText = questionText.slice(lastIndex);
+            result += remainingText.replace(/\n/g, '<br>');
+        }
+        
+        return result;
+    }
+
+    // 检测代码语言
+    detectCodeLanguage(codeText) {
+        // 检测C语言
+        if (codeText.includes('#include') || codeText.includes('#define') || 
+            codeText.includes('int main()') || codeText.includes('printf') ||
+            codeText.includes('scanf') || codeText.includes('stdlib.h')) {
+            return 'c';
+        }
+        
+        // 检测JavaScript
+        if (codeText.includes('function') || codeText.includes('var ') ||
+            codeText.includes('let ') || codeText.includes('const ') ||
+            codeText.includes('console.log')) {
+            return 'javascript';
+        }
+        
+        // 检测Python
+        if (codeText.includes('def ') || codeText.includes('import ') ||
+            codeText.includes('print(') || codeText.includes('if __name__')) {
+            return 'python';
+        }
+        
+        // 检测Java
+        if (codeText.includes('public class') || codeText.includes('System.out.println') ||
+            codeText.includes('public static void main')) {
+            return 'java';
+        }
+        
+        // 默认为C语言（因为这是C语言练习系统）
+        return 'c';
+    }
+
+    // 格式化并高亮代码
+    formatAndHighlightCode(codeText, language) {
+        // 标准化缩进（将tab转换为4个空格）
+        const formattedCode = codeText.replace(/\t/g, '    ');
+        
+        // 应用语言特定的语法高亮
+        const highlightedCode = this.applySyntaxHighlighting(formattedCode, language);
+        
+        // 设置代码内容
+        this.elements.codeExample.innerHTML = highlightedCode;
+    }
+
+    // 应用语法高亮
+    applySyntaxHighlighting(code, language) {
+        switch (language) {
+            case 'c':
+                return this.highlightCCode(code);
+            case 'javascript':
+                return this.highlightJavaScript(code);
+            case 'python':
+                return this.highlightPython(code);
+            case 'java':
+                return this.highlightJava(code);
+            default:
+                return this.highlightCCode(code);
+        }
+    }
+
+    // C语言语法高亮
+    highlightCCode(code) {
+        // 使用更安全的处理方式，避免重复替换
+        let highlighted = code;
+        
+        // 1. 先处理字符串，避免与其他规则冲突
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        
+        // 2. 处理注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        // 3. 预处理指令
+        highlighted = highlighted.replace(/(#\w+)/g, '<span class="code-macro">$1</span>');
+        
+        // 4. 关键字（包含switch、case、default、break）
+        const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
+                         'return', 'void', 'sizeof', 'struct', 'enum', 'typedef', 'unsigned', 'signed',
+                         'long', 'short', 'static', 'const', 'extern', 'auto', 'register', 
+                         'switch', 'case', 'default', 'break'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 5. 类型
+        const types = ['int', 'char', 'float', 'double', 'void'];
+        types.forEach(type => {
+            const regex = new RegExp(`\\b${type}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-type">${type}</span>`);
+        });
+        
+        // 6. 数字
+        highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g, '<span class="code-number">$1</span>');
+        
+        // 7. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
+        // 使用负向前瞻确保不匹配已经在span标签内的内容
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()(?![^<]*>)/g, '<span class="code-function">$1</span>');
+        
+        return highlighted;
+    }
+
+    // JavaScript语法高亮（简化版）
+    highlightJavaScript(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for', 
+                         'return', 'true', 'false', 'null', 'undefined', 'this', 'new', 'class'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // Python语法高亮（简化版）
+    highlightPython(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import', 
+                         'from', 'as', 'class', 'try', 'except', 'finally', 'with', 'in', 'not', 'and', 'or'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // Java语法高亮（简化版）
+    highlightJava(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char', 
+                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class', 
+                         'interface', 'extends', 'implements', 'try', 'catch', 'finally', 'throw', 'throws'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
     }
 
     // 下一题
