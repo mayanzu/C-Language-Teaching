@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C语言输入输出练习系统</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>C语言输入输出练习系统</h1>
+            <div class="progress-info">
+                <span>题目 <span id="current-question">1</span> / <span id="total-questions">0</span></span>
+                <span class="score">得分: <span id="score">0</span></span>
+            </div>
+        </header>
+
+        <main>
+            <div class="question-container">
+                <div class="question-header">
+                    <h2 id="question-text">加载中...</h2>
+                </div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- 选项将通过JavaScript动态生成 -->
+                </div>
+
+                <div class="feedback-container" id="feedback-container" style="display: none;">
+                    <div class="feedback" id="feedback">
+                        <!-- 反馈信息 -->
+                    </div>
+                    <div class="code-example-container" id="code-example-container">
+                        <h3>代码示例：</h3>
+                        <pre><code id="code-example"></code></pre>
+                        <button class="copy-btn" id="copy-btn">复制代码</button>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="btn btn-primary" id="submit-btn" disabled>提交答案</button>
+                    <button class="btn btn-secondary" id="next-btn" style="display: none;">下一题</button>
+                    <button class="btn btn-secondary" id="restart-btn" style="display: none;">重新开始</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>提示：选择答案后点击"提交答案"，查看解析和代码示例</p>
+        </footer>
+    </div>
+
+    <!-- 加载模板加载器 -->
+    <script src="./js/template-loader.js"></script>
+    <!-- 加载主应用逻辑 -->
+    <script src="./js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "question": "假设 int a = 10, b = 3;，请问表达式 a / b 的结果是多少？",
+    "options": {
+      "A": "3.333...",
+      "B": "3",
+      "C": "1",
+      "D": "0"
+    },
+    "correctAnswer": "B",
+    "explanation": "在C语言中，两个整数相除得到整数结果，10 / 3 = 3（向下取整）。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 10, b = 3;\n    printf(\"%d\\n\", a / b);  // 输出: 3\n    return 0;\n}"
+  },
+  {
+    "id": 2,
+    "question": "对于表达式 (1 > 0) || (0 / x)，如果 x 的值为0，在不考虑编译错误的情况下，这个表达式的求值结果和过程是怎样的？",
+    "options": {
+      "A": "结果为0，因为会发生除零错误。",
+      "B": "结果为1，因为第一个子表达式为真，第二个子表达式未求值。",
+      "C": "结果为0，因为第二个子表达式的值是0。",
+      "D": "结果为1，但会弹出除零错误的警告。"
+    },
+    "correctAnswer": "B",
+    "explanation": "由于短路求值（short-circuit evaluation），当 || 运算符的第一个操作数为真时，不会计算第二个操作数。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 0;\n    int result = (1 > 0) || (0 / x);  // 结果为1，不会执行除零操作\n    printf(\"%d\\n\", result);  // 输出: 1\n    return 0;\n}"
+  },
+  {
+    "id": 3,
+    "question": "假设 int i = 5;，执行语句 int j = i++ + ++i; 后，i 和 j 的值分别是多少？（考虑标准的C语言行为，但请注意此种表达式的未定义行为）",
+    "options": {
+      "A": "i=7, j=12",
+      "B": "i=7, j=13",
+      "C": "i=7, j=11",
+      "D": "该表达式涉及到对同一个变量的多次修改而没有序列点分隔，属于未定义行为（Undefined Behavior）。"
+    },
+    "correctAnswer": "D",
+    "explanation": "在同一个表达式中对同一变量进行多次修改（没有序列点分隔）是未定义行为，结果取决于编译器实现。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int i = 5;\n    // 警告：未定义行为！\n    // int j = i++ + ++i;  // 不要这样写！\n    \n    // 正确的写法：\n    int j = i++;\n    j += ++i;\n    printf(\"i=%d, j=%d\\n\", i, j);\n    return 0;\n}"
+  },
+  {
+    "id": 4,
+    "question": "假设 int x = 2, y = 3;，执行 x *= y + 5; 后，x 的值是多少？",
+    "options": {
+      "A": "16",
+      "B": "11",
+      "C": "13",
+      "D": "6"
+    },
+    "correctAnswer": "A",
+    "explanation": "x *= y + 5 等价于 x = x * (y + 5) = 2 * (3 + 5) = 2 * 8 = 16。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 2, y = 3;\n    x *= y + 5;  // 等价于 x = x * (y + 5)\n    printf(\"%d\\n\", x);  // 输出: 16\n    return 0;\n}"
+  },
+  {
+    "id": 5,
+    "question": "下列哪个表达式可以正确判断整数变量 num 是否为偶数？",
+    "options": {
+      "A": "num % 2 == 0",
+      "B": "num / 2 == 0",
+      "C": "num & 1 == 0",
+      "D": "!(num % 2)"
+    },
+    "correctAnswer": "A",
+    "explanation": "num % 2 == 0 可以正确判断偶数。注意选项C由于运算符优先级问题，实际是 num & (1 == 0)，这是错误的。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num = 4;\n    if (num % 2 == 0) {\n        printf(\"%d 是偶数\\n\", num);\n    } else {\n        printf(\"%d 是奇数\\n\", num);\n    }\n    return 0;\n}"
+  },
+  {
+    "id": 6,
+    "question": "假设 int a = 1, b = 0;，请问表达式 (a > b) ? a + 1 : b - 1 的结果是多少？",
+    "options": {
+      "A": "1",
+      "B": "2",
+      "C": "0",
+      "D": "-1"
+    },
+    "correctAnswer": "B",
+    "explanation": "三元运算符：a > b 为真（1 > 0），所以返回 a + 1 = 1 + 1 = 2。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 0;\n    int result = (a > b) ? a + 1 : b - 1;\n    printf(\"%d\\n\", result);  // 输出: 2\n    return 0;\n}"
+  },
+  {
+    "id": 7,
+    "question": "在C语言中，int 类型通常占用 4 字节。假设 unsigned int n = 0xAA;（十六进制），表达式 n << 4 的结果（用十六进制表示）是多少？",
+    "options": {
+      "A": "0xAA0",
+      "B": "0x55",
+      "C": "0xAA4",
+      "D": "0xA"
+    },
+    "correctAnswer": "A",
+    "explanation": "左移4位相当于乘以16。0xAA << 4 = 0xAA * 16 = 0xAA0。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    unsigned int n = 0xAA;\n    unsigned int result = n << 4;\n    printf(\"0x%X\\n\", result);  // 输出: 0xAA0\n    return 0;\n}"
+  },
+  {
+    "id": 8,
+    "question": "假设 int i = 5;，表达式 (double)i / 2 的结果是多少？",
+    "options": {
+      "A": "2",
+      "B": "2.5",
+      "C": "2.0",
+      "D": "5"
+    },
+    "correctAnswer": "B",
+    "explanation": "类型转换后，5.0 / 2 = 2.5（double类型）。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int i = 5;\n    double result = (double)i / 2;\n    printf(\"%.1f\\n\", result);  // 输出: 2.5\n    return 0;\n}"
+  },
+  {
+    "id": 9,
+    "question": "假设 int p = 5;，请问表达式 p > 0 && p++ > 5 求值后，p 的值是多少？",
+    "options": {
+      "A": "5",
+      "B": "6",
+      "C": "7",
+      "D": "无法确定"
+    },
+    "correctAnswer": "B",
+    "explanation": "p > 0 为真，继续计算 p++ > 5（先比较5 > 5为假，然后p变为6）。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int p = 5;\n    int result = p > 0 && p++ > 5;\n    printf(\"p=%d, result=%d\\n\", p, result);  // 输出: p=6, result=0\n    return 0;\n}"
+  },
+  {
+    "id": 10,
+    "question": "假设 int a = 1, b = 2, c = 3;，请问表达式 !a || b && !c 的求值结果是多少？",
+    "options": {
+      "A": "1",
+      "B": "0",
+      "C": "2",
+      "D": "3"
+    },
+    "correctAnswer": "B",
+    "explanation": "运算符优先级：!a || (b && !c) = !1 || (2 && !3) = 0 || (2 && 0) = 0 || 0 = 0。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3;\n    int result = !a || b && !c;\n    printf(\"%d\\n\", result);  // 输出: 0\n    return 0;\n}"
+  }
+]
