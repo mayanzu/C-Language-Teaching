@@ -10,7 +10,7 @@
     },
     "correctAnswer": "A",
     "explanation": "A正确：case后必须是常量表达式，不能是变量。B错误：switch表达式不能是浮点型。C错误：default分支可以放在任意位置。D错误：case后不写break会继续执行下一个case（贯穿现象）。",
-    "codeExample": "// switch语句示例\nint a = 2;\nswitch(a) {\n    case 1: printf(\"A\"); break;\n    case 2: printf(\"B\"); // 没有break，会继续执行下一个case\n    case 3: printf(\"C\"); break;\n    default: printf(\"D\");\n}\n// 输出：BC"
+    "codeExample": "#include <stdio.h>\nint main() {\n    int a = 2;\n    switch(a) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); // 没有break，会继续执行下一个case\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：BC"
   },
   {
     "id": 2,
