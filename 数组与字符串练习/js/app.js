@@ -1,0 +1,525 @@
+// 练习应用主逻辑
+class PracticeApp {
+    constructor() {
+        this.questions = [];
+        this.currentQuestionIndex = 0;
+        this.score = 0;
+        this.selectedAnswer = null;
+        this.isAnswered = false;
+        this.currentCodeText = '';
+        
+        // 初始化DOM元素
+        this.initializeElements();
+        // 绑定事件
+        this.bindEvents();
+        // 开始应用
+        this.start();
+    }
+
+    // 初始化DOM元素
+    initializeElements() {
+        this.elements = {
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            submitBtn: document.getElementById('submit-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            feedbackContainer: document.getElementById('feedback-container'),
+            feedback: document.getElementById('feedback'),
+            codeExample: document.getElementById('code-example'),
+            codeExampleContainer: document.getElementById('code-example-container'),
+            codeLanguageLabel: document.getElementById('code-language-label'),
+            copyBtn: document.getElementById('copy-btn'),
+            currentQuestionSpan: document.getElementById('current-question'),
+            totalQuestionsSpan: document.getElementById('total-questions'),
+            scoreSpan: document.getElementById('score'),
+            title: document.querySelector('title'),
+            headerTitle: document.querySelector('header h1')
+        };
+    }
+
+    // 绑定事件
+    bindEvents() {
+        this.elements.submitBtn.addEventListener('click', () => this.submitAnswer());
+        this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
+        this.elements.restartBtn.addEventListener('click', () => this.restart());
+        this.elements.copyBtn.addEventListener('click', () => this.copyCode());
+    }
+
+    // 开始应用
+    async start() {
+        try {
+            // 显示加载状态
+            this.elements.questionText.textContent = '正在加载题目...';
+            
+            // 加载题库数据
+            this.questions = await window.templateLoader.loadQuestions();
+            
+            if (this.questions.length === 0) {
+                this.showError('题库数据为空或加载失败，请检查 data/questions.json 文件');
+                return;
+            }
+
+            // 验证题库数据
+            try {
+                window.templateLoader.validateQuestions(this.questions);
+            } catch (error) {
+                this.showError(`题库数据格式错误: ${error.message}`);
+                return;
+            }
+
+            // 更新页面标题和统计信息
+            this.updatePageTitle();
+            this.elements.totalQuestionsSpan.textContent = this.questions.length;
+            
+            // 显示第一题
+            this.showQuestion(0);
+            
+        } catch (error) {
+            console.error('应用启动失败:', error);
+            this.showError('应用启动失败，请检查控制台错误信息');
+        }
+    }
+
+    // 更新页面标题
+    updatePageTitle() {
+        const stats = window.templateLoader.getQuestionStats();
+        const title = `练习系统 - ${stats.total} 道题目`;
+        this.elements.title.textContent = title;
+        this.elements.headerTitle.textContent = title;
+    }
+
+    // 显示题目
+    showQuestion(index) {
+        if (index >= this.questions.length) {
+            this.showFinalResults();
+            return;
+        }
+
+        const question = this.questions[index];
+        this.currentQuestionIndex = index;
+        this.isAnswered = false;
+        this.selectedAnswer = null;
+
+        // 更新题目信息
+        this.elements.currentQuestionSpan.textContent = index + 1;
+        
+        // 处理题目描述中的代码块（markdown格式转换为格式化代码）
+        const formattedQuestion = this.formatQuestionText(`${question.id}. ${question.question}`);
+        this.elements.questionText.innerHTML = formattedQuestion;
+
+        // 清空并生成选项
+        this.elements.optionsContainer.innerHTML = '';
+        question.options.forEach((option, index) => {
+            const optionLabel = String.fromCharCode(65 + index); // A, B, C, D, ...
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option';
+            optionDiv.dataset.option = index; // 存储索引，用于与correctAnswer比较
+            optionDiv.innerHTML = `<span class="option-label">${optionLabel}.</span>${option}`;
+            optionDiv.addEventListener('click', () => this.selectOption(index, optionDiv));
+            this.elements.optionsContainer.appendChild(optionDiv);
+        });
+
+        // 隐藏反馈和代码示例
+        this.elements.feedbackContainer.style.display = 'none';
+        
+        // 重置按钮状态
+        this.elements.submitBtn.style.display = 'inline-block';
+        this.elements.submitBtn.disabled = true;
+        this.elements.submitBtn.textContent = '提交答案';
+        this.elements.nextBtn.style.display = 'none';
+        this.elements.restartBtn.style.display = 'none';
+    }
+
+    // 选择选项
+    selectOption(option, element) {
+        console.log('selectOption called with option:', option);
+        console.log('element:', element);
+        
+        if (this.isAnswered) {
+            console.log('Already answered, returning');
+            return;
+        }
+
+        // 移除之前的选择
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+
+        // 添加当前选择
+        element.classList.add('selected');
+        this.selectedAnswer = option;
+        this.elements.submitBtn.disabled = false;
+        
+        console.log('selectedAnswer set to:', this.selectedAnswer);
+        console.log('submitBtn.disabled set to:', this.elements.submitBtn.disabled);
+    }
+
+    // 提交答案
+    submitAnswer() {
+        console.log('submitAnswer called');
+        console.log('selectedAnswer:', this.selectedAnswer);
+        console.log('isAnswered:', this.isAnswered);
+        
+        if (this.selectedAnswer === null || this.selectedAnswer === undefined || this.isAnswered) {
+            console.log('Early return from submitAnswer');
+            return;
+        }
+
+        this.isAnswered = true;
+        const question = this.questions[this.currentQuestionIndex];
+        
+        console.log('this.selectedAnswer type:', typeof this.selectedAnswer);
+        console.log('question.correctAnswer type:', typeof question.correctAnswer);
+        
+        const isCorrect = this.selectedAnswer === question.correctAnswer;
+        
+        console.log('question:', question);
+        console.log('isCorrect:', isCorrect);
+
+        // 更新分数
+        if (isCorrect) {
+            this.score++;
+            this.elements.scoreSpan.textContent = this.score;
+        }
+
+        // 显示正确答案和错误答案
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.add('disabled');
+            if (parseInt(opt.dataset.option) === question.correctAnswer) {
+                opt.classList.add('correct');
+            } else if (parseInt(opt.dataset.option) === this.selectedAnswer && !isCorrect) {
+                opt.classList.add('incorrect');
+            }
+        });
+
+        // 显示反馈
+        this.elements.feedbackContainer.style.display = 'block';
+        this.elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+        
+        // 将正确答案索引转换为字母
+        const correctAnswerLabel = String.fromCharCode(65 + question.correctAnswer);
+        this.elements.feedback.innerHTML = `
+            <h3>${isCorrect ? '✓ 回答正确！' : '✗ 回答错误'}</h3>
+            <p><strong>正确答案：</strong>${correctAnswerLabel}. ${question.options[question.correctAnswer]}</p>
+            <p><strong>解析：</strong>${question.explanation}</p>
+        `;
+
+        // 显示代码示例
+        this.currentCodeText = question.codeExample;
+        
+        // 如果代码示例包含markdown标记，先提取代码内容
+        let codeContent = this.currentCodeText;
+        const codeBlockMatch = this.currentCodeText.match(/```(\w*)\n([\s\S]*?)\n```/);
+        if (codeBlockMatch) {
+            codeContent = codeBlockMatch[2]; // 提取代码内容，不包括markdown标记
+        }
+        
+        // 自动检测代码语言
+        const language = this.detectCodeLanguage(codeContent);
+        this.elements.codeLanguageLabel.textContent = language.toUpperCase();
+        
+        // 应用代码格式化和高亮
+        this.formatAndHighlightCode(codeContent, language);
+
+        // 更新按钮
+        this.elements.submitBtn.style.display = 'none';
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+            this.elements.nextBtn.style.display = 'inline-block';
+        } else {
+            this.elements.restartBtn.style.display = 'inline-block';
+        }
+    }
+
+    // 格式化题目文本（处理markdown代码块）
+    formatQuestionText(questionText) {
+        // 检查是否已经是处理过的代码块（包含<div class="code-example-container">）
+        if (questionText.includes('<div class="code-example-container">')) {
+            return questionText;
+        }
+        
+        // 使用更精确的方法处理markdown代码块
+        const codeBlockRegex = /```(\w*)\n([\s\S]*?)\n```/g;
+        
+        // 首先分割文本，处理代码块和普通文本
+        let result = '';
+        let lastIndex = 0;
+        let match;
+        
+        while ((match = codeBlockRegex.exec(questionText)) !== null) {
+            const [fullMatch, language, code] = match;
+            const matchStart = match.index;
+            const matchEnd = matchStart + fullMatch.length;
+            
+            // 处理代码块之前的普通文本
+            if (matchStart > lastIndex) {
+                const normalText = questionText.slice(lastIndex, matchStart);
+                result += normalText.replace(/\n/g, '<br>');
+            }
+            
+            // 处理代码块
+            const detectedLanguage = this.detectCodeLanguage(code.trim()) || language || 'c';
+            const formattedCode = code.replace(/\t/g, '    ').trim();
+            const highlightedCode = this.applySyntaxHighlighting(formattedCode, detectedLanguage);
+            
+            result += `<div class="code-example-container">
+                    <div class="code-example-header">
+                        <span class="code-language-label">${detectedLanguage.toUpperCase()}</span>
+                    </div>
+                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
+                </div>`;
+            
+            lastIndex = matchEnd;
+        }
+        
+        // 处理剩余的普通文本
+        if (lastIndex < questionText.length) {
+            const remainingText = questionText.slice(lastIndex);
+            result += remainingText.replace(/\n/g, '<br>');
+        }
+        
+        return result;
+    }
+
+    // 检测代码语言
+    detectCodeLanguage(codeText) {
+        // 检测C语言
+        if (codeText.includes('#include') || codeText.includes('#define') || 
+            codeText.includes('int main()') || codeText.includes('printf') ||
+            codeText.includes('scanf') || codeText.includes('stdlib.h')) {
+            return 'c';
+        }
+        
+        // 检测JavaScript
+        if (codeText.includes('function') || codeText.includes('var ') ||
+            codeText.includes('let ') || codeText.includes('const ') ||
+            codeText.includes('console.log')) {
+            return 'javascript';
+        }
+        
+        // 检测Python
+        if (codeText.includes('def ') || codeText.includes('import ') ||
+            codeText.includes('print(') || codeText.includes('if __name__')) {
+            return 'python';
+        }
+        
+        // 检测Java
+        if (codeText.includes('public class') || codeText.includes('System.out.println') ||
+            codeText.includes('public static void main')) {
+            return 'java';
+        }
+        
+        // 默认为C语言（因为这是C语言练习系统）
+        return 'c';
+    }
+
+    // 格式化并高亮代码
+    formatAndHighlightCode(codeText, language) {
+        // 标准化缩进（将tab转换为4个空格）
+        const formattedCode = codeText.replace(/\t/g, '    ');
+        
+        // 应用语言特定的语法高亮
+        const highlightedCode = this.applySyntaxHighlighting(formattedCode, language);
+        
+        // 设置代码内容
+        this.elements.codeExample.innerHTML = highlightedCode;
+    }
+
+    // 应用语法高亮
+    applySyntaxHighlighting(code, language) {
+        switch (language) {
+            case 'c':
+                return this.highlightCCode(code);
+            case 'javascript':
+                return this.highlightJavaScript(code);
+            case 'python':
+                return this.highlightPython(code);
+            case 'java':
+                return this.highlightJava(code);
+            default:
+                return this.highlightCCode(code);
+        }
+    }
+
+    // C语言语法高亮
+    highlightCCode(code) {
+        // 使用更安全的处理方式，避免重复替换
+        let highlighted = code;
+        
+        // 1. 先处理字符串，避免与其他规则冲突
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        
+        // 2. 处理注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        // 3. 预处理指令
+        highlighted = highlighted.replace(/(#\w+)/g, '<span class="code-macro">$1</span>');
+        
+        // 4. 关键字（包含switch、case、default、break）
+        const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
+                         'return', 'void', 'sizeof', 'struct', 'enum', 'typedef', 'unsigned', 'signed',
+                         'long', 'short', 'static', 'const', 'extern', 'auto', 'register', 
+                         'switch', 'case', 'default', 'break'];
+        keywords.forEach(keyword => {
+            // 使用更精确的正则表达式，避免匹配HTML标签内的内容
+            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 5. 类型
+        const types = ['int', 'char', 'float', 'double', 'void'];
+        types.forEach(type => {
+            // 使用更精确的正则表达式，避免匹配HTML标签内的内容
+            const regex = new RegExp(`\\b${type}\\b(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-type">${type}</span>`);
+        });
+        
+        // 6. 数字
+        highlighted = highlighted.replace(/\b(\d+\.?\d*)\b(?![^<]*>)/g, '<span class="code-number">$1</span>');
+        
+        // 7. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()(?![^<]*>)/g, '<span class="code-function">$1</span>');
+        
+        return highlighted;
+    }
+
+    // JavaScript语法高亮（简化版）
+    highlightJavaScript(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for', 
+                         'return', 'true', 'false', 'null', 'undefined', 'this', 'new', 'class'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // Python语法高亮（简化版）
+    highlightPython(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import', 
+                         'from', 'as', 'class', 'try', 'except', 'finally', 'with', 'in', 'not', 'and', 'or'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // Java语法高亮（简化版）
+    highlightJava(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char', 
+                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class', 
+                         'interface', 'extends', 'implements', 'try', 'catch', 'finally', 'throw', 'throws'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // 下一题
+    nextQuestion() {
+        this.showQuestion(this.currentQuestionIndex + 1);
+    }
+
+    // 重新开始
+    restart() {
+        this.currentQuestionIndex = 0;
+        this.score = 0;
+        this.elements.scoreSpan.textContent = this.score;
+        this.showQuestion(0);
+    }
+
+    // 显示最终结果
+    showFinalResults() {
+        const percentage = Math.round((this.score / this.questions.length) * 100);
+        this.elements.questionText.textContent = '练习完成！';
+        this.elements.optionsContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">你的得分</h2>
+                <div style="font-size: 3em; color: #667eea; margin: 20px 0;">${this.score} / ${this.questions.length}</div>
+                <div style="font-size: 1.5em; color: #6c757d; margin-bottom: 30px;">正确率: ${percentage}%</div>
+                <p style="color: #6c757d; line-height: 1.8;">
+                    ${percentage >= 90 ? '🎉 优秀！你掌握得很好！' : 
+                      percentage >= 70 ? '👍 不错！继续加油！' : 
+                      '💪 继续努力，多练习会更好！'}
+                </p>
+            </div>
+        `;
+        this.elements.feedbackContainer.style.display = 'none';
+        this.elements.submitBtn.style.display = 'none';
+        this.elements.nextBtn.style.display = 'none';
+        this.elements.restartBtn.style.display = 'inline-block';
+        this.elements.restartBtn.textContent = '重新开始';
+    }
+
+    // 复制代码
+    copyCode() {
+        const code = this.currentCodeText || this.elements.codeExample.textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = this.elements.copyBtn.textContent;
+            this.elements.copyBtn.textContent = '已复制！';
+            setTimeout(() => {
+                this.elements.copyBtn.textContent = originalText;
+            }, 2000);
+        }).catch(err => {
+            console.error('复制失败:', err);
+            this.elements.copyBtn.textContent = '复制失败';
+            setTimeout(() => {
+                this.elements.copyBtn.textContent = '复制代码';
+            }, 2000);
+        });
+    }
+
+    // 显示错误信息
+    showError(message) {
+        this.elements.questionText.textContent = message;
+        this.elements.optionsContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #dc3545;">
+                <h3>错误</h3>
+                <p>${message}</p>
+                <p style="margin-top: 20px; font-size: 0.9em;">请检查 data/questions.json 文件格式是否正确。</p>
+            </div>
+        `;
+    }
+}
+
+// 页面加载完成后启动应用
+document.addEventListener('DOMContentLoaded', () => {
+    new PracticeApp();
+});
