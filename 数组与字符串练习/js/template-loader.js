@@ -2,30 +2,17 @@
 class TemplateLoader {
     constructor() {
         this.questions = [];
-        this.dataPath = './data/questions.json';
     }
 
     // 加载题库数据
     async loadQuestions() {
-        try {
-            // 先尝试从外部 JSON 文件加载（支持 Live Server）
-            const response = await fetch(this.dataPath);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.questions = await response.json();
-            console.log(`成功加载 ${this.questions.length} 道题目（来自 JSON 文件）`);
-            return this.questions;
-        } catch (error) {
-            console.warn('从 JSON 文件加载失败，尝试使用内置题库...', error.message);
-            // 如果加载失败（例如使用 file:// 协议），使用内置题库数据
-            this.questions = this.getBuiltInQuestions();
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
-            return this.questions;
-        }
+        // 直接使用内置题库数据
+        this.questions = this.getBuiltInQuestions();
+        console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
+        return this.questions;
     }
 
-    // 获取内置题库数据（用于 file:// 协议支持）
+    // 获取内置题库数据
     getBuiltInQuestions() {
         return [
   {

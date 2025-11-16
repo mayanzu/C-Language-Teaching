@@ -2,30 +2,17 @@
 class TemplateLoader {
     constructor() {
         this.questions = [];
-        this.dataPath = './data/questions.json';
     }
 
     // 加载题库数据
     async loadQuestions() {
-        try {
-            // 先尝试从外部 JSON 文件加载（支持 Live Server）
-            const response = await fetch(this.dataPath);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.questions = await response.json();
-            console.log(`成功加载 ${this.questions.length} 道题目（来自 JSON 文件）`);
-            return this.questions;
-        } catch (error) {
-            console.warn('从 JSON 文件加载失败，尝试使用内置题库...', error.message);
-            // 如果加载失败（例如使用 file:// 协议），使用内置题库数据
-            this.questions = this.getBuiltInQuestions();
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
-            return this.questions;
-        }
+        // 直接使用内置题库数据
+        this.questions = this.getBuiltInQuestions();
+        console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
+        return this.questions;
     }
 
-    // 获取内置题库数据（用于 file:// 协议支持）
+    // 获取内置题库数据
     getBuiltInQuestions() {
         return [
   {
@@ -106,7 +93,7 @@ class TemplateLoader {
     "options": ["宽度为2输出浮点数", "保留2位小数输出浮点数", "输出2个浮点数", "输出浮点数前2位"],
     "correctAnswer": 1,
     "explanation": ".2表示精度，用于指定浮点数的小数位数。%.2f表示保留2位小数输出浮点数。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    double pi = 3.14159;\n    \n    printf(\"默认输出: %f\\n\", pi);      // 输出: 3.141590\n    printf(\"保留2位小数: %.2f\\n\", pi);  // 输出: 3.14\n    printf(\"保留4位小数: %.4f\\n\", pi);  // 输出: 3.1416\n    return 0;\n}"
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    double pi = 3.14159;\n    \n    printf(\"默认输出: %f\\n\");      // 输出: 3.141590\n    printf(\"保留2位小数: %.2f\\n\", pi);  // 输出: 3.14\n    printf(\"保留4位小数: %.4f\\n\", pi);  // 输出: 3.1416\n    return 0;\n}"
   }
 ];
     }

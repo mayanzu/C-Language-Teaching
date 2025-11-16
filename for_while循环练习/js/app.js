@@ -99,7 +99,7 @@ class PracticeApp {
     // 更新页面标题
     updatePageTitle() {
         const stats = window.templateLoader.getQuestionStats();
-        const title = `C语言switch和for循环练习 - ${stats.total} 道题目`;
+        const title = `C语言 for 与 while 循环练习 — ${stats.total} 道题目`;
         this.elements.title.textContent = title;
         this.elements.headerTitle.textContent = title;
     }
@@ -238,27 +238,20 @@ class PracticeApp {
         // 显示代码示例
         this.currentCodeText = question.codeExample;
         
-        // 提取代码内容
-        let codeContent = this.currentCodeText;
-        
-        // 如果包含markdown代码块标记，提取其中的代码
-        if (codeContent.includes('```')) {
-            const match = codeContent.match(/```(\w*)\n([\s\S]*?)\n```/);
-            if (match) {
-                codeContent = match[2];
-            }
-        }
+        // 提取代码块内容（移除markdown标记）
+        const codeBlockMatch = this.currentCodeText.match(/```(?:\w+)?\n?([\s\S]*?)```/);
+        const codeContent = codeBlockMatch ? codeBlockMatch[1] : this.currentCodeText;
         
         // 确保头文件正确处理，避免被错误格式化
         // 使用更精确的正则表达式处理#include语句
-        codeContent = codeContent.replace(/#include\s*<([^>]+)>/g, '#include <$1>');
+        const processedCode = codeContent.replace(/#include\s*<([^>]+)>/g, '#include <$1>');
         
         // 检测语言并设置标签
-        const language = this.detectCodeLanguage(codeContent);
+        const language = this.detectCodeLanguage(processedCode);
         this.elements.codeLanguageLabel.textContent = language.toUpperCase();
         
         // 应用语法高亮，保留原始缩进
-        const highlightedCode = this.applySyntaxHighlighting(codeContent, language);
+        const highlightedCode = this.applySyntaxHighlighting(processedCode, language);
         
         // 直接设置代码内容，不添加额外的行号或格式
         this.elements.codeExample.innerHTML = highlightedCode;

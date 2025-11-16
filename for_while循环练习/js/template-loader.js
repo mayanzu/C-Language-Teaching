@@ -2,199 +2,297 @@
 class TemplateLoader {
     constructor() {
         this.questions = [];
-        this.dataPath = './data/questions.json';
+        // 移除外部JSON依赖，不再需要dataPath
     }
 
-    // 加载题库数据
-    async loadQuestions() {
+    // 简化loadQuestions方法，直接使用内置题库
+    loadQuestions() {
         try {
-            // 先尝试从外部 JSON 文件加载（支持 Live Server）
-            const response = await fetch(this.dataPath);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.questions = await response.json();
-            console.log(`成功加载 ${this.questions.length} 道题目（来自 JSON 文件）`);
-            return this.questions;
+            const questions = this.getBuiltInQuestions();
+            this.validateQuestions(questions);
+            this.questions = questions;
+            console.log('成功加载内置题库，共', this.questions.length, '题');
+            return true;
         } catch (error) {
-            console.warn('从 JSON 文件加载失败，尝试使用内置题库...', error.message);
-            // 如果加载失败（例如使用 file:// 协议），使用内置题库数据
-            this.questions = this.getBuiltInQuestions();
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
-            return this.questions;
+            console.error('加载题库失败:', error);
+            return false;
         }
     }
 
-    // 获取内置题库数据（用于 file:// 协议支持）
+    // 获取内置题库（包含所有题目）
     getBuiltInQuestions() {
         return [
-  {
-    "id": 1,
-    "question": "以下关于while循环的说法，正确的是？",
-    "options": ["while循环的循环体至少执行一次", "while循环的条件可以是任何表达式", "while循环不能使用break语句", "while循环只能用于不确定循环次数的情况"],
-    "correctAnswer": 1,
-    "explanation": "while循环的条件可以是任何表达式，结果为非0值时继续循环，为0时退出。while循环可能一次都不执行，也可以使用break和continue控制流程。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 5;\n    \n    // while循环条件可以是任何表达式\n    while(x > 0) {\n        printf(\"%d \", x);\n        x--;\n    }\n    \n    // 条件为0，循环体不执行\n    while(0) {\n        printf(\"不会执行\");\n    }\n    \n    return 0;\n}\n// 输出：5 4 3 2 1\n```"
-  },
-  {
-    "id": 2,
-    "question": "以下关于do-while循环的说法，正确的是？",
-    "options": ["do-while循环的循环体可能一次都不执行", "do-while循环的条件在循环体执行前检查", "do-while循环至少执行一次循环体", "do-while循环不能使用continue语句"],
-    "correctAnswer": 2,
-    "explanation": "do-while循环的特点是先执行循环体，后检查条件，所以循环体至少执行一次。可以使用break和continue语句。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    \n    // 即使条件为假，do-while也会执行一次循环体\n    do {\n        printf(\"执行一次\\n\");\n        i++;\n    } while(i < 0);\n    \n    return 0;\n}\n// 输出：执行一次\n```"
-  },
-  {
-    "id": 3,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i = 0;\nwhile(i < 5) {\n    i++;\n    if(i == 3) continue;\n    printf(\"%d \", i);\n}\n",
-    "options": ["1 2 3 4 5", "1 2 4 5", "0 1 2 4 5", "1 2 3 4"],
-    "correctAnswer": 1,
-    "explanation": "当i=3时执行continue，跳过printf语句，所以不输出3。其他值正常输出。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 5) {\n        i++;\n        if(i == 3) continue; // 跳过本次循环剩余部分\n        printf(\"%d \", i);\n    }\n    return 0;\n}\n// 输出：1 2 4 5\n```"
-  },
-  {
-    "id": 4,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i = 0;\ndo {\n    i++;\n    if(i == 3) continue;\n    printf(\"%d \", i);\n} while(i < 5);\n",
-    "options": ["1 2 3 4 5", "1 2 4 5", "0 1 2 4 5", "1 2 3 4"],
-    "correctAnswer": 1,
-    "explanation": "do-while循环中，当i=3时执行continue，跳过printf语句，所以不输出3。其他值正常输出。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    do {\n        i++;\n        if(i == 3) continue; // 跳过本次循环剩余部分\n        printf(\"%d \", i);\n    } while(i < 5);\n    return 0;\n}\n// 输出：1 2 4 5\n```"
-  },
-  {
-    "id": 5,
-    "question": "以下代码执行后，变量sum的值是？\n\n<C>\nint i = 0, sum = 0;\nwhile(i++ < 5) {\n    if(i % 2 == 0) continue;\n    sum += i;\n}\n",
-    "options": ["9", "12", "15", "6"],
-    "correctAnswer": 0,
-    "explanation": "i++ < 5等价于先比较后自增。i的值依次为1、2、3、4、5。当i为偶数(2、4)时跳过，累加奇数1、3、5，结果为1+3+5=9。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0, sum = 0;\n    while(i++ < 5) {\n        printf(\"i=%d\", i);\n        if(i % 2 == 0) {\n            printf(\"(偶数，跳过)\\n\");\n            continue;\n        }\n        sum += i;\n        printf(\"(奇数，累加)\\n\");\n    }\n    printf(\"sum=%d\", sum);\n    return 0;\n}\n// 输出：9\n```"
-  },
-  {
-    "id": 6,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i = 0;\nwhile(i < 3) {\n    i++;\n    if(i == 2) break;\n    printf(\"%d \", i);\n}\n",
-    "options": ["1", "1 2", "1 2 3", "2"],
-    "correctAnswer": 0,
-    "explanation": "当i=2时执行break，退出循环，所以只输出1。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 3) {\n        i++;\n        if(i == 2) break; // 退出循环\n        printf(\"%d \", i);\n    }\n    return 0;\n}\n// 输出：1\n```"
-  },
-  {
-    "id": 7,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 0; i < 3; i++) {\n    for(j = 0; j < 2; j++) {\n        if(j == 1) break;\n        printf(\"%d%d \", i, j);\n    }\n}\n",
-    "options": ["00 01 10 11 20 21", "00 10 20", "00 01 10 20", "00 10 20 21"],
-    "correctAnswer": 1,
-    "explanation": "内层循环中，当j=1时执行break，只跳出内层循环，所以只输出j=0的情况。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 0; i < 3; i++) {\n        for(j = 0; j < 2; j++) {\n            if(j == 1) break; // 只跳出内层循环\n            printf(\"%d%d \", i, j);\n        }\n    }\n    return 0;\n}\n// 输出：00 10 20\n```"
-  },
-  {
-    "id": 8,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 0; i < 3; i++) {\n    for(j = 0; j < 3; j++) {\n        if(i + j == 3) continue;\n        printf(\"%d%d \", i, j);\n    }\n}\n",
-    "options": ["00 01 02 10 11 12 20 21 22", "00 01 02 10 11 20 21", "00 01 02 10 11 20 21 22", "00 01 10 11 20 21"],
-    "correctAnswer": 1,
-    "explanation": "当i+j=3时执行continue，跳过输出。i+j=3的情况有：(0,3)、(1,2)、(2,1)、(3,0)，但j最大为2，所以只有(1,2)和(2,1)被跳过。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 0; i < 3; i++) {\n        for(j = 0; j < 3; j++) {\n            if(i + j == 3) {\n                printf(\"跳过%d%d \", i, j);\n                continue;\n            }\n            printf(\"%d%d \", i, j);\n        }\n    }\n    return 0;\n}\n// 输出：00 01 02 10 11 20 21\n```"
-  },
-  {
-    "id": 9,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 1; i <= 3; i++) {\n    for(j = 1; j <= i; j++) {\n        printf(\"%d \", i * j);\n    }\n    printf(\"\\n\");\n}\n",
-    "options": ["1\\n2 4\\n3 6 9\\n", "1\\n2 2\\n3 3 3\\n", "1\\n2 2\\n3 6 9\\n", "1\\n2 4\\n3 6 6\\n"],
-    "correctAnswer": 0,
-    "explanation": "外层循环i=1,2,3；内层循环j从1到i。输出为：i=1时j=1(1×1=1)；i=2时j=1,2(2×1=2,2×2=4)；i=3时j=1,2,3(3×1=3,3×2=6,3×3=9)。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 1; i <= 3; i++) {\n        for(j = 1; j <= i; j++) {\n            printf(\"%d \", i * j);\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出：\n// 1\n// 2 4\n// 3 6 9\n```"
-  },
-  {
-    "id": 10,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 1; i <= 3; i++) {\n    for(j = 1; j <= 3; j++) {\n        printf(\"%d \", i * j);\n    }\n    printf(\"\\n\");\n}\n",
-    "options": ["1 2 3\\n2 4 6\\n3 6 9\\n", "1 2 3\\n2 4 6\\n3 6 9\\n", "1 2 3\\n2 4 6\\n3 6 9\\n", "1 2 3\\n2 4 6\\n3 6 9\\n"],
-    "correctAnswer": 0,
-    "explanation": "这是九九乘法表的一部分。外层循环i=1,2,3；内层循环j=1,2,3。输出为3×3的乘法表。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 1; i <= 3; i++) {\n        for(j = 1; j <= 3; j++) {\n            printf(\"%d \", i * j);\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出：\n// 1 2 3\n// 2 4 6\n// 3 6 9\n```"
-  },
-  {
-    "id": 11,
-    "question": "以下代码执行后，变量sum的值是？\n\n<C>\nint n = 5, sum = 1, i = 1;\nwhile(i <= n) {\n    sum *= i;\n    i++;\n}\n",
-    "options": ["120", "720", "24", "5"],
-    "correctAnswer": 0,
-    "explanation": "这是使用while循环计算5的阶乘。sum的变化过程：1×1=1、1×2=2、2×3=6、6×4=24、24×5=120。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int n = 5, sum = 1, i = 1;\n    while(i <= n) {\n        sum *= i; // sum = sum * i\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n        i++;\n    }\n    printf(\"5! = %d\", sum);\n    return 0;\n}\n// 输出：120\n```"
-  },
-  {
-    "id": 12,
-    "question": "以下代码执行后，变量sum的值是？\n\n<C>\nint n = 5, sum = 1, i = 1;\ndo {\n    sum *= i;\n    i++;\n} while(i <= n);\n",
-    "options": ["120", "720", "24", "5"],
-    "correctAnswer": 0,
-    "explanation": "这是使用do-while循环计算5的阶乘。sum的变化过程：1×1=1、1×2=2、2×3=6、6×4=24、24×5=120。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int n = 5, sum = 1, i = 1;\n    do {\n        sum *= i; // sum = sum * i\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n        i++;\n    } while(i <= n);\n    printf(\"5! = %d\", sum);\n    return 0;\n}\n// 输出：120\n```"
-  },
-  {
-    "id": 13,
-    "question": "以下代码执行后，变量sum的值是？\n\n<C>\nint n = 5, sum = 1;\nfor(int i = 1; i <= n; i++) {\n    sum *= i;\n}\n",
-    "options": ["120", "720", "24", "5"],
-    "correctAnswer": 0,
-    "explanation": "这是使用for循环计算5的阶乘。sum的变化过程：1×1=1、1×2=2、2×3=6、6×4=24、24×5=120。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int n = 5, sum = 1;\n    for(int i = 1; i <= n; i++) {\n        sum *= i; // sum = sum * i\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n    }\n    printf(\"5! = %d\", sum);\n    return 0;\n}\n// 输出：120\n```"
-  },
-  {
-    "id": 14,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 1; i <= 9; i++) {\n    for(j = 1; j <= 9; j++) {\n        printf(\"%d\\t\", i * j);\n        if(j == i) break;\n    }\n    printf(\"\\n\");\n}\n",
-    "options": ["输出完整的九九乘法表", "输出下三角九九乘法表", "输出上三角九九乘法表", "输出对角线九九乘法表"],
-    "correctAnswer": 1,
-    "explanation": "当j==i时执行break，只输出到对角线，所以是下三角九九乘法表。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 1; i <= 9; i++) {\n        for(j = 1; j <= 9; j++) {\n            printf(\"%d\\t\", i * j);\n            if(j == i) break; // 只输出到对角线\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出下三角九九乘法表\n```"
-  },
-  {
-    "id": 15,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 1; i <= 9; i++) {\n    for(j = i; j <= 9; j++) {\n        printf(\"%d\\t\", i * j);\n    }\n    printf(\"\\n\");\n}\n",
-    "options": ["输出完整的九九乘法表", "输出下三角九九乘法表", "输出上三角九九乘法表", "输出对角线九九乘法表"],
-    "correctAnswer": 2,
-    "explanation": "内层循环从j=i开始，所以是上三角九九乘法表。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 1; i <= 9; i++) {\n        for(j = i; j <= 9; j++) {\n            printf(\"%d\\t\", i * j);\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出上三角九九乘法表\n```"
-  },
-  {
-    "id": 16,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i = 0, j = 0;\nwhile(i < 3) {\n    while(j < 3) {\n        if(i + j == 2) {\n            i++;\n            j++;\n            continue;\n        }\n        printf(\"%d%d \", i, j);\n        j++;\n    }\n    j = 0;\n    i++;\n}\n",
-    "options": ["00 01 10 11 20 21", "00 01 10 20 21", "00 01 10 11 20", "00 10 20"],
-    "correctAnswer": 1,
-    "explanation": "当i+j=2时执行continue，跳过printf和j++，但i和j已经自增。所以(0,2)和(1,1)被跳过。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0, j = 0;\n    while(i < 3) {\n        while(j < 3) {\n            if(i + j == 2) {\n                i++;\n                j++;\n                continue;\n            }\n            printf(\"%d%d \", i, j);\n            j++;\n        }\n        j = 0;\n        i++;\n    }\n    return 0;\n}\n// 输出：00 01 10 20 21\n```"
-  },
-  {
-    "id": 17,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j, k;\nfor(i = 0; i < 2; i++) {\n    for(j = 0; j < 2; j++) {\n        for(k = 0; k < 2; k++) {\n            if(i + j + k == 2) continue;\n            printf(\"%d%d%d \", i, j, k);\n        }\n    }\n}\n",
-    "options": ["000 001 010 011 100 101 110 111", "000 001 010 100 101", "000 001 010 011 100 101 110", "000 001 010 100"],
-    "correctAnswer": 1,
-    "explanation": "当i+j+k=2时执行continue，跳过输出。i+j+k=2的情况有：(0,1,1)、(1,0,1)、(1,1,0)，所以这些组合被跳过。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j, k;\n    for(i = 0; i < 2; i++) {\n        for(j = 0; j < 2; j++) {\n            for(k = 0; k < 2; k++) {\n                if(i + j + k == 2) continue;\n                printf(\"%d%d%d \", i, j, k);\n            }\n        }\n    }\n    return 0;\n}\n// 输出：000 001 010 100 101\n```"
-  },
-  {
-    "id": 18,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i = 0;\nwhile(i < 5) {\n    i++;\n    if(i == 3) {\n        continue;\n    }\n    printf(\"%d \", i);\n    if(i == 4) {\n        break;\n    }\n}\n",
-    "options": ["1 2 4", "1 2 3 4", "1 2 4 5", "1 2 3 4 5"],
-    "correctAnswer": 0,
-    "explanation": "当i=3时执行continue，跳过printf；当i=4时执行break，退出循环。所以输出1、2、4。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 5) {\n        i++;\n        if(i == 3) {\n            continue; // 跳过本次循环剩余部分\n        }\n        printf(\"%d \", i);\n        if(i == 4) {\n            break; // 退出循环\n        }\n    }\n    return 0;\n}\n// 输出：1 2 4\n```"
-  },
-  {
-    "id": 19,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i = 0, j = 0;\nwhile(i < 3) {\n    while(j < 3) {\n        if(i == j) {\n            j++;\n            continue;\n        }\n        printf(\"%d%d \", i, j);\n        j++;\n    }\n    j = 0;\n    i++;\n}\n",
-    "options": ["01 02 10 12 20 21", "01 02 10 12 20 21", "01 02 10 12 20 21", "01 02 10 12 20 21"],
-    "correctAnswer": 0,
-    "explanation": "当i==j时执行continue，跳过printf和j++，但j已经自增。所以对角线上的(0,0)、(1,1)、(2,2)被跳过。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0, j = 0;\n    while(i < 3) {\n        while(j < 3) {\n            if(i == j) {\n                j++;\n                continue;\n            }\n            printf(\"%d%d \", i, j);\n            j++;\n        }\n        j = 0;\n        i++;\n    }\n    return 0;\n}\n// 输出：01 02 10 12 20 21\n```"
-  },
-  {
-    "id": 20,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint i, j;\nfor(i = 1; i <= 5; i++) {\n    for(j = 1; j <= 5; j++) {\n        if(j > i) break;\n        printf(\"* \");\n    }\n    printf(\"\\n\");\n}\n",
-    "options": ["*\\n* *\\n* * *\\n* * * *\\n* * * * *\\n", "* * * * *\\n* * * *\\n* * *\\n* *\\n*\\n", "*\\n* *\\n* * *\\n* * * *\\n* * * * *\\n", "* * * * *\\n* * * *\\n* * *\\n* *\\n*\\n"],
-    "correctAnswer": 0,
-    "explanation": "当j>i时执行break，所以每行输出i个星号，形成直角三角形。",
-    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 1; i <= 5; i++) {\n        for(j = 1; j <= 5; j++) {\n            if(j > i) break; // 只输出到第i列\n            printf(\"* \");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出：\n// *\n// * *\n// * * *\n// * * * *\n// * * * * *\n```"
-  }
-];
+            {
+                id: 1,
+                question: "以下关于for循环和while循环的说法中，正确的是：",
+                options: [
+                    "for循环只能用于已知循环次数的情况",
+                    "while循环不能用于已知循环次数的情况",
+                    "for循环和while循环在功能上完全等价",
+                    "for循环适合处理数组等集合类型数据"
+                ],
+                correctAnswer: 2,
+                explanation: "for循环和while循环在功能上是等价的，可以相互转换。for循环通常用于已知循环次数的情况，而while循环通常用于循环次数不确定的情况，但这不是绝对的规则。",
+                codeExample: "// for循环示例\nfor (int i = 0; i < 10; i++) {\n    printf(\"%d\", i);\n}\n\n// 等价的while循环\nint i = 0;\nwhile (i < 10) {\n    printf(\"%d\", i);\n    i++;\n}"
+            },
+            {
+                id: 2,
+                question: "在C语言中，for循环的三个表达式可以省略，但分号不能省略。以下哪种写法是正确的？",
+                options: [
+                    "for (;;); // 死循环",
+                    "for (i = 0;; i++); // 死循环",
+                    "for (; i < 10;); // 死循环",
+                    "所有选项都正确"
+                ],
+                correctAnswer: 3,
+                explanation: "在C语言中，for循环的三个表达式（初始化、条件判断、增量）都可以省略，但分号不能省略。当条件表达式省略时，默认为真，形成死循环。",
+                codeExample: "// 正确的死循环写法\nfor (;;) {\n    // 循环体\n}\n\n// 初始化表达式省略\nint i = 0;\nfor (; i < 10; i++) {\n    printf(\"%d\", i);\n}\n\n// 条件表达式省略（死循环）\nfor (i = 0;; i++) {\n    // 循环体\n}\n\n// 增量表达式省略\nfor (i = 0; i < 10;) {\n    printf(\"%d\", i);\n    i++; // 在循环体内手动递增\n}"
+            },
+            {
+                id: 3,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 2 3 4 5",
+                    "1 2 3 4 5 6",
+                    "1 2 3 4 5 6 7",
+                    "无限循环"
+                ],
+                correctAnswer: 0,
+                explanation: "当i=5时，条件i<6成立，执行循环体，然后i变为6，条件i<6不成立，循环结束。所以输出结果为1 2 3 4 5。",
+                codeExample: "int i = 0;\nfor (i = 1; i < 6; i++) {\n    printf(\"%d \", i);\n}"
+            },
+            {
+                id: 4,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "10 9 8 7 6 5 4 3 2 1",
+                    "9 8 7 6 5 4 3 2 1 0",
+                    "10 9 8 7 6 5 4 3 2 1 0",
+                    "没有输出"
+                ],
+                correctAnswer: 0,
+                explanation: "这是一个递减循环，初始值为10，当i>0时执行循环体，每次循环i减1。所以输出结果为10 9 8 7 6 5 4 3 2 1。",
+                codeExample: "int i;\nfor (i = 10; i > 0; i--) {\n    printf(\"%d \", i);\n}"
+            },
+            {
+                id: 5,
+                question: "以下关于do-while循环的说法中，正确的是：",
+                options: [
+                    "do-while循环至少执行一次循环体",
+                    "do-while循环的循环体可能一次都不执行",
+                    "do-while循环不能用于已知循环次数的情况",
+                    "do-while循环与while循环功能完全相同"
+                ],
+                correctAnswer: 0,
+                explanation: "do-while循环的特点是先执行循环体，然后再判断条件，所以至少会执行一次循环体。而while循环是先判断条件，条件为真才执行循环体，可能一次都不执行。",
+                codeExample: "// do-while循环示例（至少执行一次）\nint i = 0;\ndo {\n    printf(\"%d\", i);\n    i++;\n} while (i > 0); // 输出0\n\n// while循环示例（可能不执行）\ni = 0;\nwhile (i > 0) {\n    printf(\"%d\", i); // 不会执行\n    i++;\n}"
+            },
+            {
+                id: 6,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "0 1 2 3 4 5 6 7 8 9",
+                    "0 1 2 3 4",
+                    "1 2 3 4 5",
+                    "没有输出"
+                ],
+                correctAnswer: 1,
+                explanation: "初始i=0，先判断条件i<5成立，执行循环体输出0，然后i自增为1。继续循环，直到i=5时条件不成立，循环结束。所以输出0 1 2 3 4。",
+                codeExample: "int i = 0;\nwhile (i < 5) {\n    printf(\"%d \", i++);\n}"
+            },
+            {
+                id: 7,
+                question: "以下关于break语句和continue语句的说法中，正确的是：",
+                options: [
+                    "break语句可以提前结束循环，而continue语句只是跳过当前循环的剩余部分",
+                    "continue语句可以提前结束循环，而break语句只是跳过当前循环的剩余部分",
+                    "break语句和continue语句都可以提前结束循环",
+                    "break语句和continue语句都只能跳过当前循环的剩余部分"
+                ],
+                correctAnswer: 0,
+                explanation: "break语句用于提前结束循环，跳出循环体；而continue语句用于跳过当前循环的剩余部分，继续执行下一次循环。",
+                codeExample: "// break示例\nfor (int i = 0; i < 10; i++) {\n    if (i == 5) {\n        break; // 当i=5时跳出循环\n    }\n    printf(\"%d \", i); // 输出0 1 2 3 4\n}\n\n// continue示例\nfor (int i = 0; i < 10; i++) {\n    if (i == 5) {\n        continue; // 当i=5时跳过当前循环的剩余部分\n    }\n    printf(\"%d \", i); // 输出0 1 2 3 4 6 7 8 9\n}"
+            },
+            {
+                id: 8,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 2 3 4 5 6 7 8 9 10",
+                    "1 2 3 4 5",
+                    "6 7 8 9 10",
+                    "没有输出"
+                ],
+                correctAnswer: 1,
+                explanation: "当i=5时，遇到break语句，直接跳出整个循环，不再执行后续的循环体。所以输出1 2 3 4 5。",
+                codeExample: "for (int i = 1; i <= 10; i++) {\n    if (i > 5) {\n        break;\n    }\n    printf(\"%d \", i);\n}"
+            },
+            {
+                id: 9,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 2 3 4 5 6 7 8 9 10",
+                    "1 2 3 4 5",
+                    "2 4 6 8 10",
+                    "1 3 5 7 9"
+                ],
+                correctAnswer: 2,
+                explanation: "当i为奇数时，遇到continue语句，跳过当前循环的剩余部分，直接进入下一次循环。所以只有偶数会被输出：2 4 6 8 10。",
+                codeExample: "for (int i = 1; i <= 10; i++) {\n    if (i % 2 != 0) { // i为奇数\n        continue;\n    }\n    printf(\"%d \", i);\n}"
+            },
+            {
+                id: 10,
+                question: "以下关于嵌套循环的说法中，正确的是：",
+                options: [
+                    "外层循环每执行一次，内层循环执行全部次数",
+                    "内层循环每执行一次，外层循环执行一次",
+                    "嵌套循环只能是两层",
+                    "嵌套循环的执行次数与内外层循环的顺序无关"
+                ],
+                correctAnswer: 0,
+                explanation: "在嵌套循环中，外层循环的每一次迭代都会触发内层循环的完整执行。例如，外层循环执行n次，内层循环执行m次，那么内层循环体总共会执行n*m次。",
+                codeExample: "// 嵌套循环示例\nfor (int i = 0; i < 3; i++) { // 外层循环，执行3次\n    printf(\"外层循环第%d次\n\", i+1);\n    for (int j = 0; j < 2; j++) { // 内层循环，每次外层循环执行时执行2次\n        printf(\"  内层循环第%d次\n\", j+1);\n    }\n}"
+            },
+            {
+                id: 11,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 2 3 4 5 6 7 8 9",
+                    "9 8 7 6 5 4 3 2 1",
+                    "3行3列的乘法表",
+                    "错误：变量未初始化"
+                ],
+                correctAnswer: 2,
+                explanation: "这是一个嵌套循环，外层循环控制行数，内层循环控制列数，输出3行3列的乘法表。",
+                codeExample: "for (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= 3; j++) {\n        printf(\"%d*%d=%d \", i, j, i*j);\n    }\n    printf(\"\n\");\n}"
+            },
+            {
+                id: 12,
+                question: "以下关于goto语句的说法中，正确的是：",
+                options: [
+                    "goto语句可以跳转到程序的任意位置，包括不同函数之间",
+                    "goto语句只能在同一函数内部跳转",
+                    "goto语句在现代编程中被广泛推荐使用",
+                    "goto语句不能用于跳出循环"
+                ],
+                correctAnswer: 1,
+                explanation: "goto语句只能在同一函数内部跳转，不能跨越函数边界。虽然goto语句功能强大，但在现代编程中通常不推荐使用，因为它可能导致代码结构混乱，难以维护。",
+                codeExample: "// goto语句示例（在同一函数内部跳转）\nfor (int i = 0; i < 10; i++) {\n    for (int j = 0; j < 10; j++) {\n        if (i*j > 50) {\n            goto end_loop; // 跳转到标签处，跳出嵌套循环\n        }\n    }\n}\nend_loop: // 标签\nprintf(\"跳出循环\");"
+            },
+            {
+                id: 13,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 2 3 4 5 6 7 8 9 10",
+                    "0 1 2 3 4 5 6 7 8 9",
+                    "死循环",
+                    "没有输出"
+                ],
+                correctAnswer: 2,
+                explanation: "这是一个典型的死循环，因为循环的三个表达式都被省略了，条件表达式默认为真，所以循环会一直执行下去。",
+                codeExample: "// 死循环\nfor (;;) {\n    printf(\"循环中...\n\");\n    // 没有跳出循环的条件\n}"
+            },
+            {
+                id: 14,
+                question: "以下关于循环优化的说法中，正确的是：",
+                options: [
+                    "将循环不变式移出循环可以提高执行效率",
+                    "循环嵌套时，应该将迭代次数多的循环放在外层",
+                    "使用++i比i++在循环中更高效",
+                    "所有选项都正确"
+                ],
+                correctAnswer: 3,
+                explanation: "循环优化的常见技巧包括：将循环不变式（在循环中不发生变化的表达式）移出循环；循环嵌套时，将迭代次数少的循环放在外层，迭代次数多的循环放在内层（缓存局部性原理）；使用++i比i++更高效（不需要创建临时变量）。",
+                codeExample: "// 优化前\nfor (int i = 0; i < array.length; i++) {\n    result += i * Math.pow(2, 10); // 循环不变式\n}\n\n// 优化后\ndouble powerValue = Math.pow(2, 10); // 将循环不变式移出循环\nfor (int i = 0; i < array.length; i++) {\n    result += i * powerValue;\n}\n\n// 缓存局部性优化\n// 推荐：小循环在外，大循环在内\nfor (int i = 0; i < 10; i++) { // 小循环\n    for (int j = 0; j < 1000; j++) { // 大循环\n        // 访问数组元素\n    }\n}"
+            },
+            {
+                id: 15,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 2 3 4 5",
+                    "0 1 2 3 4",
+                    "死循环",
+                    "编译错误"
+                ],
+                correctAnswer: 2,
+                explanation: "这是一个死循环，因为在循环体中没有修改循环变量i的值，条件i<5永远为真，所以循环会一直执行下去。",
+                codeExample: "int i = 0;\nwhile (i < 5) {\n    printf(\"%d \", i);\n    // 忘记递增i，导致死循环\n}"
+            },
+            {
+                id: 16,
+                question: "以下关于循环控制变量的说法中，正确的是：",
+                options: [
+                    "循环控制变量必须是整型",
+                    "循环控制变量可以是任何数据类型",
+                    "在循环体内修改循环控制变量是被禁止的",
+                    "循环控制变量不能在循环体外使用"
+                ],
+                correctAnswer: 1,
+                explanation: "循环控制变量可以是任何数据类型，只要能进行比较操作。例如，可以使用字符型、浮点型、指针等作为循环控制变量。在循环体内修改循环控制变量是允许的，但需要注意可能导致意外的循环行为。",
+                codeExample: "// 使用字符型作为循环控制变量\nfor (char c = 'a'; c <= 'z'; c++) {\n    printf(\"%c \", c);\n}\n\n// 使用浮点型作为循环控制变量\nfor (double x = 0.0; x < 1.0; x += 0.1) {\n    printf(\"%.1f \", x);\n}\n\n// 在循环体内修改循环控制变量\nfor (int i = 0; i < 10; i++) {\n    if (i == 5) {\n        i += 2; // 跳过i=6和i=7\n    }\n    printf(\"%d \", i); // 输出0 1 2 3 4 7 8 9\n}"
+            },
+            {
+                id: 17,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "1 3 5 7 9",
+                    "0 2 4 6 8",
+                    "0 2 4 6 8 10",
+                    "死循环"
+                ],
+                correctAnswer: 2,
+                explanation: "初始i=0，条件i<=10成立，执行循环体，然后i增加2变为2。继续循环，直到i=10时执行循环体，然后i变为12，条件不成立，循环结束。所以输出0 2 4 6 8 10。",
+                codeExample: "for (int i = 0; i <= 10; i += 2) {\n    printf(\"%d \", i);\n}"
+            },
+            {
+                id: 18,
+                question: "以下关于循环结构的说法中，错误的是：",
+                options: [
+                    "可以使用while循环实现的逻辑，都可以使用for循环实现",
+                    "可以使用for循环实现的逻辑，都可以使用while循环实现",
+                    "do-while循环比while循环效率更高",
+                    "循环结构是控制流的重要组成部分"
+                ],
+                correctAnswer: 2,
+                explanation: "for循环和while循环在功能上是等价的，可以相互转换。do-while循环和while循环的效率差异通常可以忽略不计，它们的主要区别在于执行流程（do-while至少执行一次循环体）。",
+                codeExample: "// 使用while循环实现的for循环逻辑\nint i = 0;\nwhile (i < 10) {\n    // 循环体\n    i++;\n}\n\n// 使用for循环实现的while循环逻辑\nint j = 0;\nfor (; j < 10;) {\n    // 循环体\n    j++;\n}"
+            },
+            {
+                id: 19,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "0 1 2 3 4",
+                    "1 2 3 4 5",
+                    "0 1 2 3 4 5",
+                    "编译错误"
+                ],
+                correctAnswer: 0,
+                explanation: "这是一个do-while循环，先执行循环体，然后再判断条件。初始i=0，执行循环体输出0，然后i自增为1。继续循环，直到i=5时执行循环体输出4，然后i变为5，条件i<5不成立，循环结束。所以输出0 1 2 3 4。",
+                codeExample: "int i = 0;\ndo {\n    printf(\"%d \", i);\n} while (i++ < 4);"
+            },
+            {
+                id: 20,
+                question: "以下代码片段的输出结果是什么？",
+                options: [
+                    "0 1 2 3 4 5",
+                    "1 2 3 4 5 6",
+                    "没有输出",
+                    "死循环"
+                ],
+                correctAnswer: 3,
+                explanation: "这是一个死循环，因为continue语句只会跳过当前循环的剩余部分，直接进入下一次循环，不会影响循环变量的自增。所以i会一直递增，条件i<1000永远为真。",
+                codeExample: "for (int i = 0; i < 1000; i++) {\n    if (i == 5) {\n        continue; // 跳过i=5的printf，但i仍会自增\n    }\n    if (i == 10) {\n        i = 5; // 当i=10时，将i重置为5，导致死循环\n    }\n    printf(\"%d \", i);\n}"
+            }
+        ];
     }
 
-    // 验证题库数据格式
+    // 验证题库数据的有效性
     validateQuestions(questions) {
         if (!Array.isArray(questions)) {
             throw new Error('题库数据必须是数组格式');
+        }
+
+        if (questions.length === 0) {
+            throw new Error('题库不能为空');
         }
 
         const requiredFields = ['id', 'question', 'options', 'correctAnswer', 'explanation', 'codeExample'];

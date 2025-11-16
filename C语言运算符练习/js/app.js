@@ -218,10 +218,15 @@ class PracticeApp {
 
         // 显示代码示例
         this.currentCodeText = question.codeExample;
-        this.elements.codeExample.textContent = this.currentCodeText;
+        
+        // 提取代码块内容（移除markdown标记）
+        const codeBlockMatch = this.currentCodeText.match(/```(?:\w+)?\n?([\s\S]*?)```/);
+        const codeContent = codeBlockMatch ? codeBlockMatch[1] : this.currentCodeText;
+        
+        this.elements.codeExample.textContent = codeContent;
         
         // 简单的语法高亮
-        this.highlightCode();
+        this.highlightCode(codeContent);
 
         // 更新按钮
         this.elements.submitBtn.style.display = 'none';
@@ -233,10 +238,10 @@ class PracticeApp {
     }
 
     // 简单的语法高亮
-    highlightCode() {
-        const code = this.elements.codeExample;
+    highlightCode(code) {
+        const codeElement = this.elements.codeExample;
         // 直接显示原始代码，不添加HTML标签
-        code.textContent = this.currentCodeText;
+        codeElement.textContent = code || this.currentCodeText;
     }
 
     // 下一题

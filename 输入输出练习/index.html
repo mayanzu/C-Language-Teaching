@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>C语言输入输出练习系统</title>
     <link rel="stylesheet" href="./css/styles.css">
 </head>
@@ -51,6 +54,13 @@
     </div>
 
     <!-- 加载模板加载器 -->
+    <script>
+        // 为CSS文件添加时间戳参数，防止缓存
+        const cssLink = document.createElement('link');
+        cssLink.rel = 'stylesheet';
+        cssLink.href = './css/styles.css?t=' + new Date().getTime();
+        document.head.appendChild(cssLink);
+    </script>
     <script src="./js/template-loader.js"></script>
     <!-- 加载主应用逻辑 -->
     <script src="./js/app.js"></script>
