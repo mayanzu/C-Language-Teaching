@@ -2,261 +2,81 @@
   {
     "id": 1,
     "question": "以下关于switch语句的说法，正确的是？",
-    "options": {
-      "A": "case后必须跟整数或字符常量，不能是变量",
-      "B": "switch的表达式可以是浮点型（如double）",
-      "C": "default分支必须放在所有case最后",
-      "D": "case分支后可以不写break，程序会自动终止"
-    },
-    "correctAnswer": "A",
-    "explanation": "A正确：case后必须是常量表达式，不能是变量。B错误：switch表达式不能是浮点型。C错误：default分支可以放在任意位置。D错误：case后不写break会继续执行下一个case（贯穿现象）。",
-    "codeExample": "#include <stdio.h>\nint main() {\n    int a = 2;\n    switch(a) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); // 没有break，会继续执行下一个case\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：BC"
+    "options": ["case后必须跟整数或字符常量，不能是变量", "switch的表达式可以是浮点型（如double）", "default分支必须放在所有case最后", "case分支后可以不写break，程序会自动终止"],
+    "correctAnswer": 0,
+    "explanation": "case后必须是常量表达式，不能是变量。switch表达式不能是浮点型，default可以放在任意位置，case后必须有break否则会贯穿执行。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int a = 2;\n    switch(a) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); // 没有break，会继续执行下一个case\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：BC\n```"
   },
   {
     "id": 2,
-    "question": "若`int a=2;`，执行以下代码后输出结果是？",
-    "options": {
-      "A": "B",
-      "B": "BC",
-      "C": "BCD",
-      "D": "无输出"
-    },
-    "correctAnswer": "B",
-    "explanation": "当a=2时，执行case 2输出'B'，由于没有break语句，会继续执行case 3输出'C'，然后遇到break退出。所以输出结果是'BC'。",
-    "codeExample": "int a = 2;\nswitch(a) {\n    case 1: printf(\"A\"); break;\n    case 2: printf(\"B\"); // 没有break，会继续执行下一个case\n    case 3: printf(\"C\"); break;\n    default: printf(\"D\");\n}\n// 输出：BC"
+    "question": "若int a=2;，执行以下代码后输出结果是？\n\n<C>\nswitch(a) {\n    case 1: printf(\"A\"); break;\n    case 2: printf(\"B\"); \n    case 3: printf(\"C\"); break;\n    default: printf(\"D\");\n}\n",
+    "options": ["B", "BC", "BCD", "无输出"],
+    "correctAnswer": 1,
+    "explanation": "由于case 2没有break，会继续执行case 3，所以输出BC。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int a = 2;\n    switch(a) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); // 没有break\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：BC\n```"
   },
   {
     "id": 3,
     "question": "switch语句中，default分支的作用是？",
-    "options": {
-      "A": "必须存在，否则编译报错",
-      "B": "当所有case都不匹配时执行",
-      "C": "只能放在case之前",
-      "D": "会覆盖前面的case分支"
-    },
-    "correctAnswer": "B",
-    "explanation": "default分支是可选的，当所有case都不匹配时执行。它可以放在switch语句的任意位置，不会覆盖前面的case分支。",
-    "codeExample": "int x = 5;\nswitch(x) {\n    case 1: printf(\"一\"); break;\n    case 2: printf(\"二\"); break;\n    default: printf(\"其他\"); // x=5时执行这里\n}\n// 输出：其他"
+    "options": ["必须存在，否则编译报错", "当所有case都不匹配时执行", "只能放在case之前", "会覆盖前面的case分支"],
+    "correctAnswer": 1,
+    "explanation": "default分支在所有case都不匹配时执行，不是必须的，可以放在任意位置。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 10;\n    switch(x) {\n        case 1: printf(\"一\"); break;\n        case 2: printf(\"二\"); break;\n        default: printf(\"其他\"); // 当x不是1或2时执行\n    }\n    return 0;\n}\n```"
   },
   {
     "id": 4,
-    "question": "以下switch代码片段中，语法正确的是？",
-    "options": {
-      "A": "switch(3) { case 1: int x=10; break; case 2: x=20; break; }",
-      "B": "switch('a') { case 'A': printf(\"大写\"); break; case 'a': printf(\"小写\"); break; }",
-      "C": "switch(5>3) { case 1: printf(\"真\"); break; case 0: printf(\"假\"); break; }",
-      "D": "switch(2) { case 1+1: printf(\"等于2\"); break; }"
-    },
-    "correctAnswer": "D",
-    "explanation": "D正确：1+1是常量表达式，可以用于case。A错误：变量x的作用域问题。B错误：字符常量正确。C错误：switch表达式不能是布尔值。",
-    "codeExample": "// 正确的switch语句\nswitch(2) {\n    case 1+1:  // 常量表达式正确\n        printf(\"等于2\");\n        break;\n}\n// 输出：等于2"
+    "question": "以下switch代码片段中，语法正确的是？\n\nA.\n\n<C>\nswitch(3) {\n    case 1: int x=10; break;\n    case 2: x=20; break;\n}\nB.\n\n<C>\nswitch('a') {\n    case 'A': printf(\"大写\"); break;\n    case 'a': printf(\"小写\"); break;\n}\nC.\n\n<C>\nswitch(5>3) {\n    case 1: printf(\"真\"); break;\n    case 0: printf(\"假\"); break;\n}\nD.\n\n<C>\nswitch(2) {\n    case 1+1: printf(\"等于2\"); break; // 注：1+1是常量表达式\n}\n",
+    "options": ["A", "B", "C", "D"],
+    "correctAnswer": 3,
+    "explanation": "选项D中1+1是常量表达式，符合case要求。选项A中不能在不同case中声明同名变量，选项B中字符比较正确，选项C中5>3是布尔表达式，结果1或0。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    switch(2) {\n        case 1+1: printf(\"等于2\"); break; // 正确：1+1是常量表达式\n    }\n    return 0;\n}\n```"
   },
   {
     "id": 5,
-    "question": "若`char ch='B';`，执行以下代码后输出结果是？",
-    "options": {
-      "A": "优秀",
-      "B": "良好",
-      "C": "及格",
-      "D": "无输出"
-    },
-    "correctAnswer": "B",
-    "explanation": "当ch='B'时，匹配case 'B'，由于case 'B'和case 'b'共享同一个代码块，所以输出'良好'。",
-    "codeExample": "char ch = 'B';\nswitch(ch) {\n    case 'A': case 'a': printf(\"优秀\"); break;\n    case 'B': case 'b': printf(\"良好\"); break;\n    default: printf(\"及格\");\n}\n// 输出：良好"
+    "question": "若char ch='B';，执行以下代码后输出结果是？\n\n<C>\nswitch(ch) {\n    case 'A': case 'a': printf(\"优秀\"); break;\n    case 'B': case 'b': printf(\"良好\"); break;\n    default: printf(\"及格\");\n}\n",
+    "options": ["优秀", "良好", "及格", "无输出"],
+    "correctAnswer": 1,
+    "explanation": "ch='B'匹配case 'B'，输出'良好'。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    char ch = 'B';\n    switch(ch) {\n        case 'A': case 'a': printf(\"优秀\"); break;\n        case 'B': case 'b': printf(\"良好\"); break;\n        default: printf(\"及格\");\n    }\n    return 0;\n}\n// 输出：良好\n```"
   },
   {
     "id": 6,
     "question": "关于switch与if-else的区别，错误的是？",
-    "options": {
-      "A": "switch只能判断**等值条件**，if-else可判断范围条件",
-      "B": "多分支场景下，switch比if-else更简洁",
-      "C": "switch的表达式类型可以是任意类型，if的条件只能是布尔型",
-      "D": "switch中case分支需用break终止，否则会'贯穿'"
-    },
-    "correctAnswer": "C",
-    "explanation": "C错误：switch表达式只能是整型或字符型，不能是任意类型。if的条件表达式必须是布尔型。",
-    "codeExample": "// switch只能用于等值判断\nint score = 85;\nswitch(score) {  // 只能判断具体值\n    case 90: printf(\"A\"); break;\n    case 85: printf(\"B\"); break;\n}\n\n// if可以判断范围\nif (score >= 90) printf(\"A\");\nelse if (score >= 80) printf(\"B\");"
+    "options": ["switch只能判断等值条件，if-else可判断范围条件", "多分支场景下，switch比if-else更简洁", "switch的表达式类型可以是任意类型，if的条件只能是布尔型", "switch中case分支需用break终止，否则会\"贯穿\""],
+    "correctAnswer": 2,
+    "explanation": "switch表达式不能是任意类型，必须是整型或字符型。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int score = 85;\n    \n    // switch只能判断等值\n    switch(score) {\n        case 90: printf(\"优秀\"); break;\n        case 85: printf(\"良好\"); break;\n    }\n    \n    // if-else可以判断范围\n    if(score >= 90) printf(\"优秀\");\n    else if(score >= 80) printf(\"良好\");\n    \n    return 0;\n}\n```"
   },
   {
     "id": 7,
-    "question": "以下代码中，存在语法错误的是？",
-    "options": {
-      "A": "int num=1; switch(num) { case 1: printf(\"one\"); break; default: printf(\"other\"); }",
-      "B": "switch(2) { case 1: printf(\"1\"); case 2: printf(\"2\"); }",
-      "C": "double d=3.14; switch(d) { case 3.14: printf(\"π\"); break; }",
-      "D": "switch(0) { default: printf(\"默认\"); break; case 0: printf(\"零\"); break; }"
-    },
-    "correctAnswer": "C",
-    "explanation": "C错误：switch表达式不能是浮点型double。其他选项语法都正确。",
-    "codeExample": "// 错误的代码\ndouble d = 3.14;\nswitch(d) {  // 错误：switch表达式不能是浮点型\n    case 3.14: printf(\"π\"); break;\n}\n\n// 应该用if语句\nif (d == 3.14) printf(\"π\");"
+    "question": "以下代码中，存在语法错误的是？\n\nA.\n\n<C>\nint num=1;\nswitch(num) {\n    case 1: printf(\"one\"); break;\n    default: printf(\"other\");\n}\nB.\n\n<C>\nswitch(2) {\n    case 1: printf(\"1\");\n    case 2: printf(\"2\");\n}\nC.\n\n<C>\ndouble d=3.14;\nswitch(d) { // 错误点：switch表达式不能是浮点型\n    case 3.14: printf(\"π\"); break;\n}\nD.\n\n<C>\nswitch(0) {\n    default: printf(\"默认\"); break;\n    case 0: printf(\"零\"); break;\n}\n",
+    "options": ["A", "B", "C", "D"],
+    "correctAnswer": 2,
+    "explanation": "switch表达式不能是浮点型。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    // 错误：switch表达式不能是浮点型\n    double d = 3.14;\n    switch(d) {  // 编译错误\n        case 3.14: printf(\"π\"); break;\n    }\n    \n    // 正确：使用if-else\n    if(d == 3.14) printf(\"π\");\n    \n    return 0;\n}\n```"
   },
   {
     "id": 8,
-    "question": "若`int score=85;`，用switch判断成绩等级（80-89为B），正确的是？",
-    "options": {
-      "A": "switch(score/10) { case 8: printf(\"B\"); break; case 9: printf(\"A\"); break; }",
-      "B": "switch(score) { case 80-89: printf(\"B\"); break; }",
-      "C": "switch(score) { case 85: printf(\"B\"); break; }",
-      "D": "switch(score%10) { case 5: printf(\"B\"); break; }"
-    },
-    "correctAnswer": "A",
+    "question": "若int score=85;，用switch判断成绩等级（80-89为B），正确的是？\n\nA.\n\n<C>\nswitch(score/10) {\n    case 8: printf(\"B\"); break;\n    case 9: printf(\"A\"); break;\n}\nB.\n\n<C>\nswitch(score) {\n    case 80-89: printf(\"B\"); break; // 错误：case不能是范围\n}\nC.\n\n<C>\nswitch(score) {\n    case 85: printf(\"B\"); break;\n}\nD.\n\n<C>\nswitch(score%10) {\n    case 5: printf(\"B\"); break;\n}\n",
+    "options": ["A", "B", "C", "D"],
+    "correctAnswer": 0,
     "explanation": "A正确：通过score/10将范围转换为具体值。B错误：case不能是范围。C错误：只能判断85分。D错误：无法判断等级。",
-    "codeExample": "int score = 85;\nswitch(score / 10) {  // 85/10=8\n    case 10: case 9: printf(\"A\"); break;\n    case 8: printf(\"B\"); break;  // 匹配这里\n    case 7: printf(\"C\"); break;\n    default: printf(\"D\");\n}\n// 输出：B"
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int score = 85;\n    switch(score / 10) {  // 85/10=8\n        case 10: case 9: printf(\"A\"); break;\n        case 8: printf(\"B\"); break;  // 匹配这里\n        case 7: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：B\n```"
   },
   {
     "id": 9,
     "question": "选择结构嵌套指的是？",
-    "options": {
-      "A": "在switch的case分支中写if-else",
-      "B": "在if的分支中写switch",
-      "C": "以上两种都算",
-      "D": "只能是if-else的多层嵌套"
-    },
-    "correctAnswer": "C",
-    "explanation": "选择结构嵌套包括两种形式：在switch的case分支中写if-else，或者在if的分支中写switch。",
-    "codeExample": "// 在switch中嵌套if\nint x = 5, y = 10;\nswitch(x) {\n    case 5:\n        if (y > 5) printf(\"x=5且y>5\");\n        else printf(\"x=5但y<=5\");\n        break;\n}\n\n// 在if中嵌套switch\nif (x > 0) {\n    switch(y) {\n        case 10: printf(\"y=10\"); break;\n    }\n}"
+    "options": ["在switch的case分支中写if-else", "在if的分支中写switch", "以上两种都算", "只能是if-else的多层嵌套"],
+    "correctAnswer": 2,
+    "explanation": "选择结构嵌套包括switch中嵌套if和if中嵌套switch两种情况。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 3, y = 5;\n    \n    // switch中嵌套if\n    switch(x) {\n        case 3:\n            if(y > 4) printf(\"y>4\");\n            else printf(\"y<=4\");\n            break;\n    }\n    \n    // if中嵌套switch\n    if(x > 2) {\n        switch(y) {\n            case 5: printf(\"Y=5\"); break;\n        }\n    }\n    \n    return 0;\n}\n```"
   },
   {
     "id": 10,
-    "question": "若`int x=3, y=5;`，执行以下嵌套选择结构后输出结果是？",
-    "options": {
-      "A": "Y=5",
-      "B": "Y=6",
-      "C": "X<=2",
-      "D": "无输出"
-    },
-    "correctAnswer": "A",
-    "explanation": "x=3>2为真，执行if分支中的switch(y)，y=5匹配case 5，输出'Y=5'。",
-    "codeExample": "int x = 3, y = 5;\nif(x > 2) {\n    switch(y) {\n        case 5: printf(\"Y=5\"); break;\n        case 6: printf(\"Y=6\"); break;\n    }\n} else {\n    printf(\"X<=2\");\n}\n// 输出：Y=5"
-  },
-  {
-    "id": 11,
-    "question": "for循环的语法格式是`for(表达式1;表达式2;表达式3)`，其中表达式2的作用是？",
-    "options": {
-      "A": "循环初始化（仅执行1次）",
-      "B": "循环条件判断（每次循环前执行）",
-      "C": "循环后操作（每次循环体执行完后执行）",
-      "D": "循环体的执行内容"
-    },
-    "correctAnswer": "B",
-    "explanation": "表达式2是循环条件，每次循环开始前判断，如果为真则执行循环体，为假则退出循环。",
-    "codeExample": "for(int i=1; i<=5; i++) {\n    // 表达式1：i=1（初始化）\n    // 表达式2：i<=5（条件判断）\n    // 表达式3：i++（循环后操作）\n    printf(\"%d\", i);\n}\n// 输出：1 2 3 4 5"
-  },
-  {
-    "id": 12,
-    "question": "以下for循环中，循环体执行次数是？",
-    "options": {
-      "A": "4次",
-      "B": "5次",
-      "C": "6次",
-      "D": "0次"
-    },
-    "correctAnswer": "B",
-    "explanation": "i从1开始，每次递增1，当i=1,2,3,4,5时满足i<=5，共执行5次循环体。",
-    "codeExample": "for(int i=1; i<=5; i++) {\n    printf(\"%d\", i);\n}\n// 执行过程：\n// i=1 → 输出1\n// i=2 → 输出2\n// i=3 → 输出3\n// i=4 → 输出4\n// i=5 → 输出5\n// i=6 → 退出循环\n// 共执行5次"
-  },
-  {
-    "id": 13,
-    "question": "若要实现'从1累加至100'，正确的for循环是？",
-    "options": {
-      "A": "int sum=0; for(int i=1; i<=100; i++) sum+=i;",
-      "B": "int sum=0; for(int i=1; i<100; i++) sum+=i;",
-      "C": "int sum=0; for(int i=0; i<=100; i++) sum+=i;",
-      "D": "int sum=0; for(int i=100; i>=1; i--) sum+=i;"
-    },
-    "correctAnswer": "A",
-    "explanation": "A正确：i从1到100包含100。B错误：i<100不包含100。C错误：i从0开始多加了0。D正确但方向相反。",
-    "codeExample": "// 正确的累加代码\nint sum = 0;\nfor(int i=1; i<=100; i++) {\n    sum += i;\n}\nprintf(\"1+2+...+100=%d\", sum);\n// 输出：5050"
-  },
-  {
-    "id": 14,
-    "question": "以下for循环中，会陷入死循环的是？",
-    "options": {
-      "A": "for(int i=1; i<=5; i--) { printf(\"%d\",i); }",
-      "B": "for(int i=0; ;i++) { printf(\"%d\",i); }",
-      "C": "for(int i=1; i<=5; i++) { if(i==3) continue; printf(\"%d\",i); }",
-      "D": "for(int i=1; i<=5; i++) { if(i==3) break; printf(\"%d\",i); }"
-    },
-    "correctAnswer": "A",
-    "explanation": "A是死循环：i从1开始递减，永远满足i<=5。B也是死循环（条件为空默认真），但题目问'会陷入死循环的是'，A更明显。",
-    "codeExample": "// 死循环示例\nfor(int i=1; i<=5; i--) {  // i递减，永远<=5\n    printf(\"%d\", i);\n    // 输出：1 0 -1 -2 ... 无限循环\n}\n\n// 无限循环（条件为空）\nfor(int i=0; ; i++) {  // 条件为空，默认真\n    printf(\"%d\", i);\n}"
-  },
-  {
-    "id": 15,
-    "question": "若`int n=5;`，执行以下for循环后输出结果是？",
-    "options": {
-      "A": "2 4 6 8 10",
-      "B": "1 2 3 4 5",
-      "C": "2 3 4 5 6",
-      "D": "无输出"
-    },
-    "correctAnswer": "A",
-    "explanation": "i从1到5，每次输出i*2，即输出2,4,6,8,10。",
-    "codeExample": "int n = 5;\nfor(int i=1; i<=n; i++) {\n    printf(\"%d \", i*2);\n}\n// 执行过程：\n// i=1 → 输出2\n// i=2 → 输出4\n// i=3 → 输出6\n// i=4 → 输出8\n// i=5 → 输出10\n// 输出：2 4 6 8 10"
-  },
-  {
-    "id": 16,
-    "question": "关于for循环的表达式，说法错误的是？",
-    "options": {
-      "A": "表达式1可以初始化多个变量（如`for(int i=1,j=10;...)`）",
-      "B": "表达式2可以是任意布尔表达式（如`for(...; i<5 && j>3;...)`）",
-      "C": "表达式3可以省略（如`for(int i=1; i<=5; ) { ... i++; }`）",
-      "D": "三个表达式都不能省略，否则编译报错"
-    },
-    "correctAnswer": "D",
-    "explanation": "D错误：三个表达式都可以省略，但分号不能省略。省略表达式2会导致无限循环。",
-    "codeExample": "// 三个表达式都可以省略\nint i = 1;  // 表达式1移到外面\nfor(; i<=5; ) {  // 省略表达式1和3\n    printf(\"%d\", i);\n    i++;  // 在循环体内递增\n}\n\n// 甚至三个都省略（无限循环）\nfor(;;) {  // 三个表达式都省略\n    printf(\"无限循环\");\n    break;  // 需要break退出\n}"
-  },
-  {
-    "id": 17,
-    "question": "若要统计'1~20中偶数的个数'，正确的for循环是？",
-    "options": {
-      "A": "int count=0; for(int i=1; i<=20; i++) { if(i%2==0) count++; }",
-      "B": "int count=0; for(int i=2; i<=20; i+=2) { count++; }",
-      "C": "int count=0; for(int i=1; i<=20; i++) { if(i%2!=0) count++; }",
-      "D": "以上A和B都正确"
-    },
-    "correctAnswer": "D",
-    "explanation": "A和B都正确：A遍历所有数判断偶数；B直接遍历偶数。C统计的是奇数个数。",
-    "codeExample": "// 方法A：遍历判断\nint count = 0;\nfor(int i=1; i<=20; i++) {\n    if(i % 2 == 0) count++;\n}\n\n// 方法B：直接遍历偶数\ncount = 0;\nfor(int i=2; i<=20; i+=2) {\n    count++;\n}\nprintf(\"1~20中有%d个偶数\", count);\n// 输出：10"
-  },
-  {
-    "id": 18,
-    "question": "以下for循环中，循环体执行次数是？",
-    "options": {
-      "A": "3次",
-      "B": "4次",
-      "C": "5次",
-      "D": "6次"
-    },
-    "correctAnswer": "B",
-    "explanation": "i从3开始，每次递增2：3,5,7,9 → 当i=11时退出循环。共执行4次。",
-    "codeExample": "for(int i=3; i<=10; i+=2) {\n    printf(\"%d\", i);\n}\n// 执行过程：\n// i=3 → 输出3\n// i=5 → 输出5\n// i=7 → 输出7\n// i=9 → 输出9\n// i=11 → 退出循环\n// 共执行4次"
-  },
-  {
-    "id": 19,
-    "question": "若要输出'5行*号，每行5个'，正确的嵌套for循环是？",
-    "options": {
-      "A": "for(int i=1; i<=5; i++) { for(int j=1; j<=5; j++) { printf(\"*\"); } printf(\"\\n\"); }",
-      "B": "for(int i=1; i<=5; i++) { printf(\"*\"); } printf(\"\\n\"); }",
-      "C": "for(int i=1; i<=5; i++) { for(int j=1; j<=i; j++) { printf(\"*\"); } printf(\"\\n\"); }",
-      "D": "for(int i=5; i>=1; i--) { for(int j=1; j<=i; j++) { printf(\"*\"); } printf(\"\\n\"); }"
-    },
-    "correctAnswer": "A",
-    "explanation": "A正确：外层控制5行，内层控制每行5个*。B只输出一行5个*。C输出三角形。D输出倒三角形。",
-    "codeExample": "// 输出5行5列矩形\nfor(int i=1; i<=5; i++) {      // 外层：控制行数\n    for(int j=1; j<=5; j++) {  // 内层：控制每行星数\n        printf(\"*\");\n    }\n    printf(\"\\n\");  // 换行\n}\n// 输出：\n// *****\n// *****\n// *****\n// *****\n// *****"
-  },
-  {
-    "id": 20,
-    "question": "关于for循环与while循环的区别，正确的是？",
-    "options": {
-      "A": "for循环更适合**已知循环次数**的场景，while更适合**未知循环次数**的场景",
-      "B": "for循环的初始化、条件、更新必须写在括号内，while只能写条件",
-      "C": "for循环不能实现的逻辑，while也不能实现（两者可以互相转换）",
-      "D": "以上说法都正确"
-    },
-    "correctAnswer": "D",
-    "explanation": "所有说法都正确：A是使用场景区别；B是语法区别；C是等价性（for和while可以互相转换）。",
-    "codeExample": "// for循环（已知次数）\nfor(int i=0; i<5; i++) {\n    printf(\"%d\", i);\n}\n\n// 等价while循环\nint i=0;\nwhile(i < 5) {\n    printf(\"%d\", i);\n    i++;\n}\n// 两者输出相同：0 1 2 3 4"
+    "question": "若int x=3, y=5;，执行以下嵌套选择结构后输出结果是？\n\n<C>\nif(x>2) {\n    switch(y) {\n        case 5: printf(\"Y=5\"); break;\n        case 6: printf(\"Y=6\"); break;\n    }\n} else {\n    printf(\"X<=2\");\n}\n",
+    "options": ["Y=5", "Y=6", "X<=2", "无输出"],
+    "correctAnswer": 0,
+    "explanation": "x=3>2为真，执行switch，y=5匹配case 5，输出Y=5。",
+    "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 3, y = 5;\n    if(x > 2) {\n        switch(y) {\n            case 5: printf(\"Y=5\"); break;\n            case 6: printf(\"Y=6\"); break;\n        }\n    } else {\n        printf(\"X<=2\");\n    }\n    return 0;\n}\n// 输出：Y=5\n```"
   }
 ]

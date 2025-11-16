@@ -104,9 +104,11 @@ main {
 }
 
 .option.correct {
-    background: #28a745;
-    color: white;
+    background: #28a745 !important;
+    color: white !important;
     border-color: #28a745;
+    opacity: 1 !important;
+    font-weight: bold;
 }
 
 .option.incorrect {
@@ -115,7 +117,7 @@ main {
     border-color: #dc3545;
 }
 
-.option.disabled {
+.option.disabled:not(.correct) {
     cursor: not-allowed;
     opacity: 0.6;
 }
@@ -176,11 +178,32 @@ main {
     border-radius: 8px;
     padding: 20px;
     position: relative;
+    border: 1px solid #3e3e3e;
+}
+
+.code-example-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3e3e3e;
+}
+
+.code-language-label {
+    color: #61dafb;
+    font-size: 0.85em;
+    font-weight: bold;
+    background: rgba(97, 218, 251, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(97, 218, 251, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .code-example-container h3 {
     color: #f8f9fa;
-    margin-bottom: 15px;
     font-size: 1.1em;
 }
 
@@ -192,12 +215,31 @@ main {
     margin-bottom: 15px;
 }
 
-.code-example-container code {
+.code-with-line-numbers {
+    counter-reset: line;
+}
+
+.code-with-line-numbers code {
     color: #d4d4d4;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 0.95em;
     line-height: 1.6;
+    display: block;
 }
+
+/* 禁用行号显示 */
+/*
+.code-with-line-numbers code::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2em;
+    margin-right: 1em;
+    text-align: right;
+    color: #858585;
+    user-select: none;
+}
+*/
 
 .copy-btn {
     background: #667eea;
@@ -253,6 +295,64 @@ main {
 .btn-secondary:hover {
     background: #5a6268;
     transform: translateY(-2px);
+}
+
+/* 语法高亮样式 */
+.code-keyword {
+    color: #4fc1ff;
+    font-weight: bold;
+}
+
+.code-function {
+    color: #dcdcaa;
+}
+
+.code-string {
+    color: #ce9178;
+}
+
+.code-comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.code-number {
+    color: #b5cea8;
+}
+
+.code-operator {
+    color: #d4d4d4;
+}
+
+.code-type {
+    color: #4ec9b0;
+}
+
+.code-variable {
+    color: #9cdcfe;
+}
+
+.code-macro {
+    color: #c586c0;
+}
+
+.code-include {
+    color: #4ec9b0;
+}
+
+/* 内联代码高亮样式 */
+.code-keyword {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.code-function {
+    color: #795e26;
+    font-weight: bold;
+}
+
+.code-string {
+    color: #a31515;
 }
 
 footer {
