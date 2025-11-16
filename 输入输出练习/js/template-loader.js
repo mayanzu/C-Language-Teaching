@@ -93,7 +93,7 @@ class TemplateLoader {
     "options": ["宽度为2输出浮点数", "保留2位小数输出浮点数", "输出2个浮点数", "输出浮点数前2位"],
     "correctAnswer": 1,
     "explanation": ".2表示精度，用于指定浮点数的小数位数。%.2f表示保留2位小数输出浮点数。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    double pi = 3.14159;\n    \n    printf(\"默认输出: %f\\n\");      // 输出: 3.141590\n    printf(\"保留2位小数: %.2f\\n\", pi);  // 输出: 3.14\n    printf(\"保留4位小数: %.4f\\n\", pi);  // 输出: 3.1416\n    return 0;\n}"
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    double pi = 3.14159;\n    \n    printf(\"默认输出: %f\\n\", pi);      // 输出: 3.141590\n    printf(\"保留2位小数: %.2f\\n\", pi);  // 输出: 3.14\n    printf(\"保留4位小数: %.4f\\n\", pi);  // 输出: 3.1416\n    return 0;\n}"
   }
 ];
     }

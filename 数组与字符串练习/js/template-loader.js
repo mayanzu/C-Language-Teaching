@@ -248,13 +248,13 @@ class TemplateLoader {
     "codeExample": "```c\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    char str1[] = \"123.456\";\n    char str2[] = \"-78.9\";\n    \n    // 将字符串转换为浮点数\n    double num1 = atof(str1);\n    double num2 = atof(str2);\n    \n    printf(\"%s -> %.3f\\n\", str1, num1);  // 输出：123.456 -> 123.456\n    printf(\"%s -> %.1f\\n\", str2, num2);  // 输出：-78.9 -> -78.9\n    \n    // 计算两数之和\n    printf(\"Sum: %.3f\\n\", num1 + num2);  // 输出：Sum: 44.556\n    \n    return 0;\n}\n```"
   },
   {
-    "id": 30,
-    "question": "以下代码执行后，输出结果是？\n\n```c\nchar str1[10] = \"Hello\";\nchar str2[10] = \"World\";\nif(strcmp(str1, str2) > 0) {\n    printf(\"1\");\n} else if(strcmp(str1, str2) < 0) {\n    printf(\"-1\");\n} else {\n    printf(\"0\");\n}\n```",
-    "options": ["1", "-1", "0", "编译错误"],
-    "correctAnswer": 1,
-    "explanation": "strcmp()函数比较两个字符串。当第一个字符串小于第二个字符串时，返回负数；当第一个字符串大于第二个字符串时，返回正数；当两个字符串相等时，返回0。\"Hello\"小于\"World\"（按字典序），所以strcmp(str1, str2) < 0，输出-1。",
-    "codeExample": "```c\n#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str1[10] = \"Hello\";\n    char str2[10] = \"World\";\n    \n    // 比较字符串\n    int result = strcmp(str1, str2);\n    \n    printf(\"strcmp(\\\"Hello\\\", \\\"World\\\") = %d\\n\", result);\n    \n    if(result > 0) {\n        printf(\"1\\n\");\n    } else if(result < 0) {\n        printf(\"-1\\n\");  // 输出：-1\n    } else {\n        printf(\"0\\n\");\n    }\n    \n    // 更多比较示例\n    printf(\"strcmp(\\\"World\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"World\", \"Hello\"));\n    printf(\"strcmp(\\\"Hello\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"Hello\", \"Hello\"));\n    \n    return 0;\n}\n```"
-  }
+        "id": 30,
+        "question": "以下代码执行后，输出结果是？\n\n```c\nchar str1[10] = \"Hello\";\nchar str2[10] = \"World\";\nif(strcmp(str1, str2) > 0) {\n    printf(\"1\");\n} else if(strcmp(str1, str2) < 0) {\n    printf(\"-1\");\n} else {\n    printf(\"0\");\n}\n```",
+        "options": ["1", "-1", "0", "编译错误"],
+        "correctAnswer": 1,
+        "explanation": "strcmp()函数比较两个字符串。当第一个字符串小于第二个字符串时，返回负数；当第一个字符串大于第二个字符串时，返回正数；当两个字符串相等时，返回0。\"Hello\"小于\"World\"（按字典序），所以strcmp(str1, str2) < 0，输出-1。",
+        "codeExample": "```c\n#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str1[10] = \"Hello\";\n    char str2[10] = \"World\";\n    \n    // 比较字符串\n    int result = strcmp(str1, str2);\n    \n    printf(\"strcmp(\\\"Hello\\\", \\\"World\\\") = %d\\n\", result);\n    \n    if(result > 0) {\n        printf(\"1\\n\");\n    } else if(result < 0) {\n        printf(\"-1\\n\");  // 输出：-1\n    } else {\n        printf(\"0\\n\");\n    }\n    \n    // 更多比较示例\n    printf(\"strcmp(\\\"World\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"World\", \"Hello\"));\n    printf(\"strcmp(\\\"Hello\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"Hello\", \"Hello\"));\n    \n    return 0;\n}\n```"
+    }
 ];
     }
 

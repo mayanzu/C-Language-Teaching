@@ -69,7 +69,7 @@ class PracticeApp {
             this.questions = await window.templateLoader.loadQuestions();
             
             if (this.questions.length === 0) {
-                this.showError('题库数据为空或加载失败，请检查 data/questions.json 文件');
+                this.showError('题库数据为空或加载失败，请检查内置题库数据');
                 return;
             }
 
@@ -79,7 +79,7 @@ class PracticeApp {
                 window.templateLoader.validateQuestions(this.questions);
             }
         } catch (error) {
-            this.showError(`题库数据格式错误: ${error.message}`);
+            this.showError(`验证题库数据失败: ${error.message}`);
             return;
         }
 
@@ -658,7 +658,7 @@ class PracticeApp {
             <div style="text-align: center; padding: 40px; color: #dc3545;">
                 <h3>错误</h3>
                 <p>${message}</p>
-                <p style="margin-top: 20px; font-size: 0.9em;">请检查 data/questions.json 文件格式是否正确。</p>
+                <p style="margin-top: 20px; font-size: 0.9em;">请检查内置题库数据格式是否正确。</p>
             </div>
         `;
     }

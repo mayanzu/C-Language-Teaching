@@ -84,9 +84,13 @@ class PracticeApp {
     // 更新页面标题
     updatePageTitle() {
         const stats = window.templateLoader.getQuestionStats();
-        const title = `练习系统 - ${stats.total} 道题目`;
-        this.elements.title.textContent = title;
-        this.elements.headerTitle.textContent = title;
+        // 保留原始标题的练习类型信息，只更新题目数量
+        const originalTitle = document.title;
+        const practiceType = originalTitle.match(/^C语言(.+?)练习/) ? originalTitle.match(/^C语言(.+?)练习/)[1] : '';
+        
+        // 分别更新页面标题和页面内标题
+        this.elements.title.textContent = `C语言${practiceType}练习 - ${stats.total} 道题目`;
+        this.elements.headerTitle.textContent = `C语言${practiceType}练习`;
     }
 
     // 显示题目

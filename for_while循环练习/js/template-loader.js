@@ -12,10 +12,10 @@ class TemplateLoader {
             this.validateQuestions(questions);
             this.questions = questions;
             console.log('成功加载内置题库，共', this.questions.length, '题');
-            return true;
+            return questions; // 返回题库数组而不是布尔值
         } catch (error) {
             console.error('加载题库失败:', error);
-            return false;
+            throw error; // 抛出错误以便上层处理
         }
     }
 
@@ -260,14 +260,14 @@ class TemplateLoader {
                 id: 19,
                 question: "以下代码片段的输出结果是什么？",
                 options: [
+                    "0 1 2 3",
+                    "1 2 3 4",
                     "0 1 2 3 4",
-                    "1 2 3 4 5",
-                    "0 1 2 3 4 5",
                     "编译错误"
                 ],
                 correctAnswer: 0,
-                explanation: "这是一个do-while循环，先执行循环体，然后再判断条件。初始i=0，执行循环体输出0，然后i自增为1。继续循环，直到i=5时执行循环体输出4，然后i变为5，条件i<5不成立，循环结束。所以输出0 1 2 3 4。",
-                codeExample: "int i = 0;\ndo {\n    printf(\"%d \", i);\n} while (i++ < 4);"
+                explanation: "这是一个do-while循环，先执行循环体，然后再判断条件。初始i=0，执行循环体输出0，然后i自增为1。继续循环，直到i=4时执行循环体输出3，然后i变为4，条件i<4不成立，循环结束。所以输出0 1 2 3。",
+                codeExample: "int i = 0;\ndo {\n    printf(\"%d \", i);\n} while (i++ < 3);"
             },
             {
                 id: 20,

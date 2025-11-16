@@ -67,7 +67,7 @@ class TemplateLoader {
     "question": "以下switch代码片段中，语法正确的是？\n\nA.\n\n```c\nswitch(3) {\n    case 1: int x=10; break;\n    case 2: x=20; break;\n}\n```\n\nB.\n\n```c\nswitch('a') {\n    case 'A': printf(\"大写\"); break;\n    case 'a': printf(\"小写\"); break;\n}\n```\n\nC.\n\n```c\nswitch(5>3) {\n    case 1: printf(\"真\"); break;\n    case 0: printf(\"假\"); break;\n}\n```\n\nD.\n\n```c\nswitch(2) {\n    case 1+1: printf(\"等于2\"); break; // 注：1+1是常量表达式\n}\n```",
     "options": ["选项A语法正确", "选项B语法正确", "选项C语法正确", "选项D语法正确"],
     "correctAnswer": 3,
-    "explanation": "D正确：1+1是常量表达式，可以用于case。A错误：变量x的作用域问题，在case中声明变量需要加花括号。B错误：虽然字符常量语法正确，但case 'A'和case 'a'是不同的字符。C错误：switch表达式不能是布尔值，5>3的结果是布尔类型。",
+    "explanation": "D正确：1+1是常量表达式，可以用于case。A错误：变量x的作用域问题，在case中声明变量需要加花括号。B错误：虽然字符常量语法正确，但case 'A'和case 'a'是不同的字符。C在大多数C编译器中也是合法的：switch表达式需要是整型表达式，而布尔值在C中会被隐式转换为整数（1表示真，0表示假）。",
     "codeExample": "#include <stdio.h>\nint main() {\n    // 正确的代码（选项D）\n    switch(2) {\n        case 1+1: printf(\"等于2\"); break; // 1+1是常量表达式2\n    }\n    // 输出：等于2\n    \n    // 错误的代码示例（选项A的问题）\n    /*\n    switch(3) {\n        case 1: int x=10; break;  // 错误：需要加花括号\n        case 2: x=20; break;      // x未定义\n    }\n    */\n    \n    // 修正选项A的代码\n    switch(3) {\n        case 1: { int x=10; break; }  // 正确：加花括号限制作用域\n        case 2: { int x=20; break; }  // 正确：每个case都有自己的x\n    }\n    \n    return 0;\n}"
   }
 ];
@@ -148,10 +148,8 @@ class TemplateLoader {
             const questions = JSON.parse(jsonData);
             this.validateQuestions(questions);
             this.questions = questions;
-            return true;
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }

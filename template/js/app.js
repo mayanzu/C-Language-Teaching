@@ -56,7 +56,7 @@ class PracticeApp {
             this.questions = await window.templateLoader.loadQuestions();
             
             if (this.questions.length === 0) {
-                this.showError('题库数据为空或加载失败，请检查 data/questions.json 文件');
+                this.showError('题库数据为空或加载失败，请检查内置题库数据');
                 return;
             }
 
@@ -84,9 +84,13 @@ class PracticeApp {
     // 更新页面标题
     updatePageTitle() {
         const stats = window.templateLoader.getQuestionStats();
-        const title = `练习系统 - ${stats.total} 道题目`;
-        this.elements.title.textContent = title;
-        this.elements.headerTitle.textContent = title;
+        // 保留原始标题的练习类型信息，只更新题目数量
+        const originalTitle = document.title;
+        const practiceType = originalTitle.match(/^C语言(.+?)练习/) ? originalTitle.match(/^C语言(.+?)练习/)[1] : '';
+        
+        // 分别更新页面标题和页面内标题
+        this.elements.title.textContent = `C语言${practiceType}练习 - ${stats.total} 道题目`;
+        this.elements.headerTitle.textContent = `C语言${practiceType}练习`;
     }
 
     // 显示题目
@@ -498,7 +502,7 @@ class PracticeApp {
             <div style="text-align: center; padding: 40px; color: #dc3545;">
                 <h3>错误</h3>
                 <p>${message}</p>
-                <p style="margin-top: 20px; font-size: 0.9em;">请检查 data/questions.json 文件格式是否正确。</p>
+                <p style="margin-top: 20px; font-size: 0.9em;">请检查内置题库数据格式是否正确。</p>
             </div>
         `;
     }
