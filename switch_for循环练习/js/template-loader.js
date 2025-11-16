@@ -154,10 +154,10 @@ class TemplateLoader {
                 "id": 11,
                 "question": "以下代码执行后，输出结果是？\n\n<C>\nint x = 1;\nint i = 0;\nwhile(i < 5) {\n    if(x % 2 == 1) {\n        x += 2;\n    } else {\n        x *= 2;\n    }\n    i++;\n}\nprintf(\"%d\", x);\n",
                 "options": [
+                    "3",
                     "7",
-                    "14",
-                    "15",
-                    "28"
+                    "9",
+                    "11"
                 ],
                 "correctAnswer": 3,
                 "explanation": "循环执行5次，每次根据x的奇偶性更新x的值：\n1. 初始x=1(奇数)，i=0：x=3，i=1\n2. x=3(奇数)，i=1：x=5，i=2\n3. x=5(奇数)，i=2：x=7，i=3\n4. x=7(奇数)，i=3：x=9，i=4\n5. x=9(奇数)，i=4：x=11，i=5\n最终x=11。",
