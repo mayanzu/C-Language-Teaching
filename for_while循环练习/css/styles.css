@@ -1,0 +1,400 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1em;
+    margin-top: 15px;
+}
+
+.score {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+main {
+    padding: 40px;
+}
+
+.question-container {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.question-header {
+    margin-bottom: 30px;
+}
+
+.question-header h2 {
+    font-size: 1.4em;
+    color: #333;
+    line-height: 1.6;
+}
+
+.options-container {
+    margin-bottom: 30px;
+}
+
+.option {
+    display: block;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+}
+
+.option:hover {
+    background: #e9ecef;
+    border-color: #667eea;
+    transform: translateX(5px);
+}
+
+.option.selected {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.option.correct {
+    background: #28a745 !important;
+    color: white !important;
+    border-color: #28a745;
+    opacity: 1 !important;
+    font-weight: bold;
+}
+
+.option.incorrect {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.option.disabled:not(.correct) {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.option-label {
+    font-weight: bold;
+    margin-right: 10px;
+    display: inline-block;
+    width: 30px;
+}
+
+.feedback-container {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feedback {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.1em;
+}
+
+.feedback.correct {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.feedback.incorrect {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.feedback h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.code-example-container {
+    margin-top: 20px;
+    background: #2d2d2d;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    border: 1px solid #3e3e3e;
+}
+
+.code-example-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3e3e3e;
+}
+
+.code-language-label {
+    color: #61dafb;
+    font-size: 0.85em;
+    font-weight: bold;
+    background: rgba(97, 218, 251, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(97, 218, 251, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.code-example-container h3 {
+    color: #f8f9fa;
+    font-size: 1.1em;
+}
+
+.code-example-container pre {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 15px;
+}
+
+.code-with-line-numbers {
+    counter-reset: line;
+}
+
+.code-with-line-numbers code {
+    color: #d4d4d4;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.95em;
+    line-height: 1.6;
+    display: block;
+}
+
+/* 禁用行号显示 */
+/*
+.code-with-line-numbers code::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2em;
+    margin-right: 1em;
+    text-align: right;
+    color: #858585;
+    user-select: none;
+}
+*/
+
+.copy-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: #5a6fd8;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* 语法高亮样式 */
+.code-keyword {
+    color: #4fc1ff;
+    font-weight: bold;
+}
+
+.code-function {
+    color: #dcdcaa;
+}
+
+.code-string {
+    color: #ce9178;
+}
+
+.code-comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.code-number {
+    color: #b5cea8;
+}
+
+.code-operator {
+    color: #d4d4d4;
+}
+
+.code-type {
+    color: #4ec9b0;
+}
+
+.code-variable {
+    color: #9cdcfe;
+}
+
+.code-macro {
+    color: #c586c0;
+}
+
+.code-include {
+    color: #4ec9b0;
+}
+
+/* 内联代码高亮样式 */
+.code-keyword {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.code-function {
+    color: #795e26;
+    font-weight: bold;
+}
+
+.code-string {
+    color: #a31515;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        border-radius: 10px;
+    }
+    
+    header {
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.6em;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    .progress-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .option {
+        font-size: 1em;
+        padding: 12px 15px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 1em;
+        margin: 5px;
+    }
+}
