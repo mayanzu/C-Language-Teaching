@@ -104,16 +104,32 @@ class PracticeApp {
         this.elements.currentQuestionSpan.textContent = index + 1;
         this.elements.questionText.textContent = `${question.id}. ${question.question}`;
 
-        // 清空并生成选项
+        // 清空并生成选项 - 支持两种格式（数组和对象）
         this.elements.optionsContainer.innerHTML = '';
-        Object.entries(question.options).forEach(([key, value]) => {
-            const optionDiv = document.createElement('div');
-            optionDiv.className = 'option';
-            optionDiv.dataset.option = key;
-            optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
-            optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
-            this.elements.optionsContainer.appendChild(optionDiv);
-        });
+        
+        if (Array.isArray(question.options)) {
+            // 数组格式：转换为 A/B/C/D 标签
+            question.options.forEach((value, optionIndex) => {
+                const label = String.fromCharCode(65 + optionIndex); // 65='A'
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                // 存储为索引字符串，便于与 question.correctAnswer（数字索引）比较
+                optionDiv.dataset.option = String(optionIndex);
+                optionDiv.innerHTML = `<span class="option-label">${label}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(String(optionIndex), optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
+        } else {
+            // 对象格式：直接使用字母标签
+            Object.entries(question.options).forEach(([key, value]) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.dataset.option = key;
+                optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
+        }
 
         // 隐藏反馈和代码示例
         this.elements.feedbackContainer.style.display = 'none';
@@ -147,7 +163,14 @@ class PracticeApp {
 
         this.isAnswered = true;
         const question = this.questions[this.currentQuestionIndex];
-        const isCorrect = this.selectedAnswer === question.correctAnswer;
+
+        // 规范比较：数组格式的题目使用数字索引（字符串形式存于 dataset.option），对象格式使用字母键
+        let isCorrect = false;
+        if (Array.isArray(question.options)) {
+            isCorrect = parseInt(this.selectedAnswer) === Number(question.correctAnswer);
+        } else {
+            isCorrect = this.selectedAnswer === question.correctAnswer;
+        }
 
         // 更新分数
         if (isCorrect) {
@@ -155,22 +178,41 @@ class PracticeApp {
             this.elements.scoreSpan.textContent = this.score;
         }
 
-        // 显示正确答案和错误答案
+        // 显示正确答案和错误答案（根据题目格式分别处理）
         document.querySelectorAll('.option').forEach(opt => {
             opt.classList.add('disabled');
-            if (opt.dataset.option === question.correctAnswer) {
-                opt.classList.add('correct');
-            } else if (opt.dataset.option === this.selectedAnswer && !isCorrect) {
-                opt.classList.add('incorrect');
+            if (Array.isArray(question.options)) {
+                if (parseInt(opt.dataset.option) === Number(question.correctAnswer)) {
+                    opt.classList.add('correct');
+                } else if (parseInt(opt.dataset.option) === parseInt(this.selectedAnswer) && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+            } else {
+                if (opt.dataset.option === question.correctAnswer) {
+                    opt.classList.add('correct');
+                } else if (opt.dataset.option === this.selectedAnswer && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
             }
         });
+
+        // 准备反馈文本（显示字母标签与选项文本）
+        let correctLabel = '';
+        let correctText = '';
+        if (Array.isArray(question.options)) {
+            correctLabel = String.fromCharCode(65 + Number(question.correctAnswer));
+            correctText = question.options[Number(question.correctAnswer)];
+        } else {
+            correctLabel = question.correctAnswer;
+            correctText = question.options[question.correctAnswer];
+        }
 
         // 显示反馈
         this.elements.feedbackContainer.style.display = 'block';
         this.elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
         this.elements.feedback.innerHTML = `
             <h3>${isCorrect ? '✓ 回答正确！' : '✗ 回答错误'}</h3>
-            <p><strong>正确答案：</strong>${question.correctAnswer}. ${question.options[question.correctAnswer]}</p>
+            <p><strong>正确答案：</strong>${correctLabel}. ${correctText}</p>
             <p><strong>解析：</strong>${question.explanation}</p>
         `;
 

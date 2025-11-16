@@ -108,16 +108,32 @@ class PracticeApp {
         const formattedQuestion = this.formatQuestionText(`${question.id}. ${question.question}`);
         this.elements.questionText.innerHTML = formattedQuestion;
 
-        // 清空并生成选项
+        // 清空并生成选项（规范化后的数组格式）
         this.elements.optionsContainer.innerHTML = '';
-        Object.entries(question.options).forEach(([key, value]) => {
-            const optionDiv = document.createElement('div');
-            optionDiv.className = 'option';
-            optionDiv.dataset.option = key;
-            optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
-            optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
-            this.elements.optionsContainer.appendChild(optionDiv);
-        });
+        
+        if (Array.isArray(question.options)) {
+            // 数组格式：转换为 A/B/C/D 标签并保存索引
+            question.options.forEach((value, optionIndex) => {
+                const label = String.fromCharCode(65 + optionIndex); // 65='A'
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                // 存储索引，便于与 question.correctAnswer（数字）比较
+                optionDiv.dataset.option = String(optionIndex);
+                optionDiv.innerHTML = `<span class="option-label">${label}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(String(optionIndex), optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
+        } else {
+            // 备用：如果仍是对象格式（不应该出现，但保险起见）
+            Object.entries(question.options).forEach(([key, value]) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.dataset.option = key;
+                optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
+        }
 
         // 隐藏反馈和代码示例
         this.elements.feedbackContainer.style.display = 'none';
@@ -151,7 +167,9 @@ class PracticeApp {
 
         this.isAnswered = true;
         const question = this.questions[this.currentQuestionIndex];
-        const isCorrect = this.selectedAnswer === question.correctAnswer;
+        
+        // 规范比较：选中的索引（字符串）与 correctAnswer（数字）比较
+        const isCorrect = parseInt(this.selectedAnswer) === Number(question.correctAnswer);
 
         // 更新分数
         if (isCorrect) {
@@ -162,19 +180,26 @@ class PracticeApp {
         // 显示正确答案和错误答案
         document.querySelectorAll('.option').forEach(opt => {
             opt.classList.add('disabled');
-            if (opt.dataset.option === question.correctAnswer) {
+            const optIdx = parseInt(opt.dataset.option);
+            const correctIdx = Number(question.correctAnswer);
+            if (optIdx === correctIdx) {
                 opt.classList.add('correct');
-            } else if (opt.dataset.option === this.selectedAnswer && !isCorrect) {
+            } else if (optIdx === parseInt(this.selectedAnswer) && !isCorrect) {
                 opt.classList.add('incorrect');
             }
         });
+
+        // 准备反馈文本（显示字母标签与选项文本）
+        const correctIdx = Number(question.correctAnswer);
+        const correctLabel = String.fromCharCode(65 + correctIdx); // 转为字母
+        const correctText = question.options[correctIdx];
 
         // 显示反馈
         this.elements.feedbackContainer.style.display = 'block';
         this.elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
         this.elements.feedback.innerHTML = `
             <h3>${isCorrect ? '✓ 回答正确！' : '✗ 回答错误'}</h3>
-            <p><strong>正确答案：</strong>${question.correctAnswer}. ${question.options[question.correctAnswer]}</p>
+            <p><strong>正确答案：</strong>${correctLabel}. ${correctText}</p>
             <p><strong>解析：</strong>${question.explanation}</p>
         `;
 
