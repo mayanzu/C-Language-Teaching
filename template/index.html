@@ -8,6 +8,38 @@
 </head>
 <body>
     <div class="container">
+        <!-- 左侧题目导航栏 -->
+        <nav class="question-nav left-nav">
+            <div class="nav-header">
+                <h3>题目导航</h3>
+                <button class="toggle-nav" id="toggle-left-nav">◀</button>
+            </div>
+            <div class="question-list" id="question-list">
+                <!-- 题目列表将通过JavaScript动态生成 -->
+            </div>
+        </nav>
+
+        <!-- 右侧快速操作栏 -->
+        <nav class="quick-nav right-nav">
+            <div class="nav-header">
+                <h3>快速操作</h3>
+                <button class="toggle-nav" id="toggle-right-nav">▶</button>
+            </div>
+            <div class="quick-actions">
+                <button class="nav-btn" id="prev-question-btn" title="上一题 (←)">上一题</button>
+                <button class="nav-btn" id="next-question-btn" title="下一题 (→)">下一题</button>
+                <button class="nav-btn" id="random-question-btn" title="随机题">随机题</button>
+                <button class="nav-btn" id="first-question-btn" title="第一题">第一题</button>
+                <button class="nav-btn" id="last-question-btn" title="最后一题">最后一题</button>
+                <div class="progress-summary">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0/0</div>
+                </div>
+            </div>
+        </nav>
+
         <header>
             <h1>练习系统</h1>
             <div class="progress-info">
