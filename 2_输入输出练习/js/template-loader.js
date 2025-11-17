@@ -6,10 +6,17 @@ class TemplateLoader {
 
     // 加载题库数据
     async loadQuestions() {
-        // 直接使用内置题库数据
-        this.questions = this.getBuiltInQuestions();
-        console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
-        return this.questions;
+        try {
+            // 直接使用内置题库数据
+            this.questions = this.getBuiltInQuestions();
+            // 规范化题目数据（统一为数组格式）
+            this.normalizeQuestions(this.questions);
+            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
+            return this.questions;
+        } catch (error) {
+            console.warn('加载题库失败:', error.message);
+            return [];
+        }
     }
 
     // 获取内置题库数据
@@ -154,6 +161,38 @@ class TemplateLoader {
             categories: this.getCategories(),
             difficulty: this.getDifficultyStats()
         };
+    }
+
+    // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引
+    normalizeQuestions(questions) {
+        if (!Array.isArray(questions)) return;
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        
+        this.questions = questions.map(q => {
+            if (!q || !q.options) return q;
+            // 已经是数组格式，跳过
+            if (Array.isArray(q.options)) return q;
+
+            // 对象格式：按 A/B/C/D 顺序转为数组
+            const optsObj = q.options;
+            const arr = [];
+            for (const k of letters) {
+                if (k in optsObj) arr.push(optsObj[k]);
+            }
+            if (arr.length === 0) {
+                Object.values(optsObj).forEach(v => arr.push(v));
+            }
+
+            // 正确答案字母转为索引
+            let correct = q.correctAnswer;
+            if (typeof correct === 'string') {
+                const up = correct.toUpperCase();
+                const idx = letters.indexOf(up);
+                correct = idx !== -1 ? idx : 0;
+            }
+
+            return Object.assign({}, q, { options: arr, correctAnswer: correct });
+        });
     }
 
     // 获取题目分类（如果存在分类字段）
