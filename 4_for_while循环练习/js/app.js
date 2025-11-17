@@ -1,12 +1,13 @@
 // 练习应用主逻辑
 class PracticeApp {
     constructor() {
-        this.questions = [];
         this.currentQuestionIndex = 0;
         this.score = 0;
-        this.selectedAnswer = null;
-        this.isAnswered = false;
-        this.currentCodeText = '';
+        this.questions = [];
+        this.selectedOption = null;
+        this.questionStates = []; // 记录每道题的状态 ('unanswered', 'correct', 'incorrect')
+        this.isLeftNavCollapsed = false;  // 左侧导航栏是否折叠
+        this.isRightNavCollapsed = false; // 右侧导航栏是否折叠
         
         // 缓存常用正则表达式以提高性能
         this.regexCache = {
@@ -35,17 +36,31 @@ class PracticeApp {
         this.elements = {
             questionText: document.getElementById('question-text'),
             optionsContainer: document.getElementById('options-container'),
+            feedbackContainer: document.getElementById('feedback-container'),
+            feedback: document.getElementById('feedback'),
             submitBtn: document.getElementById('submit-btn'),
             nextBtn: document.getElementById('next-btn'),
             restartBtn: document.getElementById('restart-btn'),
-            feedbackContainer: document.getElementById('feedback-container'),
-            feedback: document.getElementById('feedback'),
-            codeExample: document.getElementById('code-example'),
-            codeExampleContainer: document.getElementById('code-example-container'),
+            scoreSpan: document.getElementById('score'),
+            totalSpan: document.getElementById('total'),
+            progressBar: document.querySelector('.progress-bar-fill'),
             copyBtn: document.getElementById('copy-btn'),
+            codeExample: document.getElementById('code-example'),
+            // 导航栏相关元素
+            questionList: document.getElementById('question-list'),
+            toggleLeftNav: document.getElementById('toggle-left-nav'),
+            toggleRightNav: document.getElementById('toggle-right-nav'),
+            prevQuestionBtn: document.getElementById('prev-question-btn'),
+            nextQuestionBtn: document.getElementById('next-question-btn'),
+            randomQuestionBtn: document.getElementById('random-question-btn'),
+            firstQuestionBtn: document.getElementById('first-question-btn'),
+            lastQuestionBtn: document.getElementById('last-question-btn'),
+            progressFill: document.querySelector('.progress-fill'),
+            progressText: document.querySelector('.progress-text'),
+            leftNav: document.querySelector('.question-nav.left-nav'),
+            rightNav: document.querySelector('.quick-nav.right-nav'),
             currentQuestionSpan: document.getElementById('current-question'),
             totalQuestionsSpan: document.getElementById('total-questions'),
-            scoreSpan: document.getElementById('score'),
             title: document.querySelector('title'),
             headerTitle: document.querySelector('header h1')
         };
@@ -54,9 +69,41 @@ class PracticeApp {
     // 绑定事件
     bindEvents() {
         this.elements.submitBtn.addEventListener('click', () => this.submitAnswer());
-        this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
+        this.elements.nextBtn.addEventListener('click', () => {
+            this.currentQuestionIndex++;
+            if (this.currentQuestionIndex < this.questions.length) {
+                this.showQuestion(this.currentQuestionIndex);
+                this.updateCurrentQuestionHighlight(); // 更新当前题目高亮
+            } else {
+                this.showFinalResults();
+            }
+        });
+        
         this.elements.restartBtn.addEventListener('click', () => this.restart());
         this.elements.copyBtn.addEventListener('click', () => this.copyCode());
+        
+        // 导航栏事件绑定
+        if (this.elements.toggleLeftNav) {
+            this.elements.toggleLeftNav.addEventListener('click', () => this.toggleLeftNav());
+        }
+        if (this.elements.toggleRightNav) {
+            this.elements.toggleRightNav.addEventListener('click', () => this.toggleRightNav());
+        }
+        if (this.elements.prevQuestionBtn) {
+            this.elements.prevQuestionBtn.addEventListener('click', () => this.goToPrevQuestion());
+        }
+        if (this.elements.nextQuestionBtn) {
+            this.elements.nextQuestionBtn.addEventListener('click', () => this.goToNextQuestion());
+        }
+        if (this.elements.randomQuestionBtn) {
+            this.elements.randomQuestionBtn.addEventListener('click', () => this.goToRandomQuestion());
+        }
+        if (this.elements.firstQuestionBtn) {
+            this.elements.firstQuestionBtn.addEventListener('click', () => this.goToFirstQuestion());
+        }
+        if (this.elements.lastQuestionBtn) {
+            this.elements.lastQuestionBtn.addEventListener('click', () => this.goToLastQuestion());
+        }
     }
 
     // 开始应用
@@ -86,9 +133,13 @@ class PracticeApp {
             // 更新页面标题和统计信息
             this.updatePageTitle();
             this.elements.totalQuestionsSpan.textContent = this.questions.length;
+            this.questionStates = new Array(this.questions.length).fill('unanswered'); // 初始化题目状态
             
             // 显示第一题
             this.showQuestion(0);
+            
+            // 生成题目导航列表
+            this.generateQuestionList();
             
         } catch (error) {
             console.error('应用启动失败:', error);
@@ -162,6 +213,187 @@ class PracticeApp {
         this.elements.restartBtn.style.display = 'none';
     }
 
+    // 生成题目导航列表
+    generateQuestionList() {
+        if (!this.elements.questionList) return;
+        
+        this.elements.questionList.innerHTML = '';
+        
+        this.questions.forEach((question, index) => {
+            const questionItem = document.createElement('div');
+            questionItem.className = 'question-item';
+            questionItem.dataset.index = index;
+            
+            // 设置题目状态类
+            if (index === this.currentQuestionIndex) {
+                questionItem.classList.add('current');
+            } else if (this.questionStates[index] === 'correct') {
+                questionItem.classList.add('answered-correct');
+            } else if (this.questionStates[index] === 'incorrect') {
+                questionItem.classList.add('answered-incorrect');
+            }
+            
+            // 创建题目编号
+            const questionNumber = document.createElement('span');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = index + 1;
+            
+            // 创建题目文本
+            const questionText = document.createElement('span');
+            questionText.className = 'question-item-text';
+            questionText.textContent = `题目 ${index + 1}`;
+            
+            questionItem.appendChild(questionNumber);
+            questionItem.appendChild(questionText);
+            
+            // 添加点击事件
+            questionItem.addEventListener('click', () => {
+                this.goToQuestion(index);
+            });
+            
+            this.elements.questionList.appendChild(questionItem);
+        });
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 跳转到指定题目
+    goToQuestion(index) {
+        if (index >= 0 && index < this.questions.length && index !== this.currentQuestionIndex) {
+            this.showQuestion(index);
+            this.updateCurrentQuestionHighlight();
+        }
+    }
+
+    // 上一题
+    goToPrevQuestion() {
+        if (this.currentQuestionIndex > 0) {
+            this.goToQuestion(this.currentQuestionIndex - 1);
+        }
+    }
+
+    // 下一题
+    goToNextQuestion() {
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+            this.goToQuestion(this.currentQuestionIndex + 1);
+        }
+    }
+
+    // 随机题目
+    goToRandomQuestion() {
+        const randomIndex = Math.floor(Math.random() * this.questions.length);
+        if (randomIndex !== this.currentQuestionIndex) {
+            this.goToQuestion(randomIndex);
+        } else {
+            // 如果随机到当前题目，再随机一次
+            this.goToRandomQuestion();
+        }
+    }
+
+    // 第一题
+    goToFirstQuestion() {
+        this.goToQuestion(0);
+    }
+
+    // 最后一题
+    goToLastQuestion() {
+        this.goToQuestion(this.questions.length - 1);
+    }
+
+    // 切换左侧导航栏
+    toggleLeftNav() {
+        this.isLeftNavCollapsed = !this.isLeftNavCollapsed;
+        if (this.elements.leftNav) {
+            if (this.isLeftNavCollapsed) {
+                this.elements.leftNav.classList.add('collapsed');
+                if (this.elements.toggleLeftNav) {
+                    this.elements.toggleLeftNav.textContent = '▶';
+                }
+            } else {
+                this.elements.leftNav.classList.remove('collapsed');
+                if (this.elements.toggleLeftNav) {
+                    this.elements.toggleLeftNav.textContent = '◀';
+                }
+            }
+        }
+    }
+
+    // 切换右侧导航栏
+    toggleRightNav() {
+        this.isRightNavCollapsed = !this.isRightNavCollapsed;
+        if (this.elements.rightNav) {
+            if (this.isRightNavCollapsed) {
+                this.elements.rightNav.classList.add('collapsed');
+                if (this.elements.toggleRightNav) {
+                    this.elements.toggleRightNav.textContent = '◀';
+                }
+            } else {
+                this.elements.rightNav.classList.remove('collapsed');
+                if (this.elements.toggleRightNav) {
+                    this.elements.toggleRightNav.textContent = '▶';
+                }
+            }
+        }
+    }
+
+    // 更新进度条
+    updateProgressBar() {
+        if (!this.elements.progressFill || !this.elements.progressText) return;
+        
+        const answeredCount = this.questionStates.filter(state => 
+            state === 'correct' || state === 'incorrect'
+        ).length;
+        const progressPercentage = (answeredCount / this.questions.length) * 100;
+        
+        this.elements.progressFill.style.width = `${progressPercentage}%`;
+        this.elements.progressText.textContent = `${answeredCount}/${this.questions.length}`;
+    }
+
+    // 更新题目状态
+    updateQuestionState(index, state) {
+        this.questionStates[index] = state;
+        
+        // 更新题目列表中的状态
+        if (this.elements.questionList) {
+            const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+            if (questionItems[index]) {
+                questionItems[index].classList.remove('answered-correct', 'answered-incorrect');
+                
+                if (state === 'correct') {
+                    questionItems[index].classList.add('answered-correct');
+                } else if (state === 'incorrect') {
+                    questionItems[index].classList.add('answered-incorrect');
+                }
+            }
+        }
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 更新当前题目高亮
+    updateCurrentQuestionHighlight() {
+        if (!this.elements.questionList) return;
+        
+        // 移除所有current类
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        questionItems.forEach(item => item.classList.remove('current'));
+        
+        // 添加current类到当前题目
+        if (questionItems[this.currentQuestionIndex]) {
+            questionItems[this.currentQuestionIndex].classList.add('current');
+        }
+        
+        // 更新导航按钮状态
+        if (this.elements.prevQuestionBtn) {
+            this.elements.prevQuestionBtn.disabled = this.currentQuestionIndex === 0;
+        }
+        if (this.elements.nextQuestionBtn) {
+            this.elements.nextQuestionBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
+        }
+    }
+
     // 选择选项
     selectOption(option, element) {
         if (this.isAnswered) return;
@@ -183,6 +415,7 @@ class PracticeApp {
 
         this.isAnswered = true;
         const question = this.questions[this.currentQuestionIndex];
+        const questionIndex = this.currentQuestionIndex;
         
         // 处理答案验证：如果选项是数组格式且selectedAnswer是字母，需要转换为数字索引进行比较
         let userAnswerIndex = this.selectedAnswer;
@@ -197,6 +430,11 @@ class PracticeApp {
         if (isCorrect) {
             this.score++;
             this.elements.scoreSpan.textContent = this.score;
+            // 更新题目状态
+            this.updateQuestionState(questionIndex, 'correct');
+        } else {
+            // 更新题目状态
+            this.updateQuestionState(questionIndex, 'incorrect');
         }
 
         // 显示正确答案和错误答案
@@ -266,10 +504,11 @@ class PracticeApp {
     }
 
     // 格式化文本中的代码块（处理markdown格式、<C>标签格式和普通代码片段）
-    formatTextWithCodeBlocks(text) {
+    formatTextWithCodeBlocks(text, options = {}) {
         if (!text || typeof text !== 'string') return text || '';
         
         let processedText = text;
+        const enableHighlight = options.enableHighlight !== false;
         
         // 1. 处理<C>标签格式的代码块
         // 先提取<C>标签代码块，避免在处理过程中被其他逻辑影响
@@ -278,16 +517,17 @@ class PracticeApp {
             const placeholder = `C_TAG_BLOCK_${cTagBlocks.length}`;
             // 对于<C>标签，我们明确将其识别为C语言代码
             const language = 'c';
-            // 移除代码中的换行符，避免在后续处理中被转换为<br>
-            const codeWithoutNewlines = code.replace(/\n/g, ' ');
-            const formattedCode = codeWithoutNewlines.replace(this.regexCache.tab, '    ').trim();
-            const highlightedCode = this.applySyntaxHighlighting(formattedCode, language);
+            // 保留代码中的换行符，确保代码格式正确显示
+            const formattedCode = code.replace(this.regexCache.tab, '    ').trim();
+            const highlightedCode = enableHighlight 
+                ? this.applySyntaxHighlighting(formattedCode, language)
+                : this.escapeHtml(formattedCode);
             
             const codeBlock = `<div class="code-example-container">
                     <div class="code-example-header">
                         <span class="code-language-label">${language.toUpperCase()}</span>
                     </div>
-                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
+                    <pre class="code-with-line-numbers"><code class="language-c">${highlightedCode}</code></pre>
                 </div>`;
             
             cTagBlocks.push({ placeholder, content: codeBlock });
@@ -298,67 +538,71 @@ class PracticeApp {
         processedText = processedText.replace(this.regexCache.markdownCode, (match, language, code) => {
             const detectedLanguage = this.detectCodeLanguage(code.trim()) || language || 'c';
             const formattedCode = code.replace(this.regexCache.tab, '    ').trim();
-            const highlightedCode = this.applySyntaxHighlighting(formattedCode, detectedLanguage);
+            const highlightedCode = enableHighlight
+                ? this.applySyntaxHighlighting(formattedCode, detectedLanguage)
+                : this.escapeHtml(formattedCode);
             
             return `<div class="code-example-container">
                     <div class="code-example-header">
                         <span class="code-language-label">${detectedLanguage.toUpperCase()}</span>
                     </div>
-                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
+                    <pre class="code-with-line-numbers"><code class="language-${detectedLanguage}">${highlightedCode}</code></pre>
                 </div>`;
         });
         
-        // 3. 为普通文本中的代码片段添加简单高亮（适用于题干中的内联代码）
-        // 预编译正则表达式以提高性能
-        if (!this.regexCache.inlineCodeRegex) {
-            // 优化关键字列表，只包含最常用的C语言关键字和函数
-            const cKeywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
-                             'return', 'void', 'switch', 'case', 'default', 'break', 'printf', 'scanf'];
-            
-            // 优化正则表达式，减少捕获组数量，提高执行效率
-            this.regexCache.inlineCodeRegex = new RegExp(`\\b(${cKeywords.join('|')})\\b|(\\w+)\\s*\\(|\"([^\"]*)\"`, 'g');
-        }
-        
-        // 性能优化：只对真正需要高亮的文本进行处理，避免不必要的DOM操作
-        // 使用字符串处理方式代替复杂的DOM遍历，提高性能
-        
-        // 先提取已经格式化的代码块和<C>标签占位符，避免重复处理
-        const codeBlockPlaceholders = [];
-        let tempText = processedText;
-        
-        // 替换已格式化的代码块为临时标记
-        tempText = tempText.replace(/<div class="code-example-container">[\s\S]*?<\/div>/g, (match) => {
-            const placeholder = `CODE_BLOCK_PLACEHOLDER_${codeBlockPlaceholders.length}`;
-            codeBlockPlaceholders.push({ placeholder, content: match });
-            return placeholder;
-        });
-        
-        // 替换<C>标签占位符为临时标记
-        tempText = tempText.replace(/C_TAG_BLOCK_\d+/g, (match) => {
-            const placeholder = `C_TAG_PLACEHOLDER_${codeBlockPlaceholders.length}`;
-            codeBlockPlaceholders.push({ placeholder, content: match });
-            return placeholder;
-        });
-        
-        // 对剩余文本应用内联代码高亮
-        tempText = tempText.replace(this.regexCache.inlineCodeRegex, (match, keyword, func, str) => {
-            if (keyword) {
-                return `<span class="code-keyword">${keyword}</span>`;
-            } else if (func) {
-                // 处理函数名，保留括号
-                return `<span class="code-function">${func}</span>(`;
-            } else if (str !== undefined) {
-                return `<span class="code-string">"${str}"</span>`;
+        if (enableHighlight) {
+            // 3. 为普通文本中的代码片段添加简单高亮（适用于题干中的内联代码）
+            // 预编译正则表达式以提高性能
+            if (!this.regexCache.inlineCodeRegex) {
+                // 优化关键字列表，只包含最常用的C语言关键字和函数
+                const cKeywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
+                                 'return', 'void', 'switch', 'case', 'default', 'break', 'printf', 'scanf'];
+                
+                // 优化正则表达式，减少捕获组数量，提高执行效率
+                this.regexCache.inlineCodeRegex = new RegExp(`\\b(${cKeywords.join('|')})\\b|(\\w+)\\s*\\(|\"([^\"]*)\"`, 'g');
             }
-            return match;
-        });
-        
-        // 恢复已格式化的代码块和<C>标签占位符
-        codeBlockPlaceholders.forEach(({ placeholder, content }) => {
-            tempText = tempText.replace(placeholder, content);
-        });
-        
-        processedText = tempText;
+            
+            // 性能优化：只对真正需要高亮的文本进行处理，避免不必要的DOM操作
+            // 使用字符串处理方式代替复杂的DOM遍历，提高性能
+            
+            // 先提取已经格式化的代码块和<C>标签占位符，避免重复处理
+            const codeBlockPlaceholders = [];
+            let tempText = processedText;
+            
+            // 替换已格式化的代码块为临时标记
+            tempText = tempText.replace(/<div class="code-example-container">[\s\S]*?<\/div>/g, (match) => {
+                const placeholder = `CODE_BLOCK_PLACEHOLDER_${codeBlockPlaceholders.length}`;
+                codeBlockPlaceholders.push({ placeholder, content: match });
+                return placeholder;
+            });
+            
+            // 替换<C>标签占位符为临时标记
+            tempText = tempText.replace(/C_TAG_BLOCK_\d+/g, (match) => {
+                const placeholder = `C_TAG_PLACEHOLDER_${codeBlockPlaceholders.length}`;
+                codeBlockPlaceholders.push({ placeholder, content: match });
+                return placeholder;
+            });
+            
+            // 对剩余文本应用内联代码高亮
+            tempText = tempText.replace(this.regexCache.inlineCodeRegex, (match, keyword, func, str) => {
+                if (keyword) {
+                    return `<span class="code-keyword">${keyword}</span>`;
+                } else if (func) {
+                    // 处理函数名，保留括号
+                    return `<span class="code-function">${func}</span>(`;
+                } else if (str !== undefined) {
+                    return `<span class="code-string">"${str}"</span>`;
+                }
+                return match;
+            });
+            
+            // 恢复已格式化的代码块和<C>标签占位符
+            codeBlockPlaceholders.forEach(({ placeholder, content }) => {
+                tempText = tempText.replace(placeholder, content);
+            });
+            
+            processedText = tempText;
+        }
         
         // 4. 处理换行符转换为<br>标签
         // 先提取所有代码块和<C>标签占位符，避免在代码块内部添加<br>标签
@@ -400,7 +644,19 @@ class PracticeApp {
     
     // 格式化题目文本
     formatQuestionText(questionText) {
-        return this.formatTextWithCodeBlocks(questionText);
+        return this.formatTextWithCodeBlocks(questionText, { enableHighlight: false });
+    }
+
+    // 转义HTML，防止代码片段在禁用高亮时出现标签
+    escapeHtml(text) {
+        if (text === undefined || text === null) return '';
+        return text
+            .toString()
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
     // 检测代码语言
@@ -478,21 +734,28 @@ class PracticeApp {
         }
         
         if (!this.regexCache.functionCallRegex) {
-            this.regexCache.functionCallRegex = /(\w+)(?=\s*\()(?![^<]*>)/g;
+            this.regexCache.functionCallRegex = /(\w+)(?=\s*\()/g;
         }
         
-        // 使用更安全的处理方式，避免重复替换
-        let highlighted = code;
+        // 先转义HTML特殊字符，再应用高亮，这样可以避免高亮标签被转义
+        let highlighted = code
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
         
         // 1. 先处理字符串，避免与其他规则冲突
-        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        // 注意：字符串内容已经被转义，所以需要匹配转义后的引号
+        highlighted = highlighted.replace(/&quot;([^&]*?)&quot;/g, '<span class="code-string">&quot;$1&quot;</span>');
         
         // 2. 处理注释
         highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
         highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
         
         // 3. 特别处理头文件include语句
-        highlighted = highlighted.replace(/(#include)\s*<([^>]+)>/g, '<span class="code-macro">$1</span> &lt;<span class="code-include">$2</span>&gt;');
+        // 注意：<>已经被转义为&lt;&gt;，所以需要匹配转义后的符号
+        highlighted = highlighted.replace(/(#include)\s*&lt;([^&]*?)&gt;/g, '<span class="code-macro">$1</span> &lt;<span class="code-include">$2</span>&gt;');
         
         // 4. 处理其他预处理指令
         highlighted = highlighted.replace(/(#\w+)(?!include)/g, '<span class="code-macro">$1</span>');
@@ -506,7 +769,7 @@ class PracticeApp {
         // 7. 关键字
         highlighted = highlighted.replace(this.regexCache.keywordsRegex, '<span class="code-keyword">$1</span>');
         
-        // 8. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
+        // 8. 函数调用
         highlighted = highlighted.replace(this.regexCache.functionCallRegex, '<span class="code-function">$1</span>');
         
         return highlighted;
@@ -590,7 +853,21 @@ class PracticeApp {
         this.currentQuestionIndex = 0;
         this.score = 0;
         this.elements.scoreSpan.textContent = this.score;
+        
+        // 重置题目状态
+        this.questionStates = new Array(this.questions.length).fill('unanswered');
+        
+        // 重新生成题目导航列表
+        this.generateQuestionList();
+        
+        // 重新加载第一题
         this.showQuestion(0);
+        this.elements.currentQuestionSpan.textContent = 1;
+        
+        // 隐藏结果按钮，显示提交和下一题按钮
+        this.elements.restartBtn.style.display = 'none';
+        this.elements.submitBtn.style.display = 'inline-block';
+        this.elements.nextBtn.style.display = 'none';
     }
 
     // 显示最终结果
