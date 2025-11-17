@@ -1,4 +1,4 @@
-// 模板加载器 - 负责动态加载题库数据
+﻿// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         this.questions = [];
@@ -6,13 +6,52 @@ class TemplateLoader {
 
     // 加载题库数据
     async loadQuestions() {
-        // 直接使用内置题库数据
-        this.questions = this.getBuiltInQuestions();
-        console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
-        return this.questions;
+        try {
+            // 直接使用内置题库数据
+            this.questions = this.getBuiltInQuestions();
+            // 规范化题目数据（统一为数组格式）
+            this.normalizeQuestions(this.questions);
+            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
+            return this.questions;
+        } catch (error) {
+            console.warn('加载题库失败:', error.message);
+            return [];
+        }
     }
 
-    // 获取内置题库数据
+    // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引
+    normalizeQuestions(questions) {
+        if (!Array.isArray(questions)) return;
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        
+        this.questions = questions.map(q => {
+            if (!q || !q.options) return q;
+            // 已经是数组格式，跳过
+            if (Array.isArray(q.options)) return q;
+
+            // 对象格式：按 A/B/C/D 顺序转为数组
+            const optsObj = q.options;
+            const arr = [];
+            for (const k of letters) {
+                if (k in optsObj) arr.push(optsObj[k]);
+            }
+            if (arr.length === 0) {
+                Object.values(optsObj).forEach(v => arr.push(v));
+            }
+
+            // 正确答案字母转为索引
+            let correct = q.correctAnswer;
+            if (typeof correct === 'string') {
+                const up = correct.toUpperCase();
+                const idx = letters.indexOf(up);
+                correct = idx !== -1 ? idx : 0;
+            }
+
+            return Object.assign({}, q, { options: arr, correctAnswer: correct });
+        });
+    }
+
+    // 获取内置题库数据（用于 file:// 协议支持）
     getBuiltInQuestions() {
         return [
   {
@@ -248,13 +287,13 @@ class TemplateLoader {
     "codeExample": "```c\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    char str1[] = \"123.456\";\n    char str2[] = \"-78.9\";\n    \n    // 将字符串转换为浮点数\n    double num1 = atof(str1);\n    double num2 = atof(str2);\n    \n    printf(\"%s -> %.3f\\n\", str1, num1);  // 输出：123.456 -> 123.456\n    printf(\"%s -> %.1f\\n\", str2, num2);  // 输出：-78.9 -> -78.9\n    \n    // 计算两数之和\n    printf(\"Sum: %.3f\\n\", num1 + num2);  // 输出：Sum: 44.556\n    \n    return 0;\n}\n```"
   },
   {
-        "id": 30,
-        "question": "以下代码执行后，输出结果是？\n\n```c\nchar str1[10] = \"Hello\";\nchar str2[10] = \"World\";\nif(strcmp(str1, str2) > 0) {\n    printf(\"1\");\n} else if(strcmp(str1, str2) < 0) {\n    printf(\"-1\");\n} else {\n    printf(\"0\");\n}\n```",
-        "options": ["1", "-1", "0", "编译错误"],
-        "correctAnswer": 1,
-        "explanation": "strcmp()函数比较两个字符串。当第一个字符串小于第二个字符串时，返回负数；当第一个字符串大于第二个字符串时，返回正数；当两个字符串相等时，返回0。\"Hello\"小于\"World\"（按字典序），所以strcmp(str1, str2) < 0，输出-1。",
-        "codeExample": "```c\n#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str1[10] = \"Hello\";\n    char str2[10] = \"World\";\n    \n    // 比较字符串\n    int result = strcmp(str1, str2);\n    \n    printf(\"strcmp(\\\"Hello\\\", \\\"World\\\") = %d\\n\", result);\n    \n    if(result > 0) {\n        printf(\"1\\n\");\n    } else if(result < 0) {\n        printf(\"-1\\n\");  // 输出：-1\n    } else {\n        printf(\"0\\n\");\n    }\n    \n    // 更多比较示例\n    printf(\"strcmp(\\\"World\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"World\", \"Hello\"));\n    printf(\"strcmp(\\\"Hello\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"Hello\", \"Hello\"));\n    \n    return 0;\n}\n```"
-    }
+    "id": 30,
+    "question": "以下代码执行后，输出结果是？\n\n```c\nchar str1[10] = \"Hello\";\nchar str2[10] = \"World\";\nif(strcmp(str1, str2) > 0) {\n    printf(\"1\");\n} else if(strcmp(str1, str2) < 0) {\n    printf(\"-1\");\n} else {\n    printf(\"0\");\n}\n```",
+    "options": ["1", "-1", "0", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "strcmp()函数比较两个字符串。当第一个字符串小于第二个字符串时，返回负数；当第一个字符串大于第二个字符串时，返回正数；当两个字符串相等时，返回0。\"Hello\"小于\"World\"（按字典序），所以strcmp(str1, str2) < 0，输出-1。",
+    "codeExample": "```c\n#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str1[10] = \"Hello\";\n    char str2[10] = \"World\";\n    \n    // 比较字符串\n    int result = strcmp(str1, str2);\n    \n    printf(\"strcmp(\\\"Hello\\\", \\\"World\\\") = %d\\n\", result);\n    \n    if(result > 0) {\n        printf(\"1\\n\");\n    } else if(result < 0) {\n        printf(\"-1\\n\");  // 输出：-1\n    } else {\n        printf(\"0\\n\");\n    }\n    \n    // 更多比较示例\n    printf(\"strcmp(\\\"World\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"World\", \"Hello\"));\n    printf(\"strcmp(\\\"Hello\\\", \\\"Hello\\\") = %d\\n\", strcmp(\"Hello\", \"Hello\"));\n    \n    return 0;\n}\n```"
+  }
 ];
     }
 
@@ -276,23 +315,15 @@ class TemplateLoader {
                 }
             }
 
-            // 检查选项格式（支持数组格式和对象格式）
-            if (!Array.isArray(question.options) && typeof question.options !== 'object') {
+            // 检查选项格式（规范化后应为数组）
+            if (!Array.isArray(question.options) || question.options.length === 0) {
                 throw new Error(`第 ${i + 1} 题选项格式错误`);
             }
 
-            if (Array.isArray(question.options)) {
-                // 数组格式：检查correctAnswer是否为有效的索引
-                if (typeof question.correctAnswer !== 'number' || 
-                    question.correctAnswer < 0 || 
-                    question.correctAnswer >= question.options.length) {
-                    throw new Error(`第 ${i + 1} 题正确答案不在选项范围内`);
-                }
-            } else {
-                // 对象格式：检查correctAnswer是否为有效的键
-                if (!(question.correctAnswer in question.options)) {
-                    throw new Error(`第 ${i + 1} 题正确答案不在选项中`);
-                }
+            // 检查正确答案是否在选项中
+            const idx = parseInt(question.correctAnswer);
+            if (isNaN(idx) || idx < 0 || idx >= question.options.length) {
+                throw new Error(`第 ${i + 1} 题正确答案索引无效`);
             }
         }
 
@@ -341,10 +372,9 @@ class TemplateLoader {
             const questions = JSON.parse(jsonData);
             this.validateQuestions(questions);
             this.questions = questions;
-            return true;
+            this.normalizeQuestions(this.questions);
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }

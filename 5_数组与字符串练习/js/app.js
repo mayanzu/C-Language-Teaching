@@ -34,8 +34,26 @@ class PracticeApp {
             totalQuestionsSpan: document.getElementById('total-questions'),
             scoreSpan: document.getElementById('score'),
             title: document.querySelector('title'),
-            headerTitle: document.querySelector('header h1')
+            headerTitle: document.querySelector('header h1'),
+            // 题目导航相关元素
+            questionList: document.getElementById('question-list'),
+            toggleLeftNav: document.getElementById('toggle-left-nav'),
+            toggleRightNav: document.getElementById('toggle-right-nav'),
+            prevQuestionBtn: document.getElementById('prev-question-btn'),
+            nextQuestionBtn: document.getElementById('next-question-btn'),
+            randomQuestionBtn: document.getElementById('random-question-btn'),
+            firstQuestionBtn: document.getElementById('first-question-btn'),
+            lastQuestionBtn: document.getElementById('last-question-btn'),
+            progressFill: document.getElementById('progress-fill'),
+            progressText: document.getElementById('progress-text'),
+            leftNav: document.querySelector('.left-nav'),
+            rightNav: document.querySelector('.right-nav')
         };
+        
+        // 题目导航状态
+        this.questionStates = []; // 存储每个题目的状态 (未答/正确/错误)
+        this.isLeftNavCollapsed = false;
+        this.isRightNavCollapsed = false;
     }
 
     // 绑定事件
@@ -44,6 +62,24 @@ class PracticeApp {
         this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
         this.elements.restartBtn.addEventListener('click', () => this.restart());
         this.elements.copyBtn.addEventListener('click', () => this.copyCode());
+        
+        // 题目导航事件
+        this.elements.toggleLeftNav.addEventListener('click', () => this.toggleLeftNav());
+        this.elements.toggleRightNav.addEventListener('click', () => this.toggleRightNav());
+        this.elements.prevQuestionBtn.addEventListener('click', () => this.goToPrevQuestion());
+        this.elements.nextQuestionBtn.addEventListener('click', () => this.goToNextQuestion());
+        this.elements.randomQuestionBtn.addEventListener('click', () => this.goToRandomQuestion());
+        this.elements.firstQuestionBtn.addEventListener('click', () => this.goToFirstQuestion());
+        this.elements.lastQuestionBtn.addEventListener('click', () => this.goToLastQuestion());
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                this.goToPrevQuestion();
+            } else if (e.key === 'ArrowRight') {
+                this.goToNextQuestion();
+            }
+        });
     }
 
     // 开始应用
@@ -56,7 +92,7 @@ class PracticeApp {
             this.questions = await window.templateLoader.loadQuestions();
             
             if (this.questions.length === 0) {
-                this.showError('题库数据为空或加载失败，请检查 data/questions.json 文件');
+                this.showError('题库数据为空或加载失败，请检查内置题库数据');
                 return;
             }
 
@@ -71,6 +107,12 @@ class PracticeApp {
             // 更新页面标题和统计信息
             this.updatePageTitle();
             this.elements.totalQuestionsSpan.textContent = this.questions.length;
+            
+            // 初始化题目状态
+            this.questionStates = new Array(this.questions.length).fill('unanswered');
+            
+            // 生成题目导航列表
+            this.generateQuestionList();
             
             // 显示第一题
             this.showQuestion(0);
@@ -112,17 +154,32 @@ class PracticeApp {
         const formattedQuestion = this.formatQuestionText(`${question.id}. ${question.question}`);
         this.elements.questionText.innerHTML = formattedQuestion;
 
-        // 清空并生成选项
+        // 清空并生成选项（规范化后的数组格式）
         this.elements.optionsContainer.innerHTML = '';
-        question.options.forEach((option, index) => {
-            const optionLabel = String.fromCharCode(65 + index); // A, B, C, D, ...
-            const optionDiv = document.createElement('div');
-            optionDiv.className = 'option';
-            optionDiv.dataset.option = index; // 存储索引，用于与correctAnswer比较
-            optionDiv.innerHTML = `<span class="option-label">${optionLabel}.</span>${option}`;
-            optionDiv.addEventListener('click', () => this.selectOption(index, optionDiv));
-            this.elements.optionsContainer.appendChild(optionDiv);
-        });
+        
+        if (Array.isArray(question.options)) {
+            // 数组格式：转换为 A/B/C/D 标签并保存索引
+            question.options.forEach((value, optionIndex) => {
+                const label = String.fromCharCode(65 + optionIndex); // 65='A'
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                // 存储索引，便于与 question.correctAnswer（数字）比较
+                optionDiv.dataset.option = String(optionIndex);
+                optionDiv.innerHTML = `<span class="option-label">${label}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(String(optionIndex), optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
+        } else {
+            // 备用：如果仍是对象格式（不应该出现，但保险起见）
+            Object.entries(question.options).forEach(([key, value]) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.dataset.option = key;
+                optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
+        }
 
         // 隐藏反馈和代码示例
         this.elements.feedbackContainer.style.display = 'none';
@@ -133,17 +190,14 @@ class PracticeApp {
         this.elements.submitBtn.textContent = '提交答案';
         this.elements.nextBtn.style.display = 'none';
         this.elements.restartBtn.style.display = 'none';
+        
+        // 更新当前题目高亮
+        this.updateCurrentQuestionHighlight();
     }
 
     // 选择选项
     selectOption(option, element) {
-        console.log('selectOption called with option:', option);
-        console.log('element:', element);
-        
-        if (this.isAnswered) {
-            console.log('Already answered, returning');
-            return;
-        }
+        if (this.isAnswered) return;
 
         // 移除之前的选择
         document.querySelectorAll('.option').forEach(opt => {
@@ -154,73 +208,65 @@ class PracticeApp {
         element.classList.add('selected');
         this.selectedAnswer = option;
         this.elements.submitBtn.disabled = false;
-        
-        console.log('selectedAnswer set to:', this.selectedAnswer);
-        console.log('submitBtn.disabled set to:', this.elements.submitBtn.disabled);
     }
 
     // 提交答案
     submitAnswer() {
-        console.log('submitAnswer called');
-        console.log('selectedAnswer:', this.selectedAnswer);
-        console.log('isAnswered:', this.isAnswered);
-        
-        if (this.selectedAnswer === null || this.selectedAnswer === undefined || this.isAnswered) {
-            console.log('Early return from submitAnswer');
-            return;
-        }
+        if (!this.selectedAnswer || this.isAnswered) return;
 
         this.isAnswered = true;
         const question = this.questions[this.currentQuestionIndex];
         
-        console.log('this.selectedAnswer type:', typeof this.selectedAnswer);
-        console.log('question.correctAnswer type:', typeof question.correctAnswer);
-        
-        const isCorrect = this.selectedAnswer === question.correctAnswer;
-        
-        console.log('question:', question);
-        console.log('isCorrect:', isCorrect);
+        // 规范比较：选中的索引（字符串）与 correctAnswer（数字）比较
+        const isCorrect = parseInt(this.selectedAnswer) === Number(question.correctAnswer);
+
+        // 更新题目状态
+        this.updateQuestionState(this.currentQuestionIndex, isCorrect ? 'correct' : 'incorrect');
 
         // 更新分数
         if (isCorrect) {
             this.score++;
             this.elements.scoreSpan.textContent = this.score;
-        }
+       }
 
         // 显示正确答案和错误答案
         document.querySelectorAll('.option').forEach(opt => {
             opt.classList.add('disabled');
-            if (parseInt(opt.dataset.option) === question.correctAnswer) {
+            const optIdx = parseInt(opt.dataset.option);
+            const correctIdx = Number(question.correctAnswer);
+            if (optIdx === correctIdx) {
                 opt.classList.add('correct');
-            } else if (parseInt(opt.dataset.option) === this.selectedAnswer && !isCorrect) {
+            } else if (optIdx === parseInt(this.selectedAnswer) && !isCorrect) {
                 opt.classList.add('incorrect');
             }
         });
 
+        // 准备反馈文本（显示字母标签与选项文本）
+        const correctIdx = Number(question.correctAnswer);
+        const correctLabel = String.fromCharCode(65 + correctIdx); // 转为字母
+        const correctText = question.options[correctIdx];
+
         // 显示反馈
         this.elements.feedbackContainer.style.display = 'block';
         this.elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-        
-        // 将正确答案索引转换为字母
-        const correctAnswerLabel = String.fromCharCode(65 + question.correctAnswer);
         this.elements.feedback.innerHTML = `
             <h3>${isCorrect ? '✓ 回答正确！' : '✗ 回答错误'}</h3>
-            <p><strong>正确答案：</strong>${correctAnswerLabel}. ${question.options[question.correctAnswer]}</p>
+            <p><strong>正确答案：</strong>${correctLabel}. ${correctText}</p>
             <p><strong>解析：</strong>${question.explanation}</p>
         `;
 
         // 显示代码示例
-        this.currentCodeText = question.codeExample;
-        
-        // 如果代码示例包含markdown标记，先提取代码内容
-        let codeContent = this.currentCodeText;
-        const codeBlockMatch = this.currentCodeText.match(/```(\w*)\n([\s\S]*?)\n```/);
+        let codeContent = (question.codeExample || '').trim();
+        let languageFromBlock = '';
+        const codeBlockMatch = codeContent.match(/^```(\w*)\s*\n([\s\S]*?)\n```$/);
         if (codeBlockMatch) {
-            codeContent = codeBlockMatch[2]; // 提取代码内容，不包括markdown标记
+            languageFromBlock = codeBlockMatch[1];
+            codeContent = codeBlockMatch[2].trim();
         }
-        
+
         // 自动检测代码语言
-        const language = this.detectCodeLanguage(codeContent);
+        const language = (languageFromBlock && languageFromBlock.trim()) || this.detectCodeLanguage(codeContent);
+        this.currentCodeText = codeContent;
         this.elements.codeLanguageLabel.textContent = language.toUpperCase();
         
         // 应用代码格式化和高亮
@@ -237,11 +283,6 @@ class PracticeApp {
 
     // 格式化题目文本（处理markdown代码块）
     formatQuestionText(questionText) {
-        // 检查是否已经是处理过的代码块（包含<div class="code-example-container">）
-        if (questionText.includes('<div class="code-example-container">')) {
-            return questionText;
-        }
-        
         // 使用更精确的方法处理markdown代码块
         const codeBlockRegex = /```(\w*)\n([\s\S]*?)\n```/g;
         
@@ -366,23 +407,22 @@ class PracticeApp {
                          'long', 'short', 'static', 'const', 'extern', 'auto', 'register', 
                          'switch', 'case', 'default', 'break'];
         keywords.forEach(keyword => {
-            // 使用更精确的正则表达式，避免匹配HTML标签内的内容
-            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
             highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
         });
         
         // 5. 类型
         const types = ['int', 'char', 'float', 'double', 'void'];
         types.forEach(type => {
-            // 使用更精确的正则表达式，避免匹配HTML标签内的内容
-            const regex = new RegExp(`\\b${type}\\b(?![^<]*>)`, 'g');
+            const regex = new RegExp(`\\b${type}\\b`, 'g');
             highlighted = highlighted.replace(regex, `<span class="code-type">${type}</span>`);
         });
         
         // 6. 数字
-        highlighted = highlighted.replace(/\b(\d+\.?\d*)\b(?![^<]*>)/g, '<span class="code-number">$1</span>');
+        highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g, '<span class="code-number">$1</span>');
         
         // 7. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
+        // 使用负向前瞻确保不匹配已经在span标签内的内容
         highlighted = highlighted.replace(/(\w+)(?=\s*\()(?![^<]*>)/g, '<span class="code-function">$1</span>');
         
         return highlighted;
@@ -396,7 +436,7 @@ class PracticeApp {
         const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for', 
                          'return', 'true', 'false', 'null', 'undefined', 'this', 'new', 'class'];
         keywords.forEach(keyword => {
-            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
             highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
         });
         
@@ -419,7 +459,7 @@ class PracticeApp {
         const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import', 
                          'from', 'as', 'class', 'try', 'except', 'finally', 'with', 'in', 'not', 'and', 'or'];
         keywords.forEach(keyword => {
-            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
             highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
         });
         
@@ -442,7 +482,7 @@ class PracticeApp {
                          'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class', 
                          'interface', 'extends', 'implements', 'try', 'catch', 'finally', 'throw', 'throws'];
         keywords.forEach(keyword => {
-            const regex = new RegExp(`\\b${keyword}\\b(?![^<]*>)`, 'g');
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
             highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
         });
         
@@ -459,6 +499,8 @@ class PracticeApp {
     // 下一题
     nextQuestion() {
         this.showQuestion(this.currentQuestionIndex + 1);
+        // 更新当前题目高亮
+        this.updateCurrentQuestionHighlight();
     }
 
     // 重新开始
@@ -466,6 +508,13 @@ class PracticeApp {
         this.currentQuestionIndex = 0;
         this.score = 0;
         this.elements.scoreSpan.textContent = this.score;
+        
+        // 重置题目状态
+        this.questionStates = new Array(this.questions.length).fill('unanswered');
+        
+        // 重新生成题目导航列表
+        this.generateQuestionList();
+        
         this.showQuestion(0);
     }
 
@@ -517,9 +566,165 @@ class PracticeApp {
             <div style="text-align: center; padding: 40px; color: #dc3545;">
                 <h3>错误</h3>
                 <p>${message}</p>
-                <p style="margin-top: 20px; font-size: 0.9em;">请检查 data/questions.json 文件格式是否正确。</p>
+                <p style="margin-top: 20px; font-size: 0.9em;">请检查内置题库数据格式是否正确。</p>
             </div>
         `;
+    }
+
+    // 生成题目导航列表
+    generateQuestionList() {
+        this.elements.questionList.innerHTML = '';
+        
+        this.questions.forEach((question, index) => {
+            const questionItem = document.createElement('div');
+            questionItem.className = 'question-item';
+            questionItem.dataset.index = index;
+            
+            // 设置题目状态类
+            if (index === this.currentQuestionIndex) {
+                questionItem.classList.add('current');
+            } else if (this.questionStates[index] === 'correct') {
+                questionItem.classList.add('answered-correct');
+            } else if (this.questionStates[index] === 'incorrect') {
+                questionItem.classList.add('answered-incorrect');
+            }
+            
+            // 创建题目编号
+            const questionNumber = document.createElement('span');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = index + 1;
+            
+            // 创建题目文本
+            const questionText = document.createElement('span');
+            questionText.className = 'question-item-text';
+            questionText.textContent = `题目 ${index + 1}`;
+            
+            questionItem.appendChild(questionNumber);
+            questionItem.appendChild(questionText);
+            
+            // 添加点击事件
+            questionItem.addEventListener('click', () => {
+                this.goToQuestion(index);
+            });
+            
+            this.elements.questionList.appendChild(questionItem);
+        });
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 跳转到指定题目
+    goToQuestion(index) {
+        if (index >= 0 && index < this.questions.length && index !== this.currentQuestionIndex) {
+            this.showQuestion(index);
+        }
+    }
+
+    // 上一题
+    goToPrevQuestion() {
+        if (this.currentQuestionIndex > 0) {
+            this.goToQuestion(this.currentQuestionIndex - 1);
+        }
+    }
+
+    // 下一题
+    goToNextQuestion() {
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+            this.goToQuestion(this.currentQuestionIndex + 1);
+        }
+    }
+
+    // 随机题目
+    goToRandomQuestion() {
+        const randomIndex = Math.floor(Math.random() * this.questions.length);
+        if (randomIndex !== this.currentQuestionIndex) {
+            this.goToQuestion(randomIndex);
+        } else {
+            // 如果随机到当前题目，再随机一次
+            this.goToRandomQuestion();
+        }
+    }
+
+    // 第一题
+    goToFirstQuestion() {
+        this.goToQuestion(0);
+    }
+
+    // 最后一题
+    goToLastQuestion() {
+        this.goToQuestion(this.questions.length - 1);
+    }
+
+    // 切换左侧导航栏
+    toggleLeftNav() {
+        this.isLeftNavCollapsed = !this.isLeftNavCollapsed;
+        if (this.isLeftNavCollapsed) {
+            this.elements.leftNav.classList.add('collapsed');
+            this.elements.toggleLeftNav.textContent = '▶';
+        } else {
+            this.elements.leftNav.classList.remove('collapsed');
+            this.elements.toggleLeftNav.textContent = '◀';
+        }
+    }
+
+    // 切换右侧导航栏
+    toggleRightNav() {
+        this.isRightNavCollapsed = !this.isRightNavCollapsed;
+        if (this.isRightNavCollapsed) {
+            this.elements.rightNav.classList.add('collapsed');
+            this.elements.toggleRightNav.textContent = '◀';
+        } else {
+            this.elements.rightNav.classList.remove('collapsed');
+            this.elements.toggleRightNav.textContent = '▶';
+        }
+    }
+
+    // 更新进度条
+    updateProgressBar() {
+        const answeredCount = this.questionStates.filter(state => 
+            state === 'correct' || state === 'incorrect'
+        ).length;
+        const progressPercentage = (answeredCount / this.questions.length) * 100;
+        
+        this.elements.progressFill.style.width = `${progressPercentage}%`;
+        this.elements.progressText.textContent = `${answeredCount}/${this.questions.length}`;
+    }
+
+    // 更新题目状态
+    updateQuestionState(index, state) {
+        this.questionStates[index] = state;
+        
+        // 更新题目列表中的状态
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        if (questionItems[index]) {
+            questionItems[index].classList.remove('answered-correct', 'answered-incorrect');
+            
+            if (state === 'correct') {
+                questionItems[index].classList.add('answered-correct');
+            } else if (state === 'incorrect') {
+                questionItems[index].classList.add('answered-incorrect');
+            }
+        }
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 更新当前题目高亮
+    updateCurrentQuestionHighlight() {
+        // 移除所有current类
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        questionItems.forEach(item => item.classList.remove('current'));
+        
+        // 添加current类到当前题目
+        if (questionItems[this.currentQuestionIndex]) {
+            questionItems[this.currentQuestionIndex].classList.add('current');
+        }
+        
+        // 更新导航按钮状态
+        this.elements.prevQuestionBtn.disabled = this.currentQuestionIndex === 0;
+        this.elements.nextQuestionBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
     }
 }
 
