@@ -42,13 +42,32 @@ class PracticeApp {
             feedback: document.getElementById('feedback'),
             codeExample: document.getElementById('code-example'),
             codeExampleContainer: document.getElementById('code-example-container'),
+            codeLanguageLabel: document.getElementById('code-language-label'),
             copyBtn: document.getElementById('copy-btn'),
             currentQuestionSpan: document.getElementById('current-question'),
             totalQuestionsSpan: document.getElementById('total-questions'),
             scoreSpan: document.getElementById('score'),
             title: document.querySelector('title'),
-            headerTitle: document.querySelector('header h1')
+            headerTitle: document.querySelector('header h1'),
+            // 题目导航相关元素
+            questionList: document.getElementById('question-list'),
+            toggleLeftNav: document.getElementById('toggle-left-nav'),
+            toggleRightNav: document.getElementById('toggle-right-nav'),
+            prevQuestionBtn: document.getElementById('prev-question-btn'),
+            nextQuestionBtn: document.getElementById('next-question-btn'),
+            randomQuestionBtn: document.getElementById('random-question-btn'),
+            firstQuestionBtn: document.getElementById('first-question-btn'),
+            lastQuestionBtn: document.getElementById('last-question-btn'),
+            progressFill: document.getElementById('progress-fill'),
+            progressText: document.getElementById('progress-text'),
+            leftNav: document.querySelector('.left-nav'),
+            rightNav: document.querySelector('.right-nav')
         };
+        
+        // 题目导航状态
+        this.questionStates = []; // 存储每个题目的状态 (未答/正确/错误)
+        this.isLeftNavCollapsed = false;
+        this.isRightNavCollapsed = false;
     }
 
     // 绑定事件
@@ -57,6 +76,24 @@ class PracticeApp {
         this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
         this.elements.restartBtn.addEventListener('click', () => this.restart());
         this.elements.copyBtn.addEventListener('click', () => this.copyCode());
+        
+        // 题目导航事件
+        this.elements.toggleLeftNav.addEventListener('click', () => this.toggleLeftNav());
+        this.elements.toggleRightNav.addEventListener('click', () => this.toggleRightNav());
+        this.elements.prevQuestionBtn.addEventListener('click', () => this.goToPrevQuestion());
+        this.elements.nextQuestionBtn.addEventListener('click', () => this.goToNextQuestion());
+        this.elements.randomQuestionBtn.addEventListener('click', () => this.goToRandomQuestion());
+        this.elements.firstQuestionBtn.addEventListener('click', () => this.goToFirstQuestion());
+        this.elements.lastQuestionBtn.addEventListener('click', () => this.goToLastQuestion());
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                this.goToPrevQuestion();
+            } else if (e.key === 'ArrowRight') {
+                this.goToNextQuestion();
+            }
+        });
     }
 
     // 开始应用
@@ -86,6 +123,12 @@ class PracticeApp {
             // 更新页面标题和统计信息
             this.updatePageTitle();
             this.elements.totalQuestionsSpan.textContent = this.questions.length;
+            
+            // 初始化题目状态
+            this.questionStates = new Array(this.questions.length).fill('unanswered');
+            
+            // 生成题目导航列表
+            this.generateQuestionList();
             
             // 显示第一题
             this.showQuestion(0);
@@ -160,6 +203,9 @@ class PracticeApp {
         this.elements.submitBtn.textContent = '提交答案';
         this.elements.nextBtn.style.display = 'none';
         this.elements.restartBtn.style.display = 'none';
+        
+        // 更新当前题目高亮
+        this.updateCurrentQuestionHighlight();
     }
 
     // 选择选项
@@ -192,6 +238,9 @@ class PracticeApp {
         }
         
         const isCorrect = userAnswerIndex == question.correctAnswer;
+
+        // 更新题目状态
+        this.updateQuestionState(this.currentQuestionIndex, isCorrect ? 'correct' : 'incorrect');
 
         // 更新分数
         if (isCorrect) {
@@ -661,6 +710,162 @@ class PracticeApp {
                 <p style="margin-top: 20px; font-size: 0.9em;">请检查 data/questions.json 文件格式是否正确。</p>
             </div>
         `;
+    }
+
+    // 生成题目导航列表
+    generateQuestionList() {
+        this.elements.questionList.innerHTML = '';
+        
+        this.questions.forEach((question, index) => {
+            const questionItem = document.createElement('div');
+            questionItem.className = 'question-item';
+            questionItem.dataset.index = index;
+            
+            // 设置题目状态类
+            if (index === this.currentQuestionIndex) {
+                questionItem.classList.add('current');
+            } else if (this.questionStates[index] === 'correct') {
+                questionItem.classList.add('answered-correct');
+            } else if (this.questionStates[index] === 'incorrect') {
+                questionItem.classList.add('answered-incorrect');
+            }
+            
+            // 创建题目编号
+            const questionNumber = document.createElement('span');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = index + 1;
+            
+            // 创建题目文本
+            const questionText = document.createElement('span');
+            questionText.className = 'question-item-text';
+            questionText.textContent = `题目 ${index + 1}`;
+            
+            questionItem.appendChild(questionNumber);
+            questionItem.appendChild(questionText);
+            
+            // 添加点击事件
+            questionItem.addEventListener('click', () => {
+                this.goToQuestion(index);
+            });
+            
+            this.elements.questionList.appendChild(questionItem);
+        });
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 跳转到指定题目
+    goToQuestion(index) {
+        if (index >= 0 && index < this.questions.length && index !== this.currentQuestionIndex) {
+            this.showQuestion(index);
+        }
+    }
+
+    // 上一题
+    goToPrevQuestion() {
+        if (this.currentQuestionIndex > 0) {
+            this.goToQuestion(this.currentQuestionIndex - 1);
+        }
+    }
+
+    // 下一题
+    goToNextQuestion() {
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+            this.goToQuestion(this.currentQuestionIndex + 1);
+        }
+    }
+
+    // 随机题目
+    goToRandomQuestion() {
+        const randomIndex = Math.floor(Math.random() * this.questions.length);
+        if (randomIndex !== this.currentQuestionIndex) {
+            this.goToQuestion(randomIndex);
+        } else {
+            // 如果随机到当前题目，再随机一次
+            this.goToRandomQuestion();
+        }
+    }
+
+    // 第一题
+    goToFirstQuestion() {
+        this.goToQuestion(0);
+    }
+
+    // 最后一题
+    goToLastQuestion() {
+        this.goToQuestion(this.questions.length - 1);
+    }
+
+    // 切换左侧导航栏
+    toggleLeftNav() {
+        this.isLeftNavCollapsed = !this.isLeftNavCollapsed;
+        if (this.isLeftNavCollapsed) {
+            this.elements.leftNav.classList.add('collapsed');
+            this.elements.toggleLeftNav.textContent = '▶';
+        } else {
+            this.elements.leftNav.classList.remove('collapsed');
+            this.elements.toggleLeftNav.textContent = '◀';
+        }
+    }
+
+    // 切换右侧导航栏
+    toggleRightNav() {
+        this.isRightNavCollapsed = !this.isRightNavCollapsed;
+        if (this.isRightNavCollapsed) {
+            this.elements.rightNav.classList.add('collapsed');
+            this.elements.toggleRightNav.textContent = '◀';
+        } else {
+            this.elements.rightNav.classList.remove('collapsed');
+            this.elements.toggleRightNav.textContent = '▶';
+        }
+    }
+
+    // 更新进度条
+    updateProgressBar() {
+        const answeredCount = this.questionStates.filter(state => 
+            state === 'correct' || state === 'incorrect'
+        ).length;
+        const progressPercentage = (answeredCount / this.questions.length) * 100;
+        
+        this.elements.progressFill.style.width = `${progressPercentage}%`;
+        this.elements.progressText.textContent = `${answeredCount}/${this.questions.length}`;
+    }
+
+    // 更新题目状态
+    updateQuestionState(index, state) {
+        this.questionStates[index] = state;
+        
+        // 更新题目列表中的状态
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        if (questionItems[index]) {
+            questionItems[index].classList.remove('answered-correct', 'answered-incorrect');
+            
+            if (state === 'correct') {
+                questionItems[index].classList.add('answered-correct');
+            } else if (state === 'incorrect') {
+                questionItems[index].classList.add('answered-incorrect');
+            }
+        }
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 更新当前题目高亮
+    updateCurrentQuestionHighlight() {
+        // 移除所有current类
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        questionItems.forEach(item => item.classList.remove('current'));
+        
+        // 添加current类到当前题目
+        if (questionItems[this.currentQuestionIndex]) {
+            questionItems[this.currentQuestionIndex].classList.add('current');
+        }
+        
+        // 更新导航按钮状态
+        this.elements.prevQuestionBtn.disabled = this.currentQuestionIndex === 0;
+        this.elements.nextQuestionBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
     }
 }
 
