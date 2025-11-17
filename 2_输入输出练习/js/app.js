@@ -28,13 +28,32 @@ class PracticeApp {
             feedback: document.getElementById('feedback'),
             codeExample: document.getElementById('code-example'),
             codeExampleContainer: document.getElementById('code-example-container'),
+            codeLanguageLabel: document.getElementById('code-language-label'),
             copyBtn: document.getElementById('copy-btn'),
             currentQuestionSpan: document.getElementById('current-question'),
             totalQuestionsSpan: document.getElementById('total-questions'),
             scoreSpan: document.getElementById('score'),
             title: document.querySelector('title'),
-            headerTitle: document.querySelector('header h1')
+            headerTitle: document.querySelector('header h1'),
+            // 题目导航相关元素
+            questionList: document.getElementById('question-list'),
+            toggleLeftNav: document.getElementById('toggle-left-nav'),
+            toggleRightNav: document.getElementById('toggle-right-nav'),
+            prevQuestionBtn: document.getElementById('prev-question-btn'),
+            nextQuestionBtn: document.getElementById('next-question-btn'),
+            randomQuestionBtn: document.getElementById('random-question-btn'),
+            firstQuestionBtn: document.getElementById('first-question-btn'),
+            lastQuestionBtn: document.getElementById('last-question-btn'),
+            progressFill: document.getElementById('progress-fill'),
+            progressText: document.getElementById('progress-text'),
+            leftNav: document.querySelector('.left-nav'),
+            rightNav: document.querySelector('.right-nav')
         };
+        
+        // 题目导航状态
+        this.questionStates = []; // 存储每个题目的状态 (未答/正确/错误)
+        this.isLeftNavCollapsed = false;
+        this.isRightNavCollapsed = false;
     }
 
     // 绑定事件
@@ -43,6 +62,24 @@ class PracticeApp {
         this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
         this.elements.restartBtn.addEventListener('click', () => this.restart());
         this.elements.copyBtn.addEventListener('click', () => this.copyCode());
+        
+        // 题目导航事件
+        this.elements.toggleLeftNav.addEventListener('click', () => this.toggleLeftNav());
+        this.elements.toggleRightNav.addEventListener('click', () => this.toggleRightNav());
+        this.elements.prevQuestionBtn.addEventListener('click', () => this.goToPrevQuestion());
+        this.elements.nextQuestionBtn.addEventListener('click', () => this.goToNextQuestion());
+        this.elements.randomQuestionBtn.addEventListener('click', () => this.goToRandomQuestion());
+        this.elements.firstQuestionBtn.addEventListener('click', () => this.goToFirstQuestion());
+        this.elements.lastQuestionBtn.addEventListener('click', () => this.goToLastQuestion());
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                this.goToPrevQuestion();
+            } else if (e.key === 'ArrowRight') {
+                this.goToNextQuestion();
+            }
+        });
     }
 
     // 开始应用
@@ -55,7 +92,7 @@ class PracticeApp {
             this.questions = await window.templateLoader.loadQuestions();
             
             if (this.questions.length === 0) {
-                this.showError('题库数据为空或加载失败，请检查 data/questions.json 文件');
+                this.showError('题库数据为空或加载失败，请检查内置题库数据');
                 return;
             }
 
@@ -70,6 +107,12 @@ class PracticeApp {
             // 更新页面标题和统计信息
             this.updatePageTitle();
             this.elements.totalQuestionsSpan.textContent = this.questions.length;
+            
+            // 初始化题目状态
+            this.questionStates = new Array(this.questions.length).fill('unanswered');
+            
+            // 生成题目导航列表
+            this.generateQuestionList();
             
             // 显示第一题
             this.showQuestion(0);
@@ -102,25 +145,28 @@ class PracticeApp {
 
         // 更新题目信息
         this.elements.currentQuestionSpan.textContent = index + 1;
-        this.elements.questionText.textContent = `${question.id}. ${question.question}`;
+        
+        // 处理题目描述中的代码块（markdown格式转换为格式化代码）
+        const formattedQuestion = this.formatQuestionText(`${question.id}. ${question.question}`);
+        this.elements.questionText.innerHTML = formattedQuestion;
 
-        // 清空并生成选项 - 支持两种格式（数组和对象）
+        // 清空并生成选项（规范化后的数组格式）
         this.elements.optionsContainer.innerHTML = '';
         
         if (Array.isArray(question.options)) {
-            // 数组格式：转换为 A/B/C/D 标签
+            // 数组格式：转换为 A/B/C/D 标签并保存索引
             question.options.forEach((value, optionIndex) => {
                 const label = String.fromCharCode(65 + optionIndex); // 65='A'
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'option';
-                // 存储为索引字符串，便于与 question.correctAnswer（数字索引）比较
+                // 存储索引，便于与 question.correctAnswer（数字）比较
                 optionDiv.dataset.option = String(optionIndex);
                 optionDiv.innerHTML = `<span class="option-label">${label}.</span>${value}`;
                 optionDiv.addEventListener('click', () => this.selectOption(String(optionIndex), optionDiv));
                 this.elements.optionsContainer.appendChild(optionDiv);
             });
         } else {
-            // 对象格式：直接使用字母标签
+            // 备用：如果仍是对象格式（不应该出现，但保险起见）
             Object.entries(question.options).forEach(([key, value]) => {
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'option';
@@ -140,6 +186,9 @@ class PracticeApp {
         this.elements.submitBtn.textContent = '提交答案';
         this.elements.nextBtn.style.display = 'none';
         this.elements.restartBtn.style.display = 'none';
+        
+        // 更新当前题目高亮
+        this.updateCurrentQuestionHighlight();
     }
 
     // 选择选项
@@ -163,14 +212,12 @@ class PracticeApp {
 
         this.isAnswered = true;
         const question = this.questions[this.currentQuestionIndex];
+        
+        // 规范比较：选中的索引（字符串）与 correctAnswer（数字）比较
+        const isCorrect = parseInt(this.selectedAnswer) === Number(question.correctAnswer);
 
-        // 规范比较：数组格式的题目使用数字索引（字符串形式存于 dataset.option），对象格式使用字母键
-        let isCorrect = false;
-        if (Array.isArray(question.options)) {
-            isCorrect = parseInt(this.selectedAnswer) === Number(question.correctAnswer);
-        } else {
-            isCorrect = this.selectedAnswer === question.correctAnswer;
-        }
+        // 更新题目状态
+        this.updateQuestionState(this.currentQuestionIndex, isCorrect ? 'correct' : 'incorrect');
 
         // 更新分数
         if (isCorrect) {
@@ -178,34 +225,22 @@ class PracticeApp {
             this.elements.scoreSpan.textContent = this.score;
         }
 
-        // 显示正确答案和错误答案（根据题目格式分别处理）
+        // 显示正确答案和错误答案
         document.querySelectorAll('.option').forEach(opt => {
             opt.classList.add('disabled');
-            if (Array.isArray(question.options)) {
-                if (parseInt(opt.dataset.option) === Number(question.correctAnswer)) {
-                    opt.classList.add('correct');
-                } else if (parseInt(opt.dataset.option) === parseInt(this.selectedAnswer) && !isCorrect) {
-                    opt.classList.add('incorrect');
-                }
-            } else {
-                if (opt.dataset.option === question.correctAnswer) {
-                    opt.classList.add('correct');
-                } else if (opt.dataset.option === this.selectedAnswer && !isCorrect) {
-                    opt.classList.add('incorrect');
-                }
+            const optIdx = parseInt(opt.dataset.option);
+            const correctIdx = Number(question.correctAnswer);
+            if (optIdx === correctIdx) {
+                opt.classList.add('correct');
+            } else if (optIdx === parseInt(this.selectedAnswer) && !isCorrect) {
+                opt.classList.add('incorrect');
             }
         });
 
         // 准备反馈文本（显示字母标签与选项文本）
-        let correctLabel = '';
-        let correctText = '';
-        if (Array.isArray(question.options)) {
-            correctLabel = String.fromCharCode(65 + Number(question.correctAnswer));
-            correctText = question.options[Number(question.correctAnswer)];
-        } else {
-            correctLabel = question.correctAnswer;
-            correctText = question.options[question.correctAnswer];
-        }
+        const correctIdx = Number(question.correctAnswer);
+        const correctLabel = String.fromCharCode(65 + correctIdx); // 转为字母
+        const correctText = question.options[correctIdx];
 
         // 显示反馈
         this.elements.feedbackContainer.style.display = 'block';
@@ -219,14 +254,12 @@ class PracticeApp {
         // 显示代码示例
         this.currentCodeText = question.codeExample;
         
-        // 提取代码块内容（移除markdown标记）
-        const codeBlockMatch = question.codeExample.match(/```(?:\w+)?\n?([\s\S]*?)```/);
-        const codeContent = codeBlockMatch ? codeBlockMatch[1].trim() : question.codeExample;
+        // 自动检测代码语言
+        const language = this.detectCodeLanguage(this.currentCodeText);
+        this.elements.codeLanguageLabel.textContent = language.toUpperCase();
         
-        this.elements.codeExample.textContent = codeContent;
-        
-        // 简单的语法高亮
-        this.highlightCode(codeContent);
+        // 应用代码格式化和高亮
+        this.formatAndHighlightCode(this.currentCodeText, language);
 
         // 更新按钮
         this.elements.submitBtn.style.display = 'none';
@@ -237,15 +270,225 @@ class PracticeApp {
         }
     }
 
-    // 简单的语法高亮
-    highlightCode(code) {
-        const codeElement = this.elements.codeExample;
-        codeElement.textContent = code || this.currentCodeText;
+    // 格式化题目文本（处理markdown代码块）
+    formatQuestionText(questionText) {
+        // 使用更精确的方法处理markdown代码块
+        const codeBlockRegex = /```(\w*)\n([\s\S]*?)\n```/g;
+        
+        // 首先分割文本，处理代码块和普通文本
+        let result = '';
+        let lastIndex = 0;
+        let match;
+        
+        while ((match = codeBlockRegex.exec(questionText)) !== null) {
+            const [fullMatch, language, code] = match;
+            const matchStart = match.index;
+            const matchEnd = matchStart + fullMatch.length;
+            
+            // 处理代码块之前的普通文本
+            if (matchStart > lastIndex) {
+                const normalText = questionText.slice(lastIndex, matchStart);
+                result += normalText.replace(/\n/g, '<br>');
+            }
+            
+            // 处理代码块
+            const detectedLanguage = this.detectCodeLanguage(code.trim()) || language || 'c';
+            const formattedCode = code.replace(/\t/g, '    ').trim();
+            const highlightedCode = this.applySyntaxHighlighting(formattedCode, detectedLanguage);
+            
+            result += `<div class="code-example-container">
+                    <div class="code-example-header">
+                        <span class="code-language-label">${detectedLanguage.toUpperCase()}</span>
+                    </div>
+                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
+                </div>`;
+            
+            lastIndex = matchEnd;
+        }
+        
+        // 处理剩余的普通文本
+        if (lastIndex < questionText.length) {
+            const remainingText = questionText.slice(lastIndex);
+            result += remainingText.replace(/\n/g, '<br>');
+        }
+        
+        return result;
+    }
+
+    // 检测代码语言
+    detectCodeLanguage(codeText) {
+        // 检测C语言
+        if (codeText.includes('#include') || codeText.includes('#define') ||
+            codeText.includes('int main()') || codeText.includes('printf') ||
+            codeText.includes('scanf') || codeText.includes('stdlib.h')) {
+            return 'c';
+        }
+        
+        // 检测JavaScript
+        if (codeText.includes('function') || codeText.includes('var ') ||
+            codeText.includes('let ') || codeText.includes('const ') ||
+            codeText.includes('console.log')) {
+            return 'javascript';
+        }
+        
+        // 检测Python
+        if (codeText.includes('def ') || codeText.includes('import ') ||
+            codeText.includes('print(') || codeText.includes('if __name__')) {
+            return 'python';
+        }
+        
+        // 检测Java
+        if (codeText.includes('public class') || codeText.includes('System.out.println') ||
+            codeText.includes('public static void main')) {
+            return 'java';
+        }
+        
+        // 默认为C语言（因为这是C语言练习系统）
+        return 'c';
+    }
+
+    // 格式化并高亮代码
+    formatAndHighlightCode(codeText, language) {
+        // 标准化缩进（将tab转换为4个空格）
+        const formattedCode = codeText.replace(/\t/g, '    ');
+        
+        // 应用语言特定的语法高亮
+        const highlightedCode = this.applySyntaxHighlighting(formattedCode, language);
+        
+        // 设置代码内容
+        this.elements.codeExample.innerHTML = highlightedCode;
+    }
+
+    // 应用语法高亮
+    applySyntaxHighlighting(code, language) {
+        switch (language) {
+            case 'c':
+                return this.highlightCCode(code);
+            case 'javascript':
+                return this.highlightJavaScript(code);
+            case 'python':
+                return this.highlightPython(code);
+            case 'java':
+                return this.highlightJava(code);
+            default:
+                return this.highlightCCode(code);
+        }
+    }
+
+    // C语言语法高亮
+    highlightCCode(code) {
+        // 使用更安全的处理方式，避免重复替换
+        let highlighted = code;
+        
+        // 1. 先处理字符串，避免与其他规则冲突
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        
+        // 2. 处理注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        // 3. 预处理指令
+        highlighted = highlighted.replace(/(#\w+)/g, '<span class="code-macro">$1</span>');
+        
+        // 4. 关键字（包含switch、case、default、break）
+        const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for',
+                         'return', 'void', 'sizeof', 'struct', 'enum', 'typedef', 'unsigned', 'signed',
+                         'long', 'short', 'static', 'const', 'extern', 'auto', 'register',
+                         'switch', 'case', 'default', 'break'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 5. 类型
+        const types = ['int', 'char', 'float', 'double', 'void'];
+        types.forEach(type => {
+            const regex = new RegExp(`\\b${type}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-type">${type}</span>`);
+        });
+        
+        // 6. 数字
+        highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g, '<span class="code-number">$1</span>');
+        
+        // 7. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
+        // 使用负向前瞻确保不匹配已经在span标签内的内容
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()(?![^<]*>)/g, '<span class="code-function">$1</span>');
+        
+        return highlighted;
+    }
+
+    // JavaScript语法高亮（简化版）
+    highlightJavaScript(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for',
+                         'return', 'true', 'false', 'null', 'undefined', 'this', 'new', 'class'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // Python语法高亮（简化版）
+    highlightPython(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import',
+                         'from', 'as', 'class', 'try', 'except', 'finally', 'with', 'in', 'not', 'and', 'or'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^'\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
+    }
+
+    // Java语法高亮（简化版）
+    highlightJava(code) {
+        let highlighted = code;
+        
+        // 关键字
+        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char',
+                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class',
+                         'interface', 'extends', 'implements', 'try', 'catch', 'finally', 'throw', 'throws'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
+        
+        // 字符串
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        
+        // 注释
+        highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+        highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+        
+        return highlighted;
     }
 
     // 复制代码
     copyCode() {
-        navigator.clipboard.writeText(this.currentCodeText).then(() => {
+        const code = this.currentCodeText || this.elements.codeExample.textContent;
+        navigator.clipboard.writeText(code).then(() => {
             const originalText = this.elements.copyBtn.textContent;
             this.elements.copyBtn.textContent = '已复制！';
             setTimeout(() => {
@@ -253,19 +496,32 @@ class PracticeApp {
             }, 2000);
         }).catch(err => {
             console.error('复制失败:', err);
-            alert('复制失败，请手动选择代码复制');
+            this.elements.copyBtn.textContent = '复制失败';
+            setTimeout(() => {
+                this.elements.copyBtn.textContent = '复制代码';
+            }, 2000);
         });
     }
 
     // 下一题
     nextQuestion() {
         this.showQuestion(this.currentQuestionIndex + 1);
+        // 更新当前题目高亮
+        this.updateCurrentQuestionHighlight();
     }
 
     // 重新开始
     restart() {
+        this.currentQuestionIndex = 0;
         this.score = 0;
         this.elements.scoreSpan.textContent = this.score;
+        
+        // 重置题目状态
+        this.questionStates = new Array(this.questions.length).fill('unanswered');
+        
+        // 重新生成题目导航列表
+        this.generateQuestionList();
+        
         this.showQuestion(0);
     }
 
@@ -292,10 +548,172 @@ class PracticeApp {
         this.elements.restartBtn.style.display = 'inline-block';
     }
 
+    // 生成题目导航列表
+    generateQuestionList() {
+        this.elements.questionList.innerHTML = '';
+        
+        this.questions.forEach((question, index) => {
+            const questionItem = document.createElement('div');
+            questionItem.className = 'question-item';
+            questionItem.dataset.index = index;
+            
+            // 设置题目状态类
+            if (index === this.currentQuestionIndex) {
+                questionItem.classList.add('current');
+            } else if (this.questionStates[index] === 'correct') {
+                questionItem.classList.add('answered-correct');
+            } else if (this.questionStates[index] === 'incorrect') {
+                questionItem.classList.add('answered-incorrect');
+            }
+            
+            // 创建题目编号
+            const questionNumber = document.createElement('span');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = index + 1;
+            
+            // 创建题目文本
+            const questionText = document.createElement('span');
+            questionText.className = 'question-item-text';
+            questionText.textContent = `题目 ${index + 1}`;
+            
+            questionItem.appendChild(questionNumber);
+            questionItem.appendChild(questionText);
+            
+            // 添加点击事件
+            questionItem.addEventListener('click', () => {
+                this.goToQuestion(index);
+            });
+            
+            this.elements.questionList.appendChild(questionItem);
+        });
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 跳转到指定题目
+    goToQuestion(index) {
+        if (index >= 0 && index < this.questions.length && index !== this.currentQuestionIndex) {
+            this.showQuestion(index);
+        }
+    }
+
+    // 上一题
+    goToPrevQuestion() {
+        if (this.currentQuestionIndex > 0) {
+            this.goToQuestion(this.currentQuestionIndex - 1);
+        }
+    }
+
+    // 下一题
+    goToNextQuestion() {
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+            this.goToQuestion(this.currentQuestionIndex + 1);
+        }
+    }
+
+    // 随机题目
+    goToRandomQuestion() {
+        const randomIndex = Math.floor(Math.random() * this.questions.length);
+        if (randomIndex !== this.currentQuestionIndex) {
+            this.goToQuestion(randomIndex);
+        } else {
+            // 如果随机到当前题目，再随机一次
+            this.goToRandomQuestion();
+        }
+    }
+
+    // 第一题
+    goToFirstQuestion() {
+        this.goToQuestion(0);
+    }
+
+    // 最后一题
+    goToLastQuestion() {
+        this.goToQuestion(this.questions.length - 1);
+    }
+
+    // 切换左侧导航栏
+    toggleLeftNav() {
+        this.isLeftNavCollapsed = !this.isLeftNavCollapsed;
+        if (this.isLeftNavCollapsed) {
+            this.elements.leftNav.classList.add('collapsed');
+            this.elements.toggleLeftNav.textContent = '▶';
+        } else {
+            this.elements.leftNav.classList.remove('collapsed');
+            this.elements.toggleLeftNav.textContent = '◀';
+        }
+    }
+
+    // 切换右侧导航栏
+    toggleRightNav() {
+        this.isRightNavCollapsed = !this.isRightNavCollapsed;
+        if (this.isRightNavCollapsed) {
+            this.elements.rightNav.classList.add('collapsed');
+            this.elements.toggleRightNav.textContent = '◀';
+        } else {
+            this.elements.rightNav.classList.remove('collapsed');
+            this.elements.toggleRightNav.textContent = '▶';
+        }
+    }
+
+    // 更新进度条
+    updateProgressBar() {
+        const answeredCount = this.questionStates.filter(state =>
+            state === 'correct' || state === 'incorrect'
+        ).length;
+        const progressPercentage = (answeredCount / this.questions.length) * 100;
+        
+        this.elements.progressFill.style.width = `${progressPercentage}%`;
+        this.elements.progressText.textContent = `${answeredCount}/${this.questions.length}`;
+    }
+
+    // 更新题目状态
+    updateQuestionState(index, state) {
+        this.questionStates[index] = state;
+        
+        // 更新题目列表中的状态
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        if (questionItems[index]) {
+            questionItems[index].classList.remove('answered-correct', 'answered-incorrect');
+            
+            if (state === 'correct') {
+                questionItems[index].classList.add('answered-correct');
+            } else if (state === 'incorrect') {
+                questionItems[index].classList.add('answered-incorrect');
+            }
+        }
+        
+        // 更新进度条
+        this.updateProgressBar();
+    }
+
+    // 更新当前题目高亮
+    updateCurrentQuestionHighlight() {
+        // 移除所有current类
+        const questionItems = this.elements.questionList.querySelectorAll('.question-item');
+        questionItems.forEach(item => item.classList.remove('current'));
+        
+        // 添加current类到当前题目
+        if (questionItems[this.currentQuestionIndex]) {
+            questionItems[this.currentQuestionIndex].classList.add('current');
+        }
+        
+        // 更新导航按钮状态
+        this.elements.prevQuestionBtn.disabled = this.currentQuestionIndex === 0;
+        this.elements.nextQuestionBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
+    }
+
     // 显示错误信息
     showError(message) {
         this.elements.questionText.textContent = message;
-        this.elements.optionsContainer.innerHTML = '';
+        this.elements.optionsContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #dc3545;">
+                <h3>错误</h3>
+                <p>${message}</p>
+                <p style="margin-top: 20px; font-size: 0.9em;">请检查内置题库数据格式是否正确。</p>
+            </div>
+        `;
         this.elements.submitBtn.style.display = 'none';
     }
 }
