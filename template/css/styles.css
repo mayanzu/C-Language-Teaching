@@ -26,9 +26,11 @@ body {
 
 /* 题目导航栏样式 */
 .question-nav, .quick-nav {
-    position: absolute;
-    top: 0;
-    height: 100%;
+    position: fixed;
+    top: 10px;
+    bottom: 10px;
+    height: auto;
+    max-height: calc(100vh - 20px);
     background: rgba(255, 255, 255, 0.95);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, width 0.3s ease;
@@ -38,14 +40,14 @@ body {
 }
 
 .left-nav {
-    left: 0;
+    left: 1vw;
     width: 180px;
     border-right: 1px solid #e9ecef;
     transform: translateX(0);
 }
 
 .right-nav {
-    right: 0;
+    right: 1vw;
     width: 180px;
     border-left: 1px solid #e9ecef;
     transform: translateX(0);
