@@ -1,6 +1,7 @@
 // 练习应用主逻辑
 class PracticeApp {
     constructor() {
+        console.log('[PracticeApp] 构造函数已调用');
         this.questions = [];
         this.currentQuestionIndex = 0;
         this.score = 0;
@@ -9,15 +10,19 @@ class PracticeApp {
         this.currentCodeText = '';
         
         // 初始化DOM元素
+        console.log('[PracticeApp] 初始化DOM元素...');
         this.initializeElements();
         // 绑定事件
+        console.log('[PracticeApp] 绑定事件...');
         this.bindEvents();
         // 开始应用
+        console.log('[PracticeApp] 调用 start() 方法...');
         this.start();
     }
 
     // 初始化DOM元素
     initializeElements() {
+        console.log('[PracticeApp] initializeElements 开始...');
         this.elements = {
             questionText: document.getElementById('question-text'),
             optionsContainer: document.getElementById('options-container'),
@@ -34,7 +39,7 @@ class PracticeApp {
             totalQuestionsSpan: document.getElementById('total-questions'),
             scoreSpan: document.getElementById('score'),
             title: document.querySelector('title'),
-            headerTitle: document.querySelector('header h1'),
+            headerTitle: document.getElementById('header-title'),
             // 题目导航相关元素
             questionList: document.getElementById('question-list'),
             toggleLeftNav: document.getElementById('toggle-left-nav'),
@@ -46,79 +51,117 @@ class PracticeApp {
             lastQuestionBtn: document.getElementById('last-question-btn'),
             progressFill: document.getElementById('progress-fill'),
             progressText: document.getElementById('progress-text'),
-            leftNav: document.querySelector('.left-nav'),
-            rightNav: document.querySelector('.right-nav')
+            leftSidebar: document.querySelector('.sidebar-left'),
+            rightSidebar: document.querySelector('.sidebar-right')
         };
+        
+        // 验证元素是否都成功加载
+        console.log('[PracticeApp] 验证DOM元素...');
+        const missingElements = Object.entries(this.elements)
+            .filter(([key, el]) => el === null)
+            .map(([key]) => key);
+        
+        if (missingElements.length > 0) {
+            console.error('[PracticeApp] ❌ 缺失的DOM元素:', missingElements);
+        } else {
+            console.log('[PracticeApp] ✓ 所有DOM元素已正确加载');
+        }
         
         // 题目导航状态
         this.questionStates = []; // 存储每个题目的状态 (未答/正确/错误)
         this.isLeftNavCollapsed = false;
         this.isRightNavCollapsed = false;
+        console.log('[PracticeApp] initializeElements 完成');
     }
 
     // 绑定事件
     bindEvents() {
-        this.elements.submitBtn.addEventListener('click', () => this.submitAnswer());
-        this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
-        this.elements.restartBtn.addEventListener('click', () => this.restart());
-        this.elements.copyBtn.addEventListener('click', () => this.copyCode());
-        
-        // 题目导航事件
-        this.elements.toggleLeftNav.addEventListener('click', () => this.toggleLeftNav());
-        this.elements.toggleRightNav.addEventListener('click', () => this.toggleRightNav());
-        this.elements.prevQuestionBtn.addEventListener('click', () => this.goToPrevQuestion());
-        this.elements.nextQuestionBtn.addEventListener('click', () => this.goToNextQuestion());
-        this.elements.randomQuestionBtn.addEventListener('click', () => this.goToRandomQuestion());
-        this.elements.firstQuestionBtn.addEventListener('click', () => this.goToFirstQuestion());
-        this.elements.lastQuestionBtn.addEventListener('click', () => this.goToLastQuestion());
-        
-        // 键盘快捷键
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                this.goToPrevQuestion();
-            } else if (e.key === 'ArrowRight') {
-                this.goToNextQuestion();
-            }
-        });
+        console.log('[PracticeApp] bindEvents 开始...');
+        try {
+            this.elements.submitBtn.addEventListener('click', () => this.submitAnswer());
+            this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
+            this.elements.restartBtn.addEventListener('click', () => this.restart());
+            this.elements.copyBtn.addEventListener('click', () => this.copyCode());
+            
+            // 题目导航事件
+            this.elements.toggleLeftNav.addEventListener('click', () => this.toggleLeftNav());
+            this.elements.toggleRightNav.addEventListener('click', () => this.toggleRightNav());
+            this.elements.prevQuestionBtn.addEventListener('click', () => this.goToPrevQuestion());
+            this.elements.nextQuestionBtn.addEventListener('click', () => this.goToNextQuestion());
+            this.elements.randomQuestionBtn.addEventListener('click', () => this.goToRandomQuestion());
+            this.elements.firstQuestionBtn.addEventListener('click', () => this.goToFirstQuestion());
+            this.elements.lastQuestionBtn.addEventListener('click', () => this.goToLastQuestion());
+            
+            // 键盘快捷键
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    this.goToPrevQuestion();
+                } else if (e.key === 'ArrowRight') {
+                    this.goToNextQuestion();
+                }
+            });
+            console.log('[PracticeApp] ✓ 所有事件已绑定');
+        } catch (error) {
+            console.error('[PracticeApp] ❌ 绑定事件失败:', error);
+            throw error;
+        }
     }
 
     // 开始应用
     async start() {
         try {
+            console.log('[PracticeApp] 开始初始化应用...');
+            
             // 显示加载状态
             this.elements.questionText.textContent = '正在加载题目...';
+            console.log('[PracticeApp] 显示加载状态');
+            
+            // 检查 templateLoader
+            console.log('[PracticeApp] templateLoader 状态:', window.templateLoader);
             
             // 加载题库数据
+            console.log('[PracticeApp] 开始加载题库数据...');
             this.questions = await window.templateLoader.loadQuestions();
+            console.log('[PracticeApp] 题库数据加载完成，共', this.questions.length, '题');
             
             if (this.questions.length === 0) {
+                console.error('[PracticeApp] 题库数据为空！');
                 this.showError('题库数据为空或加载失败，请检查内置题库数据');
                 return;
             }
 
             // 验证题库数据
+            console.log('[PracticeApp] 开始验证题库数据...');
             try {
                 window.templateLoader.validateQuestions(this.questions);
+                console.log('[PracticeApp] 题库数据验证通过');
             } catch (error) {
+                console.error('[PracticeApp] 题库数据验证失败:', error);
                 this.showError(`题库数据格式错误: ${error.message}`);
                 return;
             }
 
             // 更新页面标题和统计信息
+            console.log('[PracticeApp] 更新页面信息...');
             this.updatePageTitle();
             this.elements.totalQuestionsSpan.textContent = this.questions.length;
             
             // 初始化题目状态
+            console.log('[PracticeApp] 初始化题目状态...');
             this.questionStates = new Array(this.questions.length).fill('unanswered');
             
             // 生成题目导航列表
+            console.log('[PracticeApp] 生成题目导航列表...');
             this.generateQuestionList();
             
             // 显示第一题
+            console.log('[PracticeApp] 显示第一题...');
             this.showQuestion(0);
+            console.log('[PracticeApp] 应用初始化完成！');
             
         } catch (error) {
-            console.error('应用启动失败:', error);
+            console.error('[PracticeApp] 应用启动失败:', error);
+            console.error('错误堆栈:', error.stack);
             this.showError('应用启动失败，请检查控制台错误信息');
         }
     }
@@ -309,10 +352,11 @@ class PracticeApp {
             return `\n___CODE_BLOCK_${index}___\n`;
         });
         
-        // 3. 处理内联代码 `code`
+        // 3. 处理内联代码 `code` - 不应用语法高亮，保持简单样式
         result = result.replace(/`([^`]+)`/g, (match, code) => {
-            const highlightedCode = this.applySyntaxHighlighting(code, 'c');
-            return `<code class="inline-code">${highlightedCode}</code>`;
+            // 转义HTML特殊字符
+            const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return `<code class="inline-code">${escaped}</code>`;
         });
         
         // 4. 处理换行符（将连续多个换行符合并为一个）
@@ -331,10 +375,11 @@ class PracticeApp {
     formatOptionText(optionText) {
         let result = optionText;
         
-        // 处理内联代码 `code`
+        // 处理内联代码 `code` - 不应用语法高亮，保持简单样式
         result = result.replace(/`([^`]+)`/g, (match, code) => {
-            const highlightedCode = this.applySyntaxHighlighting(code, 'c');
-            return `<code class="inline-code">${highlightedCode}</code>`;
+            // 转义HTML特殊字符
+            const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return `<code class="inline-code">${escaped}</code>`;
         });
         
         return result;
@@ -586,7 +631,7 @@ class PracticeApp {
         this.elements.questionList.innerHTML = '';
         
         this.questions.forEach((question, index) => {
-            const questionItem = document.createElement('div');
+            const questionItem = document.createElement('li');
             questionItem.className = 'question-item';
             questionItem.dataset.index = index;
             
@@ -670,11 +715,11 @@ class PracticeApp {
     toggleLeftNav() {
         this.isLeftNavCollapsed = !this.isLeftNavCollapsed;
         if (this.isLeftNavCollapsed) {
-            this.elements.leftNav.classList.add('collapsed');
-            this.elements.toggleLeftNav.textContent = '▶';
+            this.elements.leftSidebar.classList.add('collapsed');
+            this.elements.toggleLeftNav.querySelector('.toggle-icon').textContent = '▶';
         } else {
-            this.elements.leftNav.classList.remove('collapsed');
-            this.elements.toggleLeftNav.textContent = '◀';
+            this.elements.leftSidebar.classList.remove('collapsed');
+            this.elements.toggleLeftNav.querySelector('.toggle-icon').textContent = '◀';
         }
     }
 
@@ -682,11 +727,11 @@ class PracticeApp {
     toggleRightNav() {
         this.isRightNavCollapsed = !this.isRightNavCollapsed;
         if (this.isRightNavCollapsed) {
-            this.elements.rightNav.classList.add('collapsed');
-            this.elements.toggleRightNav.textContent = '◀';
+            this.elements.rightSidebar.classList.add('collapsed');
+            this.elements.toggleRightNav.querySelector('.toggle-icon').textContent = '◀';
         } else {
-            this.elements.rightNav.classList.remove('collapsed');
-            this.elements.toggleRightNav.textContent = '▶';
+            this.elements.rightSidebar.classList.remove('collapsed');
+            this.elements.toggleRightNav.querySelector('.toggle-icon').textContent = '▶';
         }
     }
 

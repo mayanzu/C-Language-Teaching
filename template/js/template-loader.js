@@ -1,20 +1,26 @@
 ﻿// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
+        console.log('[TemplateLoader] 构造函数已调用');
         this.questions = [];
     }
 
     // 加载题库数据
     async loadQuestions() {
+        console.log('[TemplateLoader] loadQuestions 被调用');
         try {
             // 直接使用内置题库数据
+            console.log('[TemplateLoader] 调用 getBuiltInQuestions...');
             this.questions = this.getBuiltInQuestions();
+            console.log('[TemplateLoader] getBuiltInQuestions 返回了', this.questions.length, '题');
             // 规范化题目数据（统一为数组格式）
+            console.log('[TemplateLoader] 开始规范化题目...');
             this.normalizeQuestions(this.questions);
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
+            console.log(`[TemplateLoader] 成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
-            console.warn('加载题库失败:', error.message);
+            console.error('[TemplateLoader] 加载题库失败:', error);
+            console.error('错误堆栈:', error.stack);
             return [];
         }
     }
@@ -53,13 +59,14 @@ class TemplateLoader {
 
     // 获取内置题库数据（用于 file:// 协议支持）
     getBuiltInQuestions() {
-        return [
+        console.log('[TemplateLoader] getBuiltInQuestions 被调用');
+        const questions = [
   {
     "id": 1,
-    "question": "若`int a=2;`，执行以下代码后输出结果是？\n\n<C>\nswitch(a) {\n    case 1: printf(\"A\"); break;\n    case 2: printf(\"B\");\n    case 3: printf(\"C\"); break;\n    default: printf(\"D\");\n}\n",
-    "options": ["`B`", "`BC`", "`BCD`", "无输出"],
+    "question": "若 `int a=2;`，执行以下代码后输出结果是？\n\n<C>\nswitch(a) {\n    case 1: printf(\"A\"); break;\n    case 2: printf(\"B\");\n    case 3: printf(\"C\"); break;\n    default: printf(\"D\");\n}\n",
+    "options": ["B", "BC", "BCD", "无输出"],
     "correctAnswer": 1,
-    "explanation": "当`a=2`时，switch语句匹配到`case 2`，执行`printf(\"B\")`。由于`case 2`后面没有`break`语句，会继续执行`case 3`的`printf(\"C\")`，然后遇到`break`跳出switch。所以输出结果是`BC`。这体现了switch语句的fall-through（贯穿）特性。",
+    "explanation": "当 `a=2` 时，switch语句匹配到 `case 2`，执行 `printf(\"B\")`。由于 `case 2` 后面没有 `break` 语句，会继续执行 `case 3` 的 `printf(\"C\")`，然后遇到 `break` 跳出switch。所以输出结果是 BC。这体现了switch语句的fall-through（贯穿）特性。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 2;\n    switch(a) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\");\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    // 输出: BC\n    return 0;\n}"
   },
   {
@@ -71,6 +78,8 @@ class TemplateLoader {
     "codeExample": "#include <stdio.h>\nint main() {\n    // 正确的代码（选项D）\n    switch(2) {\n        case 1+1: printf(\"等于2\"); break; // 1+1是常量表达式2\n    }\n    // 输出：等于2\n    \n    // 错误的代码示例（选项A的问题）\n    /*\n    switch(3) {\n        case 1: int x=10; break;  // 错误：需要加花括号\n        case 2: x=20; break;      // x未定义\n    }\n    */\n    \n    // 修正选项A的代码\n    switch(3) {\n        case 1: { int x=10; break; }  // 正确：加花括号限制作用域\n        case 2: { int x=20; break; }  // 正确：每个case都有自己的x\n    }\n    \n    return 0;\n}"
   }
 ];
+        console.log('[TemplateLoader] getBuiltInQuestions 返回数据', questions.length, '条');
+        return questions;
     }
 
     // 验证题库数据格式
@@ -155,4 +164,6 @@ class TemplateLoader {
 }
 
 // 创建全局实例
+console.log('[Script] 创建 TemplateLoader 全局实例...');
 window.templateLoader = new TemplateLoader();
+console.log('[Script] TemplateLoader 全局实例创建完成');
