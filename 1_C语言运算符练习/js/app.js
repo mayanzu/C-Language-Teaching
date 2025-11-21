@@ -101,92 +101,11 @@ class PracticeApp {
                 }
             });
             
-            // 鼠标跟随光效
-            this.initMouseFollowEffect();
-            
             console.log('[PracticeApp] ✓ 所有事件已绑定');
         } catch (error) {
             console.error('[PracticeApp] ❌ 绑定事件失败:', error);
             throw error;
         }
-    }
-    
-    // 初始化鼠标跟随效果
-    initMouseFollowEffect() {
-        let mouseX = 0;
-        let mouseY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        const speed = 0.15; // 跟随速度，值越小越平滑
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        
-        const animate = () => {
-            // 使用缓动函数平滑移动
-            currentX += (mouseX - currentX) * speed;
-            currentY += (mouseY - currentY) * speed;
-            
-            // 更新光效位置
-            document.body.style.setProperty('--mouse-x', `${currentX}px`);
-            document.body.style.setProperty('--mouse-y', `${currentY}px`);
-            
-            requestAnimationFrame(animate);
-        };
-        
-        animate();
-        
-        // 鼠标进入和离开页面时的效果
-        document.addEventListener('mouseenter', () => {
-            document.body.classList.add('mouse-active');
-        });
-        
-        document.addEventListener('mouseleave', () => {
-            document.body.classList.remove('mouse-active');
-        });
-        
-        // 为选项添加3D倾斜效果
-        this.init3DTiltEffect();
-    }
-    
-    // 初始化3D倾斜效果
-    init3DTiltEffect() {
-        const options = this.elements.optionsContainer.querySelectorAll('.option');
-
-        options.forEach(option => {
-            let animationFrameId = null;
-            let rotateX = 0;
-            let rotateY = 0;
-
-            const handleMouseMove = (e) => {
-                const rect = option.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                rotateX = ((y - centerY) / centerY) * -4; // 减小最大倾斜角度
-                rotateY = ((x - centerX) / centerX) * 4;
-
-                if (animationFrameId === null) {
-                    animationFrameId = requestAnimationFrame(() => {
-                        option.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-                        animationFrameId = null;
-                    });
-                }
-            };
-
-            const handleMouseLeave = () => {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-                option.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-            };
-
-            option.addEventListener('mousemove', handleMouseMove);
-            option.addEventListener('mouseleave', handleMouseLeave);
-        });
     }
 
     // 开始应用
@@ -310,6 +229,9 @@ class PracticeApp {
             });
         }
 
+        // 初始化选项悬浮光效
+        this.initializeOptionHoverEffects();
+
         // 隐藏反馈和代码示例
         this.elements.feedbackContainer.style.display = 'none';
         
@@ -322,6 +244,43 @@ class PracticeApp {
         
         // 更新当前题目高亮
         this.updateCurrentQuestionHighlight();
+    }
+
+    // 初始化选项悬浮光效
+    initializeOptionHoverEffects() {
+        const options = this.elements.optionsContainer.querySelectorAll('.option');
+        options.forEach(option => {
+            let animationFrameId = null;
+            let hoverX = 0;
+            let hoverY = 0;
+
+            const updateSpotlight = () => {
+                option.style.setProperty('--hover-x', `${hoverX}px`);
+                option.style.setProperty('--hover-y', `${hoverY}px`);
+                option.classList.add('has-pointer');
+                animationFrameId = null;
+            };
+
+            option.addEventListener('mousemove', (event) => {
+                const rect = option.getBoundingClientRect();
+                hoverX = event.clientX - rect.left;
+                hoverY = event.clientY - rect.top;
+
+                if (animationFrameId === null) {
+                    animationFrameId = requestAnimationFrame(updateSpotlight);
+                }
+            });
+
+            option.addEventListener('mouseleave', () => {
+                if (animationFrameId !== null) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+                option.classList.remove('has-pointer');
+                option.style.removeProperty('--hover-x');
+                option.style.removeProperty('--hover-y');
+            });
+        });
     }
 
     // 选择选项

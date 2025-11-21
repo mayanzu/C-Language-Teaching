@@ -47,7 +47,9 @@
     --blur-lg: 40px;
     
     /* Typography */
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-family-latin: "Inter", "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-family-cjk: "SF Pro SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    --font-family: var(--font-family-latin), var(--font-family-cjk);
     --font-size-xs: 13px;
     --font-size-sm: 15px;
     --font-size-base: 17px;
@@ -77,28 +79,6 @@ body {
     min-height: 100vh;
     height: 100vh;
     overflow: hidden;
-    position: relative;
-}
-
-/* 鼠标跟随光效 */
-body::before {
-    content: '';
-    position: fixed;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 113, 227, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    left: var(--mouse-x, 50%);
-    top: var(--mouse-y, 50%);
-    transform: translate(-50%, -50%);
-}
-
-body.mouse-active::before {
-    opacity: 1;
 }
 
 .app-container {
@@ -473,66 +453,72 @@ body.mouse-active::before {
     display: flex;
     align-items: flex-start;
     padding: var(--spacing-lg) calc(var(--spacing-lg) + 4px);
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(var(--blur-sm));
     -webkit-backdrop-filter: blur(var(--blur-sm));
     border: 2px solid rgba(0, 0, 0, 0.06);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all var(--transition-base), transform 0.1s ease-out;
-    font-size: var(--font-size-base);
-    line-height: 1.6;
+    transition: background var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+    font-family: var(--font-family-latin), var(--font-family-cjk);
+    font-size: var(--font-size-lg);
+    font-weight: 550;
+    letter-spacing: 0.15px;
+    line-height: 1.65;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1, "kern" 1;
     position: relative;
     overflow: hidden;
-    transform-style: preserve-3d;
-    will-change: transform;
+    isolation: isolate;
 }
 
-.option::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity var(--transition-fast);
+.option:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 113, 227, 0.2);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-.option::before {
+.option::after {
     content: '';
     position: absolute;
-    left: var(--spotlight-x, 50%);
-    top: var(--spotlight-y, 50%);
-    width: 250px;
-    height: 250px;
+    width: 160%;
+    height: 160%;
+    left: var(--hover-x, 50%);
+    top: var(--hover-y, 50%);
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(0, 113, 227, 0.12) 0%, transparent 60%);
+    background: radial-gradient(circle at center,
+        rgba(0, 112, 255, 0.55) 0%,
+        rgba(64, 156, 255, 0.35) 30%,
+        rgba(255, 255, 255, 0.0) 70%);
     opacity: 0;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: blur(32px);
     pointer-events: none;
     z-index: 0;
 }
 
-.option:hover::before {
+.option.has-pointer::after {
     opacity: 1;
 }
 
-.option:hover {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(0, 113, 227, 0.3);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 113, 227, 0.1);
-    /* transform: translateY(-2px) scale(1.01); */
-}
-
-.option:hover::before {
-    opacity: 1;
+.option.selected::after {
+    background: radial-gradient(circle at center,
+        rgba(255, 255, 255, 0.65) 0%,
+        rgba(173, 209, 255, 0.45) 35%,
+        rgba(0, 70, 180, 0.0) 75%);
 }
 
 .option.selected {
-    background: linear-gradient(135deg, var(--color-accent) 0%, #0066cc 100%);
-    color: white;
-    border-color: var(--color-accent);
-    box-shadow: 0 8px 24px rgba(0, 113, 227, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: linear-gradient(145deg, #0a84ff 0%, #0060df 45%, #0046af 100%);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 12px 28px rgba(0, 90, 190, 0.35), 0 0 0 3px rgba(0, 113, 227, 0.35);
     transform: translateY(-2px) scale(1.02);
+}
+
+.option.selected:hover {
+    background: linear-gradient(145deg, #0b7dff 0%, #0055c8 45%, #003c99 100%);
+    box-shadow: 0 16px 32px rgba(0, 90, 190, 0.45), 0 0 0 3px rgba(0, 113, 227, 0.45);
 }
 
 .option.correct {
@@ -558,29 +544,43 @@ body.mouse-active::before {
     font-weight: 600;
     margin-right: var(--spacing-lg);
     flex-shrink: 0;
-    min-width: 28px;
+    min-width: 32px;
     color: inherit;
+    font-family: var(--font-family-latin), var(--font-family-cjk);
+    font-size: var(--font-size-lg);
+    letter-spacing: 0.2px;
+    position: relative;
+    z-index: 1;
 }
 
 .option-content {
     display: inline;
     flex: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .inline-code {
-    background: var(--color-code-bg);
-    border: 1px solid var(--color-divider);
+    background: rgba(0, 113, 227, 0.08);
+    border: 1px solid rgba(0, 113, 227, 0.15);
     border-radius: var(--radius-sm);
-    padding: 2px 6px;
-    color: var(--color-error);
-    font-family: "SF Mono", Monaco, monospace;
-    font-size: 0.9em;
+    padding: 4px 8px;
+    color: var(--color-accent);
+    font-family: "SF Mono", "Cascadia Code", "Fira Code", monospace;
+    font-size: var(--font-size-base);
+    font-weight: 550;
+    letter-spacing: 0.2px;
 }
 
-.option.selected .inline-code,
+.option.selected .inline-code {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
 .option.correct .inline-code,
 .option.incorrect .inline-code {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 .inline-code-block {
@@ -854,6 +854,7 @@ body.mouse-active::before {
     flex-shrink: 0;
     box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
 }
+
 
 .app-footer p {
     margin: 0;
