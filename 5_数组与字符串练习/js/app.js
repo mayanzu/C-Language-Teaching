@@ -227,7 +227,7 @@ class PracticeApp {
         if (isCorrect) {
             this.score++;
             this.elements.scoreSpan.textContent = this.score;
-       }
+        }
 
         // 显示正确答案和错误答案
         document.querySelectorAll('.option').forEach(opt => {
@@ -256,21 +256,14 @@ class PracticeApp {
         `;
 
         // 显示代码示例
-        let codeContent = (question.codeExample || '').trim();
-        let languageFromBlock = '';
-        const codeBlockMatch = codeContent.match(/^```(\w*)\s*\n([\s\S]*?)\n```$/);
-        if (codeBlockMatch) {
-            languageFromBlock = codeBlockMatch[1];
-            codeContent = codeBlockMatch[2].trim();
-        }
-
+        this.currentCodeText = question.codeExample;
+        
         // 自动检测代码语言
-        const language = (languageFromBlock && languageFromBlock.trim()) || this.detectCodeLanguage(codeContent);
-        this.currentCodeText = codeContent;
+        const language = this.detectCodeLanguage(this.currentCodeText);
         this.elements.codeLanguageLabel.textContent = language.toUpperCase();
         
         // 应用代码格式化和高亮
-        this.formatAndHighlightCode(codeContent, language);
+        this.formatAndHighlightCode(this.currentCodeText, language);
 
         // 更新按钮
         this.elements.submitBtn.style.display = 'none';
@@ -329,7 +322,7 @@ class PracticeApp {
     // 检测代码语言
     detectCodeLanguage(codeText) {
         // 检测C语言
-        if (codeText.includes('#include') || codeText.includes('#define') || 
+        if (codeText.includes('#include') || codeText.includes('#define') ||
             codeText.includes('int main()') || codeText.includes('printf') ||
             codeText.includes('scanf') || codeText.includes('stdlib.h')) {
             return 'c';
@@ -402,9 +395,9 @@ class PracticeApp {
         highlighted = highlighted.replace(/(#\w+)/g, '<span class="code-macro">$1</span>');
         
         // 4. 关键字（包含switch、case、default、break）
-        const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
+        const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for',
                          'return', 'void', 'sizeof', 'struct', 'enum', 'typedef', 'unsigned', 'signed',
-                         'long', 'short', 'static', 'const', 'extern', 'auto', 'register', 
+                         'long', 'short', 'static', 'const', 'extern', 'auto', 'register',
                          'switch', 'case', 'default', 'break'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -433,7 +426,7 @@ class PracticeApp {
         let highlighted = code;
         
         // 关键字
-        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for', 
+        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for',
                          'return', 'true', 'false', 'null', 'undefined', 'this', 'new', 'class'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -456,7 +449,7 @@ class PracticeApp {
         let highlighted = code;
         
         // 关键字
-        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import', 
+        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import',
                          'from', 'as', 'class', 'try', 'except', 'finally', 'with', 'in', 'not', 'and', 'or'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -478,8 +471,8 @@ class PracticeApp {
         let highlighted = code;
         
         // 关键字
-        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char', 
-                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class', 
+        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char',
+                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class',
                          'interface', 'extends', 'implements', 'try', 'catch', 'finally', 'throw', 'throws'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -528,7 +521,7 @@ class PracticeApp {
                 <div style="font-size: 3em; color: #667eea; margin: 20px 0;">${this.score} / ${this.questions.length}</div>
                 <div style="font-size: 1.5em; color: #6c757d; margin-bottom: 30px;">正确率: ${percentage}%</div>
                 <p style="color: #6c757d; line-height: 1.8;">
-                    ${percentage >= 90 ? '🎉 优秀！你掌握得很好！' : 
+                    ${percentage >= 90 ? '🎉 优秀！你对C语言运算符理解得很好！' : 
                       percentage >= 70 ? '👍 不错！继续加油！' : 
                       '💪 继续努力，多练习会更好！'}
                 </p>
@@ -553,22 +546,18 @@ class PracticeApp {
         }).catch(err => {
             console.error('复制失败:', err);
             this.elements.copyBtn.textContent = '复制失败';
-            setTimeout(() => {
-                this.elements.copyBtn.textContent = '复制代码';
-            }, 2000);
         });
     }
 
     // 显示错误信息
     showError(message) {
         this.elements.questionText.textContent = message;
-        this.elements.optionsContainer.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: #dc3545;">
-                <h3>错误</h3>
-                <p>${message}</p>
-                <p style="margin-top: 20px; font-size: 0.9em;">请检查内置题库数据格式是否正确。</p>
-            </div>
-        `;
+        this.elements.optionsContainer.innerHTML = '';
+        this.elements.feedbackContainer.style.display = 'none';
+        this.elements.submitBtn.style.display = 'none';
+        this.elements.nextBtn.style.display = 'none';
+        this.elements.restartBtn.style.display = 'inline-block';
+        this.elements.restartBtn.textContent = '重新加载';
     }
 
     // 生成题目导航列表
@@ -682,7 +671,7 @@ class PracticeApp {
 
     // 更新进度条
     updateProgressBar() {
-        const answeredCount = this.questionStates.filter(state => 
+        const answeredCount = this.questionStates.filter(state =>
             state === 'correct' || state === 'incorrect'
         ).length;
         const progressPercentage = (answeredCount / this.questions.length) * 100;
@@ -719,7 +708,15 @@ class PracticeApp {
         
         // 添加current类到当前题目
         if (questionItems[this.currentQuestionIndex]) {
-            questionItems[this.currentQuestionIndex].classList.add('current');
+            const currentItem = questionItems[this.currentQuestionIndex];
+            currentItem.classList.add('current');
+            
+            // 滚动到当前题目，使其在可视区域内
+            currentItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
         }
         
         // 更新导航按钮状态

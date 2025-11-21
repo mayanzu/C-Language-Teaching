@@ -126,9 +126,13 @@ class PracticeApp {
     // 更新页面标题
     updatePageTitle() {
         const stats = window.templateLoader.getQuestionStats();
-        const title = `C语言输入输出练习 - ${stats.total} 道题目`;
-        this.elements.title.textContent = title;
-        this.elements.headerTitle.textContent = title;
+        // 保留原始标题的练习类型信息，只更新题目数量
+        const originalTitle = document.title;
+        const practiceType = originalTitle.match(/^C语言(.+?)练习/) ? originalTitle.match(/^C语言(.+?)练习/)[1] : '';
+        
+        // 分别更新页面标题和页面内标题
+        this.elements.title.textContent = `C语言${practiceType}练习 - ${stats.total} 道题目`;
+        this.elements.headerTitle.textContent = `C语言${practiceType}练习`;
     }
 
     // 显示题目
@@ -453,7 +457,7 @@ class PracticeApp {
         });
         
         // 字符串
-        highlighted = highlighted.replace(/"([^"\\]*(\\.[^'\\]*)*)"/g, '<span class="code-string">"$1"</span>');
+        highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');
         highlighted = highlighted.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '<span class="code-string">\'$1\'</span>');
         
         // 注释
@@ -485,24 +489,6 @@ class PracticeApp {
         return highlighted;
     }
 
-    // 复制代码
-    copyCode() {
-        const code = this.currentCodeText || this.elements.codeExample.textContent;
-        navigator.clipboard.writeText(code).then(() => {
-            const originalText = this.elements.copyBtn.textContent;
-            this.elements.copyBtn.textContent = '已复制！';
-            setTimeout(() => {
-                this.elements.copyBtn.textContent = originalText;
-            }, 2000);
-        }).catch(err => {
-            console.error('复制失败:', err);
-            this.elements.copyBtn.textContent = '复制失败';
-            setTimeout(() => {
-                this.elements.copyBtn.textContent = '复制代码';
-            }, 2000);
-        });
-    }
-
     // 下一题
     nextQuestion() {
         this.showQuestion(this.currentQuestionIndex + 1);
@@ -528,24 +514,50 @@ class PracticeApp {
     // 显示最终结果
     showFinalResults() {
         const percentage = Math.round((this.score / this.questions.length) * 100);
-        
         this.elements.questionText.textContent = '练习完成！';
         this.elements.optionsContainer.innerHTML = `
             <div style="text-align: center; padding: 40px;">
-                <h2>练习结果</h2>
-                <p style="font-size: 1.2em; margin: 20px 0;">
-                    得分: <strong>${this.score}</strong> / ${this.questions.length} (${percentage}%)
-                </p>
-                <p style="color: #666;">
-                    ${percentage >= 80 ? '🎉 优秀！' : percentage >= 60 ? '👍 良好！' : '💪 继续加油！'}
+                <h2 style="color: #667eea; margin-bottom: 20px;">你的得分</h2>
+                <div style="font-size: 3em; color: #667eea; margin: 20px 0;">${this.score} / ${this.questions.length}</div>
+                <div style="font-size: 1.5em; color: #6c757d; margin-bottom: 30px;">正确率: ${percentage}%</div>
+                <p style="color: #6c757d; line-height: 1.8;">
+                    ${percentage >= 90 ? '🎉 优秀！你对C语言运算符理解得很好！' : 
+                      percentage >= 70 ? '👍 不错！继续加油！' : 
+                      '💪 继续努力，多练习会更好！'}
                 </p>
             </div>
         `;
-        
         this.elements.feedbackContainer.style.display = 'none';
         this.elements.submitBtn.style.display = 'none';
         this.elements.nextBtn.style.display = 'none';
         this.elements.restartBtn.style.display = 'inline-block';
+        this.elements.restartBtn.textContent = '重新开始';
+    }
+
+    // 复制代码
+    copyCode() {
+        const code = this.currentCodeText || this.elements.codeExample.textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = this.elements.copyBtn.textContent;
+            this.elements.copyBtn.textContent = '已复制！';
+            setTimeout(() => {
+                this.elements.copyBtn.textContent = originalText;
+            }, 2000);
+        }).catch(err => {
+            console.error('复制失败:', err);
+            this.elements.copyBtn.textContent = '复制失败';
+        });
+    }
+
+    // 显示错误信息
+    showError(message) {
+        this.elements.questionText.textContent = message;
+        this.elements.optionsContainer.innerHTML = '';
+        this.elements.feedbackContainer.style.display = 'none';
+        this.elements.submitBtn.style.display = 'none';
+        this.elements.nextBtn.style.display = 'none';
+        this.elements.restartBtn.style.display = 'inline-block';
+        this.elements.restartBtn.textContent = '重新加载';
     }
 
     // 生成题目导航列表
@@ -696,29 +708,24 @@ class PracticeApp {
         
         // 添加current类到当前题目
         if (questionItems[this.currentQuestionIndex]) {
-            questionItems[this.currentQuestionIndex].classList.add('current');
+            const currentItem = questionItems[this.currentQuestionIndex];
+            currentItem.classList.add('current');
+            
+            // 滚动到当前题目，使其在可视区域内
+            currentItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
         }
         
         // 更新导航按钮状态
         this.elements.prevQuestionBtn.disabled = this.currentQuestionIndex === 0;
         this.elements.nextQuestionBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
     }
-
-    // 显示错误信息
-    showError(message) {
-        this.elements.questionText.textContent = message;
-        this.elements.optionsContainer.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: #dc3545;">
-                <h3>错误</h3>
-                <p>${message}</p>
-                <p style="margin-top: 20px; font-size: 0.9em;">请检查内置题库数据格式是否正确。</p>
-            </div>
-        `;
-        this.elements.submitBtn.style.display = 'none';
-    }
 }
 
-// 当页面加载完成后启动应用
+// 页面加载完成后启动应用
 document.addEventListener('DOMContentLoaded', () => {
     new PracticeApp();
 });

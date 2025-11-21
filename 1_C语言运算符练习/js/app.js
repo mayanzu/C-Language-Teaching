@@ -708,7 +708,15 @@ class PracticeApp {
         
         // 添加current类到当前题目
         if (questionItems[this.currentQuestionIndex]) {
-            questionItems[this.currentQuestionIndex].classList.add('current');
+            const currentItem = questionItems[this.currentQuestionIndex];
+            currentItem.classList.add('current');
+            
+            // 滚动到当前题目，使其在可视区域内
+            currentItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
         }
         
         // 更新导航按钮状态

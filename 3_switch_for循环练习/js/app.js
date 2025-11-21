@@ -8,22 +8,8 @@ class PracticeApp {
         this.isAnswered = false;
         this.currentCodeText = '';
         
-        // 缓存常用正则表达式以提高性能
-        this.regexCache = {
-            cTag: /<C>([\s\S]*?)<\/C>/g,
-            markdownCode: /```(\w*)\n([\s\S]*?)\n```/g,
-            markdownCodeExtract: /```\w*\n([\s\S]*?)\n```/,
-            newline: /\n/g,
-            tab: /\t/g
-        };
-        
         // 初始化DOM元素
         this.initializeElements();
-        
-        // 添加缺失的DOM元素引用
-        if (!this.elements.codeLanguageLabel) {
-            this.elements.codeLanguageLabel = document.getElementById('code-language-label');
-        }
         // 绑定事件
         this.bindEvents();
         // 开始应用
@@ -106,19 +92,17 @@ class PracticeApp {
             this.questions = await window.templateLoader.loadQuestions();
             
             if (this.questions.length === 0) {
-                this.showError('题库数据为空或加载失败，请检查 data/questions.json 文件');
+                this.showError('题库数据为空或加载失败，请检查内置题库数据');
                 return;
             }
 
             // 验证题库数据
-        try {
-            if (window.templateLoader && typeof window.templateLoader.validateQuestions === 'function') {
+            try {
                 window.templateLoader.validateQuestions(this.questions);
+            } catch (error) {
+                this.showError(`题库数据格式错误: ${error.message}`);
+                return;
             }
-        } catch (error) {
-            this.showError(`题库数据格式错误: ${error.message}`);
-            return;
-        }
 
             // 更新页面标题和统计信息
             this.updatePageTitle();
@@ -142,9 +126,13 @@ class PracticeApp {
     // 更新页面标题
     updatePageTitle() {
         const stats = window.templateLoader.getQuestionStats();
-        const title = `C语言switch和for循环练习 - ${stats.total} 道题目`;
-        this.elements.title.textContent = title;
-        this.elements.headerTitle.textContent = title;
+        // 保留原始标题的练习类型信息，只更新题目数量
+        const originalTitle = document.title;
+        const practiceType = originalTitle.match(/^C语言(.+?)练习/) ? originalTitle.match(/^C语言(.+?)练习/)[1] : '';
+        
+        // 分别更新页面标题和页面内标题
+        this.elements.title.textContent = `C语言${practiceType}练习 - ${stats.total} 道题目`;
+        this.elements.headerTitle.textContent = `C语言${practiceType}练习`;
     }
 
     // 显示题目
@@ -166,33 +154,32 @@ class PracticeApp {
         const formattedQuestion = this.formatQuestionText(`${question.id}. ${question.question}`);
         this.elements.questionText.innerHTML = formattedQuestion;
 
-        // 清空并生成选项
+        // 清空并生成选项（规范化后的数组格式）
         this.elements.optionsContainer.innerHTML = '';
         
-        // 处理不同格式的选项数据（支持数组和对象两种格式）
-        let optionsEntries = [];
         if (Array.isArray(question.options)) {
-            // 如果是数组格式，将索引转换为字母标签A, B, C, D...
-            optionsEntries = question.options.map((value, index) => {
-                const letter = String.fromCharCode(65 + index); // 65是'A'的ASCII码
-                return [letter, value];
+            // 数组格式：转换为 A/B/C/D 标签并保存索引
+            question.options.forEach((value, optionIndex) => {
+                const label = String.fromCharCode(65 + optionIndex); // 65='A'
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                // 存储索引，便于与 question.correctAnswer（数字）比较
+                optionDiv.dataset.option = String(optionIndex);
+                optionDiv.innerHTML = `<span class="option-label">${label}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(String(optionIndex), optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
             });
         } else {
-            // 如果是对象格式，保持原有的键值对
-            optionsEntries = Object.entries(question.options);
+            // 备用：如果仍是对象格式（不应该出现，但保险起见）
+            Object.entries(question.options).forEach(([key, value]) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.dataset.option = key;
+                optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
+                optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
+                this.elements.optionsContainer.appendChild(optionDiv);
+            });
         }
-        
-        // 生成选项
-        optionsEntries.forEach(([key, value]) => {
-            const optionDiv = document.createElement('div');
-            optionDiv.className = 'option';
-            optionDiv.dataset.option = key;
-            // 对选项内容也应用代码块高亮处理
-            const formattedOption = this.formatTextWithCodeBlocks(value);
-            optionDiv.innerHTML = `<span class="option-label">${key}.</span>${formattedOption}`;
-            optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
-            this.elements.optionsContainer.appendChild(optionDiv);
-        });
 
         // 隐藏反馈和代码示例
         this.elements.feedbackContainer.style.display = 'none';
@@ -230,14 +217,8 @@ class PracticeApp {
         this.isAnswered = true;
         const question = this.questions[this.currentQuestionIndex];
         
-        // 处理答案验证：如果选项是数组格式且selectedAnswer是字母，需要转换为数字索引进行比较
-        let userAnswerIndex = this.selectedAnswer;
-        if (Array.isArray(question.options) && isNaN(parseInt(this.selectedAnswer))) {
-            // 将字母A/B/C/D转换为数字索引0/1/2/3
-            userAnswerIndex = this.selectedAnswer.charCodeAt(0) - 65;
-        }
-        
-        const isCorrect = userAnswerIndex == question.correctAnswer;
+        // 规范比较：选中的索引（字符串）与 correctAnswer（数字）比较
+        const isCorrect = parseInt(this.selectedAnswer) === Number(question.correctAnswer);
 
         // 更新题目状态
         this.updateQuestionState(this.currentQuestionIndex, isCorrect ? 'correct' : 'incorrect');
@@ -251,59 +232,38 @@ class PracticeApp {
         // 显示正确答案和错误答案
         document.querySelectorAll('.option').forEach(opt => {
             opt.classList.add('disabled');
-            
-            // 处理正确答案比较：如果选项是字母格式，需要将数字索引转换为字母
-            let correctAnswerValue = question.correctAnswer;
-            if (Array.isArray(question.options) && !isNaN(parseInt(question.correctAnswer))) {
-                correctAnswerValue = String.fromCharCode(65 + parseInt(question.correctAnswer));
-            }
-            
-            if (opt.dataset.option === correctAnswerValue) {
+            const optIdx = parseInt(opt.dataset.option);
+            const correctIdx = Number(question.correctAnswer);
+            if (optIdx === correctIdx) {
                 opt.classList.add('correct');
-            } else if (opt.dataset.option === this.selectedAnswer && !isCorrect) {
+            } else if (optIdx === parseInt(this.selectedAnswer) && !isCorrect) {
                 opt.classList.add('incorrect');
             }
         });
 
+        // 准备反馈文本（显示字母标签与选项文本）
+        const correctIdx = Number(question.correctAnswer);
+        const correctLabel = String.fromCharCode(65 + correctIdx); // 转为字母
+        const correctText = question.options[correctIdx];
+
         // 显示反馈
         this.elements.feedbackContainer.style.display = 'block';
         this.elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-        // 对反馈内容中的代码块也应用高亮
-        const formattedExplanation = this.formatTextWithCodeBlocks(question.explanation);
-        const formattedCorrectOption = this.formatTextWithCodeBlocks(question.options[question.correctAnswer]);
-        
-        // 将正确答案数字索引转换为字母标签
-        let correctAnswerLabel = question.correctAnswer;
-        if (Array.isArray(question.options) && !isNaN(parseInt(question.correctAnswer))) {
-            correctAnswerLabel = String.fromCharCode(65 + parseInt(question.correctAnswer));
-        }
-        
         this.elements.feedback.innerHTML = `
             <h3>${isCorrect ? '✓ 回答正确！' : '✗ 回答错误'}</h3>
-            <p><strong>正确答案：</strong>${correctAnswerLabel}. ${formattedCorrectOption}</p>
-            <p><strong>解析：</strong>${formattedExplanation}</p>
+            <p><strong>正确答案：</strong>${correctLabel}. ${correctText}</p>
+            <p><strong>解析：</strong>${question.explanation}</p>
         `;
 
         // 显示代码示例
         this.currentCodeText = question.codeExample;
         
-        // 提取代码块内容（移除markdown标记）
-        const codeBlockMatch = this.currentCodeText.match(/```(?:\w+)?\n?([\s\S]*?)```/);
-        const codeContent = codeBlockMatch ? codeBlockMatch[1] : this.currentCodeText;
-        
-        // 确保头文件正确处理，避免被错误格式化
-        // 使用更精确的正则表达式处理#include语句
-        const processedCode = codeContent.replace(/#include\s*<([^>]+)>/g, '#include <$1>');
-        
-        // 检测语言并设置标签
-        const language = this.detectCodeLanguage(processedCode);
+        // 自动检测代码语言
+        const language = this.detectCodeLanguage(this.currentCodeText);
         this.elements.codeLanguageLabel.textContent = language.toUpperCase();
         
-        // 应用语法高亮，保留原始缩进
-        const highlightedCode = this.applySyntaxHighlighting(processedCode, language);
-        
-        // 直接设置代码内容，不添加额外的行号或格式
-        this.elements.codeExample.innerHTML = highlightedCode;
+        // 应用代码格式化和高亮
+        this.formatAndHighlightCode(this.currentCodeText, language);
 
         // 更新按钮
         this.elements.submitBtn.style.display = 'none';
@@ -314,161 +274,77 @@ class PracticeApp {
         }
     }
 
-    // 格式化文本中的代码块（处理markdown格式、<C>标签格式和普通代码片段）
-    formatTextWithCodeBlocks(text) {
-        if (!text || typeof text !== 'string') return text || '';
+    // 格式化题目文本（处理markdown代码块）
+    formatQuestionText(questionText) {
+        // 使用更精确的方法处理markdown代码块
+        const codeBlockRegex = /```(\w*)\n([\s\S]*?)\n```/g;
         
-        let processedText = text;
+        // 首先分割文本，处理代码块和普通文本
+        let result = '';
+        let lastIndex = 0;
+        let match;
         
-        // 1. 处理<C>标签格式的代码块
-        // 先提取<C>标签代码块，避免在处理过程中被其他逻辑影响
-        const cTagBlocks = [];
-        processedText = processedText.replace(this.regexCache.cTag, (match, code) => {
-            const placeholder = `C_TAG_BLOCK_${cTagBlocks.length}`;
-            // 对于<C>标签，我们明确将其识别为C语言代码
-            const language = 'c';
-            // 移除代码中的换行符，避免在后续处理中被转换为<br>
-            const codeWithoutNewlines = code.replace(/\n/g, ' ');
-            const formattedCode = codeWithoutNewlines.replace(this.regexCache.tab, '    ').trim();
-            const highlightedCode = this.applySyntaxHighlighting(formattedCode, language);
+        while ((match = codeBlockRegex.exec(questionText)) !== null) {
+            const [fullMatch, language, code] = match;
+            const matchStart = match.index;
+            const matchEnd = matchStart + fullMatch.length;
             
-            const codeBlock = `<div class="code-example-container">
-                    <div class="code-example-header">
-                        <span class="code-language-label">${language.toUpperCase()}</span>
-                    </div>
-                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
-                </div>`;
+            // 处理代码块之前的普通文本
+            if (matchStart > lastIndex) {
+                const normalText = questionText.slice(lastIndex, matchStart);
+                result += normalText.replace(/\n/g, '<br>');
+            }
             
-            cTagBlocks.push({ placeholder, content: codeBlock });
-            return placeholder;
-        });
-        
-        // 2. 处理markdown格式的代码块
-        processedText = processedText.replace(this.regexCache.markdownCode, (match, language, code) => {
+            // 处理代码块
             const detectedLanguage = this.detectCodeLanguage(code.trim()) || language || 'c';
-            const formattedCode = code.replace(this.regexCache.tab, '    ').trim();
+            const formattedCode = code.replace(/\t/g, '    ').trim();
             const highlightedCode = this.applySyntaxHighlighting(formattedCode, detectedLanguage);
             
-            return `<div class="code-example-container">
+            result += `<div class="code-example-container">
                     <div class="code-example-header">
                         <span class="code-language-label">${detectedLanguage.toUpperCase()}</span>
                     </div>
                     <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
                 </div>`;
-        });
-        
-        // 3. 为普通文本中的代码片段添加简单高亮（适用于题干中的内联代码）
-        // 预编译正则表达式以提高性能
-        if (!this.regexCache.inlineCodeRegex) {
-            // 优化关键字列表，只包含最常用的C语言关键字和函数
-            const cKeywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
-                             'return', 'void', 'switch', 'case', 'default', 'break', 'printf', 'scanf'];
             
-            // 优化正则表达式，减少捕获组数量，提高执行效率
-            this.regexCache.inlineCodeRegex = new RegExp(`\\b(${cKeywords.join('|')})\\b|(\\w+)\\s*\\(|\"([^\"]*)\"`, 'g');
+            lastIndex = matchEnd;
         }
         
-        // 性能优化：只对真正需要高亮的文本进行处理，避免不必要的DOM操作
-        // 使用字符串处理方式代替复杂的DOM遍历，提高性能
+        // 处理剩余的普通文本
+        if (lastIndex < questionText.length) {
+            const remainingText = questionText.slice(lastIndex);
+            result += remainingText.replace(/\n/g, '<br>');
+        }
         
-        // 先提取已经格式化的代码块和<C>标签占位符，避免重复处理
-        const codeBlockPlaceholders = [];
-        let tempText = processedText;
-        
-        // 替换已格式化的代码块为临时标记
-        tempText = tempText.replace(/<div class="code-example-container">[\s\S]*?<\/div>/g, (match) => {
-            const placeholder = `CODE_BLOCK_PLACEHOLDER_${codeBlockPlaceholders.length}`;
-            codeBlockPlaceholders.push({ placeholder, content: match });
-            return placeholder;
-        });
-        
-        // 替换<C>标签占位符为临时标记
-        tempText = tempText.replace(/C_TAG_BLOCK_\d+/g, (match) => {
-            const placeholder = `C_TAG_PLACEHOLDER_${codeBlockPlaceholders.length}`;
-            codeBlockPlaceholders.push({ placeholder, content: match });
-            return placeholder;
-        });
-        
-        // 对剩余文本应用内联代码高亮
-        tempText = tempText.replace(this.regexCache.inlineCodeRegex, (match, keyword, func, str) => {
-            if (keyword) {
-                return `<span class="code-keyword">${keyword}</span>`;
-            } else if (func) {
-                // 处理函数名，保留括号
-                return `<span class="code-function">${func}</span>(`;
-            } else if (str !== undefined) {
-                return `<span class="code-string">"${str}"</span>`;
-            }
-            return match;
-        });
-        
-        // 恢复已格式化的代码块和<C>标签占位符
-        codeBlockPlaceholders.forEach(({ placeholder, content }) => {
-            tempText = tempText.replace(placeholder, content);
-        });
-        
-        processedText = tempText;
-        
-        // 4. 处理换行符转换为<br>标签
-        // 先提取所有代码块和<C>标签占位符，避免在代码块内部添加<br>标签
-        const allCodeBlocks = [];
-        let finalText = processedText;
-        
-        // 替换所有代码块为临时标记
-        finalText = finalText.replace(/<div class="code-example-container">[\s\S]*?<\/div>/g, (match) => {
-            const placeholder = `FINAL_CODE_BLOCK_${allCodeBlocks.length}`;
-            allCodeBlocks.push({ placeholder, content: match });
-            return placeholder;
-        });
-        
-        // 替换<C>标签占位符为临时标记
-        finalText = finalText.replace(/C_TAG_BLOCK_\d+/g, (match) => {
-            const placeholder = `FINAL_C_TAG_BLOCK_${allCodeBlocks.length}`;
-            allCodeBlocks.push({ placeholder, content: match });
-            return placeholder;
-        });
-        
-        // 只对非代码块部分应用换行符转换
-        finalText = finalText.replace(this.regexCache.newline, '<br>');
-        
-        // 5. 恢复所有代码块
-        allCodeBlocks.forEach(({ placeholder, content }) => {
-            finalText = finalText.replace(placeholder, content);
-        });
-        
-        // 6. 恢复<C>标签代码块
-        cTagBlocks.forEach(({ placeholder, content }) => {
-            finalText = finalText.replace(placeholder, content);
-        });
-        
-        // 7. 清理连续的<br>标签，避免在代码块前后出现多余的空行
-        finalText = finalText.replace(/(<br>\s*){2,}/g, '<br>');
-        
-        return finalText;
-    }
-    
-    // 格式化题目文本
-    formatQuestionText(questionText) {
-        return this.formatTextWithCodeBlocks(questionText);
+        return result;
     }
 
     // 检测代码语言
     detectCodeLanguage(codeText) {
-        if (!codeText || typeof codeText !== 'string') return 'c';
+        // 检测C语言
+        if (codeText.includes('#include') || codeText.includes('#define') ||
+            codeText.includes('int main()') || codeText.includes('printf') ||
+            codeText.includes('scanf') || codeText.includes('stdlib.h')) {
+            return 'c';
+        }
         
-        // 为常见模式创建简单的正则表达式，提高检测准确性
-        const patterns = {
-            c: /#include|#define|int\s+main\s*\(|printf|scanf|stdlib\.h/i,
-            javascript: /function|var\s+|let\s+|const\s+|console\.log/i,
-            python: /def\s+|import\s+|print\s*\(|if\s+__name__/i,
-            java: /public\s+class|System\.out\.println|public\s+static\s+void\s+main/i
-        };
+        // 检测JavaScript
+        if (codeText.includes('function') || codeText.includes('var ') ||
+            codeText.includes('let ') || codeText.includes('const ') ||
+            codeText.includes('console.log')) {
+            return 'javascript';
+        }
         
-        // 按照优先级检测语言
-        for (const [language, pattern] of Object.entries(patterns)) {
-            if (pattern.test(codeText)) {
-                return language;
-            }
+        // 检测Python
+        if (codeText.includes('def ') || codeText.includes('import ') ||
+            codeText.includes('print(') || codeText.includes('if __name__')) {
+            return 'python';
+        }
+        
+        // 检测Java
+        if (codeText.includes('public class') || codeText.includes('System.out.println') ||
+            codeText.includes('public static void main')) {
+            return 'java';
         }
         
         // 默认为C语言（因为这是C语言练习系统）
@@ -483,13 +359,8 @@ class PracticeApp {
         // 应用语言特定的语法高亮
         const highlightedCode = this.applySyntaxHighlighting(formattedCode, language);
         
-        // 设置代码内容，使用完整的代码容器结构
-        this.elements.codeExample.innerHTML = `<div class="code-example-container">
-                <div class="code-example-header">
-                    <span class="code-language-label">${language.toUpperCase()}</span>
-                </div>
-                <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
-            </div>`;
+        // 设置代码内容
+        this.elements.codeExample.innerHTML = highlightedCode;
     }
 
     // 应用语法高亮
@@ -510,26 +381,6 @@ class PracticeApp {
 
     // C语言语法高亮
     highlightCCode(code) {
-        if (!code || typeof code !== 'string') return '';
-        
-        // 初始化缓存的正则表达式（如果尚未初始化）
-        if (!this.regexCache.keywordsRegex) {
-            const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for', 
-                             'return', 'void', 'sizeof', 'struct', 'enum', 'typedef', 'unsigned', 'signed',
-                             'long', 'short', 'static', 'const', 'extern', 'auto', 'register', 
-                             'switch', 'case', 'default', 'break'];
-            this.regexCache.keywordsRegex = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
-        }
-        
-        if (!this.regexCache.typesRegex) {
-            const types = ['int', 'char', 'float', 'double', 'void'];
-            this.regexCache.typesRegex = new RegExp(`\\b(${types.join('|')})\\b`, 'g');
-        }
-        
-        if (!this.regexCache.functionCallRegex) {
-            this.regexCache.functionCallRegex = /(\w+)(?=\s*\()(?![^<]*>)/g;
-        }
-        
         // 使用更安全的处理方式，避免重复替换
         let highlighted = code;
         
@@ -540,23 +391,32 @@ class PracticeApp {
         highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
         highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
         
-        // 3. 特别处理头文件include语句
-        highlighted = highlighted.replace(/(#include)\s*<([^>]+)>/g, '<span class="code-macro">$1</span> &lt;<span class="code-include">$2</span>&gt;');
+        // 3. 预处理指令
+        highlighted = highlighted.replace(/(#\w+)/g, '<span class="code-macro">$1</span>');
         
-        // 4. 处理其他预处理指令
-        highlighted = highlighted.replace(/(#\w+)(?!include)/g, '<span class="code-macro">$1</span>');
+        // 4. 关键字（包含switch、case、default、break）
+        const keywords = ['int', 'char', 'float', 'double', 'if', 'else', 'while', 'for',
+                         'return', 'void', 'sizeof', 'struct', 'enum', 'typedef', 'unsigned', 'signed',
+                         'long', 'short', 'static', 'const', 'extern', 'auto', 'register',
+                         'switch', 'case', 'default', 'break'];
+        keywords.forEach(keyword => {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-keyword">${keyword}</span>`);
+        });
         
-        // 5. 数字
+        // 5. 类型
+        const types = ['int', 'char', 'float', 'double', 'void'];
+        types.forEach(type => {
+            const regex = new RegExp(`\\b${type}\\b`, 'g');
+            highlighted = highlighted.replace(regex, `<span class="code-type">${type}</span>`);
+        });
+        
+        // 6. 数字
         highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g, '<span class="code-number">$1</span>');
         
-        // 6. 类型（优先级高于关键字）
-        highlighted = highlighted.replace(this.regexCache.typesRegex, '<span class="code-type">$1</span>');
-        
-        // 7. 关键字
-        highlighted = highlighted.replace(this.regexCache.keywordsRegex, '<span class="code-keyword">$1</span>');
-        
-        // 8. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
-        highlighted = highlighted.replace(this.regexCache.functionCallRegex, '<span class="code-function">$1</span>');
+        // 7. 函数调用 - 使用更精确的正则表达式，避免匹配HTML标签内的内容
+        // 使用负向前瞻确保不匹配已经在span标签内的内容
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()(?![^<]*>)/g, '<span class="code-function">$1</span>');
         
         return highlighted;
     }
@@ -566,7 +426,7 @@ class PracticeApp {
         let highlighted = code;
         
         // 关键字
-        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for', 
+        const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'while', 'for',
                          'return', 'true', 'false', 'null', 'undefined', 'this', 'new', 'class'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -589,7 +449,7 @@ class PracticeApp {
         let highlighted = code;
         
         // 关键字
-        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import', 
+        const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import',
                          'from', 'as', 'class', 'try', 'except', 'finally', 'with', 'in', 'not', 'and', 'or'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -611,8 +471,8 @@ class PracticeApp {
         let highlighted = code;
         
         // 关键字
-        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char', 
-                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class', 
+        const keywords = ['public', 'private', 'protected', 'static', 'final', 'void', 'int', 'char',
+                         'float', 'double', 'boolean', 'if', 'else', 'while', 'for', 'return', 'class',
                          'interface', 'extends', 'implements', 'try', 'catch', 'finally', 'throw', 'throws'];
         keywords.forEach(keyword => {
             const regex = new RegExp(`\\b${keyword}\\b`, 'g');
@@ -632,6 +492,8 @@ class PracticeApp {
     // 下一题
     nextQuestion() {
         this.showQuestion(this.currentQuestionIndex + 1);
+        // 更新当前题目高亮
+        this.updateCurrentQuestionHighlight();
     }
 
     // 重新开始
@@ -639,6 +501,13 @@ class PracticeApp {
         this.currentQuestionIndex = 0;
         this.score = 0;
         this.elements.scoreSpan.textContent = this.score;
+        
+        // 重置题目状态
+        this.questionStates = new Array(this.questions.length).fill('unanswered');
+        
+        // 重新生成题目导航列表
+        this.generateQuestionList();
+        
         this.showQuestion(0);
     }
 
@@ -652,7 +521,7 @@ class PracticeApp {
                 <div style="font-size: 3em; color: #667eea; margin: 20px 0;">${this.score} / ${this.questions.length}</div>
                 <div style="font-size: 1.5em; color: #6c757d; margin-bottom: 30px;">正确率: ${percentage}%</div>
                 <p style="color: #6c757d; line-height: 1.8;">
-                    ${percentage >= 90 ? '🎉 优秀！你掌握得很好！' : 
+                    ${percentage >= 90 ? '🎉 优秀！你对C语言运算符理解得很好！' : 
                       percentage >= 70 ? '👍 不错！继续加油！' : 
                       '💪 继续努力，多练习会更好！'}
                 </p>
@@ -667,24 +536,7 @@ class PracticeApp {
 
     // 复制代码
     copyCode() {
-        // 获取原始代码文本，避免复制HTML标签
-        let code = '';
-        if (this.currentCodeText) {
-            // 从currentCodeText中提取纯文本代码
-            if (this.currentCodeText.includes('```')) {
-                const match = this.currentCodeText.match(this.regexCache.markdownCodeExtract);
-                if (match) {
-                    code = match[1];
-                } else {
-                    code = this.currentCodeText;
-                }
-            } else {
-                code = this.currentCodeText;
-            }
-        } else if (this.elements && this.elements.codeExample) {
-            code = this.elements.codeExample.textContent;
-        }
-        
+        const code = this.currentCodeText || this.elements.codeExample.textContent;
         navigator.clipboard.writeText(code).then(() => {
             const originalText = this.elements.copyBtn.textContent;
             this.elements.copyBtn.textContent = '已复制！';
@@ -694,22 +546,18 @@ class PracticeApp {
         }).catch(err => {
             console.error('复制失败:', err);
             this.elements.copyBtn.textContent = '复制失败';
-            setTimeout(() => {
-                this.elements.copyBtn.textContent = '复制代码';
-            }, 2000);
         });
     }
 
     // 显示错误信息
     showError(message) {
         this.elements.questionText.textContent = message;
-        this.elements.optionsContainer.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: #dc3545;">
-                <h3>错误</h3>
-                <p>${message}</p>
-                <p style="margin-top: 20px; font-size: 0.9em;">请检查 data/questions.json 文件格式是否正确。</p>
-            </div>
-        `;
+        this.elements.optionsContainer.innerHTML = '';
+        this.elements.feedbackContainer.style.display = 'none';
+        this.elements.submitBtn.style.display = 'none';
+        this.elements.nextBtn.style.display = 'none';
+        this.elements.restartBtn.style.display = 'inline-block';
+        this.elements.restartBtn.textContent = '重新加载';
     }
 
     // 生成题目导航列表
@@ -823,7 +671,7 @@ class PracticeApp {
 
     // 更新进度条
     updateProgressBar() {
-        const answeredCount = this.questionStates.filter(state => 
+        const answeredCount = this.questionStates.filter(state =>
             state === 'correct' || state === 'incorrect'
         ).length;
         const progressPercentage = (answeredCount / this.questions.length) * 100;
@@ -860,7 +708,15 @@ class PracticeApp {
         
         // 添加current类到当前题目
         if (questionItems[this.currentQuestionIndex]) {
-            questionItems[this.currentQuestionIndex].classList.add('current');
+            const currentItem = questionItems[this.currentQuestionIndex];
+            currentItem.classList.add('current');
+            
+            // 滚动到当前题目，使其在可视区域内
+            currentItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
         }
         
         // 更新导航按钮状态
