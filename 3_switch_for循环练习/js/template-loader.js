@@ -1,4 +1,4 @@
-// 模板加载器 - 负责动态加载题库数据
+﻿// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         this.questions = [];
@@ -31,7 +31,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 2,
                 "explanation": "x的值为5，匹配case 5，执行printf(\"five\")。由于case 5后面有break语句，所以不会继续执行default分支。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 5;\n    switch(x) {\n        case 1: printf(\"one\"); break;\n        case 3: printf(\"three\"); break;\n        case 5: printf(\"five\"); break;\n        default: printf(\"default\");\n    }\n    return 0;\n}\n// 输出：five\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 5;\n    switch(x) {\n        case 1: printf(\"one\"); break;\n        case 3: printf(\"three\"); break;\n        case 5: printf(\"five\"); break;\n        default: printf(\"default\");\n    }\n    return 0;\n}\n// 输出：five"
             },
             {
                 "id": 2,
@@ -44,7 +44,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "x的值为2，匹配case 2，执行printf(\"B\")。由于case 2后面没有break语句，会继续执行case 3，输出\"C\"。然后遇到break语句，跳出switch结构。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 2;\n    switch(x) {\n        case 1: printf(\"A\");\n        case 2: printf(\"B\");\n        case 3: printf(\"C\"); break;\n        case 4: printf(\"D\");\n        default: printf(\"E\");\n    }\n    return 0;\n}\n// 输出：BC\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 2;\n    switch(x) {\n        case 1: printf(\"A\");\n        case 2: printf(\"B\");\n        case 3: printf(\"C\"); break;\n        case 4: printf(\"D\");\n        default: printf(\"E\");\n    }\n    return 0;\n}\n// 输出：BC"
             },
             {
                 "id": 3,
@@ -57,7 +57,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "switch语句中default的位置不影响匹配顺序。x的值为3，匹配case 3，执行printf(\"C\")。由于case 3后面没有break语句，但已经是最后一个case，所以执行结束。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 3;\n    switch(x) {\n        default: printf(\"D\");\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\");\n        case 3: printf(\"C\");\n    }\n    return 0;\n}\n// 输出：C\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 3;\n    switch(x) {\n        default: printf(\"D\");\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\");\n        case 3: printf(\"C\");\n    }\n    return 0;\n}\n// 输出：C"
             },
             {
                 "id": 4,
@@ -70,7 +70,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "ch的值为'B'，匹配case 'B'，执行printf(\"乙\")。由于case 'B'后面没有break语句，会继续执行case 'C'，输出\"丙\"。然后遇到break语句，跳出switch结构。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    char ch = 'B';\n    switch(ch) {\n        case 'A': printf(\"甲\"); break;\n        case 'B': printf(\"乙\");\n        case 'C': printf(\"丙\"); break;\n        default: printf(\"丁\");\n    }\n    return 0;\n}\n// 输出：乙丙\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    char ch = 'B';\n    switch(ch) {\n        case 'A': printf(\"甲\"); break;\n        case 'B': printf(\"乙\");\n        case 'C': printf(\"丙\"); break;\n        default: printf(\"丁\");\n    }\n    return 0;\n}\n// 输出：乙丙"
             },
             {
                 "id": 5,
@@ -83,7 +83,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "循环执行5次，i的值分别为0、1、2、3、4，x的值为0+0+1+2+3+4=10。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 0;\n    for(int i = 0; i < 5; i++) {\n        x += i; // x = x + i\n        printf(\"i=%d, x=%d\\n\", i, x);\n    }\n    printf(\"最终x=%d\", x);\n    return 0;\n}\n// 输出：10\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 0;\n    for(int i = 0; i < 5; i++) {\n        x += i; // x = x + i\n        printf(\"i=%d, x=%d\\n\", i, x);\n    }\n    printf(\"最终x=%d\", x);\n    return 0;\n}\n// 输出：10"
             },
             {
                 "id": 6,
@@ -96,7 +96,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "当i为偶数时执行continue，跳过printf语句，继续下一次循环。所以只输出奇数：1、3、5。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i;\n    for(i = 1; i <= 5; i++) {\n        if(i % 2 == 0) { // 判断是否为偶数\n            continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"%d \", i);\n    }\n    return 0;\n}\n// 输出：1 3 5\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i;\n    for(i = 1; i <= 5; i++) {\n        if(i % 2 == 0) { // 判断是否为偶数\n            continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"%d \", i);\n    }\n    return 0;\n}\n// 输出：1 3 5"
             },
             {
                 "id": 7,
@@ -109,7 +109,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "for循环的初始化和更新部分可以省略。循环条件为i < 5，循环体中先执行i++，然后输出i的值。i的值从0开始，循环执行5次，输出1到5。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    for(; i < 5; ) { // 初始化和更新部分省略\n        i++; // 在循环体内更新i\n        printf(\"%d \", i);\n    }\n    return 0;\n}\n// 输出：1 2 3 4 5\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    for(; i < 5; ) { // 初始化和更新部分省略\n        i++; // 在循环体内更新i\n        printf(\"%d \", i);\n    }\n    return 0;\n}\n// 输出：1 2 3 4 5"
             },
             {
                 "id": 8,
@@ -122,7 +122,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "i的初始值为1，每次增加2，循环条件为i <= 10。i的值依次为1、3、5、7、9，循环执行5次。当i=11时，不满足循环条件，退出循环。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, count = 0;\n    for(i = 1; i <= 10; i += 2) { // 每次增加2\n        count++; // 统计循环次数\n        printf(\"第%d次循环: i=%d\\n\", count, i);\n    }\n    printf(\"循环体执行了%d次\", count);\n    return 0;\n}\n// 输出：5次\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i, count = 0;\n    for(i = 1; i <= 10; i += 2) { // 每次增加2\n        count++; // 统计循环次数\n        printf(\"第%d次循环: i=%d\\n\", count, i);\n    }\n    printf(\"循环体执行了%d次\", count);\n    return 0;\n}\n// 输出：5次"
             },
             {
                 "id": 9,
@@ -135,7 +135,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "i的初始值为0，进入while循环，i变为1，输出1。接着i变为2，遇到break语句，跳出循环，不再输出。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 3) {\n        i++;    printf(\"i=%d \", i);\n        if(i == 2) {\n            printf(\"遇到break，跳出循环\\n\");\n            break; // 跳出循环\n        }\n        printf(\"继续下一次循环\\n\");\n    }\n    return 0;\n}\n// 输出：i=1 继续下一次循环\ni=2 遇到break，跳出循环\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 3) {\n        i++;    printf(\"i=%d \", i);\n        if(i == 2) {\n            printf(\"遇到break，跳出循环\\n\");\n            break; // 跳出循环\n        }\n        printf(\"继续下一次循环\\n\");\n    }\n    return 0;\n}\n// 输出：i=1 继续下一次循环\ni=2 遇到break，跳出循环"
             },
             {
                 "id": 10,
@@ -148,7 +148,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "当i为偶数时，执行i++和continue，跳过printf语句，继续下一次循环。所以只输出奇数：1、3、5。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 1;\n    while(i <= 5) {\n        if(i % 2 == 0) { // 判断是否为偶数\n            i++;    continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"%d \", i);\n        i++;\n    }\n    return 0;\n}\n// 输出：1 3 5\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 1;\n    while(i <= 5) {\n        if(i % 2 == 0) { // 判断是否为偶数\n            i++;    continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"%d \", i);\n        i++;\n    }\n    return 0;\n}\n// 输出：1 3 5"
             },
             {
                 "id": 11,
@@ -161,7 +161,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 3,
                 "explanation": "循环执行5次，每次根据x的奇偶性更新x的值：\n1. 初始x=1(奇数)，i=0：x=3，i=1\n2. x=3(奇数)，i=1：x=5，i=2\n3. x=5(奇数)，i=2：x=7，i=3\n4. x=7(奇数)，i=3：x=9，i=4\n5. x=9(奇数)，i=4：x=11，i=5\n最终x=11。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 1;\n    int i = 0;\n    while(i < 5) {\n        if(x % 2 == 1) { // x是奇数\n            x += 2;\n        } else { // x是偶数\n            x *= 2;\n        }\n        printf(\"i=%d, x=%d\\n\", i, x);\n        i++;\n    }\n    printf(\"最终x=%d\", x);\n    return 0;\n}\n// 输出：11\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 1;\n    int i = 0;\n    while(i < 5) {\n        if(x % 2 == 1) { // x是奇数\n            x += 2;\n        } else { // x是偶数\n            x *= 2;\n        }\n        printf(\"i=%d, x=%d\\n\", i, x);\n        i++;\n    }\n    printf(\"最终x=%d\", x);\n    return 0;\n}\n// 输出：11"
             },
             {
                 "id": 12,
@@ -174,7 +174,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "do-while循环先执行循环体，再检查条件。循环执行5次，i的值分别为0、1、2、3、4，sum的值为0+0+1+2+3+4=10。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    int sum = 0;\n    do {\n        sum += i; // sum = sum + i\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n        i++;\n    } while(i < 5);\n    printf(\"最终sum=%d\", sum);\n    return 0;\n}\n// 输出：10\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    int sum = 0;\n    do {\n        sum += i; // sum = sum + i\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n        i++;\n    } while(i < 5);\n    printf(\"最终sum=%d\", sum);\n    return 0;\n}\n// 输出：10"
             },
             {
                 "id": 13,
@@ -187,7 +187,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "do-while循环先执行循环体，再检查条件。i的初始值为5，输出5后i变为4，继续循环，直到i=0时退出循环。所以输出5 4 3 2 1。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 5;\n    do {\n        printf(\"%d \", i);\n        i--; // i = i - 1\n    } while(i > 0);\n    return 0;\n}\n// 输出：5 4 3 2 1\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 5;\n    do {\n        printf(\"%d \", i);\n        i--; // i = i - 1\n    } while(i > 0);\n    return 0;\n}\n// 输出：5 4 3 2 1"
             },
             {
                 "id": 14,
@@ -200,7 +200,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "外层循环执行3次，i的值分别为0、1、2：\n1. i=0：匹配case 0，输出\"A\"，由于没有break，继续执行case 1，输出\"B\"，遇到break跳出switch。\n2. i=1：匹配case 1，输出\"B\"，遇到break跳出switch。\n3. i=2：匹配case 2，输出\"C\"，由于没有break，继续执行default，输出\"D\"。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    for(i = 0; i < 3; i++) {\n        printf(\"i=%d: \", i);\n        switch(i) {\n            case 0: printf(\"A\");\n            case 1: printf(\"B\"); break;\n            case 2: printf(\"C\");\n            default: printf(\"D\");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出：i=0: AB\ni=1: B\ni=2: CD\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    for(i = 0; i < 3; i++) {\n        printf(\"i=%d: \", i);\n        switch(i) {\n            case 0: printf(\"A\");\n            case 1: printf(\"B\"); break;\n            case 2: printf(\"C\");\n            default: printf(\"D\");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出：i=0: AB\ni=1: B\ni=2: CD"
             },
             {
                 "id": 15,
@@ -213,7 +213,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 2,
                 "explanation": "while循环执行5次，i的值分别为0、1、2、3、4：\n1. i=0，i%3=0：输出\"X\"，break。\n2. i=1，i%3=1：输出\"Y\"，由于没有break，继续执行case 2，输出\"Z\"，break。\n3. i=2，i%3=2：输出\"Z\"，break。\n4. i=3，i%3=0：输出\"X\"，break。\n5. i=4，i%3=1：输出\"Y\"，由于没有break，继续执行case 2，输出\"Z\"，break。\n最终输出：XYZXZ。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 5) {\n        printf(\"i=%d, i%%3=%d: \" , i, i%3);\n        switch(i % 3) {\n            case 0: printf(\"X\"); break;\n            case 1: printf(\"Y\");\n            case 2: printf(\"Z\"); break;\n        }\n        printf(\"\\n\");\n        i++;\n    }\n    return 0;\n}\n// 输出：XYZXZ\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    while(i < 5) {\n        printf(\"i=%d, i%%3=%d: \" , i, i%3);\n        switch(i % 3) {\n            case 0: printf(\"X\"); break;\n            case 1: printf(\"Y\");\n            case 2: printf(\"Z\"); break;\n        }\n        printf(\"\\n\");\n        i++;\n    }\n    return 0;\n}\n// 输出：XYZXZ"
             },
             {
                 "id": 16,
@@ -226,7 +226,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "for循环执行3次，i的值分别为0、1、2：\n1. i=0：输出\"0\"。\n2. i=1：执行continue，跳过printf语句，继续下一次循环。\n3. i=2：输出\"2\"。\n循环结束后i=3，输出\"i=3\"。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    for(; i < 3; i++) {\n        if(i == 1) {\n            continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"%d \", i);\n    }\n    printf(\"i=%d\", i);\n    return 0;\n}\n// 输出：0 2 i=3\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    for(; i < 3; i++) {\n        if(i == 1) {\n            continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"%d \", i);\n    }\n    printf(\"i=%d\", i);\n    return 0;\n}\n// 输出：0 2 i=3"
             },
             {
                 "id": 17,
@@ -239,7 +239,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "外层循环执行2次，内层循环执行3次：\n1. i=0：\n   - j=0：i==j，执行break，跳出内层循环。\n   - j=1：输出\"01\"。\n   - j=2：输出\"02\"。\n2. i=1：\n   - j=0：输出\"10\"。\n   - j=1：i==j，执行break，跳出内层循环。\n最终输出：01 02 10。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 0; i < 2; i++) {\n        for(j = 0; j < 3; j++) {\n            if(i == j) {\n                break; // 跳出内层循环\n            }\n            printf(\"%d%d \", i, j);\n        }\n    }\n    return 0;\n}\n// 输出：01 02 10\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i, j;\n    for(i = 0; i < 2; i++) {\n        for(j = 0; j < 3; j++) {\n            if(i == j) {\n                break; // 跳出内层循环\n            }\n            printf(\"%d%d \", i, j);\n        }\n    }\n    return 0;\n}\n// 输出：01 02 10"
             },
             {
                 "id": 18,
@@ -252,7 +252,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 2,
                 "explanation": "while循环中，i的初始值为0，每次增加2：\n1. i=0 → i=2 → i≤5 → count=1\n2. i=2 → i=4 → i≤5 → count=2\n3. i=4 → i=6 → i>5 → continue，不增加count\n4. i=6 → i=8 → i>5 → continue，不增加count\n5. i=8 → i=10 → i=10不满足i<10，退出循环\n最终count=2。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    int count = 0;\n    while(i < 10) {\n        i += 2; // i = i + 2\n        printf(\"i=%d \", i);\n        if(i > 5) {\n            printf(\"(i>5, 不增加count)\\n\");\n            continue; // 跳过count++\n        }\n        count++;\n        printf(\"count=%d\\n\", count);\n    }\n    printf(\"最终count=%d\", count);\n    return 0;\n}\n// 输出：2\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    int count = 0;\n    while(i < 10) {\n        i += 2; // i = i + 2\n        printf(\"i=%d \", i);\n        if(i > 5) {\n            printf(\"(i>5, 不增加count)\\n\");\n            continue; // 跳过count++\n        }\n        count++;\n        printf(\"count=%d\\n\", count);\n    }\n    printf(\"最终count=%d\", count);\n    return 0;\n}\n// 输出：2"
             },
             {
                 "id": 19,
@@ -265,7 +265,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 0,
                 "explanation": "这是一个无限循环，但有break和continue控制：\n1. i=1：输出\"1\"。\n2. i=2：执行continue，跳过printf语句，继续下一次循环。\n3. i=3：执行break，跳出循环。\n最终输出：1。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int i = 0;\n    while(1) { // 无限循环\n        i++;    printf(\"i=%d \", i);\n        if(i == 3) {\n            printf(\"遇到break，跳出循环\\n\");\n            break; // 跳出循环\n        }\n        if(i == 2) {\n            printf(\"遇到continue，跳过printf\\n\");\n            continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"输出i\\n\");\n    }\n    return 0;\n}\n// 输出：1\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    while(1) { // 无限循环\n        i++;    printf(\"i=%d \", i);\n        if(i == 3) {\n            printf(\"遇到break，跳出循环\\n\");\n            break; // 跳出循环\n        }\n        if(i == 2) {\n            printf(\"遇到continue，跳过printf\\n\");\n            continue; // 跳过本次循环的剩余部分\n        }\n        printf(\"输出i\\n\");\n    }\n    return 0;\n}\n// 输出：1"
             },
             {
                 "id": 20,
@@ -278,7 +278,7 @@ class TemplateLoader {
                 ],
                 "correctAnswer": 1,
                 "explanation": "x的值为10，x/5的结果为2，匹配case 2，执行printf(\"B\")。由于case 2后面有break语句，所以不会继续执行其他分支。",
-                "codeExample": "```c\n#include <stdio.h>\nint main() {\n    int x = 10;\n    printf(\"x/5 = %d\\n\", x / 5);\n    switch(x / 5) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); break;\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：B\n```"
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 10;\n    printf(\"x/5 = %d\\n\", x / 5);\n    switch(x / 5) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); break;\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：B"
             }
         ];
     }

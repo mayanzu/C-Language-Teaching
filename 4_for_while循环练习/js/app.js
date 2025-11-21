@@ -165,7 +165,9 @@ class PracticeApp {
                 optionDiv.className = 'option';
                 // 存储索引，便于与 question.correctAnswer（数字）比较
                 optionDiv.dataset.option = String(optionIndex);
-                optionDiv.innerHTML = `<span class="option-label">${label}.</span>${value}`;
+                // 格式化选项中的内联代码
+                const formattedValue = this.formatOptionText(value);
+                optionDiv.innerHTML = `<span class="option-label">${label}.</span><span class="option-content">${formattedValue}</span>`;
                 optionDiv.addEventListener('click', () => this.selectOption(String(optionIndex), optionDiv));
                 this.elements.optionsContainer.appendChild(optionDiv);
             });
@@ -175,7 +177,9 @@ class PracticeApp {
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'option';
                 optionDiv.dataset.option = key;
-                optionDiv.innerHTML = `<span class="option-label">${key}.</span>${value}`;
+                // 格式化选项中的内联代码
+                const formattedValue = this.formatOptionText(value);
+                optionDiv.innerHTML = `<span class="option-label">${key}.</span><span class="option-content">${formattedValue}</span>`;
                 optionDiv.addEventListener('click', () => this.selectOption(key, optionDiv));
                 this.elements.optionsContainer.appendChild(optionDiv);
             });
@@ -274,47 +278,64 @@ class PracticeApp {
         }
     }
 
-    // 格式化题目文本（处理markdown代码块）
+    // 格式化题目文本（处理markdown代码块和<C>标记）
     formatQuestionText(questionText) {
-        // 使用更精确的方法处理markdown代码块
-        const codeBlockRegex = /```(\w*)\n([\s\S]*?)\n```/g;
+        let result = questionText;
+        const codeBlocks = []; // 存储代码块
         
-        // 首先分割文本，处理代码块和普通文本
-        let result = '';
-        let lastIndex = 0;
-        let match;
+        // 1. 处理 <C> 标记的代码块（同时移除前后的换行符）
+        const cTagRegex = /\n*<C>\s*([\s\S]*?)\s*<\/C>\n*|\n*<C>\s*([\s\S]*?)(?=\n\n|\n[A-Z]\.|\n选项|$)\n*/gi;
+        result = result.replace(cTagRegex, (match, codeWithClosing, codeWithoutClosing) => {
+            const code = (codeWithClosing || codeWithoutClosing || '').trim();
+            const formattedCode = code.replace(/\t/g, '    ');
+            const highlightedCode = this.applySyntaxHighlighting(formattedCode, 'c');
+            
+            const blockHtml = `<div class="code-example-container inline-code-block"><div class="code-example-header"><span class="code-language-label">C</span></div><pre><code>${highlightedCode}</code></pre></div>`;
+            const index = codeBlocks.length;
+            codeBlocks.push(blockHtml);
+            return `\n___CODE_BLOCK_${index}___\n`;
+        });
         
-        while ((match = codeBlockRegex.exec(questionText)) !== null) {
-            const [fullMatch, language, code] = match;
-            const matchStart = match.index;
-            const matchEnd = matchStart + fullMatch.length;
-            
-            // 处理代码块之前的普通文本
-            if (matchStart > lastIndex) {
-                const normalText = questionText.slice(lastIndex, matchStart);
-                result += normalText.replace(/\n/g, '<br>');
-            }
-            
-            // 处理代码块
+        // 2. 处理 markdown 代码块 ```c ... ```（同时移除前后的换行符）
+        const codeBlockRegex = /\n*```(\w*)\n([\s\S]*?)\n```\n*/g;
+        result = result.replace(codeBlockRegex, (match, language, code) => {
             const detectedLanguage = this.detectCodeLanguage(code.trim()) || language || 'c';
             const formattedCode = code.replace(/\t/g, '    ').trim();
             const highlightedCode = this.applySyntaxHighlighting(formattedCode, detectedLanguage);
             
-            result += `<div class="code-example-container">
-                    <div class="code-example-header">
-                        <span class="code-language-label">${detectedLanguage.toUpperCase()}</span>
-                    </div>
-                    <pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre>
-                </div>`;
-            
-            lastIndex = matchEnd;
-        }
+            const blockHtml = `<div class="code-example-container"><div class="code-example-header"><span class="code-language-label">${detectedLanguage.toUpperCase()}</span></div><pre class="code-with-line-numbers"><code>${highlightedCode}</code></pre></div>`;
+            const index = codeBlocks.length;
+            codeBlocks.push(blockHtml);
+            return `\n___CODE_BLOCK_${index}___\n`;
+        });
         
-        // 处理剩余的普通文本
-        if (lastIndex < questionText.length) {
-            const remainingText = questionText.slice(lastIndex);
-            result += remainingText.replace(/\n/g, '<br>');
-        }
+        // 3. 处理内联代码 `code`
+        result = result.replace(/`([^`]+)`/g, (match, code) => {
+            const highlightedCode = this.applySyntaxHighlighting(code, 'c');
+            return `<code class="inline-code">${highlightedCode}</code>`;
+        });
+        
+        // 4. 处理换行符（将连续多个换行符合并为一个）
+        result = result.replace(/\n{3,}/g, '\n\n');
+        result = result.replace(/\n/g, '<br>');
+        
+        // 5. 恢复代码块
+        result = result.replace(/___CODE_BLOCK_(\d+)___/g, (match, index) => {
+            return codeBlocks[parseInt(index)];
+        });
+        
+        return result;
+    }
+
+    // 格式化选项文本（处理内联代码）
+    formatOptionText(optionText) {
+        let result = optionText;
+        
+        // 处理内联代码 `code`
+        result = result.replace(/`([^`]+)`/g, (match, code) => {
+            const highlightedCode = this.applySyntaxHighlighting(code, 'c');
+            return `<code class="inline-code">${highlightedCode}</code>`;
+        });
         
         return result;
     }
