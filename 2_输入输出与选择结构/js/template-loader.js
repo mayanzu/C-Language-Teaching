@@ -41,7 +41,7 @@ class TemplateLoader {
     // 获取内置题库数据
     getBuiltInQuestions() {
         return [
-  {
+            {
     "id": 1,
     "question": "用 `printf` 输出格式说明符本身（如 `%d`），正确写法是？",
     "options": ["`printf(\"%d\");`", "`printf(\"%%d\");`", "`printf(\"%\\\\d\");`", "`printf(\"d\");`"],
@@ -200,6 +200,86 @@ class TemplateLoader {
     "correctAnswer": 1,
     "explanation": "`scanf` 返回成功读取并赋值的输入项目数。可以用返回值来判断输入是否成功，返回值小于期望值表示输入失败或格式不匹配。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    int a, b, c;\n    int ret;\n    \n    printf(\"请输入三个整数: \");\n    ret = scanf(\"%d %d %d\", &a, &b, &c);\n    \n    printf(\"成功读取 %d 个整数\\n\", ret);\n    \n    if (ret == 3) {\n        printf(\"输入成功: %d, %d, %d\\n\", a, b, c);\n    } else {\n        printf(\"输入失败或不完整\\n\");\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "id": 21,
+    "question": "关于 `scanf` 中的取地址符 `&`，以下说法正确的是？",
+    "options": ["`&` 只用于整型变量", "`&` 获取变量的内存地址传递给scanf", "数组名前也需要加&", "字符变量不需要&"],
+    "correctAnswer": 1,
+    "explanation": "`&` 是取地址运算符，用于获取变量的内存地址。`scanf` 需要知道变量的地址才能将读取的值存储到变量中。但数组名本身就是地址，不需要加&。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num;\n    char ch;\n    char str[50];\n    \n    scanf(\"%d\", &num);    // 整型需要&\n    scanf(\"%c\", &ch);     // 字符也需要&\n    scanf(\"%s\", str);     // 数组名不需要&\n    // scanf(\"%s\", &str);  // 错误！数组名已是地址\n    \n    printf(\"%d %c %s\\n\", num, ch, str);\n    return 0;\n}"
+  },
+  {
+    "id": 22,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 10;\nif (x = 5) {\n    printf(\"A\");\n} else {\n    printf(\"B\");\n}\n</C>",
+    "options": ["`B`", "`A`", "编译错误", "未定义行为"],
+    "correctAnswer": 1,
+    "explanation": "`x = 5` 是赋值表达式，将5赋值给x并返回5。非零值被视为真，所以执行if分支输出A。常见错误是把赋值`=`误写成判断`==`。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    \n    // 错误：使用=而不是==\n    if (x = 5) {  // x被赋值为5，表达式值为5（真）\n        printf(\"A\\n\");  // 输出A\n    } else {\n        printf(\"B\\n\");\n    }\n    \n    printf(\"x = %d\\n\", x);  // 输出: x = 5\n    \n    // 正确：使用==比较\n    if (x == 10) {\n        printf(\"x等于10\\n\");\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "id": 23,
+    "question": "以下哪个条件判断是错误的？",
+    "options": ["`if (x > 0 && x < 10)`", "`if (0 < x < 10)`", "`if (x >= 0 || x <= 100)`", "`if (x != 0)`"],
+    "correctAnswer": 1,
+    "explanation": "`0 < x < 10` 在C语言中不表示数学中的范围。它会先计算 `0 < x`（结果为0或1），然后用结果与10比较，这不是预期的逻辑。正确写法是 `x > 0 && x < 10`。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 5;\n    \n    // 错误写法\n    if (0 < x < 10) {  // 等价于 (0 < x) < 10，即 1 < 10，总是真\n        printf(\"错误判断\\n\");\n    }\n    \n    // 正确写法\n    if (x > 0 && x < 10) {\n        printf(\"正确判断: x在0到10之间\\n\");\n    }\n    \n    // 测试边界情况\n    x = 15;\n    if (0 < x < 10) {\n        printf(\"x=15时仍然为真！\\n\");  // 会输出，因为(0<15)=1, 1<10为真\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "id": 24,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 5, b = 10;\nif (a < b)\n    printf(\"A\");\n    printf(\"B\");\n</C>",
+    "options": ["`A`", "`AB`", "`B`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "if语句没有花括号时只控制紧跟的第一条语句。第二个printf不受if控制，总会执行。因此输出AB。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 5, b = 10;\n    \n    // 没有花括号，只控制第一条语句\n    if (a < b)\n        printf(\"A\");      // 受if控制\n        printf(\"B\");      // 不受if控制，总是执行\n    \n    printf(\"\\n\");\n    \n    // 正确写法：使用花括号\n    if (a < b) {\n        printf(\"A\");\n        printf(\"B\");\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "id": 25,
+    "question": "`printf` 中 `%p` 格式符的作用是？",
+    "options": ["输出百分比", "输出指针地址", "输出小数点", "输出字符"],
+    "correctAnswer": 1,
+    "explanation": "`%p` 用于输出指针地址，通常以十六进制格式显示。输出格式依赖于编译器和平台。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 100;\n    int *p = &x;\n    \n    printf(\"变量x的值: %d\\n\", x);\n    printf(\"变量x的地址: %p\\n\", (void*)&x);\n    printf(\"指针p的值: %p\\n\", (void*)p);\n    printf(\"指针p的地址: %p\\n\", (void*)&p);\n    \n    return 0;\n}"
+  },
+  {
+    "id": 26,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 0;\nif (x)\n    printf(\"True\");\nelse\n    printf(\"False\");\n</C>",
+    "options": ["`True`", "`False`", "`0`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "在C语言中，0被视为假，非零值被视为真。x为0，条件为假，执行else分支输出False。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 0;\n    \n    if (x) {\n        printf(\"True\\n\");\n    } else {\n        printf(\"False\\n\");  // 输出False\n    }\n    \n    // 非零值都是真\n    if (1) printf(\"1是真\\n\");\n    if (-1) printf(\"-1也是真\\n\");\n    if (100) printf(\"100也是真\\n\");\n    \n    return 0;\n}"
+  },
+  {
+    "id": 27,
+    "question": "`scanf` 读取失败后，如何清空输入缓冲区？",
+    "options": ["`fflush(stdin)`（不推荐）", "`while(getchar() != '\\n');`", "`clear()`", "`reset()`"],
+    "correctAnswer": 1,
+    "explanation": "推荐使用 `while(getchar() != '\\n');` 循环读取并丢弃字符直到换行符，清空输入缓冲区。`fflush(stdin)` 是未定义行为，不推荐使用。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num;\n    \n    printf(\"请输入一个整数: \");\n    while (scanf(\"%d\", &num) != 1) {\n        printf(\"输入错误，请重新输入: \");\n        // 清空输入缓冲区\n        while (getchar() != '\\n');\n    }\n    \n    printf(\"你输入的整数是: %d\\n\", num);\n    return 0;\n}"
+  },
+  {
+    "id": 28,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 5;\nint b = (a > 3) ? 10 : 20;\nprintf(\"%d\", b);\n</C>",
+    "options": ["`5`", "`10`", "`20`", "`15`"],
+    "correctAnswer": 1,
+    "explanation": "三元运算符 `条件 ? 值1 : 值2`，如果条件为真返回值1，否则返回值2。`a > 3` 为真，所以b被赋值为10。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 5;\n    int b = (a > 3) ? 10 : 20;  // a>3为真，b=10\n    \n    printf(\"b = %d\\n\", b);  // 输出: 10\n    \n    // 三元运算符相当于简化的if-else\n    int c;\n    if (a > 3) {\n        c = 10;\n    } else {\n        c = 20;\n    }\n    printf(\"c = %d\\n\", c);  // 输出: 10\n    \n    return 0;\n}"
+  },
+  {
+    "id": 29,
+    "question": "`printf` 中 `%n` 格式符的作用是？",
+    "options": ["输出换行符", "将已输出字符数存储到变量", "输出数字", "跳过输出"],
+    "correctAnswer": 1,
+    "explanation": "`%n` 不会输出任何内容，而是将到目前为止已输出的字符数存储到对应的 `int*` 参数指向的变量中。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int count;\n    \n    printf(\"Hello%nWorld\\n\", &count);\n    printf(\"已输出字符数: %d\\n\", count);  // 输出: 5 (\"Hello\"的长度)\n    \n    int count2;\n    printf(\"ABC%nDEF%nGHI\\n\", &count, &count2);\n    printf(\"第一次: %d, 第二次: %d\\n\", count, count2);  // 3, 6\n    \n    return 0;\n}"
+  },
+  {
+    "id": 30,
+    "question": "以下代码有什么问题？\n\n<C>\nif (x = 0); {\n    printf(\"x is zero\");\n}\n</C>",
+    "options": ["没有问题", "if后有分号导致空语句", "赋值符号应该是==", "A和B都是问题"],
+    "correctAnswer": 3,
+    "explanation": "有两个问题：1) `x = 0` 是赋值而不是比较，应该用 `==`；2) if后的分号创建了一个空语句，导致花括号中的代码总是执行。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 5;\n    \n    // 错误代码\n    if (x = 0);  // 1.赋值非比较 2.分号产生空语句\n    {\n        printf(\"总是执行\\n\");  // 这个总会执行\n    }\n    \n    // 正确写法\n    x = 5;\n    if (x == 0) {  // 使用==比较，没有分号\n        printf(\"x is zero\\n\");\n    }\n    \n    return 0;\n}"
   }
 ];
     }
