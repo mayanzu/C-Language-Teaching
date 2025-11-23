@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="C语言编程练习系统">
+    <meta name="theme-color" content="#667eea">
+    <title>C语言指针进阶与结构体练习</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧题目导航栏 -->
+        <aside class="sidebar sidebar-left" role="navigation" aria-label="题目导航">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">题目导航</h3>
+                <button class="sidebar-toggle" id="toggle-left-nav" aria-label="切换题目导航" title="切换题目导航">
+                    <span class="toggle-icon">◀</span>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <ul class="question-list" id="question-list" role="list">
+                    <!-- 题目列表将通过JavaScript动态生成 -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- 右侧快速操作栏 -->
+        <aside class="sidebar sidebar-right" role="navigation" aria-label="快速操作">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">快速操作</h3>
+                <button class="sidebar-toggle" id="toggle-right-nav" aria-label="切换快速操作" title="切换快速操作">
+                    <span class="toggle-icon">▶</span>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div class="action-buttons">
+                    <button class="btn-action" id="first-question-btn" title="跳转到第一题">第一题</button>
+                    <button class="btn-action" id="prev-question-btn" title="返回上一题">上一题</button>
+                    <button class="btn-action" id="next-question-btn" title="前往下一题">下一题</button>
+                    <button class="btn-action" id="last-question-btn" title="跳转到最后一题">最后一题</button>
+                    <button class="btn-action" id="random-question-btn" title="随机选择一题">随机题</button>
+                </div>
+                <div class="progress-widget">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0/0</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <div class="main-wrapper">
+            <!-- 顶部导航栏 -->
+            <header class="app-header" role="banner">
+                <div class="header-content">
+                    <div class="header-title">
+                        <h1 id="header-title">C语言练习系统</h1>
+                    </div>
+                    <div class="header-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">题目</span>
+                            <span class="stat-value"><span id="current-question">1</span>/<span id="total-questions">0</span></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">得分</span>
+                            <span class="stat-value" id="score">0</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 主内容区 -->
+            <main class="main-content" role="main">
+                <article class="question-card">
+                    <section class="question-section">
+                        <h2 class="question-title" id="question-text">加载中...</h2>
+                    </section>
+
+                    <section class="options-section">
+                        <div class="options-container" id="options-container" role="radiogroup" aria-label="选择答案">
+                            <!-- 选项将通过JavaScript动态生成 -->
+                        </div>
+                    </section>
+
+                    <section class="feedback-section" id="feedback-container" style="display: none;">
+                        <div class="feedback-box" id="feedback">
+                            <!-- 反馈信息 -->
+                        </div>
+                        <div class="code-section" id="code-example-container">
+                            <div class="code-example-header">
+                                <h3>代码示例</h3>
+                            </div>
+                            <pre class="code-block"><code id="code-example"></code></pre>
+                            <button class="btn-copy" id="copy-btn" aria-label="复制代码">📋 复制代码</button>
+                        </div>
+                    </section>
+
+                    <section class="action-section">
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="submit-btn" disabled>提交答案</button>
+                            <button class="btn btn-secondary" id="next-btn" style="display: none;">下一题</button>
+                            <button class="btn btn-secondary" id="restart-btn" style="display: none;">重新开始</button>
+                        </div>
+                    </section>
+                </article>
+            </main>
+
+        </div>
+    </div>
+
+    <!-- 加载模板加载器 -->
+    <script src="./js/template-loader.js"></script>
+    <!-- 加载主应用逻辑 -->
+    <script src="./js/app.js"></script>
+</body>
+</html>
