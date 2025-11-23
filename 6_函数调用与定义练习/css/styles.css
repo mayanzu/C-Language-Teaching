@@ -520,7 +520,6 @@ body {
         rgba(173, 209, 255, 0.3) 70%,
         rgba(255, 255, 255, 0.2) 100%);
     background-size: 150% 100%;
-    animation: frostedShimmer 6s ease-in-out infinite;
     opacity: 1;
 }
 
