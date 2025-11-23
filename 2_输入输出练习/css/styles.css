@@ -32,8 +32,8 @@
     /* Radius */
     --radius-sm: 6px;
     --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 18px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
     
     /* Shadows - Apple-style layered shadows */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -45,6 +45,14 @@
     --blur-sm: 10px;
     --blur-md: 20px;
     --blur-lg: 40px;
+    
+    /* 3D Glass effects */
+    --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    --glass-selected-bg: linear-gradient(135deg, rgba(10, 132, 255, 0.85), rgba(0, 96, 223, 0.75));
+    --glass-frosted-effect: blur(20px) saturate(180%) brightness(110%);
+    --glass-frosted-selected: blur(15px) saturate(200%) brightness(120%);
+    --glass-shadow-elegant: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 16px rgba(0, 0, 0, 0.08);
+    --glass-shadow-selected: 0 16px 64px rgba(10, 132, 255, 0.25), 0 8px 32px rgba(0, 96, 223, 0.15);
     
     /* Typography */
     --font-family-latin: "Inter", "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
@@ -447,19 +455,21 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+    perspective: 1200px;
+    perspective-origin: center center;
 }
 
 .option {
     display: flex;
-    align-items: flex-start;
-    padding: var(--spacing-lg) calc(var(--spacing-lg) + 4px);
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(var(--blur-sm));
-    -webkit-backdrop-filter: blur(var(--blur-sm));
-    border: 2px solid rgba(0, 0, 0, 0.06);
+    align-items: center;
+    padding: var(--spacing-xl) calc(var(--spacing-xl) + 2px);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-frosted-effect);
+    -webkit-backdrop-filter: var(--glass-frosted-effect);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: background var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+    transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
     font-family: var(--font-family-latin), var(--font-family-cjk);
     font-size: var(--font-size-lg);
     font-weight: 550;
@@ -470,15 +480,51 @@ body {
     position: relative;
     overflow: hidden;
     isolation: isolate;
+    box-shadow: var(--glass-shadow-elegant);
+    transform: translateZ(0) translateY(0);
+    transform-style: preserve-3d;
+}
+
+.option::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+    border-radius: var(--radius-lg);
+    z-index: -1;
+    opacity: 0.8;
+    transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .option:hover {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(0, 113, 227, 0.2);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.12),
+        0 4px 20px rgba(0, 113, 227, 0.08),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transform: translateZ(0) translateY(-3px) scale(1.005);
 }
 
-.option::after {
+.option:hover::before {
+    background: linear-gradient(135deg, rgba(0, 113, 227, 0.6), rgba(0, 113, 227, 0.3));
+}
+
+.option.selected::before {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.7) 0%, 
+        rgba(255, 255, 255, 0.4) 30%,
+        rgba(173, 209, 255, 0.3) 70%,
+        rgba(255, 255, 255, 0.2) 100%);
+    background-size: 150% 100%;
+    animation: frostedShimmer 6s ease-in-out infinite;
+    opacity: 1;
+}
+
+.option.selected::after {
     content: '';
     position: absolute;
     width: 160%;
@@ -501,6 +547,8 @@ body {
     opacity: 1;
 }
 
+
+
 .option.selected::after {
     background: radial-gradient(circle at center,
         rgba(255, 255, 255, 0.65) 0%,
@@ -509,30 +557,73 @@ body {
 }
 
 .option.selected {
-    background: linear-gradient(145deg, #0a84ff 0%, #0060df 45%, #0046af 100%);
+    background: var(--glass-selected-bg);
+    backdrop-filter: var(--glass-frosted-selected);
+    -webkit-backdrop-filter: var(--glass-frosted-selected);
     color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 12px 28px rgba(0, 90, 190, 0.35), 0 0 0 3px rgba(0, 113, 227, 0.35);
-    transform: translateY(-2px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: var(--glass-shadow-selected),
+        inset 0 3px 6px rgba(255, 255, 255, 0.25),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.15);
+    transform: translateZ(0) translateY(-8px) scale(1.02);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    animation: elegantFloat 2s ease-in-out infinite;
 }
 
 .option.selected:hover {
-    background: linear-gradient(145deg, #0b7dff 0%, #0055c8 45%, #003c99 100%);
-    box-shadow: 0 16px 32px rgba(0, 90, 190, 0.45), 0 0 0 3px rgba(0, 113, 227, 0.45);
+    background: linear-gradient(135deg, rgba(11, 125, 255, 0.9), rgba(0, 85, 200, 0.85));
+    box-shadow: 
+        0 24px 80px rgba(10, 132, 255, 0.35),
+        0 12px 40px rgba(0, 96, 223, 0.25),
+        inset 0 4px 8px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateZ(0) translateY(-10px) scale(1.025);
 }
 
 .option.correct {
-    background: linear-gradient(135deg, rgba(52, 199, 89, 0.15) 0%, rgba(52, 199, 89, 0.08) 100%);
-    border-color: var(--color-success);
+    background: linear-gradient(135deg, rgba(52, 199, 89, 0.35) 0%, rgba(52, 199, 89, 0.25) 100%);
+    backdrop-filter: blur(var(--blur-md)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(150%);
+    border: 2px solid var(--color-success);
     color: var(--color-text-primary);
-    box-shadow: 0 4px 16px rgba(52, 199, 89, 0.15);
+    box-shadow: 0 8px 24px rgba(52, 199, 89, 0.3), 
+                inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    font-weight: 600;
 }
 
 .option.incorrect {
-    background: linear-gradient(135deg, rgba(255, 59, 48, 0.15) 0%, rgba(255, 59, 48, 0.08) 100%);
-    border-color: var(--color-error);
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.35) 0%, rgba(255, 59, 48, 0.25) 100%);
+    backdrop-filter: blur(var(--blur-md)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(150%);
+    border: 2px solid var(--color-error);
     color: var(--color-text-primary);
-    box-shadow: 0 4px 16px rgba(255, 59, 48, 0.15);
+    box-shadow: 0 8px 24px rgba(255, 59, 48, 0.3), 
+                inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+}
+
+/* Enhanced visibility for correct and incorrect options */
+.option.correct::before {
+    background: linear-gradient(135deg, 
+        rgba(52, 199, 89, 0.6) 0%, 
+        rgba(52, 199, 89, 0.4) 50%,
+        rgba(34, 179, 69, 0.5) 100%);
+    opacity: 1;
+}
+
+.option.incorrect::before {
+    background: linear-gradient(135deg, 
+        rgba(255, 59, 48, 0.6) 0%, 
+        rgba(255, 59, 48, 0.4) 50%,
+        rgba(235, 39, 28, 0.5) 100%);
+    opacity: 1;
+}
+
+.option.correct .inline-code,
+.option.incorrect .inline-code {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
 }
 
 .option.disabled {
@@ -550,14 +641,21 @@ body {
     font-size: var(--font-size-lg);
     letter-spacing: 0.2px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    line-height: 1.65;
+    display: flex;
+    align-items: center;
 }
 
 .option-content {
-    display: inline;
     flex: 1;
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    line-height: 1.65;
+    display: flex;
+    align-items: center;
 }
 
 .inline-code {
@@ -580,7 +678,9 @@ body {
 
 .option.correct .inline-code,
 .option.incorrect .inline-code {
-    background: rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
 }
 
 .inline-code-block {
@@ -641,16 +741,7 @@ body {
     color: #1d1d1f; /* 黑色 - 运算符 */
 }
 
-/* 内联代码也应用高亮 */
-.inline-code-block .code-keyword,
-.inline-code-block .code-function,
-.inline-code-block .code-string,
-.inline-code-block .code-comment,
-.inline-code-block .code-number,
-.inline-code-block .code-type,
-.inline-code-block .code-macro {
-    /* 继承上面的颜色 */
-}
+/* 内联代码颜色继承上面的定义 */
 
 .code-example-header {
     display: flex;
@@ -983,4 +1074,59 @@ body {
     .main-content {
         padding: var(--spacing-lg);
     }
+}
+
+/* Elegant Glass Effect Animations */
+@keyframes elegantFloat {
+    0%, 100% {
+        transform: translateZ(0) translateY(-8px) scale(1.02);
+        box-shadow: 
+            0 16px 64px rgba(10, 132, 255, 0.25), 
+            0 8px 32px rgba(0, 96, 223, 0.15),
+            inset 0 3px 6px rgba(255, 255, 255, 0.25),
+            inset 0 -1px 3px rgba(0, 0, 0, 0.15);
+    }
+    50% {
+        transform: translateZ(0) translateY(-10px) scale(1.022);
+        box-shadow: 
+            0 20px 80px rgba(10, 132, 255, 0.3), 
+            0 10px 40px rgba(0, 96, 223, 0.2),
+            inset 0 4px 8px rgba(255, 255, 255, 0.3),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.18);
+    }
+}
+
+@keyframes subtleGlow {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes frostedShimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Enhanced 3D Glass Effects */
+.option.selected {
+    animation: glassFloat 4s ease-in-out infinite, glassSelectedPulse 3s ease-in-out infinite;
+}
+
+
+
+/* Additional Glass Depth Effect */
+.option:active {
+    transform: translateZ(0) rotateX(4deg) translateY(1px) scale(0.98);
+    transition: transform 0.1s ease-out;
+}
+
+.option.selected:active {
+    transform: translateZ(0) rotateX(-1deg) translateY(-2px) scale(0.99);
 }
