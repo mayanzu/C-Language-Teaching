@@ -13,6 +13,11 @@ class TemplateLoader {
             console.log('[TemplateLoader] 调用 getBuiltInQuestions...');
             this.questions = this.getBuiltInQuestions();
             console.log('[TemplateLoader] getBuiltInQuestions 返回了', this.questions.length, '题');
+            // 打乱题库顺序
+            console.log('[TemplateLoader] 打乱题库顺序...');
+            this.shuffleQuestions();
+            // 重新分配题目ID（保持1到n的顺序）
+            this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             console.log('[TemplateLoader] 开始规范化题目...');
             this.normalizeQuestions(this.questions);
@@ -23,6 +28,21 @@ class TemplateLoader {
             console.error('错误堆栈:', error.stack);
             return [];
         }
+    }
+
+    // 打乱题库顺序（Fisher-Yates 洗牌算法）
+    shuffleQuestions() {
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+        }
+    }
+
+    // 重新分配题目ID
+    reassignQuestionIds() {
+        this.questions.forEach((q, index) => {
+            q.id = index + 1;
+        });
     }
 
     // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引

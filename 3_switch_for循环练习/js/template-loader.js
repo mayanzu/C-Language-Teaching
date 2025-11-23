@@ -9,12 +9,31 @@ class TemplateLoader {
         try {
             // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
+            // 打乱题库顺序
+            this.shuffleQuestions();
+            // 重新分配题目ID（保持1到n的顺序）
+            this.reassignQuestionIds();
             console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
             console.error('加载题库失败:', error.message);
             throw error;
         }
+    }
+
+    // 打乱题库顺序（Fisher-Yates 洗牌算法）
+    shuffleQuestions() {
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+        }
+    }
+
+    // 重新分配题目ID
+    reassignQuestionIds() {
+        this.questions.forEach((q, index) => {
+            q.id = index + 1;
+        });
     }
 
     // 获取内置题库数据
@@ -279,6 +298,136 @@ class TemplateLoader {
                 "correctAnswer": 1,
                 "explanation": "x的值为10，x/5的结果为2，匹配case 2，执行printf(\"B\")。由于case 2后面有break语句，所以不会继续执行其他分支。",
                 "codeExample": "#include <stdio.h>\nint main() {\n    int x = 10;\n    printf(\"x/5 = %d\\n\", x / 5);\n    switch(x / 5) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); break;\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    return 0;\n}\n// 输出：B"
+            },
+            {
+                "id": 21,
+                "question": "以下嵌套for循环输出什么？\n\n<C>\nfor(int i=1; i<=3; i++) {\n    for(int j=1; j<=i; j++) {\n        printf(\"*\");\n    }\n    printf(\"\\n\");\n}\n",
+                "options": [
+                    "*\\n**\\n***\\n",
+                    "***\\n***\\n***\\n",
+                    "*\\n*\\n*\\n",
+                    "******"
+                ],
+                "correctAnswer": 0,
+                "explanation": "外层循环i从1到3，内层循环j从1到i。第一次i=1时打印1个*；i=2时打印2个*；i=3时打印3个*。形成一个三角形图案。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    for(int i=1; i<=3; i++) {\n        for(int j=1; j<=i; j++) {\n            printf(\"*\");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n// 输出：\n// *\n// **\n// ***"
+            },
+            {
+                "id": 22,
+                "question": "以下代码中，for循环会执行几次？\n\n<C>\nint count = 0;\nfor(int i=10; i>0; i-=2) {\n    count++;\n}\nprintf(\"%d\", count);\n",
+                "options": [
+                    "5",
+                    "10",
+                    "6",
+                    "4"
+                ],
+                "correctAnswer": 0,
+                "explanation": "i从10开始，每次减2，循环条件是i>0。循环顺序：10, 8, 6, 4, 2，共执行5次。当i减到0时不满足i>0，循环结束。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int count = 0;\n    for(int i=10; i>0; i-=2) {\n        printf(\"i=%d \", i);\n        count++;\n    }\n    printf(\"\\ncount=%d\\n\", count);\n    return 0;\n}\n// 输出：i=10 i=8 i=6 i=4 i=2 \n// count=5"
+            },
+            {
+                "id": 23,
+                "question": "switch语句中可以使用哪种类型的表达式？\n\n<C>\n// 以下哪个是合法的？\n",
+                "options": [
+                    "char类型和int类型",
+                    "float类型",
+                    "double类型",
+                    "字符串"
+                ],
+                "correctAnswer": 0,
+                "explanation": "switch语句只能使用整型表达式（int、char、short、long及其枚举类型）。不能使用浮点型（float、double）或字符串。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    // 合法：char类型\n    char c = 'A';\n    switch(c) {\n        case 'A': printf(\"A\"); break;\n    }\n    \n    // 合法：int类型\n    int n = 1;\n    switch(n) {\n        case 1: printf(\"1\"); break;\n    }\n    \n    // 非法：float类型\n    // float f = 1.5;\n    // switch(f) { }  // 编译错误！\n    \n    return 0;\n}"
+            },
+            {
+                "id": 24,
+                "question": "以下代码的输出是？\n\n<C>\nfor(int i=0; i<3; i++) {\n    switch(i) {\n        case 0: printf(\"A\");\n        case 1: printf(\"B\"); break;\n        case 2: printf(\"C\");\n    }\n}\n",
+                "options": [
+                    "ABC",
+                    "ABBC",
+                    "ABBCC",
+                    "ABCC"
+                ],
+                "correctAnswer": 1,
+                "explanation": "i=0时：执行case 0输出A，没有break继续执行case 1输出B，遇到break跳出。i=1时：执行case 1输出B，遇到break跳出。i=2时：执行case 2输出C，没有更多case。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    for(int i=0; i<3; i++) {\n        printf(\"[i=%d] \", i);\n        switch(i) {\n            case 0: printf(\"A\");\n            case 1: printf(\"B\"); break;\n            case 2: printf(\"C\");\n        }\n    }\n    printf(\"\\n\");\n    return 0;\n}\n// 输出：[i=0] AB[i=1] B[i=2] C"
+            },
+            {
+                "id": 25,
+                "question": "for循环的三个表达式都可以省略吗？\n\n<C>\nfor(;;) { /* 循环体 */ }\n",
+                "options": [
+                    "不可以，至少需要一个",
+                    "可以，但会导致编译错误",
+                    "可以，形成无限循环",
+                    "只能省略第三个表达式"
+                ],
+                "correctAnswer": 2,
+                "explanation": "for循环的三个表达式都可以省略。`for(;;)`等价于`while(1)`，形成无限循环。需要在循环体内使用break或return才能退出。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int i = 0;\n    for(;;) {  // 无限循环\n        printf(\"%d \", i);\n        i++;\n        if(i >= 5) {\n            break;  // 必须有退出条件\n        }\n    }\n    printf(\"\\n\");\n    return 0;\n}\n// 输出：0 1 2 3 4"
+            },
+            {
+                "id": 26,
+                "question": "以下代码的输出是？\n\n<C>\nint sum = 0;\nfor(int i=1; i<=5; i++) {\n    if(i % 2 == 0) continue;\n    sum += i;\n}\nprintf(\"%d\", sum);\n",
+                "options": [
+                    "15",
+                    "9",
+                    "6",
+                    "12"
+                ],
+                "correctAnswer": 1,
+                "explanation": "循环中遇到偶数时continue跳过，只累加奇数。i=1(奇)累加1，i=2(偶)跳过，i=3(奇)累加3，i=4(偶)跳过，i=5(奇)累加5。sum = 1+3+5 = 9。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int sum = 0;\n    for(int i=1; i<=5; i++) {\n        if(i % 2 == 0) {\n            printf(\"i=%d 跳过\\n\", i);\n            continue;\n        }\n        printf(\"i=%d 累加\\n\", i);\n        sum += i;\n    }\n    printf(\"sum=%d\\n\", sum);\n    return 0;\n}\n// 输出：sum=9"
+            },
+            {
+                "id": 27,
+                "question": "switch语句中default分支的位置有什么要求？\n\n<C>\nswitch(x) {\n    default: printf(\"D\");\n    case 1: printf(\"A\"); break;\n}\n",
+                "options": [
+                    "必须放在最后",
+                    "必须放在最前",
+                    "可以放在任意位置",
+                    "不能与case混合"
+                ],
+                "correctAnswer": 2,
+                "explanation": "default分支可以放在switch语句的任意位置，不一定要放在最后。但如果default后面没有break，会继续执行后面的case（fall-through）。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 5;\n    switch(x) {\n        default: printf(\"D\");  // default可以在前面\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); break;\n    }\n    printf(\"\\n\");\n    return 0;\n}\n// x=5时输出：DA (因为default没有break)"
+            },
+            {
+                "id": 28,
+                "question": "以下嵌套循环打印九九乘法表的前3行，输出有多少个数字？\n\n<C>\nfor(int i=1; i<=3; i++) {\n    for(int j=1; j<=i; j++) {\n        printf(\"%d*%d=%d \", i, j, i*j);\n    }\n    printf(\"\\n\");\n}\n",
+                "options": [
+                    "6个",
+                    "9个",
+                    "3个",
+                    "12个"
+                ],
+                "correctAnswer": 0,
+                "explanation": "i=1时打印1个数字(1×1)；i=2时打印2个数字(2×1, 2×2)；i=3时打印3个数字(3×1, 3×2, 3×3)。总共：1+2+3=6个数字。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int count = 0;\n    for(int i=1; i<=3; i++) {\n        for(int j=1; j<=i; j++) {\n            printf(\"%d*%d=%d \", i, j, i*j);\n            count++;\n        }\n        printf(\"\\n\");\n    }\n    printf(\"共%d个数字\\n\", count);\n    return 0;\n}\n// 输出：\n// 1*1=1 \n// 2*1=2 2*2=4 \n// 3*1=3 3*2=6 3*3=9 \n// 共6个数字"
+            },
+            {
+                "id": 29,
+                "question": "以下代码中，内外层循环各执行多少次？\n\n<C>\nfor(int i=0; i<2; i++) {\n    for(int j=0; j<3; j++) {\n        printf(\"%d\", i+j);\n    }\n}\n",
+                "options": [
+                    "外层2次，内层3次",
+                    "外层3次，内层2次",
+                    "外层2次，内层总共6次",
+                    "外层3次，内层总共6次"
+                ],
+                "correctAnswer": 2,
+                "explanation": "外层循环i从0到1，执行2次。每次外层循环，内层循环j从0到2执行3次。所以内层循环总共执行2×3=6次。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int outer_count = 0, inner_count = 0;\n    for(int i=0; i<2; i++) {\n        outer_count++;\n        printf(\"\\n外层第%d次: \", outer_count);\n        for(int j=0; j<3; j++) {\n            inner_count++;\n            printf(\"[内层第%d次: %d+%d=%d] \", inner_count, i, j, i+j);\n        }\n    }\n    printf(\"\\n外层执行%d次，内层执行%d次\\n\", outer_count, inner_count);\n    return 0;\n}\n// 外层执行2次，内层执行6次"
+            },
+            {
+                "id": 30,
+                "question": "以下代码利用switch实现分段函数，当x=15时输出什么？\n\n<C>\nint x = 15;\nswitch(x/10) {\n    case 0: printf(\"Low\"); break;\n    case 1: printf(\"Mid\");\n    case 2: printf(\"High\"); break;\n    default: printf(\"VeryHigh\");\n}\n",
+                "options": [
+                    "Low",
+                    "Mid",
+                    "MidHigh",
+                    "High"
+                ],
+                "correctAnswer": 2,
+                "explanation": "x=15，x/10=1，匹配case 1执行printf(\"Mid\")。由于case 1后面没有break，继续执行case 2输出\"High\"，然后遇到break跳出。",
+                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 15;\n    printf(\"x/10 = %d\\n\", x/10);\n    switch(x/10) {\n        case 0: printf(\"Low(0-9)\"); break;\n        case 1: printf(\"Mid(10-19)\");  // 没有break!\n        case 2: printf(\"High(20-29)\"); break;\n        default: printf(\"VeryHigh(>=30)\");\n    }\n    printf(\"\\n\");\n    return 0;\n}\n// 输出：MidHigh"
             }
         ];
     }

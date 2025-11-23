@@ -9,6 +9,10 @@ class TemplateLoader {
         try {
             // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
+            // 打乱题库顺序
+            this.shuffleQuestions();
+            // 重新分配题目ID（保持1到n的顺序）
+            this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
             console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
@@ -17,6 +21,21 @@ class TemplateLoader {
             console.warn('加载题库失败:', error.message);
             return [];
         }
+    }
+
+    // 打乱题库顺序（Fisher-Yates 洗牌算法）
+    shuffleQuestions() {
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+        }
+    }
+
+    // 重新分配题目ID
+    reassignQuestionIds() {
+        this.questions.forEach((q, index) => {
+            q.id = index + 1;
+        });
     }
 
     // 获取内置题库数据
@@ -101,6 +120,86 @@ class TemplateLoader {
     "correctAnswer": 1,
     "explanation": "`.2` 表示精度，用于指定浮点数的小数位数。`%.2f` 表示保留2位小数输出浮点数。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    double pi = 3.14159;\n    \n    printf(\"默认输出: %f\\n\", pi);      // 输出: 3.141590\n    printf(\"保留2位小数: %.2f\\n\", pi);  // 输出: 3.14\n    printf(\"保留4位小数: %.4f\\n\", pi);  // 输出: 3.1416\n    return 0;\n}"
+  },
+  {
+    "id": 11,
+    "question": "`printf(\"%05d\", 42)` 的输出结果是什么？",
+    "options": ["`42000`", "`00042`", "`42   `", "`  042`"],
+    "correctAnswer": 1,
+    "explanation": "`0` 标志表示用 `0` 填充，`5` 表示总宽度为5。所以会在数字前面补0，使总宽度达到5位。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"%05d\\n\", 42);     // 输出: 00042\n    printf(\"%05d\\n\", 1234);   // 输出: 01234\n    printf(\"%05d\\n\", 123456); // 输出: 123456 (超过宽度不截断)\n    printf(\"%-05d\\n\", 42);    // 输出: 42    (左对齐时0标志无效)\n    return 0;\n}"
+  },
+  {
+    "id": 12,
+    "question": "`scanf` 读取两个用逗号分隔的整数（如 `10,20`），正确的格式是？",
+    "options": ["`scanf(\"%d,%d\", &a, &b);`", "`scanf(\"%d %d\", &a, &b);`", "`scanf(\"%d-%d\", &a, &b);`", "`scanf(\"%d.%d\", &a, &b);`"],
+    "correctAnswer": 0,
+    "explanation": "`scanf` 的格式字符串需要与输入格式完全匹配。如果输入是用逗号分隔的，格式字符串中也必须包含逗号。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a, b;\n    \n    printf(\"请输入两个用逗号分隔的整数（如10,20）: \");\n    scanf(\"%d,%d\", &a, &b);  // 正确读取 10,20\n    \n    printf(\"a = %d, b = %d\\n\", a, b);\n    return 0;\n}"
+  },
+  {
+    "id": 13,
+    "question": "`getchar()` 和 `scanf(\"%c\")` 的主要区别是？",
+    "options": ["`getchar()` 只能读取字母", "`getchar()` 不需要取地址符&", "`scanf` 更快", "两者完全相同"],
+    "correctAnswer": 1,
+    "explanation": "`getchar()` 返回读取的字符，不需要传递变量地址；而 `scanf(\"%c\")` 需要传递字符变量的地址（使用&符号）。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    char ch1, ch2;\n    \n    printf(\"使用getchar(): \");\n    ch1 = getchar();  // 直接返回值，不需要&\n    getchar();  // 读取换行符\n    \n    printf(\"使用scanf(): \");\n    scanf(\"%c\", &ch1);  // 需要使用&传递地址\n    \n    printf(\"读取的字符: %c\\n\", ch1);\n    return 0;\n}"
+  },
+  {
+    "id": 14,
+    "question": "`printf(\"%+d\", 42)` 的输出是什么？",
+    "options": ["`42`", "`+42`", "`-42`", "`错误`"],
+    "correctAnswer": 1,
+    "explanation": "`+` 标志表示总是显示符号，无论数字是正数还是负数。正数会显示 `+` 号，负数会显示 `-` 号。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"%+d\\n\", 42);   // 输出: +42\n    printf(\"%+d\\n\", -42);  // 输出: -42\n    printf(\"%d\\n\", 42);    // 输出: 42 (不加+标志)\n    printf(\"%+5d\\n\", 42);  // 输出: '  +42'\n    return 0;\n}"
+  },
+  {
+    "id": 15,
+    "question": "`scanf` 读取时如何跳过输入中的空白字符？",
+    "options": ["`scanf` 会自动跳过空白字符（除了%c）", "必须使用特殊函数", "不能跳过空白字符", "需要手动清理缓冲区"],
+    "correctAnswer": 0,
+    "explanation": "`scanf` 在读取大多数类型（如 `%d`、`%f`、`%s`）时会自动跳过前导空白字符。但 `%c` 不会跳过，会读取任何字符包括空格和换行符。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a, b;\n    char ch;\n    \n    // 自动跳过空白\n    scanf(\"%d %d\", &a, &b);  // 输入: '10    20' 或 '10\\n20' 都可以\n    \n    // %c不跳过空白\n    scanf(\"%c\", &ch);  // 会读取前面的换行符\n    \n    // 强制跳过空白再读取字符\n    scanf(\" %c\", &ch);  // 注意%前面有空格，会跳过空白字符\n    \n    return 0;\n}"
+  },
+  {
+    "id": 16,
+    "question": "`printf` 中 `%e` 格式符的作用是？",
+    "options": ["输出整数", "输出科学计数法表示的浮点数", "输出八进制", "输出字符"],
+    "correctAnswer": 1,
+    "explanation": "`%e` 用于以科学计数法（指数形式）输出浮点数，格式为 `[-]d.ddde±dd`。`%E` 则输出大写的 `E`。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    double num = 12345.6789;\n    \n    printf(\"普通格式: %f\\n\", num);      // 输出: 12345.678900\n    printf(\"科学计数法: %e\\n\", num);    // 输出: 1.234568e+04\n    printf(\"大写E: %E\\n\", num);         // 输出: 1.234568E+04\n    printf(\"保留2位: %.2e\\n\", num);     // 输出: 1.23e+04\n    return 0;\n}"
+  },
+  {
+    "id": 17,
+    "question": "`scanf(\"%3d\", &num)` 的含义是？",
+    "options": ["最多读取3个整数", "只读取3位数字", "读取整数并除以3", "输出3个整数"],
+    "correctAnswer": 1,
+    "explanation": "`%3d` 中的 `3` 表示最大宽度，`scanf` 最多读取3个数字字符来组成整数，即使输入更多数字也只取前3位。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num;\n    \n    printf(\"请输入一个整数: \");\n    scanf(\"%3d\", &num);  // 输入: 123456\n    \n    printf(\"读取的数字: %d\\n\", num);  // 输出: 123 (只读取前3位)\n    \n    // 缓冲区中还剩下: 456\n    scanf(\"%d\", &num);\n    printf(\"继续读取: %d\\n\", num);    // 输出: 456\n    return 0;\n}"
+  },
+  {
+    "id": 18,
+    "question": "`printf` 中 `%g` 格式符的特点是？",
+    "options": ["总是使用科学计数法", "总是使用普通小数格式", "自动选择%f或%e中更短的格式", "只能输出整数"],
+    "correctAnswer": 2,
+    "explanation": "`%g` 会根据数值大小和精度自动选择 `%f` 或 `%e` 格式中更简洁的一种，并且会去除末尾无意义的零。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    double a = 0.0001234;\n    double b = 1234567.89;\n    double c = 123.456;\n    \n    printf(\"小数: %g\\n\", a);        // 输出: 0.0001234\n    printf(\"大数: %g\\n\", b);        // 输出: 1.23457e+06 (自动用科学计数法)\n    printf(\"普通数: %g\\n\", c);      // 输出: 123.456\n    printf(\"对比%%f: %f\\n\", c);     // 输出: 123.456000\n    return 0;\n}"
+  },
+  {
+    "id": 19,
+    "question": "`puts()` 和 `printf(\"%s\\n\")` 的主要区别是？",
+    "options": ["`puts()` 不自动换行", "`puts()` 更快且自动换行", "`printf` 不能输出字符串", "两者完全相同"],
+    "correctAnswer": 1,
+    "explanation": "`puts()` 专门用于输出字符串，会自动在末尾添加换行符，且通常比 `printf` 更快，因为它不需要解析格式字符串。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    char str[] = \"Hello, World!\";\n    \n    // 使用puts，自动换行\n    puts(str);  // 输出: Hello, World!\\n\n    \n    // 使用printf，需要手动添加\\n\n    printf(\"%s\\n\", str);  // 输出: Hello, World!\\n\n    \n    // puts更简洁\n    puts(\"简单快速\");\n    \n    return 0;\n}"
+  },
+  {
+    "id": 20,
+    "question": "`scanf` 的返回值表示什么？",
+    "options": ["读取的字节数", "成功读取并赋值的项目数", "缓冲区剩余字符数", "总是返回1"],
+    "correctAnswer": 1,
+    "explanation": "`scanf` 返回成功读取并赋值的输入项目数。可以用返回值来判断输入是否成功，返回值小于期望值表示输入失败或格式不匹配。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a, b, c;\n    int ret;\n    \n    printf(\"请输入三个整数: \");\n    ret = scanf(\"%d %d %d\", &a, &b, &c);\n    \n    printf(\"成功读取 %d 个整数\\n\", ret);\n    \n    if (ret == 3) {\n        printf(\"输入成功: %d, %d, %d\\n\", a, b, c);\n    } else {\n        printf(\"输入失败或不完整\\n\");\n    }\n    \n    return 0;\n}"
   }
 ];
     }

@@ -9,6 +9,10 @@ class TemplateLoader {
         try {
             // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
+            // 打乱题库顺序
+            this.shuffleQuestions();
+            // 重新分配题目ID（保持1到n的顺序）
+            this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
             console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
@@ -17,6 +21,21 @@ class TemplateLoader {
             console.warn('加载题库失败:', error.message);
             return [];
         }
+    }
+
+    // 打乱题库顺序（Fisher-Yates 洗牌算法）
+    shuffleQuestions() {
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+        }
+    }
+
+    // 重新分配题目ID
+    reassignQuestionIds() {
+        this.questions.forEach((q, index) => {
+            q.id = index + 1;
+        });
     }
 
     // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引

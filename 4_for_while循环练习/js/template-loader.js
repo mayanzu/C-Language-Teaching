@@ -11,12 +11,31 @@ class TemplateLoader {
             const questions = this.getBuiltInQuestions();
             this.validateQuestions(questions);
             this.questions = questions;
+            // 打乱题库顺序
+            this.shuffleQuestions();
+            // 重新分配题目ID（保持1到n的顺序）
+            this.reassignQuestionIds();
             console.log('成功加载内置题库，共', this.questions.length, '题');
-            return questions; // 返回题库数组而不是布尔值
+            return this.questions; // 返回题库数组而不是布尔值
         } catch (error) {
             console.error('加载题库失败:', error);
             throw error; // 抛出错误以便上层处理
         }
+    }
+
+    // 打乱题库顺序（Fisher-Yates 洗牌算法）
+    shuffleQuestions() {
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+        }
+    }
+
+    // 重新分配题目ID
+    reassignQuestionIds() {
+        this.questions.forEach((q, index) => {
+            q.id = index + 1;
+        });
     }
 
     // 获取内置题库（包含所有题目）
@@ -281,6 +300,136 @@ class TemplateLoader {
                 correctAnswer: 3,
                 explanation: "这是一个死循环，因为 `continue` 语句只会跳过当前循环的剩余部分，直接进入下一次循环，不会影响循环变量的自增。所以 `i` 会一直递增，条件 `i<1000` 永远为真。",
                 codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0; i < 1000; i++) {\n        if (i == 5) {\n            continue; // 跳过i=5的printf，但i仍会自增\n        }\n        if (i == 10) {\n            i = 5; // 当i=10时，将i重置为5，导致死循环\n        }\n        printf(\"%d \", i);\n    }\n    return 0;\n}"
+            },
+            {
+                id: 21,
+                question: "以下代码片段中，三重嵌套循环的执行次数是多少？\n\n<C>\nint count = 0;\nfor (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= 2; j++) {\n        for (int k = 1; k <= 4; k++) {\n            count++;\n        }\n    }\n}\nprintf(\"%d\", count);\n</C>",
+                options: [
+                    "`9`",
+                    "`24`",
+                    "`12`",
+                    "`8`"
+                ],
+                correctAnswer: 1,
+                explanation: "三重嵌套循环的总执行次数 = 外层次数 × 中层次数 × 内层次数 = 3 × 2 × 4 = 24。每个层级独立循环，内层循环会完整执行外层每次迭代的所有组合。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int count = 0;\n    for (int i = 1; i <= 3; i++) {\n        for (int j = 1; j <= 2; j++) {\n            for (int k = 1; k <= 4; k++) {\n                count++;\n                printf(\"i=%d, j=%d, k=%d, count=%d\\n\", i, j, k, count);\n            }\n        }\n    }\n    printf(\"总执行次数: %d\\n\", count);\n    return 0;\n}"
+            },
+            {
+                id: 22,
+                question: "关于 `do-while` 与 `while` 循环的本质区别，以下说法正确的是：",
+                options: [
+                    "`do-while` 条件判断在循环末尾，至少执行一次循环体",
+                    "`while` 循环效率更高，应优先使用",
+                    "`do-while` 不能与 `break` 和 `continue` 一起使用",
+                    "`do-while` 循环只能用于菜单驱动程序"
+                ],
+                correctAnswer: 0,
+                explanation: "`do-while` 的核心特性是「先执行后判断」，保证循环体至少执行一次，适用于需要先执行一次操作再判断是否继续的场景（如输入验证）。`while` 是「先判断后执行」，条件不满足时可能一次都不执行。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    // do-while适用场景：输入验证\n    int num;\n    do {\n        printf(\"请输入1-10之间的数字: \");\n        scanf(\"%d\", &num);\n    } while (num < 1 || num > 10);\n    \n    // while循环可能一次都不执行\n    int i = 10;\n    while (i < 5) {\n        printf(\"不会执行\\n\");\n        i++;\n    }\n    \n    return 0;\n}"
+            },
+            {
+                id: 23,
+                question: "以下代码输出结果是什么？\n\n<C>\nint i = 0, sum = 0;\nwhile (i <= 10) {\n    if (i % 2 == 0) {\n        i++;\n        continue;\n    }\n    sum += i;\n    i++;\n}\nprintf(\"%d\", sum);\n</C>",
+                options: [
+                    "`25`（1+3+5+7+9）",
+                    "`30`（1+3+5+7+9+11）",
+                    "`55`（所有数之和）",
+                    "死循环"
+                ],
+                correctAnswer: 0,
+                explanation: "只有奇数会被累加到sum中。i=0,2,4,6,8,10时遇到continue跳过累加。i=1,3,5,7,9时执行累加，sum = 1+3+5+7+9 = 25。i=11时不满足while条件，循环结束。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 0, sum = 0;\n    while (i <= 10) {\n        if (i % 2 == 0) {\n            i++;\n            continue;\n        }\n        sum += i;\n        printf(\"累加 %d, sum = %d\\n\", i, sum);\n        i++;\n    }\n    printf(\"最终结果: %d\\n\", sum);\n    return 0;\n}"
+            },
+            {
+                id: 24,
+                question: "以下代码中，变量 `x` 的最终值是多少？\n\n<C>\nint x = 1;\nfor (int i = 1; i < 5; i++) {\n    x *= i;\n}\nprintf(\"%d\", x);\n</C>",
+                options: [
+                    "`10`",
+                    "`24`（1×1×2×3×4）",
+                    "`120`",
+                    "`5`"
+                ],
+                correctAnswer: 1,
+                explanation: "这是计算阶乘的循环。x初始为1，依次乘以1,2,3,4。计算过程：1×1=1, 1×2=2, 2×3=6, 6×4=24。结果为4的阶乘24。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 1;\n    for (int i = 1; i < 5; i++) {\n        x *= i;\n        printf(\"i=%d, x=%d\\n\", i, x);\n    }\n    printf(\"最终x的值: %d\\n\", x);\n    return 0;\n}"
+            },
+            {
+                id: 25,
+                question: "以下嵌套循环输出多少个星号？\n\n<C>\nfor (int i = 1; i <= 5; i++) {\n    for (int j = 1; j <= i; j++) {\n        printf(\"*\");\n    }\n    printf(\"\\n\");\n}\n</C>",
+                options: [
+                    "`5`个星号",
+                    "`10`个星号",
+                    "`15`个星号（1+2+3+4+5）",
+                    "`25`个星号"
+                ],
+                correctAnswer: 2,
+                explanation: "这是打印直角三角形的经典模式。外层循环控制行数（5行），内层循环控制每行星号数（第i行打印i个星号）。总数 = 1+2+3+4+5 = 15个星号。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int total = 0;\n    for (int i = 1; i <= 5; i++) {\n        for (int j = 1; j <= i; j++) {\n            printf(\"*\");\n            total++;\n        }\n        printf(\" (第%d行: %d个)\\n\", i, i);\n    }\n    printf(\"总共: %d个星号\\n\", total);\n    return 0;\n}"
+            },
+            {
+                id: 26,
+                question: "以下代码的输出结果是什么？\n\n<C>\nint n = 5;\nwhile (n > 0) {\n    printf(\"%d \", n);\n    n -= 2;\n}\n</C>",
+                options: [
+                    "`5 3 1`",
+                    "`5 3 1 -1`",
+                    "`5 4 3 2 1`",
+                    "`5 3`"
+                ],
+                correctAnswer: 0,
+                explanation: "每次循环n减2。n=5输出5，n=3输出3，n=1输出1，n=-1不满足n>0，循环结束。输出：`5 3 1`。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int n = 5;\n    while (n > 0) {\n        printf(\"%d \", n);\n        n -= 2;\n    }\n    printf(\"\\n最终n=%d\\n\", n);\n    return 0;\n}"
+            },
+            {
+                id: 27,
+                question: "以下代码中，`break` 语句只跳出哪一层循环？\n\n<C>\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        if (j == 1) break;\n        printf(\"i=%d, j=%d\\n\", i, j);\n    }\n}\n</C>",
+                options: [
+                    "跳出外层 `for (i)` 循环",
+                    "跳出内层 `for (j)` 循环",
+                    "跳出所有循环",
+                    "编译错误，break不能用于嵌套循环"
+                ],
+                correctAnswer: 1,
+                explanation: "`break` 只跳出其所在的最内层循环。此代码中break在内层循环，每次j=1时跳出内层循环，外层循环继续。输出：i=0,j=0; i=1,j=0; i=2,j=0 共3次。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0; i < 3; i++) {\n        printf(\"外层循环 i=%d 开始\\n\", i);\n        for (int j = 0; j < 3; j++) {\n            if (j == 1) {\n                printf(\"  内层break在j=%d\\n\", j);\n                break;\n            }\n            printf(\"  i=%d, j=%d\\n\", i, j);\n        }\n    }\n    return 0;\n}"
+            },
+            {
+                id: 28,
+                question: "以下代码实现的功能是什么？\n\n<C>\nint num = 12345, reversed = 0;\nwhile (num != 0) {\n    reversed = reversed * 10 + num % 10;\n    num /= 10;\n}\nprintf(\"%d\", reversed);\n</C>",
+                options: [
+                    "计算数字位数",
+                    "反转数字，输出 `54321`",
+                    "计算数字各位之和",
+                    "判断数字是否为回文数"
+                ],
+                correctAnswer: 1,
+                explanation: "这是反转整数的经典算法。通过 `num % 10` 获取最后一位，加到 `reversed` 的末尾，然后 `num /= 10` 去掉最后一位。重复直到num为0。12345 → 54321。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int num = 12345, reversed = 0;\n    printf(\"原数字: %d\\n\", num);\n    \n    while (num != 0) {\n        int digit = num % 10;\n        reversed = reversed * 10 + digit;\n        printf(\"取出 %d, reversed = %d\\n\", digit, reversed);\n        num /= 10;\n    }\n    \n    printf(\"反转结果: %d\\n\", reversed);\n    return 0;\n}"
+            },
+            {
+                id: 29,
+                question: "以下代码中，`continue` 语句对循环计数器 `i` 的影响是什么？\n\n<C>\nfor (int i = 0; i < 10; i++) {\n    if (i % 3 == 0) continue;\n    printf(\"%d \", i);\n}\n</C>",
+                options: [
+                    "`continue` 会跳过 `i++`，导致死循环",
+                    "`continue` 不影响 `i++`，正常自增",
+                    "`i` 会被重置为0",
+                    "编译错误"
+                ],
+                correctAnswer: 1,
+                explanation: "在 `for` 循环中，`continue` 跳过循环体剩余部分后，会继续执行增量表达式 `i++`。所以i正常自增，跳过3的倍数，输出：1 2 4 5 7 8。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0; i < 10; i++) {\n        if (i % 3 == 0) {\n            printf(\"跳过%d\\n\", i);\n            continue;\n        }\n        printf(\"%d \", i);\n    }\n    printf(\"\\n循环正常结束\\n\");\n    return 0;\n}"
+            },
+            {
+                id: 30,
+                question: "以下哪个循环结构在C语言中是不存在的？",
+                options: [
+                    "`for-each` 循环（如 `for (item in array)`）",
+                    "`do-while` 循环",
+                    "`while` 循环",
+                    "`for` 循环"
+                ],
+                correctAnswer: 0,
+                explanation: "C语言没有 `for-each` 或 `for-in` 这样的高级循环语法。遍历数组需要使用传统的 `for` 循环配合索引。C++11、Java、Python等语言才有基于范围的for循环。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int len = sizeof(arr) / sizeof(arr[0]);\n    \n    // C语言遍历数组的标准方式\n    for (int i = 0; i < len; i++) {\n        printf(\"%d \", arr[i]);\n    }\n    \n    // C语言没有这样的语法:\n    // for (int item in arr) { // 错误！\n    //     printf(\"%d \", item);\n    // }\n    \n    return 0;\n}"
             }
         ];
     }
