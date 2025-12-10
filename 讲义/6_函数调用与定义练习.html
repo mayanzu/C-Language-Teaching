@@ -428,10 +428,173 @@
                 <h2 class="section-title">函数声明</h2>
                 
                 <div class="subsection">
+                    <h3 class="subsection-title">函数声明与定义的区别</h3>
+                    <div class="subsection-content">
+                        <h4>什么是函数声明？什么是函数定义？</h4>
+                        <p>在C语言中，函数的<strong>声明</strong>和<strong>定义</strong>是两个不同的概念：</p>
+                        <ul>
+                            <li><strong>函数声明（Declaration）：</strong>告诉编译器函数的名称、返回类型和参数，但不提供函数的具体实现代码</li>
+                            <li><strong>函数定义（Definition）：</strong>不仅声明函数的接口，还提供函数的完整实现代码（函数体）</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">声明与定义对比</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数声明（只有接口，没有实现）</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);  <span class="c-comment">// 注意：以分号结束</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> result = <span class="c-function">add</span>(<span class="c-number">5</span>, <span class="c-number">3</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"结果: %d\n"</span>, result);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 函数定义（有完整的实现代码）</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {  <span class="c-comment">// 注意：有大括号和函数体</span>
+    <span class="c-keyword">return</span> a + b;
+}</code></pre>
+                    </div>
+                    
+                        <h4>关键区别总结</h4>
+                        <table class="comparison-table" style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                            <thead>
+                                <tr style="background-color: #f0f0f0;">
+                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">特征</th>
+                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">函数声明</th>
+                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">函数定义</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;"><strong>作用</strong></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">告诉编译器函数的存在</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">提供函数的完整实现</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;"><strong>包含内容</strong></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">返回类型 + 函数名 + 参数列表</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">声明 + 函数体（实现代码）</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;"><strong>结束符号</strong></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">分号 <code>;</code></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">大括号 <code>{ }</code></td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;"><strong>参数名</strong></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">可以省略（只写类型）</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">必须写（需要在函数体中使用）</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;"><strong>数量限制</strong></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">可以多次声明（但要一致）</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">只能定义一次</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;"><strong>位置</strong></td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">通常在文件开头或头文件中</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">可以在任何位置</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="tip-box">
+                            <strong>💡 重要提示：</strong>
+                            <ul>
+                                <li><strong>定义即声明：</strong>函数定义自动包含声明，所以如果函数定义在调用之前，可以不写声明</li>
+                                <li><strong>声明不是定义：</strong>只有声明没有定义会导致链接错误</li>
+                                <li><strong>多次声明：</strong>可以在不同地方多次声明同一个函数，但定义只能有一次</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>三种使用场景</h4>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">场景1：函数定义在调用之前（不需要声明）</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 直接定义函数</span>
+<span class="c-keyword">int</span> <span class="c-function">multiply</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a * b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, <span class="c-function">multiply</span>(<span class="c-number">3</span>, <span class="c-number">4</span>));  <span class="c-comment">// 可以直接调用</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="code-block">
+                        <div class="code-block-title">场景2：函数定义在调用之后（需要先声明）</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 先声明</span>
+<span class="c-keyword">int</span> <span class="c-function">multiply</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, <span class="c-function">multiply</span>(<span class="c-number">3</span>, <span class="c-number">4</span>));  <span class="c-comment">// 可以调用</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 后定义</span>
+<span class="c-keyword">int</span> <span class="c-function">multiply</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a * b;
+}</code></pre>
+                    </div>
+                    
+                        <div class="code-block">
+                        <div class="code-block-title">场景3：多文件项目（头文件中声明，源文件中定义）</div>
+                        <pre><code><span class="c-comment">// math_utils.h（头文件 - 包含声明）</span>
+<span class="c-keyword">#ifndef</span> MATH_UTILS_H
+<span class="c-keyword">#define</span> MATH_UTILS_H
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);
+<span class="c-keyword">int</span> <span class="c-function">subtract</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);
+
+<span class="c-keyword">#endif</span>
+
+<span class="c-comment">// math_utils.c（源文件 - 包含定义）</span>
+<span class="c-keyword">#include</span> <span class="c-string">"math_utils.h"</span>
+
+<span class="c-comment">// 函数定义</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a + b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">subtract</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a - b;
+}
+
+<span class="c-comment">// main.c（主程序 - 使用函数）</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">"math_utils.h"</span>  <span class="c-comment">// 包含声明</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, <span class="c-function">add</span>(<span class="c-number">10</span>, <span class="c-number">5</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, <span class="c-function">subtract</span>(<span class="c-number">10</span>, <span class="c-number">5</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>⚠️ 常见错误：</strong>
+                            <ul>
+                                <li><strong>重复定义：</strong>同一个函数在多个文件中定义会导致链接错误</li>
+                                <li><strong>声明不一致：</strong>声明和定义的返回类型、参数不匹配会导致编译错误</li>
+                                <li><strong>只声明不定义：</strong>只有声明没有定义会导致链接错误</li>
+                                <li><strong>忘记包含头文件：</strong>使用函数前忘记包含对应的头文件</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
                     <h3 class="subsection-title">函数原型声明</h3>
                     <div class="subsection-content">
-                        <h4>什么是函数声明？</h4>
-                        <p>函数声明（也叫函数原型）是告诉编译器函数存在的一种方式。它只描述函数的接口（返回值类型、函数名、参数类型），不包含函数的具体实现。</p>
+                        <h4>什么是函数原型？</h4>
+                        <p>函数原型（Function Prototype）就是函数声明的另一种叫法。它只描述函数的接口（返回值类型、函数名、参数类型），不包含函数的具体实现。</p>
                         
                         <h4>为什么需要函数声明？</h4>
                         <ul>
