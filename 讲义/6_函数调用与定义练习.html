@@ -491,155 +491,54 @@
 <span class="c-keyword">double</span> <span class="c-function">divide</span>(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>);
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">char</span> accounts[<span class="c-number">10</span>][<span class="c-number">20</span>];  <span class="c-comment">// 最多10个账户，每个账户名最多19字符</span>
-    <span class="c-keyword">double</span> balances[<span class="c-number">10</span>] = {<span class="c-number">0</span>}; <span class="c-comment">// 账户余额</span>
-    <span class="c-keyword">int</span> accountCount = <span class="c-number">0</span>;     <span class="c-comment">// 当前账户数量</span>
-    <span class="c-keyword">int</span> choice;
+    <span class="c-keyword">double</span> num1, num2, result;
+    <span class="c-keyword">char</span> op;
     
-    <span class="c-keyword">do</span> {
-        <span class="c-function">displayMenu</span>();  <span class="c-comment">// 函数调用：显示菜单</span>
-        <span class="c-function">printf</span>(<span class="c-string">"请选择操作 (1-6): "</span>);
-        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &choice);
-        
-        <span class="c-keyword">switch</span>(choice) {
-            <span class="c-keyword">case</span> <span class="c-number">1</span>: {
-                <span class="c-keyword">int</span> result = <span class="c-function">createAccount</span>(accounts, balances, &accountCount);  <span class="c-comment">// 函数调用：创建账户</span>
-                <span class="c-keyword">if</span>(result) {
-                    <span class="c-function">printf</span>(<span class="c-string">"账户创建成功!\n"</span>);
-                } <span class="c-keyword">else</span> {
-                    <span class="c-function">printf</span>(<span class="c-string">"账户已满，无法创建!\n"</span>);
-                }
-                <span class="c-keyword">break</span>;
-            }
-            <span class="c-keyword">case</span> <span class="c-number">2</span>: {
-                <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
-                <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
-                <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
-                <span class="c-keyword">int</span> index = <span class="c-function">findAccount</span>(accounts, name, accountCount);  <span class="c-comment">// 函数调用：查找账户</span>
-                <span class="c-keyword">if</span>(index != -<span class="c-number">1</span>) {
-                    <span class="c-function">displayBalance</span>(accounts, balances, index);  <span class="c-comment">// 函数调用：显示余额</span>
-                } <span class="c-keyword">else</span> {
-                    <span class="c-function">printf</span>(<span class="c-string">"账户不存在!\n"</span>);
-                }
-                <span class="c-keyword">break</span>;
-            }
-            <span class="c-keyword">case</span> <span class="c-number">3</span>: {
-                <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
-                <span class="c-keyword">double</span> amount;
-                <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
-                <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
-                <span class="c-function">printf</span>(<span class="c-string">"请输入存款金额: "</span>);
-                <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amount);
-                
-                <span class="c-keyword">int</span> index = <span class="c-function">findAccount</span>(accounts, name, accountCount);
-                <span class="c-keyword">if</span>(index != -<span class="c-number">1</span>) {
-                    <span class="c-function">deposit</span>(balances, index, amount);  <span class="c-comment">// 函数调用：存款</span>
-                    <span class="c-function">printf</span>(<span class="c-string">"存款成功!\n"</span>);
-                } <span class="c-keyword">else</span> {
-                    <span class="c-function">printf</span>(<span class="c-string">"账户不存在!\n"</span>);
-                }
-                <span class="c-keyword">break</span>;
-            }
-            <span class="c-keyword">case</span> <span class="c-number">4</span>: {
-                <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
-                <span class="c-keyword">double</span> amount;
-                <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
-                <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
-                <span class="c-function">printf</span>(<span class="c-string">"请输入取款金额: "</span>);
-                <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amount);
-                
-                <span class="c-keyword">int</span> index = <span class="c-function">findAccount</span>(accounts, name, accountCount);
-                <span class="c-keyword">if</span>(index != -<span class="c-number">1</span>) {
-                    <span class="c-keyword">int</span> result = <span class="c-function">withdraw</span>(balances, index, amount);  <span class="c-comment">// 函数调用：取款</span>
-                    <span class="c-keyword">if</span>(result) {
-                        <span class="c-function">printf</span>(<span class="c-string">"取款成功!\n"</span>);
-                    } <span class="c-keyword">else</span> {
-                        <span class="c-function">printf</span>(<span class="c-string">"余额不足!\n"</span>);
-                    }
-                } <span class="c-keyword">else</span> {
-                    <span class="c-function">printf</span>(<span class="c-string">"账户不存在!\n"</span>);
-                }
-                <span class="c-keyword">break</span>;
-            }
-            <span class="c-keyword">case</span> <span class="c-number">5</span>:
-                <span class="c-function">displayAllAccounts</span>(accounts, balances, accountCount);  <span class="c-comment">// 函数调用：显示所有账户</span>
-                <span class="c-keyword">break</span>;
-            <span class="c-keyword">case</span> <span class="c-number">6</span>:
-                <span class="c-function">printf</span>(<span class="c-string">"感谢使用，再见!\n"</span>);
-                <span class="c-keyword">break</span>;
-            <span class="c-keyword">default</span>:
-                <span class="c-function">printf</span>(<span class="c-string">"无效选择!\n"</span>);
-        }
-        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    } <span class="c-keyword">while</span>(choice != <span class="c-number">6</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"简单计算器\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"输入表达式 (如: 5 + 3): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%lf %c %lf"</span>, &num1, &op, &num2);
     
+    <span class="c-keyword">switch</span>(op) {
+        <span class="c-keyword">case</span> <span class="c-string">'+'</span>:
+            result = <span class="c-function">add</span>(num1, num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'-'</span>:
+            result = <span class="c-function">subtract</span>(num1, num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'*'</span>:
+            result = <span class="c-function">multiply</span>(num1, num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'/'</span>:
+            result = <span class="c-function">divide</span>(num1, num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"无效运算符\n"</span>);
+            <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, result);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 
 <span class="c-comment">// 函数定义</span>
-<span class="c-keyword">void</span> <span class="c-function">displayMenu</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"=== 银行账户管理系统 ===\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"1. 创建账户\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"2. 查询余额\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"3. 存款\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"4. 取款\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"5. 显示所有账户\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"6. 退出\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"========================\n"</span>);
+<span class="c-keyword">double</span> <span class="c-function">add</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
+    <span class="c-keyword">return</span> a + b;
 }
 
-<span class="c-keyword">int</span> <span class="c-function">createAccount</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> *count) {
-    <span class="c-keyword">if</span>(*count >= <span class="c-number">10</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;  <span class="c-comment">// 账户已满</span>
-    
-    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
-    <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
-    
-    <span class="c-comment">// 检查账户是否已存在</span>
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < *count; i++) {
-        <span class="c-keyword">if</span>(<span class="c-function">strcmp</span>(accounts[i], name) == <span class="c-number">0</span>) {
-            <span class="c-function">printf</span>(<span class="c-string">"账户已存在!\n"</span>);
-            <span class="c-keyword">return</span> <span class="c-number">0</span>;
-        }
+<span class="c-keyword">double</span> <span class="c-function">subtract</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
+    <span class="c-keyword">return</span> a - b;
+}
+
+<span class="c-keyword">double</span> <span class="c-function">multiply</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
+    <span class="c-keyword">return</span> a * b;
+}
+
+<span class="c-keyword">double</span> <span class="c-function">divide</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
+    <span class="c-keyword">if</span>(b == <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"错误: 除数不能为0\n"</span>);
+        <span class="c-keyword">return</span> <span class="c-number">0</span>;
     }
-    
-    <span class="c-function">strcpy</span>(accounts[*count], name);
-    balances[*count] = <span class="c-number">0.0</span>;
-    (*count)++;
-    <span class="c-keyword">return</span> <span class="c-number">1</span>;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">findAccount</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">char</span> name[], <span class="c-keyword">int</span> count) {
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
-        <span class="c-keyword">if</span>(<span class="c-function">strcmp</span>(accounts[i], name) == <span class="c-number">0</span>) {
-            <span class="c-keyword">return</span> i;
-        }
-    }
-    <span class="c-keyword">return</span> -<span class="c-number">1</span>;  <span class="c-comment">// 未找到</span>
-}
-
-<span class="c-keyword">void</span> <span class="c-function">deposit</span>(<span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> index, <span class="c-keyword">double</span> amount) {
-    balances[index] += amount;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">withdraw</span>(<span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> index, <span class="c-keyword">double</span> amount) {
-    <span class="c-keyword">if</span>(balances[index] >= amount) {
-        balances[index] -= amount;
-        <span class="c-keyword">return</span> <span class="c-number">1</span>;  <span class="c-comment">// 成功</span>
-    }
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;  <span class="c-comment">// 失败</span>
-}
-
-<span class="c-keyword">void</span> <span class="c-function">displayBalance</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> index) {
-    <span class="c-function">printf</span>(<span class="c-string">"账户: %s\n"</span>, accounts[index]);
-    <span class="c-function">printf</span>(<span class="c-string">"余额: %.2f元\n"</span>, balances[index]);
-}
-
-<span class="c-keyword">void</span> <span class="c-function">displayAllAccounts</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> count) {
-    <span class="c-function">printf</span>(<span class="c-string">"=== 所有账户信息 ===\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d. %s: %.2f元\n"</span>, i+<span class="c-number">1</span>, accounts[i], balances[index]);
-    }
+    <span class="c-keyword">return</span> a / b;
 }</code></pre>
                     </div>
                 </div>
@@ -648,6 +547,75 @@
             <!-- 参数传递 -->
             <section id="parameters" class="section">
                 <h2 class="section-title">参数传递</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">形参与实参</h3>
+                    <div class="subsection-content">
+                        <h4>什么是形参和实参？</h4>
+                        <p>在函数的定义和调用过程中，涉及两种参数：</p>
+                        <ul>
+                            <li><strong>形参（形式参数）：</strong>函数定义时声明的参数，是占位符变量，用于接收传入的值</li>
+                            <li><strong>实参（实际参数）：</strong>函数调用时传递的具体值或变量</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">形参与实参示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数定义：a和b是形参</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a + b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">5</span>, y = <span class="c-number">3</span>;
+    
+    <span class="c-comment">// 函数调用：x和y是实参</span>
+    <span class="c-keyword">int</span> sum1 = <span class="c-function">add</span>(x, y);     <span class="c-comment">// 变量作为实参</span>
+    <span class="c-keyword">int</span> sum2 = <span class="c-function">add</span>(<span class="c-number">10</span>, <span class="c-number">20</span>);  <span class="c-comment">// 常量作为实参</span>
+    <span class="c-keyword">int</span> sum3 = <span class="c-function">add</span>(x+<span class="c-number">1</span>, y*<span class="c-number">2</span>); <span class="c-comment">// 表达式作为实参</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"sum1=%d, sum2=%d, sum3=%d\n"</span>, sum1, sum2, sum3);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <h4>形参与实参的关系</h4>
+                        <ul>
+                            <li><strong>数量匹配：</strong>实参的个数必须与形参的个数相同</li>
+                            <li><strong>类型匹配：</strong>实参的类型应与形参的类型一致（或可以隐式转换）</li>
+                            <li><strong>顺序对应：</strong>实参按位置顺序传递给形参</li>
+                            <li><strong>单向传递：</strong>实参的值传递给形参，形参是实参的副本</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">参数匹配示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 形参：type, length, width</span>
+<span class="c-keyword">void</span> <span class="c-function">printInfo</span>(<span class="c-keyword">char</span> type, <span class="c-keyword">int</span> length, <span class="c-keyword">int</span> width) {
+    <span class="c-function">printf</span>(<span class="c-string">"类型:%c, 长:%d, 宽:%d\n"</span>, type, length, width);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 实参必须按顺序对应形参</span>
+    <span class="c-function">printInfo</span>(<span class="c-string">'A'</span>, <span class="c-number">10</span>, <span class="c-number">5</span>);  <span class="c-comment">// 正确：类型和顺序匹配</span>
+    <span class="c-comment">// printInfo(10, 5, 'A');  // 错误：顺序不对</span>
+    <span class="c-comment">// printInfo('A', 10);     // 错误：参数个数不足</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>💡 记忆技巧：</strong>
+                            <ul>
+                                <li><strong>形参</strong>在函数<strong>定义</strong>处（形式上的）</li>
+                                <li><strong>实参</strong>在函数<strong>调用</strong>处（实际传入的）</li>
+                                <li>形参相当于"模板"，实参是填入模板的"具体内容"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="subsection">
                     <h3 class="subsection-title">值传递与地址传递</h3>
