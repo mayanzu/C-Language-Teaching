@@ -110,6 +110,171 @@
                 </div>
                 
                 <div class="subsection">
+                    <h3 class="subsection-title">函数使用常见错误与注意事项</h3>
+                    <div class="subsection-content">
+                        <h4>1. 参数数量不匹配</h4>
+                        <p><strong>错误描述：</strong>调用函数时提供的实参个数与函数定义的形参个数不一致。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 错误示例</div>
+                        <pre><code><span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a + b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> sum = <span class="c-function">add</span>(<span class="c-number">5</span>);        <span class="c-comment">// ❌ 错误：缺少第二个参数</span>
+    <span class="c-keyword">int</span> sum2 = <span class="c-function">add</span>(<span class="c-number">5</span>, <span class="c-number">3</span>, <span class="c-number">2</span>);  <span class="c-comment">// ❌ 错误：参数过多</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <p><strong>后果：</strong>编译错误，程序无法通过编译。编译器会提示"参数数量不匹配"或类似信息。</p>
+                        
+                        <h4>2. 参数类型不匹配</h4>
+                        <p><strong>错误描述：</strong>实参的类型与形参的类型不一致，可能导致数据丢失或错误。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">⚠️ 类型不匹配示例</div>
+                        <pre><code><span class="c-keyword">void</span> <span class="c-function">printInt</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, n);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> x = <span class="c-number">3.14</span>;
+    <span class="c-function">printInt</span>(x);  <span class="c-comment">// ⚠️ 警告：double转int，小数部分丢失，输出3</span>
+    
+    <span class="c-keyword">char</span> *str = <span class="c-string">"hello"</span>;
+    <span class="c-comment">// printInt(str);  // ❌ 错误：指针不能直接转int</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <p><strong>后果：</strong>可能产生编译警告或错误，运行时可能得到错误结果或数据丢失。</p>
+                        
+                        <h4>3. 忘记返回值</h4>
+                        <p><strong>错误描述：</strong>非void函数没有return语句或某些分支没有return。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 忘记返回值</div>
+                        <pre><code><span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">if</span>(a > b) {
+        <span class="c-keyword">return</span> a;
+    }
+    <span class="c-comment">// ❌ 错误：当a<=b时没有return语句</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">getNumber</span>() {
+    <span class="c-keyword">int</span> n = <span class="c-number">10</span>;
+    <span class="c-comment">// ❌ 错误：声明返回int但没有return</span>
+}</code></pre>
+                    </div>
+                    
+                        <p><strong>后果：</strong>编译警告，运行时返回值不确定（垃圾值），可能导致程序错误。</p>
+                        
+                        <h4>4. void函数错误使用返回值</h4>
+                        <p><strong>错误描述：</strong>void函数不应该有返回值，也不能将其用于赋值。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">❌ void函数错误</div>
+                        <pre><code><span class="c-keyword">void</span> <span class="c-function">printHello</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"Hello\n"</span>);
+    <span class="c-comment">// return 0;  // ❌ 错误：void函数不能返回值</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// int x = printHello();  // ❌ 错误：void函数没有返回值</span>
+    <span class="c-function">printHello</span>();  <span class="c-comment">// ✅ 正确：直接调用</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <p><strong>后果：</strong>编译错误，无法通过编译。</p>
+                        
+                        <h4>5. 函数未声明就使用</h4>
+                        <p><strong>错误描述：</strong>在函数定义之前调用，且没有提前声明。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 未声明就使用</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> result = <span class="c-function">add</span>(<span class="c-number">5</span>, <span class="c-number">3</span>);  <span class="c-comment">// ❌ 错误：add函数未声明</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, result);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a + b;
+}</code></pre>
+                    </div>
+                    
+                        <div class="code-block">
+                        <div class="code-block-title">✅ 正确做法</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);  <span class="c-comment">// ✅ 提前声明</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> result = <span class="c-function">add</span>(<span class="c-number">5</span>, <span class="c-number">3</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, result);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a + b;
+}</code></pre>
+                    </div>
+                    
+                        <p><strong>后果：</strong>C89标准下会产生警告（隐式声明），C99及以后标准会产生编译错误。</p>
+                        
+                        <h4>6. 参数传递的值传递陷阱</h4>
+                        <p><strong>错误描述：</strong>误以为值传递可以修改原变量。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 值传递陷阱</div>
+                        <pre><code><span class="c-keyword">void</span> <span class="c-function">changeValue</span>(<span class="c-keyword">int</span> x) {
+    x = <span class="c-number">100</span>;  <span class="c-comment">// 只修改了副本，不影响原变量</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
+    <span class="c-function">changeValue</span>(a);
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a);  <span class="c-comment">// 输出10，不是100</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="code-block">
+                        <div class="code-block-title">✅ 使用指针修改</div>
+                        <pre><code><span class="c-keyword">void</span> <span class="c-function">changeValue</span>(<span class="c-keyword">int</span> *x) {
+    *x = <span class="c-number">100</span>;  <span class="c-comment">// 通过指针修改原变量</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
+    <span class="c-function">changeValue</span>(&a);  <span class="c-comment">// 传递地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a);  <span class="c-comment">// 输出100</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>📌 最佳实践总结：</strong>
+                            <ul>
+                                <li><strong>参数匹配：</strong>确保实参和形参的数量、类型完全对应</li>
+                                <li><strong>函数声明：</strong>在使用前声明，或将函数定义放在调用之前</li>
+                                <li><strong>返回值检查：</strong>非void函数必须在所有路径上都有return</li>
+                                <li><strong>类型转换：</strong>注意隐式类型转换可能导致的精度损失</li>
+                                <li><strong>值传递理解：</strong>记住C语言默认是值传递，需要修改原变量时使用指针</li>
+                                <li><strong>编译警告：</strong>重视所有编译警告，它们通常指示潜在问题</li>
+                                <li><strong>测试验证：</strong>编写函数后要测试各种边界情况</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
                     <h3 class="subsection-title">函数的组成结构练习</h3>
                     <div class="practice-questions">
                         <div class="question-item">
@@ -614,12 +779,85 @@
                                 <li>形参相当于"模板"，实参是填入模板的"具体内容"</li>
                             </ul>
                         </div>
+                        
+                        <h4>参数匹配常见问题</h4>
+                        <div class="code-block">
+                        <div class="code-block-title">参数匹配错误示例</div>
+                        <pre><code><span class="c-keyword">void</span> <span class="c-function">display</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">double</span> b, <span class="c-keyword">char</span> c) {
+    <span class="c-function">printf</span>(<span class="c-string">"%d %.2f %c\n"</span>, a, b, c);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// ❌ 数量不匹配</span>
+    <span class="c-comment">// display(10, 3.14);        // 少一个参数 - 编译错误</span>
+    <span class="c-comment">// display(10, 3.14, 'A', 5); // 多一个参数 - 编译错误</span>
+    
+    <span class="c-comment">// ⚠️ 顺序错误</span>
+    <span class="c-comment">// display(3.14, 10, 'A');   // 类型顺序不对 - 可能编译警告</span>
+    
+    <span class="c-comment">// ✅ 正确调用</span>
+    <span class="c-function">display</span>(<span class="c-number">10</span>, <span class="c-number">3.14</span>, <span class="c-string">'A'</span>);  <span class="c-comment">// 数量、类型、顺序都正确</span>
+    
+    <span class="c-comment">// ⚠️ 类型可以自动转换但不推荐</span>
+    <span class="c-function">display</span>(<span class="c-number">10</span>, <span class="c-number">3</span>, <span class="c-number">65</span>);      <span class="c-comment">// int转double，int转char（65是'A'的ASCII）</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>⚠️ 参数传递注意事项：</strong>
+                            <ul>
+                                <li><strong>数量必须完全一致：</strong>多一个或少一个都会编译错误</li>
+                                <li><strong>顺序必须对应：</strong>第1个实参传给第1个形参，第2个对第2个，依此类推</li>
+                                <li><strong>类型尽量匹配：</strong>虽然C语言会自动转换，但可能丢失数据或产生意外结果</li>
+                                <li><strong>表达式作为实参：</strong>会先计算表达式的值，再传递给形参</li>
+                                <li><strong>常见错误：</strong>函数调用时忘记传参，或者参数顺序写反</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="subsection">
                     <h3 class="subsection-title">值传递与地址传递</h3>
                     <div class="subsection-content">
+                        <h4>前置知识：指针基础</h4>
+                        <p>在学习地址传递之前，我们需要了解<strong>指针</strong>的基本概念：</p>
+                        <ul>
+                            <li><strong>指针变量：</strong>用来存储变量地址的变量</li>
+                            <li><strong>&运算符：</strong>取地址运算符，获取变量的内存地址</li>
+                            <li><strong>*运算符：</strong>解引用运算符，访问指针指向的值</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">指针基础示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;           <span class="c-comment">// 定义整型变量</span>
+    <span class="c-keyword">int</span> *p = &a;        <span class="c-comment">// p是指针，存储a的地址</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"a的值: %d\n"</span>, a);        <span class="c-comment">// 输出: 10</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a的地址: %p\n"</span>, &a);    <span class="c-comment">// 输出地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"p指向的值: %d\n"</span>, *p);  <span class="c-comment">// 输出: 10</span>
+    
+    *p = <span class="c-number">20</span>;           <span class="c-comment">// 通过指针修改a的值</span>
+    <span class="c-function">printf</span>(<span class="c-string">"修改后a: %d\n"</span>, a);     <span class="c-comment">// 输出: 20</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>💡 理解指针的关键：</strong>
+                            <ul>
+                                <li><code>&a</code> 表示"a的地址"</li>
+                                <li><code>int *p</code> 表示"p是一个指向int的指针"</li>
+                                <li><code>*p</code> 表示"p指向的那个值"</li>
+                                <li>通过指针可以间接访问和修改变量的值</li>
+                            </ul>
+                        </div>
+                        
                         <h4>什么是参数传递？</h4>
                         <p>参数传递是指将实参的值传递给函数形参的过程。C语言有两种主要的参数传递方式：<strong>值传递</strong>和<strong>地址传递</strong>。</p>
                         
@@ -831,6 +1069,81 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">结构体作为函数参数（选学）</h3>
+                    <div class="subsection-content">
+                        <h4>什么是结构体？</h4>
+                        <p><strong>结构体（struct）</strong>是C语言中用于组合多个不同类型数据的复合数据类型。可以把结构体理解为一个"数据包"，里面可以装不同类型的数据。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">结构体基础示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 定义学生结构体</span>
+<span class="c-keyword">struct</span> Student {
+    <span class="c-keyword">char</span> name[<span class="c-number">50</span>];   <span class="c-comment">// 姓名</span>
+    <span class="c-keyword">int</span> age;         <span class="c-comment">// 年龄</span>
+    <span class="c-keyword">float</span> score;    <span class="c-comment">// 分数</span>
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 创建结构体变量</span>
+    <span class="c-keyword">struct</span> Student s1;
+    
+    <span class="c-comment">// 访问结构体成员使用点运算符(.)</span>
+    <span class="c-function">strcpy</span>(s1.name, <span class="c-string">"张三"</span>);
+    s1.age = <span class="c-number">18</span>;
+    s1.score = <span class="c-number">95.5</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"姓名:%s, 年龄:%d, 分数:%.1f\n"</span>, 
+           s1.name, s1.age, s1.score);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <h4>typedef简化结构体定义</h4>
+                        <p><code>typedef</code>关键字可以为结构体类型定义别名，使用更方便：</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">typedef使用示例</div>
+                        <pre><code><span class="c-comment">// 使用typedef定义结构体</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
+    <span class="c-keyword">int</span> age;
+} Student;  <span class="c-comment">// Student是结构体的别名</span>
+
+<span class="c-comment">// 现在可以直接用Student定义变量，不需要写struct</span>
+Student s1, s2;</code></pre>
+                    </div>
+                    
+                        <h4>结构体指针访问成员</h4>
+                        <p>当使用结构体指针时，需要用箭头运算符（<code>-&gt;</code>）访问成员：</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">结构体指针示例</div>
+                        <pre><code>Student s1;
+Student *p = &s1;  <span class="c-comment">// p是指向s1的指针</span>
+
+<span class="c-comment">// 两种访问方式等价：</span>
+(*p).age = <span class="c-number">18</span>;    <span class="c-comment">// 方式1：解引用后用点运算符</span>
+p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// 方式2：箭头运算符（更常用）</span></code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>💡 结构体作为函数参数的要点：</strong>
+                            <ul>
+                                <li>传递结构体变量：值传递，函数内修改不影响原结构体</li>
+                                <li>传递结构体指针：地址传递，函数内可修改原结构体</li>
+                                <li>使用<code>const</code>修饰指针参数可防止意外修改</li>
+                                <li>结构体较大时，传递指针比传递值更高效</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>综合应用示例</h4>
+                        <p>下面的例子展示了如何将结构体、数组、指针综合使用在函数参数中：</p>
+                    </div>
                     <div class="code-block">
                         <div class="code-block-title">综合参数传递应用</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
@@ -940,8 +1253,8 @@
                         
                         <h4>递归的两个要素</h4>
                         <ul>
-                            <li><strong>递归终止条件：</strong>必须有明确的结束条件，否则会无限递归</li>
-                            <li><strong>递归调用：</strong>函数调用自己，且每次调用都向终止条件靠近</li>
+                            <li><strong>递归终止条件（基准情况）：</strong>必须有明确的结束条件，否则会无限递归</li>
+                            <li><strong>递归调用（递推关系）：</strong>函数调用自己，且每次调用都向终止条件靠近</li>
                         </ul>
                         
                         <div class="code-block">
@@ -957,6 +1270,107 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"5! = %d\n"</span>, <span class="c-function">factorial</span>(<span class="c-number">5</span>));  <span class="c-comment">// 120</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                        <h4>递归执行过程详解</h4>
+                        <p>以<code>factorial(3)</code>为例，看看递归是如何执行的：</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">递归执行过程可视化</div>
+                        <pre><code><span class="c-comment">调用 factorial(3):</span>
+<span class="c-comment">  ├─ n = 3, n > 1, 需要计算 3 * factorial(2)</span>
+<span class="c-comment">  └─ 调用 factorial(2):</span>
+<span class="c-comment">       ├─ n = 2, n > 1, 需要计算 2 * factorial(1)</span>
+<span class="c-comment">       └─ 调用 factorial(1):</span>
+<span class="c-comment">            ├─ n = 1, n <= 1, 返回 1  ← 到达终止条件</span>
+<span class="c-comment">       ├─ 得到 factorial(1) = 1</span>
+<span class="c-comment">       └─ 返回 2 * 1 = 2</span>
+<span class="c-comment">  ├─ 得到 factorial(2) = 2</span>
+<span class="c-comment">  └─ 返回 3 * 2 = 6</span>
+
+<span class="c-comment">最终结果: factorial(3) = 6</span></code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>💡 理解递归的关键：</strong>
+                            <ul>
+                                <li><strong>递推阶段：</strong>函数不断调用自己，问题规模逐渐缩小</li>
+                                <li><strong>回归阶段：</strong>达到终止条件后，逐层返回结果并计算</li>
+                                <li><strong>栈的使用：</strong>每次调用都在栈上保存当前状态，返回时恢复</li>
+                                <li><strong>效率考虑：</strong>递归简洁但可能消耗较多内存，某些情况下循环更高效</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>递归常见错误</h4>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 缺少终止条件导致无限递归</div>
+                        <pre><code><span class="c-keyword">int</span> <span class="c-function">badFunction</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">return</span> n + <span class="c-function">badFunction</span>(n - <span class="c-number">1</span>);  <span class="c-comment">// ❌ 没有终止条件！</span>
+}
+<span class="c-comment">// 结果：栈溢出（Stack Overflow）程序崩溃</span></code></pre>
+                    </div>
+                    
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 终止条件错误</div>
+                        <pre><code><span class="c-keyword">int</span> <span class="c-function">factorial</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n == <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;  <span class="c-comment">// ❌ 如果传入0或负数会无限递归</span>
+    <span class="c-keyword">return</span> n * <span class="c-function">factorial</span>(n - <span class="c-number">1</span>);
+}
+
+<span class="c-comment">// ✅ 正确的终止条件</span>
+<span class="c-keyword">int</span> <span class="c-function">factorial_correct</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n &lt;= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;  <span class="c-comment">// ✅ 考虑了边界情况</span>
+    <span class="c-keyword">return</span> n * <span class="c-function">factorial_correct</span>(n - <span class="c-number">1</span>);
+}</code></pre>
+                    </div>
+                    
+                        <div class="code-block">
+                        <div class="code-block-title">❌ 递归方向错误</div>
+                        <pre><code><span class="c-keyword">int</span> <span class="c-function">sum</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n == <span class="c-number">10</span>) <span class="c-keyword">return</span> <span class="c-number">10</span>;
+    <span class="c-keyword">return</span> n + <span class="c-function">sum</span>(n + <span class="c-number">1</span>);  <span class="c-comment">// ❌ 递增而不是递减，永远达不到10</span>
+}
+
+<span class="c-comment">// 应该从大到小递归</span>
+<span class="c-keyword">int</span> <span class="c-function">sum_correct</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n == <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    <span class="c-keyword">return</span> n + <span class="c-function">sum_correct</span>(n - <span class="c-number">1</span>);  <span class="c-comment">// ✅ 递减，逐步接近终止条件</span>
+}</code></pre>
+                    </div>
+                    
+                        <div class="tip-box">
+                            <strong>⚠️ 递归使用注意事项：</strong>
+                            <ul>
+                                <li><strong>必须有明确的终止条件：</strong>否则会导致栈溢出（Stack Overflow）</li>
+                                <li><strong>每次递归必须向终止条件靠近：</strong>参数要递减或递增到终止值</li>
+                                <li><strong>考虑边界情况：</strong>0、负数、空值等特殊输入</li>
+                                <li><strong>注意栈空间限制：</strong>递归层数太深（通常几千到上万层）会导致栈溢出</li>
+                                <li><strong>避免重复计算：</strong>如斐波那契数列递归效率很低，可考虑循环或记忆化</li>
+                                <li><strong>测试小数据：</strong>先用小数据测试，确保逻辑正确后再用大数据</li>
+                                <li><strong>调试技巧：</strong>在递归函数中打印参数值，观察递归过程</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>递归 vs 循环</h4>
+                        <p>同一个问题可以用递归或循环实现，各有优劣：</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">阶乘的两种实现</div>
+                        <pre><code><span class="c-comment">// 递归实现（简洁但可能效率较低）</span>
+<span class="c-keyword">int</span> <span class="c-function">factorial_recursive</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n &lt;= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    <span class="c-keyword">return</span> n * <span class="c-function">factorial_recursive</span>(n - <span class="c-number">1</span>);
+}
+
+<span class="c-comment">// 循环实现（效率高但代码稍长）</span>
+<span class="c-keyword">int</span> <span class="c-function">factorial_iterative</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">int</span> result = <span class="c-number">1</span>;
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i &lt;= n; i++) {
+        result *= i;
+    }
+    <span class="c-keyword">return</span> result;
 }</code></pre>
                     </div>
                     </div>
