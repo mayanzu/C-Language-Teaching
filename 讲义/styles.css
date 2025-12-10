@@ -1,0 +1,1048 @@
+/* ===== 2K/大屏优化 ===== */
+@media screen and (min-width: 1440px) {
+    :root {
+        --font-size-base: 18px;
+        --font-size-h1: 34px;
+        --font-size-h2: 26px;
+        --line-height-base: 1.8;
+    }
+
+    body {
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-base);
+    }
+
+    .tutorial-content {
+        max-width: 1100px;
+        padding: 28px 36px;
+    }
+
+    .tutorial-header h1 {
+        font-size: var(--font-size-h1);
+    }
+
+    .section-title {
+        font-size: var(--font-size-h2);
+        margin-bottom: 16px;
+    }
+
+    .tutorial-nav {
+        width: 280px;
+    }
+
+    .tutorial-content {
+        margin-left: 280px;
+    }
+
+    .tutorial-nav ul li a,
+    .tutorial-nav a {
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+
+    .code-block pre {
+        font-size: 15px;
+        line-height: 1.9;
+        max-height: none;
+    }
+
+    .code-block {
+        margin: 18px 0 24px;
+        padding: 16px 18px;
+    }
+
+    .tip-box, .callout {
+        padding: 14px 16px;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    :root {
+        --font-size-base: 20px;
+        --font-size-h1: 38px;
+        --font-size-h2: 28px;
+    }
+
+    .tutorial-content {
+        max-width: 1280px;
+        padding: 32px 40px;
+    }
+
+    .tutorial-nav {
+        width: 320px;
+    }
+
+    .tutorial-content {
+        margin-left: 320px;
+    }
+
+    .code-block pre {
+        font-size: 16px;
+    }
+}
+/* ============================================
+   Apple Developer Documentation Style System
+   Modern, Clean, Professional
+   ============================================ */
+
+/* CSS Variables for Design System */
+:root {
+    /* Colors - Apple Style */
+    --color-text-primary: #1D1D1F;
+    --color-text-secondary: #6E6E73;
+    --color-text-tertiary: #86868B;
+    --color-accent-blue: #0066CC;
+    --color-accent-blue-hover: #0055B3;
+    --color-background: #FBFBFD;
+    --color-surface: #FFFFFF;
+    --color-border: #E5E5E7;
+    --color-code-bg: #FAFAFA;
+    --color-code-border: #E8E8ED;
+    
+    /* Callout Colors - Minimal */
+    --color-info-bg: #F5F5F7;
+    --color-info-border: #86868B;
+    --color-warning-bg: #F5F5F7;
+    --color-warning-border: #86868B;
+    --color-success-bg: #F5F5F7;
+    --color-success-border: #86868B;
+    
+    /* Typography */
+    --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    --spacing-3xl: 64px;
+    
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Global Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-system);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    font-size: 17px;
+}
+
+/* ============================================
+   Layout Components
+   ============================================ */
+
+/* Main Container */
+.tutorial-container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--color-background);
+}
+
+/* Sidebar Navigation - Fixed Left */
+.tutorial-nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+    z-index: 1000;
+    padding: var(--spacing-md) 0;
+}
+
+.tutorial-nav::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tutorial-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.tutorial-nav::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.tutorial-nav::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-tertiary);
+}
+
+.tutorial-nav ul {
+    list-style: none;
+    padding: 0 var(--spacing-md);
+}
+
+.tutorial-nav li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.tutorial-nav a {
+    display: block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.tutorial-nav a:hover {
+    background: var(--color-code-bg);
+    color: var(--color-text-primary);
+}
+
+.tutorial-nav a.active {
+    background: var(--color-accent-blue);
+    color: white;
+}
+
+/* Main Content Area */
+.tutorial-content {
+    flex: 1;
+    margin-left: 220px;
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-3xl) var(--spacing-xl);
+    max-width: 1000px;
+}
+
+/* Header Section */
+.tutorial-header {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tutorial-header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.15;
+}
+
+.tutorial-header p {
+    font-size: 19px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    max-width: 720px;
+}
+
+/* ============================================
+   Typography & Content Sections
+   ============================================ */
+
+.section {
+    margin-bottom: var(--spacing-2xl);
+    scroll-margin-top: var(--spacing-lg);
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.25;
+}
+
+.subsection {
+    margin-bottom: var(--spacing-xl);
+}
+
+.subsection-title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.4;
+}
+
+/* Content Typography */
+.subsection-content,
+.subsection-content p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.subsection-content ul,
+.subsection-content ol {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-xl);
+}
+
+.subsection-content li {
+    margin-bottom: var(--spacing-sm);
+    padding-left: var(--spacing-sm);
+}
+
+.subsection-content li::marker {
+    color: var(--color-accent-blue);
+}
+
+.subsection-content strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+/* Links */
+a {
+    color: var(--color-accent-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-accent-blue-hover);
+}
+
+/* Inline Code - Apple Style */
+code {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    background: var(--color-code-bg);
+    color: #AD3DA4;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 5px;
+    border: 1px solid var(--color-code-border);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================================
+   Code Block Component - Apple Style
+   ============================================ */
+
+.code-block {
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-code-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: var(--spacing-md) 0;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s ease;
+}
+
+.code-block:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Code Block Title Bar */
+.code-block-title {
+    background: linear-gradient(to bottom, #FAFAFA, #F5F5F7);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-code-border);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.code-block-title::before {
+    content: '●●●';
+    font-size: 12px;
+    color: #D1D1D6;
+    letter-spacing: 2px;
+    margin-right: var(--spacing-md);
+}
+
+/* Copy Button */
+.copy-button {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.copy-button:hover {
+    background: var(--color-code-bg);
+    border-color: var(--color-accent-blue);
+    color: var(--color-accent-blue);
+}
+
+.copy-button.copied {
+    background: var(--color-accent-blue);
+    border-color: var(--color-accent-blue);
+    color: white;
+}
+
+.copy-button::before {
+    content: '📋';
+    font-size: 14px;
+}
+
+.copy-button.copied::before {
+    content: '✓';
+}
+
+/* Code Content */
+.code-block pre {
+    margin: 0;
+    padding: var(--spacing-lg);
+    background: #FFFFFF;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    letter-spacing: 0.3px;
+}
+
+.code-block pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-tertiary);
+}
+
+.code-block code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+/* ============================================
+   Syntax Highlighting - Apple Xcode Style
+   ============================================ */
+
+/* C Language Keywords - Purple/Magenta like Xcode */
+.c-keyword {
+    color: #AD3DA4;
+    font-weight: 600;
+}
+
+/* Strings - Red like Xcode */
+.c-string {
+    color: #D12F1B;
+    font-weight: 400;
+}
+
+/* Numbers - Blue like Xcode */
+.c-number {
+    color: #1C00CF;
+    font-weight: 500;
+}
+
+/* Comments - Green like Xcode */
+.c-comment {
+    color: #5D6C79;
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* Functions - Teal/Cyan like Xcode */
+.c-function {
+    color: #3E8087;
+    font-weight: 600;
+}
+
+/* Operators */
+.c-operator {
+    color: #1D1D1F;
+    font-weight: 500;
+}
+
+/* Preprocessor Directives - Brown like Xcode */
+.c-preprocessor {
+    color: #78492A;
+    font-weight: 600;
+}
+
+/* Line Numbers (if needed) */
+.line-number {
+    color: var(--color-text-tertiary);
+    user-select: none;
+    padding-right: var(--spacing-md);
+    border-right: 1px solid var(--color-border);
+    margin-right: var(--spacing-md);
+}
+
+/* Highlighted Lines */
+.highlight-line {
+    background: rgba(0, 102, 204, 0.06);
+    border-left: 3px solid var(--color-accent-blue);
+    margin-left: -24px;
+    padding-left: 21px;
+    display: block;
+}
+
+/* Code Block Title - Apple Style */
+.code-block-title {
+    background: linear-gradient(to bottom, #FAFAFA, #F5F5F7);
+    color: var(--color-text-secondary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: 0;
+    border-bottom: 1px solid var(--color-code-border);
+    font-size: 13px;
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.code-block-title::before {
+    content: '●●●';
+    font-size: 10px;
+    color: #D1D1D6;
+    letter-spacing: 2px;
+    margin-right: var(--spacing-sm);
+}
+
+/* Copy Button - Apple Style */
+.copy-button {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-system);
+    font-weight: 500;
+}
+
+.copy-button:hover {
+    background: var(--color-code-bg);
+    border-color: var(--color-accent-blue);
+    color: var(--color-accent-blue);
+}
+
+.copy-button:active {
+    transform: scale(0.96);
+}
+
+.copy-button.copied {
+    background: var(--color-accent-blue);
+    border-color: var(--color-accent-blue);
+    color: white;
+}
+
+
+
+/* ============================================
+   Callouts - Apple Documentation Style
+   ============================================ */
+
+/* Base Callout Styles */
+.callout,
+.new-learner-tip,
+.tip-box,
+.warning-box {
+    background: var(--color-info-bg);
+    border-left: 3px solid var(--color-info-border);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+    position: relative;
+}
+
+/* Callout Variants */
+.callout.info,
+.new-learner-tip,
+.tip-box {
+    background: var(--color-info-bg);
+    border-left-color: var(--color-info-border);
+}
+
+.callout.warning,
+.warning-box {
+    background: var(--color-warning-bg);
+    border-left-color: var(--color-warning-border);
+}
+
+.callout.success {
+    background: var(--color-success-bg);
+    border-left-color: var(--color-success-border);
+}
+
+.callout.tip {
+    background: var(--color-info-bg);
+    border-left-color: var(--color-accent-blue);
+}
+
+.callout strong,
+.new-learner-tip strong,
+.tip-box strong,
+.warning-box strong {
+    display: block;
+    color: var(--color-text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.callout strong,
+.callout.info strong,
+.callout.warning strong,
+.callout.success strong,
+.callout.tip strong,
+.new-learner-tip strong,
+.tip-box strong,
+.warning-box strong {
+    color: var(--color-text-primary);
+}
+
+.callout p,
+.new-learner-tip p,
+.tip-box p,
+.warning-box p {
+    color: var(--color-text-secondary);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.callout ul,
+.new-learner-tip ul,
+.tip-box ul,
+.warning-box ul {
+    margin: var(--spacing-xs) 0 0 0;
+    padding-left: var(--spacing-lg);
+}
+
+.callout li,
+.new-learner-tip li,
+.tip-box li,
+.warning-box li {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xs);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.example-item {
+    background: #f8f9fa;
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    font-size: 1.05em;
+    line-height: 1.7;
+}
+
+.example-item strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.example-item ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.example-item li {
+    margin-bottom: 6px;
+    line-height: 1.7;
+}
+
+.question-analysis {
+    background: #f0f9f4;
+    border-left: 4px solid #27ae60;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.question-analysis h4 {
+    color: #27ae60;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* ============================================
+   Tables - Clean & Minimal
+   ============================================ */
+
+.table-container {
+    overflow-x: auto;
+    margin: var(--spacing-md) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-surface);
+    font-size: 15px;
+}
+
+thead {
+    background: var(--color-code-bg);
+}
+
+th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    border-bottom: 2px solid var(--color-border);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: var(--color-background);
+}
+
+/* Code in table cells */
+td code {
+    background: var(--color-code-bg);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ============================================
+   Additional Components
+   ============================================ */
+
+/* Example Grids */
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+.example-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    transition: all 0.2s ease;
+}
+
+.example-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.example-item strong {
+    display: block;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    font-size: 16px;
+}
+
+/* Practice Questions */
+.section#practice ol {
+    counter-reset: question;
+    list-style: none;
+    padding: 0;
+}
+
+.section#practice li {
+    counter-increment: question;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+    padding-left: calc(var(--spacing-lg) + 48px);
+}
+
+.section#practice li::before {
+    content: counter(question);
+    position: absolute;
+    left: var(--spacing-lg);
+    top: var(--spacing-lg);
+    width: 32px;
+    height: 32px;
+    background: var(--color-accent-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* Practice Hints */
+.practice-hints {
+    background: var(--color-info-bg);
+    border: 1px solid var(--color-info-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-2xl) 0;
+}
+
+.practice-hints h3 {
+    color: var(--color-accent-blue);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+}
+
+.practice-hints ul {
+    list-style: none;
+    padding: 0;
+}
+
+.practice-hints li {
+    position: relative;
+    padding-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-secondary);
+}
+
+.practice-hints li::before {
+    content: '💡';
+    position: absolute;
+    left: 0;
+    font-size: 18px;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .tutorial-nav {
+        width: 200px;
+    }
+    
+    .tutorial-content {
+        margin-left: 200px;
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .tutorial-nav {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--spacing-md) 0;
+    }
+    
+    .tutorial-content {
+        margin-left: 0;
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+    
+    .tutorial-header h1 {
+        font-size: 30px;
+    }
+    
+    .tutorial-header p {
+        font-size: 16px;
+    }
+    
+    .section-title {
+        font-size: 26px;
+    }
+    
+    .subsection-title {
+        font-size: 20px;
+    }
+    
+    .tutorial-container {
+        flex-direction: column;
+    }
+    
+    .example-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .tutorial-content {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+    
+    .tutorial-header h1 {
+        font-size: 28px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .subsection-title {
+        font-size: 20px;
+    }
+    
+    .code-block-title {
+        font-size: 13px;
+    }
+    
+    .code-block pre {
+        font-size: 13px;
+        padding: var(--spacing-md);
+    }
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+/* Flow Diagrams */
+.flow-diagram,
+.execution-flow {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-xl) 0;
+}
+
+.flow-step {
+    background: var(--color-accent-blue);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    margin: var(--spacing-sm) 0;
+}
+
+.flow-decision {
+    background: var(--color-warning-border);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Question Analysis */
+.question-analysis {
+    background: var(--color-success-bg);
+    border: 1px solid var(--color-success-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+.question-analysis h4 {
+    color: var(--color-success-border);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection Color */
+::selection {
+    background: var(--color-accent-blue);
+    color: white;
+}
+
+/* Focus Styles */
+:focus-visible {
+    outline: 2px solid var(--color-accent-blue);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .tutorial-nav {
+        display: none;
+    }
+    
+    .tutorial-content {
+        margin-left: 0;
+        max-width: 100%;
+    }
+    
+    .code-block {
+        break-inside: avoid;
+    }
+    
+    .copy-button {
+        display: none;
+    }
+}

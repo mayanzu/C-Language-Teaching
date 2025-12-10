@@ -1,0 +1,1273 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择结构与循环结构基础 - C语言教程</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 侧边导航栏 -->
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#if-multi">if多分支选择</a></li>
+            <li><a href="#switch">switch语句</a></li>
+            <li><a href="#nested">选择结构嵌套</a></li>
+            <li><a href="#while">while循环</a></li>
+            <li><a href="#for">for循环</a></li>
+            <li><a href="#do-while">do-while循环</a></li>
+            
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="tutorial-content">
+        <!-- 页面标题 -->
+        <header class="tutorial-header">
+            <h1>选择结构与循环结构基础</h1>
+            <p>掌握 C 语言条件判断和循环控制的基本方法</p>
+        </header>
+            <!-- 简介 -->
+            <section id="intro" class="section">
+                <h2 class="section-title">选择结构与循环结构基础</h2>
+                <div class="subsection-content">
+                    <p>C语言程序需要根据不同条件执行不同操作，这就是选择结构。同时，程序经常需要重复执行某些操作，这就是循环结构。</p>
+                    
+                    <div class="new-learner-tip">
+                        <strong>新手注意：</strong>
+                        <ul>
+                            <li>选择结构让程序能够做出判断和选择</li>
+                            <li>循环结构让程序能够重复执行任务</li>
+                            <li>掌握break和continue语句很重要</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>重要提示：</strong>选择结构和循环结构是C语言的核心控制结构，理解它们的执行流程是编程的基础。
+                    </div>
+
+                    <h3 class="subsection-title">学习目标与节奏</h3>
+                    <div class="subsection-content">
+                        <p>按照下面的节奏来学习，确保每一步都扎实：</p>
+                        <ol>
+                            <li><strong>第1步：掌握if多分支</strong> —— 学会用if-else if处理多种情况</li>
+                            <li><strong>第2步：理解switch语句</strong> —— 掌握多分支选择的另一种写法</li>
+                            <li><strong>第3步：练习嵌套结构</strong> —— 理解选择结构的嵌套使用</li>
+                            <li><strong>第4步：入门循环控制</strong> —— 掌握while、for、do-while三种循环</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- if多分支选择 -->
+            <section id="if-multi" class="section">
+                <h2 class="section-title">if多分支选择</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">if-else if结构</h3>
+                    <div class="subsection-content">
+                        <p>当需要处理多种互斥的情况时，使用if-else if结构。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">成绩等级判断</div>
+                            <pre><code><span class="c-comment">// if-else if多分支选择示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入成绩: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &score);
+    
+    <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"优秀\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">80</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"良好\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"及格\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"不及格\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">if-else if的执行流程</h3>
+                    <div class="subsection-content">
+                        <p>if-else if结构从上到下依次检查条件，找到第一个为真的条件就执行对应的代码块，然后跳出整个结构。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">执行流程演示</div>
+                            <pre><code><span class="c-comment">// if-else if执行流程</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score = <span class="c-number">85</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"成绩: %d\n"</span>, score);
+    
+    <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"等级: 优秀\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"奖励: 奖金100元\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">80</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"等级: 良好\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"奖励: 奖金50元\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">70</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"等级: 中等\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"奖励: 鼓励奖\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"等级: 及格\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"奖励: 继续努力\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"等级: 不及格\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"奖励: 需要补考\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>执行顺序：</strong>
+                            <p>1. 从上到下依次检查条件<br>
+                            2. 遇到第一个为真的条件，执行对应代码块<br>
+                            3. 跳过剩余的所有分支<br>
+                            4. 如果所有条件都为假，执行else块</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">常见的多分支模式</h3>
+                    <div class="subsection-content">
+                        <p>学习一些常见的多分支判断模式，可以让代码更简洁。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">多分支判断模式</div>
+                            <pre><code><span class="c-comment">// 常见的多分支判断模式</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+    
+    <span class="c-comment">// 1. 判断正负零</span>
+    <span class="c-keyword">if</span> (num > <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"正数\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num < <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"负数\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"零\n"</span>);
+    }
+    
+    <span class="c-comment">// 2. 判断范围区间</span>
+    <span class="c-keyword">if</span> (num >= <span class="c-number">0</span> && num <= <span class="c-number">100</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"在0-100范围内\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">101</span> && num <= <span class="c-number">200</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"在101-200范围内\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"超出范围\n"</span>);
+    }
+    
+    <span class="c-comment">// 3. 成绩分段</span>
+    <span class="c-keyword">char</span> grade;
+    <span class="c-keyword">if</span> (num >= <span class="c-number">90</span>) grade = <span class="c-string">'A'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">80</span>) grade = <span class="c-string">'B'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">70</span>) grade = <span class="c-string">'C'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">60</span>) grade = <span class="c-string">'D'</span>;
+    <span class="c-keyword">else</span> grade = <span class="c-string">'F'</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">if多分支练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：出租车计费</strong></p>
+                            <p>编写程序计算出租车费用。3公里内起步价13元，3-10公里每公里2.3元，超过10公里每公里3.2元。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> distance, fare;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入行驶公里数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &distance);
+    
+    <span class="c-keyword">if</span> (distance <= <span class="c-number">3</span>) {
+        fare = <span class="c-number">13</span>;
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (distance <= <span class="c-number">10</span>) {
+        fare = <span class="c-number">13</span> + (distance - <span class="c-number">3</span>) * <span class="c-number">2.3</span>;
+    } <span class="c-keyword">else</span> {
+        fare = <span class="c-number">13</span> + <span class="c-number">7</span> * <span class="c-number">2.3</span> + (distance - <span class="c-number">10</span>) * <span class="c-number">3.2</span>;
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"行驶%.1f公里，费用%.2f元\n"</span>, distance, fare);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：水费计算</strong></p>
+                            <p>居民用水阶梯收费：10吨以内每吨2.5元，10-20吨每吨3.5元，超过20吨每吨5元。输入用水量，计算费用。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> water, cost;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入用水量(吨): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &water);
+    
+    <span class="c-keyword">if</span> (water <= <span class="c-number">10</span>) {
+        cost = water * <span class="c-number">2.5</span>;
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (water <= <span class="c-number">20</span>) {
+        cost = <span class="c-number">10</span> * <span class="c-number">2.5</span> + (water - <span class="c-number">10</span>) * <span class="c-number">3.5</span>;
+    } <span class="c-keyword">else</span> {
+        cost = <span class="c-number">10</span> * <span class="c-number">2.5</span> + <span class="c-number">10</span> * <span class="c-number">3.5</span> + (water - <span class="c-number">20</span>) * <span class="c-number">5</span>;
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"用水%.1f吨，费用%.2f元\n"</span>, water, cost);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- switch语句 -->
+            <section id="switch" class="section">
+                <h2 class="section-title">switch语句</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">switch基本语法</h3>
+                    <div class="subsection-content">
+                        <p>switch语句适用于多分支选择，特别是当分支较多且基于同一个表达式的不同值时。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">switch基本用法</div>
+                            <pre><code><span class="c-comment">// switch语句基本用法</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> day;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入星期几(1-7): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &day);
+    
+    <span class="c-keyword">switch</span>(day) {
+        <span class="c-keyword">case</span> <span class="c-number">1</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期一\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">2</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期二\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">3</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期三\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">4</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期四\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">5</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期五\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">6</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期六\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">7</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"星期日\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"输入错误\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        <div class="practice-questions">
+                            <div class="question-item">
+                                <p><strong>练习：菜单选择</strong></p>
+                                <p>输入菜单编号<code>(1: 开始, 2: 设置, 0: 退出)</code>，使用<code>switch</code>输出对应操作。</p>
+                                <details class="answer">
+                                    <summary>查看参考答案</summary>
+                                    <div class="code-block">
+<pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> sel;
+    <span class="c-function">printf</span>(<span class="c-string">"请输入菜单(1/2/0): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &sel);
+    <span class="c-keyword">switch</span>(sel) {
+        <span class="c-keyword">case</span> <span class="c-number">1</span>: <span class="c-function">printf</span>(<span class="c-string">"开始\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">2</span>: <span class="c-function">printf</span>(<span class="c-string">"设置\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">0</span>: <span class="c-function">printf</span>(<span class="c-string">"退出\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>: <span class="c-function">printf</span>(<span class="c-string">"无效选择\n"</span>);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">switch的case合并</h3>
+                    <div class="subsection-content">
+                        <p>多个case可以执行相同的代码，可以将它们合并。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">case合并示例</div>
+                            <pre><code><span class="c-comment">// switch case合并</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> month;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入月份(1-12): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &month);
+    
+    <span class="c-keyword">switch</span>(month) {
+        <span class="c-keyword">case</span> <span class="c-number">12</span>:
+        <span class="c-keyword">case</span> <span class="c-number">1</span>:
+        <span class="c-keyword">case</span> <span class="c-number">2</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"冬季\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">3</span>:
+        <span class="c-keyword">case</span> <span class="c-number">4</span>:
+        <span class="c-keyword">case</span> <span class="c-number">5</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"春季\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">6</span>:
+        <span class="c-keyword">case</span> <span class="c-number">7</span>:
+        <span class="c-keyword">case</span> <span class="c-number">8</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"夏季\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">9</span>:
+        <span class="c-keyword">case</span> <span class="c-number">10</span>:
+        <span class="c-keyword">case</span> <span class="c-number">11</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"秋季\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"无效月份\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        <div class="practice-questions">
+                            <div class="question-item">
+                                <p><strong>练习：季度判断</strong></p>
+                                <p>输入月份<code>(1-12)</code>，使用<code>switch</code>合并<code>case</code>输出所属季度。</p>
+                                <details class="answer">
+                                    <summary>查看参考答案</summary>
+                                    <div class="code-block">
+<pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> m;
+    <span class="c-function">printf</span>(<span class="c-string">"请输入月份(1-12): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &m);
+    <span class="c-keyword">switch</span>(m) {
+        <span class="c-keyword">case</span> <span class="c-number">3</span>: <span class="c-keyword">case</span> <span class="c-number">4</span>: <span class="c-keyword">case</span> <span class="c-number">5</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"春季\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">6</span>: <span class="c-keyword">case</span> <span class="c-number">7</span>: <span class="c-keyword">case</span> <span class="c-number">8</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"夏季\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">9</span>: <span class="c-keyword">case</span> <span class="c-number">10</span>: <span class="c-keyword">case</span> <span class="c-number">11</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"秋季\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">12</span>: <span class="c-keyword">case</span> <span class="c-number">1</span>: <span class="c-keyword">case</span> <span class="c-number">2</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"冬季\n"</span>); <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"无效月份\n"</span>);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">switch vs if-else if</h3>
+                    <div class="subsection-content">
+                        <p>switch和if-else if都可以实现多分支选择，什么时候用哪个？</p>
+                        
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>情况</th>
+                                        <th>推荐使用</th>
+                                        <th>理由</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>基于整数值的多分支</td>
+                                        <td>switch</td>
+                                        <td>代码更清晰，执行效率更高</td>
+                                    </tr>
+                                    <tr>
+                                        <td>基于范围的判断</td>
+                                        <td>if-else if</td>
+                                        <td>switch不支持范围判断</td>
+                                    </tr>
+                                    <tr>
+                                        <td>分支较少(2-3个)</td>
+                                        <td>if-else if</td>
+                                        <td>switch结构相对复杂</td>
+                                    </tr>
+                                    <tr>
+                                        <td>需要复杂条件</td>
+                                        <td>if-else if</td>
+                                        <td>switch只能做相等比较</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-block-title">switch vs if-else if对比</div>
+                            <pre><code><span class="c-comment">// 使用switch的情况</span>
+<span class="c-keyword">int</span> choice = <span class="c-number">2</span>;
+<span class="c-keyword">switch</span>(choice) {
+    <span class="c-keyword">case</span> <span class="c-number">1</span>: <span class="c-function">printf</span>(<span class="c-string">"选项1\n"</span>); <span class="c-keyword">break</span>;
+    <span class="c-keyword">case</span> <span class="c-number">2</span>: <span class="c-function">printf</span>(<span class="c-string">"选项2\n"</span>); <span class="c-keyword">break</span>;
+    <span class="c-keyword">case</span> <span class="c-number">3</span>: <span class="c-function">printf</span>(<span class="c-string">"选项3\n"</span>); <span class="c-keyword">break</span>;
+}
+
+<span class="c-comment">// 使用if-else if的情况</span>
+<span class="c-keyword">int</span> score = <span class="c-number">85</span>;
+<span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) {
+    <span class="c-function">printf</span>(<span class="c-string">"优秀\n"</span>);
+} <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">80</span>) {
+    <span class="c-function">printf</span>(<span class="c-string">"良好\n"</span>);
+} <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) {
+    <span class="c-function">printf</span>(<span class="c-string">"及格\n"</span>);
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">switch练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：简单计算器</strong></p>
+                            <p>编写程序，用户输入两个数和一个运算符(+、-、*、/)，使用switch实现计算器功能。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> num1, num2;
+    <span class="c-keyword">char</span> op;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入表达式(如: 5 + 3): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%lf %c %lf"</span>, &num1, &op, &num2);
+    
+    <span class="c-keyword">switch</span>(op) {
+        <span class="c-keyword">case</span> <span class="c-string">'+'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, num1 + num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'-'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, num1 - num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'*'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, num1 * num2);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'/'</span>:
+            <span class="c-keyword">if</span>(num2 != <span class="c-number">0</span>) {
+                <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, num1 / num2);
+            } <span class="c-keyword">else</span> {
+                <span class="c-function">printf</span>(<span class="c-string">"错误：除数不能为0\n"</span>);
+            }
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"错误：无效的运算符\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：成绩等级查询</strong></p>
+                            <p>输入等级(A/B/C/D/F)，输出对应的分数范围和评价。使用switch的case合并功能。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> grade;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入成绩等级(A/B/C/D/F): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &grade);
+    
+    <span class="c-keyword">switch</span>(grade) {
+        <span class="c-keyword">case</span> <span class="c-string">'A'</span>:
+        <span class="c-keyword">case</span> <span class="c-string">'a'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"优秀！分数范围：90-100\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'B'</span>:
+        <span class="c-keyword">case</span> <span class="c-string">'b'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"良好！分数范围：80-89\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'C'</span>:
+        <span class="c-keyword">case</span> <span class="c-string">'c'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"中等！分数范围：70-79\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'D'</span>:
+        <span class="c-keyword">case</span> <span class="c-string">'d'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"及格！分数范围：60-69\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'F'</span>:
+        <span class="c-keyword">case</span> <span class="c-string">'f'</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"不及格！分数范围：0-59\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"错误：无效的等级\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 选择结构嵌套 -->
+            <section id="nested" class="section">
+                <h2 class="section-title">选择结构嵌套</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">if语句嵌套</h3>
+                    <div class="subsection-content">
+                        <p>在if语句中可以嵌套另一个if语句，实现更复杂的逻辑判断。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">找三个数中的最大值</div>
+                            <pre><code><span class="c-comment">// if语句嵌套示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">15</span>, b = <span class="c-number">20</span>, c = <span class="c-number">10</span>;
+    <span class="c-keyword">int</span> max;
+    
+    <span class="c-keyword">if</span> (a > b) {
+        <span class="c-keyword">if</span> (a > c) {
+            max = a;
+        } <span class="c-keyword">else</span> {
+            max = c;
+        }
+    } <span class="c-keyword">else</span> {
+        <span class="c-keyword">if</span> (b > c) {
+            max = b;
+        } <span class="c-keyword">else</span> {
+            max = c;
+        }
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"三个数中的最大值是: %d\n"</span>, max);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">switch语句嵌套</h3>
+                    <div class="subsection-content">
+                        <p>switch语句也可以嵌套使用。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">switch嵌套示例</div>
+                            <pre><code><span class="c-comment">// switch语句嵌套</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> type = <span class="c-number">1</span>, level = <span class="c-number">2</span>;
+    
+    <span class="c-keyword">switch</span>(type) {
+        <span class="c-keyword">case</span> <span class="c-number">1</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"类型A"</span>);
+            <span class="c-keyword">switch</span>(level) {
+                <span class="c-keyword">case</span> <span class="c-number">1</span>: <span class="c-function">printf</span>(<span class="c-string">" 等级1\n"</span>); <span class="c-keyword">break</span>;
+                <span class="c-keyword">case</span> <span class="c-number">2</span>: <span class="c-function">printf</span>(<span class="c-string">" 等级2\n"</span>); <span class="c-keyword">break</span>;
+                <span class="c-keyword">case</span> <span class="c-number">3</span>: <span class="c-function">printf</span>(<span class="c-string">" 等级3\n"</span>); <span class="c-keyword">break</span>;
+            }
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">2</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"类型B\n"</span>);
+            <span class="c-keyword">break</span>;
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        <div class="practice-questions">
+                            <div class="question-item">
+                                <p><strong>练习：类型与等级路由</strong></p>
+                                <p>输入类型<code>(1/2)</code>与等级<code>(1-3)</code>，使用嵌套<code>switch</code>输出对应的提示信息。</p>
+                                <details class="answer">
+                                    <summary>查看参考答案</summary>
+                                    <div class="code-block">
+<pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> type, level;
+    <span class="c-function">printf</span>(<span class="c-string">"请输入类型(1/2) 与 等级(1-3): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d %d"</span>, &type, &level);
+    <span class="c-keyword">switch</span>(type) {
+        <span class="c-keyword">case</span> <span class="c-number">1</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"类型A "</span>);
+            <span class="c-keyword">switch</span>(level) {
+                <span class="c-keyword">case</span> <span class="c-number">1</span>: <span class="c-function">printf</span>(<span class="c-string">"等级1\n"</span>); <span class="c-keyword">break</span>;
+                <span class="c-keyword">case</span> <span class="c-number">2</span>: <span class="c-function">printf</span>(<span class="c-string">"等级2\n"</span>); <span class="c-keyword">break</span>;
+                <span class="c-keyword">case</span> <span class="c-number">3</span>: <span class="c-function">printf</span>(<span class="c-string">"等级3\n"</span>); <span class="c-keyword">break</span>;
+                <span class="c-keyword">default</span>: <span class="c-function">printf</span>(<span class="c-string">"无效等级\n"</span>);
+            }
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-number">2</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"类型B\n"</span>);
+            <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"无效类型\n"</span>);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- while循环 -->
+            <section id="while" class="section">
+                <h2 class="section-title">while循环</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">while循环语法</h3>
+                    <div class="subsection-content">
+                        <p>while循环在每次执行循环体之前检查条件。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">while循环示例</div>
+                            <pre><code><span class="c-comment">// while循环基本用法</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> i = <span class="c-number">1</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"while循环:\n"</span>);
+    <span class="c-keyword">while</span> (i <= <span class="c-number">5</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"第%d次循环\n"</span>, i);
+        i++;  <span class="c-comment">// 不要忘记更新循环变量</span>
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">while循环的执行流程</h3>
+                    <div class="subsection-content">
+                        <p>while循环的执行顺序：先判断条件，再执行循环体。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">while循环执行流程</div>
+                            <pre><code><span class="c-comment">// while循环执行流程演示</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> i = <span class="c-number">1</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"while循环开始:\n"</span>);
+    <span class="c-keyword">while</span> (i <= <span class="c-number">3</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"  第%d次循环开始，i=%d\n"</span>, i, i);
+        <span class="c-function">printf</span>(<span class="c-string">"  执行循环体\n"</span>);
+        i++;  <span class="c-comment">// 更新循环变量</span>
+        <span class="c-function">printf</span>(<span class="c-string">"  第%d次循环结束，i=%d\n"</span>, i-<span class="c-number">1</span>, i);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"while循环结束\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>while循环特点：</strong>
+                            <p>• 先判断条件，后执行循环体<br>
+                            • 如果条件一开始就为假，循环体一次都不执行<br>
+                            • 循环体内必须更新循环变量，否则可能死循环</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">while循环的常见应用</h3>
+                    <div class="subsection-content">
+                        <p>while循环常用于不确定循环次数的情况。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">while循环应用示例</div>
+                            <pre><code><span class="c-comment">// while循环的常见应用</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>, num;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"输入数字求和(输入0结束):\n"</span>);
+    <span class="c-keyword">while</span> (<span class="c-number">1</span>) {  <span class="c-comment">// 无限循环</span>
+        <span class="c-function">printf</span>(<span class="c-string">"请输入数字: "</span>);
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+        
+        <span class="c-keyword">if</span> (num == <span class="c-number">0</span>) {
+            <span class="c-keyword">break</span>;  <span class="c-comment">// 输入0时退出</span>
+        }
+        
+        sum += num;
+        <span class="c-function">printf</span>(<span class="c-string">"当前和: %d\n"</span>, sum);
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"最终和: %d\n"</span>, sum);
+    
+    <span class="c-comment">// 猜数字游戏</span>
+    <span class="c-keyword">int</span> target = <span class="c-number">42</span>, guess;
+    <span class="c-keyword">int</span> attempts = <span class="c-number">0</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"\n猜数字游戏(1-100):\n"</span>);
+    <span class="c-keyword">while</span> (<span class="c-number">1</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"请输入猜测: "</span>);
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &guess);
+        attempts++;
+        
+        <span class="c-keyword">if</span> (guess == target) {
+            <span class="c-function">printf</span>(<span class="c-string">"恭喜猜对了! 用了%d次\n"</span>, attempts);
+            <span class="c-keyword">break</span>;
+        } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (guess < target) {
+            <span class="c-function">printf</span>(<span class="c-string">"太小了!\n"</span>);
+        } <span class="c-keyword">else</span> {
+            <span class="c-function">printf</span>(<span class="c-string">"太大了!\n"</span>);
+        }
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">while循环练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：求n的阶乘</strong></p>
+                            <p>编写程序，输入一个正整数n，使用while循环计算n!（n的阶乘）。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> n, i = <span class="c-number">1</span>;
+    <span class="c-keyword">long</span> <span class="c-keyword">long</span> factorial = <span class="c-number">1</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个正整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &n);
+    
+    <span class="c-keyword">while</span> (i <= n) {
+        factorial *= i;
+        i++;
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"%d! = %lld\n"</span>, n, factorial);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：数字反转</strong></p>
+                            <p>输入一个整数，使用while循环将其各位数字反转后输出。例如：输入1234，输出4321。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num, reversed = <span class="c-number">0</span>, digit;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+    
+    <span class="c-keyword">int</span> original = num;  <span class="c-comment">// 保存原始值</span>
+    
+    <span class="c-keyword">while</span> (num != <span class="c-number">0</span>) {
+        digit = num % <span class="c-number">10</span>;           <span class="c-comment">// 取最后一位</span>
+        reversed = reversed * <span class="c-number">10</span> + digit;  <span class="c-comment">// 构建反转数</span>
+        num /= <span class="c-number">10</span>;                 <span class="c-comment">// 去掉最后一位</span>
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"%d 反转后是 %d\n"</span>, original, reversed);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- for循环 -->
+            <section id="for" class="section">
+                <h2 class="section-title">for循环</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">for循环语法</h3>
+                    <div class="subsection-content">
+                        <p>for循环是最常用的循环结构，特别适合已知循环次数的情况。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">for循环示例</div>
+                            <pre><code><span class="c-comment">// for循环基本用法</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// for(初始化; 条件; 更新)</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">5</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"第%d次循环\n"</span>, i);
+    }
+    
+    <span class="c-comment">// 计算1到10的和</span>
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++) {
+        sum += i;
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"1到10的和: %d\n"</span>, sum);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">for循环的执行流程</h3>
+                    <div class="subsection-content">
+                        <p>for循环的执行顺序：初始化 → 判断条件 → 执行循环体 → 更新 → 再次判断条件...</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">for循环执行流程</div>
+                            <pre><code><span class="c-comment">// for循环执行流程演示</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"for循环执行流程:\n"</span>);
+    
+    <span class="c-comment">// for(初始化; 条件; 更新)</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">3</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"  初始化: i=1\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"  条件: i(%d) <= 3 为真\n"</span>, i);
+        <span class="c-function">printf</span>(<span class="c-string">"  执行循环体: 第%d次\n"</span>, i);
+        <span class="c-function">printf</span>(<span class="c-string">"  更新: i++ 变为 %d\n"</span>, i+<span class="c-number">1</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"  ---\n"</span>);
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"循环结束\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">for循环的变体</h3>
+                    <div class="subsection-content">
+                        <p>for循环的三个部分都可以省略，但分号不能省略。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">for循环变体</div>
+                            <pre><code><span class="c-comment">// for循环的各种变体</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 1. 省略初始化</span>
+    <span class="c-keyword">int</span> i = <span class="c-number">1</span>;
+    <span class="c-keyword">for</span> (; i <= <span class="c-number">3</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"省略初始化: %d\n"</span>, i);
+    }
+    
+    <span class="c-comment">// 2. 省略更新</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= <span class="c-number">3</span>; ) {
+        <span class="c-function">printf</span>(<span class="c-string">"省略更新: %d\n"</span>, j);
+        j++;  <span class="c-comment">// 在循环体内更新</span>
+    }
+    
+    <span class="c-comment">// 3. 省略条件(死循环)</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> k = <span class="c-number">1</span>; ; k++) {
+        <span class="c-function">printf</span>(<span class="c-string">"死循环: %d\n"</span>, k);
+        <span class="c-keyword">if</span> (k >= <span class="c-number">3</span>) <span class="c-keyword">break</span>;  <span class="c-comment">// 必须有跳出条件</span>
+    }
+    
+    <span class="c-comment">// 4. 多个变量</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">10</span>; a <= <span class="c-number">3</span>; a++, b--) {
+        <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d\n"</span>, a, b);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">嵌套循环</h3>
+                    <div class="subsection-content">
+                        <p>循环中可以嵌套另一个循环，实现更复杂的重复逻辑。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">嵌套循环示例</div>
+                            <pre><code><span class="c-comment">// 嵌套循环示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 打印乘法表</span>
+    <span class="c-function">printf</span>(<span class="c-string">"九九乘法表:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">9</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
+            <span class="c-function">printf</span>(<span class="c-string">"%d×%d=%2d "</span>, j, i, i*j);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+    
+    <span class="c-comment">// 打印矩形</span>
+    <span class="c-function">printf</span>(<span class="c-string">"\n5×3的矩形:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> row = <span class="c-number">1</span>; row <= <span class="c-number">3</span>; row++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> col = <span class="c-number">1</span>; col <= <span class="c-number">5</span>; col++) {
+            <span class="c-function">printf</span>(<span class="c-string">"* "</span>);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <div class="practice-questions">
+                            <div class="question-item">
+                                <p><strong>练习：嵌套循环打印矩形</strong></p>
+                                <p>使用嵌套循环打印一个<code>m×n</code>的矩形（用星号填充），行数和列数由用户输入。</p>
+                                <details class="answer">
+                                    <summary>查看参考答案</summary>
+                                    <div class="code-block">
+                                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> rows, cols;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入行数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &rows);
+    <span class="c-function">printf</span>(<span class="c-string">"请输入列数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &cols);
+    
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= rows; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= cols; j++) {
+            <span class="c-function">printf</span>(<span class="c-string">"* "</span>);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：求素数</strong></p>
+                            <p>编写程序，找出并输出1-100之间的所有素数。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"1-100之间的素数:\n"</span>);
+    
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> num = <span class="c-number">2</span>; num <= <span class="c-number">100</span>; num++) {
+        <span class="c-keyword">int</span> isPrime = <span class="c-number">1</span>;  <span class="c-comment">// 假设是素数</span>
+        
+        <span class="c-comment">// 检查是否有因子</span>
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i <= num; i++) {
+            <span class="c-keyword">if</span> (num % i == <span class="c-number">0</span>) {
+                isPrime = <span class="c-number">0</span>;  <span class="c-comment">// 不是素数</span>
+                <span class="c-keyword">break</span>;
+            }
+        }
+        
+        <span class="c-keyword">if</span> (isPrime) {
+            <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, num);
+        }
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- do-while循环 -->
+            <section id="do-while" class="section">
+                <h2 class="section-title">do-while循环</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">do-while vs while的区别</h3>
+                    <div class="subsection-content">
+                        <p>do-while至少执行一次循环体，而while可能一次都不执行。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">do-while vs while对比</div>
+                            <pre><code><span class="c-comment">// do-while vs while的区别</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">10</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"x = %d\n"</span>, x);
+    <span class="c-function">printf</span>(<span class="c-string">"while循环:\n"</span>);
+    
+    <span class="c-keyword">while</span> (x < <span class="c-number">5</span>) {  <span class="c-comment">// 条件为假，不执行</span>
+        <span class="c-function">printf</span>(<span class="c-string">"  while: x = %d\n"</span>, x);
+        x++;
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"do-while循环:\n"</span>);
+    x = <span class="c-number">10</span>;  <span class="c-comment">// 重置x</span>
+    <span class="c-keyword">do</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"  do-while: x = %d\n"</span>, x);
+        x++;
+    } <span class="c-keyword">while</span> (x < <span class="c-number">5</span>);  <span class="c-comment">// 条件为假，但已执行了一次</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"循环都结束了!\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>选择建议：</strong>
+                            <p>• 需要至少执行一次：用do-while<br>
+                            • 可能一次都不执行：用while<br>
+                            • 已知循环次数：用for</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">三种循环的比较</h3>
+                    <div class="subsection-content">
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>循环类型</th>
+                                        <th>适用场景</th>
+                                        <th>特点</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>for</td>
+                                        <td>已知循环次数</td>
+                                        <td>结构清晰，变量作用域有限</td>
+                                    </tr>
+
+                                    <div class="practice-questions">
+                                        <div class="question-item">
+                                            <p><strong>练习：至少执行一次 vs 可能不执行</strong></p>
+                                            <p>读取用户输入的年龄（整数）。如果输入为负数，<code>while</code>循环不会执行；<code>do-while</code>循环则至少提示一次，直到输入合法年龄（0-150）。</p>
+                                            <details class="answer">
+                                                <summary>查看参考答案</summary>
+                                                <div class="code-block">
+            <pre><code><span class="c-comment">// while 与 do-while 对比示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age = -<span class="c-number">1</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"while版本：\n"</span>);
+    <span class="c-keyword">while</span> (age &gt;= <span class="c-number">0</span> &amp;&amp; age &lt;= <span class="c-number">150</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"合法年龄: %d\n"</span>, age);
+        <span class="c-keyword">break</span>;
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"do-while版本：\n"</span>);
+    <span class="c-keyword">do</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"请输入年龄(0-150): "</span>);
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
+    } <span class="c-keyword">while</span> (age &lt; <span class="c-number">0</span> || age &gt; <span class="c-number">150</span>);
+
+    <span class="c-function">printf</span>(<span class="c-string">"合法年龄: %d\n"</span>, age);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                                </div>
+                                            </details>
+                                        </div>
+                                    </div>
+                                        <td>while</td>
+                                        <td>不确定循环次数</td>
+                                        <td>先判断后执行，可能0次</td>
+                                    </tr>
+                                    <tr>
+                                        <td>do-while</td>
+                                        <td>至少执行一次</td>
+                                        <td>先执行后判断，至少1次</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 为所有代码块添加复制按钮
+           document.addEventListener('DOMContentLoaded', function() {
+              const codeBlocks = document.querySelectorAll('.code-block');
+            
+            codeBlocks.forEach(function(block) {
+                const title = block.querySelector('.code-block-title');
+                if (title) {
+                    // 创建复制按钮
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.textContent = '复制';
+                    
+                    // 添加点击事件
+                    copyButton.addEventListener('click', function() {
+                        const code = block.querySelector('code');
+                        if (code) {
+                            // 获取代码内容
+                            const textToCopy = code.textContent;
+                            
+                            // 创建临时文本区域
+                            const textArea = document.createElement('textarea');
+                            textArea.value = textToCopy;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            
+                            try {
+                                // 执行复制命令
+                                const successful = document.execCommand('copy');
+                                if (successful) {
+                                    // 显示复制成功状态
+                                    copyButton.textContent = '已复制';
+                                    copyButton.classList.add('copied');
+                                    
+                                    // 2秒后恢复按钮状态
+                                    setTimeout(function() {
+                                        copyButton.textContent = '复制';
+                                        copyButton.classList.remove('copied');
+                                    }, 2000);
+                                }
+                            } catch (err) {
+                                console.error('复制失败:', err);
+                            }
+                            
+                            // 移除临时文本区域
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                    
+                    // 将按钮添加到标题栏
+                    title.appendChild(copyButton);
+                }
+            });
+        });
+
+        // 导航栏高亮效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.tutorial-nav a');
+            const sections = document.querySelectorAll('.section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -70% 0px',
+                threshold: 0
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>

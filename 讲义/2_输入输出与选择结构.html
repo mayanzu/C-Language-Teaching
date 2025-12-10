@@ -1,0 +1,1253 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>输入输出与选择结构 - C语言教程</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 侧边导航栏 -->
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#printf">printf函数详解</a></li>
+            <li><a href="#scanf">scanf函数详解</a></li>
+            <li><a href="#if">if语句</a></li>
+            <li><a href="#ternary">三元运算符</a></li>
+            <li><a href="#common-errors">常见错误</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="tutorial-content">
+        <!-- 页面标题 -->
+        <header class="tutorial-header">
+            <h1>输入输出与选择结构</h1>
+            <p>掌握 C 语言输入输出和条件判断的基本方法</p>
+        </header>
+        <!-- 简介 -->
+        <section id="intro" class="section">
+            <h2 class="section-title">输入输出与选择结构基础</h2>
+            
+            <p>C 语言程序需要与用户进行交互，这主要通过输入输出函数实现。同时，程序需要根据不同条件执行不同操作，这就需要条件判断语句。</p>
+            
+            <div class="callout info">
+                <strong>注意</strong>
+                <ul>
+                    <li>输入输出是程序与用户沟通的桥梁</li>
+                    <li>条件判断让程序能够做出选择</li>
+                    <li>格式控制是 C 语言输入输出的重点</li>
+                </ul>
+            </div>
+            
+            <div class="callout tip">
+                <strong>重要</strong>
+                <p>掌握 printf 和 scanf 的格式控制，以及 if 语句的逻辑判断，是 C 语言编程的基础。</p>
+            </div>
+
+                    <h3 class="subsection-title">学习目标与节奏</h3>
+                    <div class="subsection-content">
+                        <p>按照下面的节奏来学习，确保每一步都扎实：</p>
+                        <ol>
+                            <li><strong>第1步：理解格式化输出</strong> —— 掌握printf的基本用法和格式说明符</li>
+                            <li><strong>第2步：学习数据输入</strong> —— 理解scanf的工作原理和地址传递</li>
+                            <li><strong>第3步：条件判断基础</strong> —— 学会用if语句做简单判断</li>
+                            <li><strong>第4步：综合练习</strong> —— 结合输入输出和条件判断写完整程序</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- printf函数详解 -->
+            <section id="printf" class="section">
+                <h2 class="section-title">printf函数详解</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">printf基本用法</h3>
+                    <div class="subsection-content">
+                        <p>printf是C语言中最常用的输出函数，用于向屏幕输出格式化的文本。</p>
+                        
+                        <h4>什么是printf？</h4>
+                        <p>printf是"print formatted"的缩写，意思是"格式化打印"。它的主要作用是将数据以特定格式输出到屏幕上。printf函数定义在stdio.h头文件中，所以使用前必须包含这个头文件。</p>
+                        
+                        <h4>printf的基本语法</h4>
+                        <p>printf函数的基本格式是：<code>printf("格式字符串", 参数列表);</code></p>
+                        <ul>
+                            <li><strong>格式字符串</strong>：包含要输出的文本和格式说明符（如%d、%f等）</li>
+                            <li><strong>参数列表</strong>：要输出的变量，按照格式说明符的顺序提供</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">printf基本示例</div>
+                            <pre><code><span class="c-comment">// printf基本用法示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 简单文本输出 - 不需要格式说明符</span>
+    <span class="c-function">printf</span>(<span class="c-string">"Hello, World!\n"</span>);
+    
+    <span class="c-comment">// 格式化输出整数</span>
+    <span class="c-keyword">int</span> age = <span class="c-number">20</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);  <span class="c-comment">// %d是整数的格式说明符</span>
+    
+    <span class="c-comment">// 格式化输出浮点数</span>
+    <span class="c-keyword">float</span> height = <span class="c-number">1.75</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f 米\n"</span>, height);  <span class="c-comment">// %.2f保留2位小数</span>
+    
+    <span class="c-comment">// 格式化输出字符</span>
+    <span class="c-keyword">char</span> grade = <span class="c-string">'A'</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);  <span class="c-comment">// %c是字符的格式说明符</span>
+    
+    <span class="c-comment">// 一次输出多个变量</span>
+    <span class="c-keyword">int</span> score = <span class="c-number">95</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"学生年龄%d岁，成绩%d分，等级%c\n"</span>, age, score, grade);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <div class="tip-box">
+                            <strong>重要提示：</strong>
+                            <p>• printf的格式说明符数量必须与后面的参数数量一致<br>
+                            • 格式说明符的类型必须与对应参数的类型匹配<br>
+                            • \n表示换行，如果不加\n，下一次输出会接在同一行</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">printf练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：基本输出</strong></p>
+                            <p>编写程序，输出你的姓名、年龄和喜欢的数字。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> name[] = <span class="c-string">"小明"</span>;
+    <span class="c-keyword">int</span> age = <span class="c-number">18</span>;
+    <span class="c-keyword">int</span> luckyNumber = <span class="c-number">7</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"我叫%s\n"</span>, name);
+    <span class="c-function">printf</span>(<span class="c-string">"我今年%d岁\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"我喜欢的数字是%d\n"</span>, luckyNumber);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：计算并输出</strong></p>
+                            <p>计算并输出一个矩形的面积，长5.5米，宽3.2米，结果保留1位小数。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> length = <span class="c-number">5.5</span>;
+    <span class="c-keyword">float</span> width = <span class="c-number">3.2</span>;
+    <span class="c-keyword">float</span> area = length * width;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"矩形长%.1f米，宽%.1f米\n"</span>, length, width);
+    <span class="c-function">printf</span>(<span class="c-string">"面积为%.1f平方米\n"</span>, area);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">常用格式说明符</h3>
+                    <div class="operator-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>格式符</th>
+                                    <th>含义</th>
+                                    <th>示例</th>
+                                    <th>输出结果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="c-operator">%d</span></td>
+                                    <td>十进制整数</td>
+                                    <td><code>printf("%d", 42);</code></td>
+                                    <td>42</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="c-operator">%f</span></td>
+                                    <td>浮点数</td>
+                                    <td><code>printf("%f", 3.14);</code></td>
+                                    <td>3.140000</td>
+                                </tr>
+                                <td><span class="c-operator">%.2f</span></td>
+                                    <td>保留2位小数</td>
+                                    <td><code>printf("%.2f", 3.14159);</code></td>
+                                    <td>3.14</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="c-operator">%c</span></td>
+                                    <td>字符</td>
+                                    <td><code>printf("%c", 'A');</code></td>
+                                    <td>A</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="c-operator">%s</span></td>
+                                    <td>字符串</td>
+                                    <td><code>printf("%s", "hello");</code></td>
+                                    <td>hello</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="c-operator">%%</span></td>
+                                    <td>输出%</td>
+                                    <td><code>printf("%%");</code></td>
+                                    <td>%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">格式说明符实战示例</div>
+                        <pre><code><span class="c-comment">// 各种格式说明符的使用示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age = <span class="c-number">18</span>;
+    <span class="c-keyword">float</span> score = <span class="c-number">95.5</span>;
+    <span class="c-keyword">char</span> grade = <span class="c-string">'A'</span>;
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>] = <span class="c-string">"小明"</span>;
+    
+    <span class="c-comment">// 基本格式输出</span>
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, name);
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d 岁\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"成绩: %.1f 分\n"</span>, score);
+    <span class="c-function">printf</span>(<span class="c-string">"等级: %c 级\n"</span>, grade);
+    
+    <span class="c-comment">// 多个变量一起输出</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%s今年%d岁，成绩%.1f分，等级%c\n"</span>, name, age, score, grade);
+    
+    <span class="c-comment">// 输出百分号</span>
+    <span class="c-function">printf</span>(<span class="c-string">"完成度: 100%%\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">格式控制详解</h3>
+                    <div class="subsection-content">
+                        <p>printf支持多种格式控制，让输出更整齐美观。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">宽度和对齐控制</div>
+                            <pre><code><span class="c-comment">// 宽度和对齐控制示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num1 = <span class="c-number">42</span>, num2 = <span class="c-number">123</span>;
+    
+    <span class="c-comment">// 宽度控制 - 右对齐</span>
+    <span class="c-function">printf</span>(<span class="c-string">"右对齐: '%5d'\n"</span>, num1);    <span class="c-comment">// '   42'</span>
+    <span class="c-function">printf</span>(<span class="c-string">"右对齐: '%5d'\n"</span>, num2);    <span class="c-comment">// '  123'</span>
+    
+    <span class="c-comment">// 左对齐</span>
+    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num1);   <span class="c-comment">// '42   '</span>
+    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num2);   <span class="c-comment">// '123  '</span>
+    
+    <span class="c-comment">// 前导零</span>
+    <span class="c-function">printf</span>(<span class="c-string">"前导零: '%05d'\n"</span>, num1);   <span class="c-comment">// '00042'</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-block-title">浮点数精度控制</div>
+                            <pre><code><span class="c-comment">// 浮点数精度控制示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> pi = <span class="c-number">3.141592653589793</span>;
+    <span class="c-keyword">double</span> money = <span class="c-number">123.456789</span>;
+    
+    <span class="c-comment">// 默认精度</span>
+    <span class="c-function">printf</span>(<span class="c-string">"默认: %f\n"</span>, pi);         <span class="c-comment">// 3.141593</span>
+    
+    <span class="c-comment">// 指定小数位数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"2位小数: %.2f\n"</span>, pi);    <span class="c-comment">// 3.14</span>
+    <span class="c-function">printf</span>(<span class="c-string">"4位小数: %.4f\n"</span>, pi);    <span class="c-comment">// 3.1416</span>
+    
+    <span class="c-comment">// 货币格式</span>
+    <span class="c-function">printf</span>(<span class="c-string">"金额: %.2f 元\n"</span>, money); <span class="c-comment">// 123.46</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">转义字符</h3>
+                    <div class="subsection-content">
+                        <p>转义字符用于输出特殊字符，以反斜杠\开头。</p>
+                        
+                        <div class="operator-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>转义字符</th>
+                                        <th>含义</th>
+                                        <th>示例</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>\n</code></td>
+                                        <td>换行</td>
+                                        <td><code>printf("Hello\nWorld");</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>\t</code></td>
+                                        <td>制表符</td>
+                                        <td><code>printf("Name\tAge");</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>\"</code></td>
+                                        <td>双引号</td>
+                                        <td><code>printf("\"Hello\"");</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>\\'</code></td>
+                                        <td>单引号</td>
+                                        <td><code>printf("\'A\'");</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>\\</code></td>
+                                        <td>反斜杠</td>
+                                        <td><code>printf("\\");</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-block-title">转义字符使用示例</div>
+                            <pre><code><span class="c-comment">// 转义字符使用示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 换行和制表符</span>
+    <span class="c-function">printf</span>(<span class="c-string">"姓名\t年龄\t成绩\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"小明\t18\t95.5\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"小红\t19\t98.0\n"</span>);
+    
+    <span class="c-comment">// 引号</span>
+    <span class="c-function">printf</span>(<span class="c-string">"他说: \"学习C语言很有趣!\"\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"字符'A'的ASCII码是65\n"</span>);
+    
+    <span class="c-comment">// 路径分隔符</span>
+    <span class="c-function">printf</span>(<span class="c-string">"文件路径: C:\\Program Files\\Code\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">格式控制详解</h3>
+                    <div class="subsection-content">
+                        <p>printf支持多种格式控制选项，让输出更美观。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">格式控制示例</div>
+                            <pre><code><span class="c-comment">// printf格式控制详解</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num = <span class="c-number">42</span>;
+    
+    <span class="c-comment">// 宽度控制</span>
+    <span class="c-function">printf</span>(<span class="c-string">"宽度5: '%5d'\n"</span>, num);    <span class="c-comment">// '   42'</span>
+    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num);   <span class="c-comment">// '42   '</span>
+    
+    <span class="c-comment">// 精度控制</span>
+    <span class="c-keyword">double</span> pi = <span class="c-number">3.1415926535</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"默认: %f\n"</span>, pi);         <span class="c-comment">// 3.141593</span>
+    <span class="c-function">printf</span>(<span class="c-string">"2位小数: %.2f\n"</span>, pi);    <span class="c-comment">// 3.14</span>
+    
+    <span class="c-comment">// 前导零</span>
+    <span class="c-function">printf</span>(<span class="c-string">"前导零: %05d\n"</span>, num);    <span class="c-comment">// 00042</span>
+    
+    <span class="c-comment">// 十六进制</span>
+    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %x\n"</span>, num);     <span class="c-comment">// 2a</span>
+    <span class="c-function">printf</span>(<span class="c-string">"带前缀: %#x\n"</span>, num);     <span class="c-comment">// 0x2a</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- scanf函数详解 -->
+            <section id="scanf" class="section">
+                <h2 class="section-title">scanf函数详解</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">scanf基本用法</h3>
+                    <div class="subsection-content">
+                        <p>scanf是C语言中最常用的输入函数，用于从键盘读取用户输入。</p>
+                        
+                        <h4>什么是scanf？</h4>
+                        <p>scanf是"scan formatted"的缩写，意思是"格式化扫描"。它从标准输入（通常是键盘）读取数据，并按照指定的格式存储到变量中。</p>
+                        
+                        <h4>scanf的基本语法</h4>
+                        <p>scanf函数的基本格式是：<code>scanf("格式字符串", &变量1, &变量2, ...);</code></p>
+                        <ul>
+                            <li><strong>格式字符串</strong>：指定输入数据的类型和格式</li>
+                            <li><strong>&变量</strong>：取地址运算符&后跟变量名，表示变量的内存地址</li>
+                        </ul>
+                        
+                        <h4>为什么需要&符号？</h4>
+                        <p>这是初学者最常遇到的问题。scanf需要知道变量在内存中的位置才能把读取的数据存进去。&运算符就是用来获取变量的内存地址的。</p>
+                        <p><strong>记忆方法：</strong>scanf要"存"数据，需要知道"存"在哪里，所以要用&获取地址。printf只是"读"数据，不需要地址。</p>
+                        
+                        <div class="new-learner-tip">
+                            <strong>重要提醒：</strong>
+                            <p>• scanf读取整数、浮点数、字符时都需要&<br>
+                            • 读取字符串时不需要&（因为数组名本身就是地址）<br>
+                            • 忘记&是最常见的错误，会导致程序崩溃</p>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">scanf基本示例</div>
+                            <pre><code><span class="c-comment">// scanf基本用法示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> height;
+    <span class="c-keyword">char</span> grade;
+    <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入身高: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &height);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入等级: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &grade);  <span class="c-comment">// 注意前面的空格</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入姓名: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);  <span class="c-comment">// 字符串不需要&</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"\n输入信息:\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f\n"</span>, height);
+    <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, name);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">为什么需要&符号？</h3>
+                    <div class="subsection-content">
+                        <p>&是取地址运算符，scanf需要知道变量在内存中的地址才能修改变量的值。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">正确与错误的对比</div>
+                            <pre><code><span class="c-comment">// 错误的写法 - 编译器会报错</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+    
+    <span class="c-comment">// 错误：缺少&</span>
+    <span class="c-comment">// scanf("%d", num);  // 编译错误！</span>
+    
+    <span class="c-comment">// 正确：使用&</span>
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+    <span class="c-function">printf</span>(<span class="c-string">"输入的数字是: %d\n"</span>, num);
+    
+    <span class="c-comment">// 字符串数组名本身就是地址，不需要&</span>
+    <span class="c-keyword">char</span> str[<span class="c-number">100</span>];
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str);  <span class="c-comment">// 正确</span>
+    <span class="c-comment">// scanf("%s", &str);  // 错误！</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>记忆口诀：</strong>
+                            <p>scanf读数据要地址，&符号不能少。字符串数组不用&，数组名就是地址。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">scanf的格式控制</h3>
+                    <div class="subsection-content">
+                        <p>scanf也支持格式控制，可以限制输入的字符数。</p>
+                        
+                        <h4>为什么需要限制输入长度？</h4>
+                        <p>限制输入长度可以防止缓冲区溢出，保护程序安全。特别是在读取字符串时，如果数组只有10个元素，但用户输入了20个字符，就会造成内存溢出。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">输入长度限制</div>
+                            <pre><code><span class="c-comment">// scanf格式控制示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+    <span class="c-keyword">char</span> str[<span class="c-number">10</span>];
+    
+    <span class="c-comment">// 限制整数位数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个最多2位的数字: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%2d"</span>, &num);  <span class="c-comment">// 最多读2位数字</span>
+    <span class="c-function">printf</span>(<span class="c-string">"读取的数字: %d\n"</span>, num);
+    
+    <span class="c-comment">// 限制字符串长度</span>
+    <span class="c-function">printf</span>(<span class="c-string">"请输入名字(最多9个字符): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%9s"</span>, str);  <span class="c-comment">// 最多读9个字符（预留1个给\0）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"名字: %s\n"</span>, str);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <h4>scanf的常见问题</h4>
+                        <p><strong>问题1：读取整数后再读字符</strong></p>
+                        <p>scanf读取整数后，输入缓冲区会残留换行符\n，导致下一个%c直接读到换行符。</p>
+                        <p><strong>解决方法：</strong>在%c前加空格：<code>scanf(" %c", &ch);</code></p>
+                        
+                        <p><strong>问题2：scanf不能读取带空格的字符串</strong></p>
+                        <p>scanf遇到空格就停止读取，要读取整行需要使用gets()或fgets()函数。</p>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">scanf练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：基本输入</strong></p>
+                            <p>编写程序，让用户输入姓名、年龄、身高，然后输出这些信息。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> height;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入姓名: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入身高(米): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &height);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"\n您的信息:\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, name);
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d岁\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f米\n"</span>, height);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：圆面积计算</strong></p>
+                            <p>编写程序，让用户输入圆的半径，计算并输出圆的面积（π取3.14159）。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> radius;
+    <span class="c-keyword">float</span> area;
+    <span class="c-keyword">const</span> <span class="c-keyword">float</span> PI = <span class="c-number">3.14159</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入圆的半径: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &radius);
+    
+    area = PI * radius * radius;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"半径为%.2f的圆，面积为%.2f\n"</span>, radius, area);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- if语句 -->
+            <section id="if" class="section">
+                <h2 class="section-title">if语句</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">if语句基本结构</h3>
+                    <div class="subsection-content">
+                        <p>if语句用于根据条件执行不同的代码块，是程序实现"判断和选择"的基础。</p>
+                        
+                        <h4>if语句的三种形式</h4>
+                        
+                        <p><strong>1. 单分支if语句</strong></p>
+                        <p>只有一个判断条件，满足条件时执行代码块。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">单分支if示例</div>
+                            <pre><code><span class="c-comment">// 单分支if：只有"满足条件执行"</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
+    
+    <span class="c-keyword">if</span> (age >= <span class="c-number">18</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"您已成年，可以观看此内容。\n"</span>);
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"程序结束。\n"</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <p><strong>2. 双分支if-else语句</strong></p>
+                        <p>有两个分支：条件满足执行if块，不满足执行else块。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">双分支if-else示例</div>
+                            <pre><code><span class="c-comment">// 双分支if-else：满足和不满足各有一个分支</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+    
+    <span class="c-keyword">if</span> (num % <span class="c-number">2</span> == <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d是偶数\n"</span>, num);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"%d是奇数\n"</span>, num);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <p><strong>3. 多分支if-else if-else语句</strong></p>
+                        <p>有多个条件判断，从上到下依次检查，执行第一个满足条件的分支。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">多分支if-else if示例</div>
+                            <pre><code><span class="c-comment">// 多分支if-else if：多种情况分别处理</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入成绩: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &score);
+    
+    <span class="c-comment">// 从上到下依次检查条件</span>
+    <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"优秀！继续保持！\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">80</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"良好！再接再厉！\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"及格了，要继续努力！\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"不及格，需要加油！\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <div class="tip-box">
+                            <strong>执行顺序：</strong>
+                            <p>if-else if结构从上到下依次检查条件，一旦找到满足的条件就执行对应代码块，然后跳过所有剩余分支。即使后面还有满足的条件也不会再执行。</p>
+                        </div>
+                        
+                        <h4>条件表达式详解</h4>
+                        <p>if语句的条件可以是任何能产生真（非0）或假（0）的表达式。</p>
+                        <ul>
+                            <li><strong>比较运算：</strong> <code>a > b</code>, <code>a == b</code>, <code>a != b</code></li>
+                            <li><strong>逻辑运算：</strong> <code>a > 0 && b < 10</code>, <code>a == 0 || b == 0</code></li>
+                            <li><strong>直接判断：</strong> <code>if (num)</code> 等价于 <code>if (num != 0)</code></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">if语句练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：年龄分类</strong></p>
+                            <p>编写程序，输入年龄，判断是儿童（<12）、少年（12-17）、青年（18-35）、中年（36-59）还是老年（>=60）。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
+    
+    <span class="c-keyword">if</span> (age < <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"年龄无效！\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (age < <span class="c-number">12</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"您是儿童\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (age < <span class="c-number">18</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"您是少年\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (age < <span class="c-number">36</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"您是青年\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (age < <span class="c-number">60</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"您是中年\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"您是老年\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：BMI计算器</strong></p>
+                            <p>编写程序，输入身高（米）和体重（公斤），计算BMI并判断体重状态。BMI=体重/(身高²)。偏瘦<18.5，正常18.5-24，偏胖24-28，肥胖>=28。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> height, weight, bmi;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入身高(米): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &height);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入体重(公斤): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &weight);
+    
+    bmi = weight / (height * height);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"您的BMI值为: %.2f\n"</span>, bmi);
+    
+    <span class="c-keyword">if</span> (bmi < <span class="c-number">18.5</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"偏瘦，建议增加营养\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (bmi < <span class="c-number">24</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"正常，保持健康\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (bmi < <span class="c-number">28</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"偏胖，建议控制饮食\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"肥胖，建议减肥\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">逻辑运算符</h3>
+                    <div class="operator-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>运算符</th>
+                                    <th>含义</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="c-operator">&&</span></td>
+                                    <td>逻辑与</td>
+                                    <td><code>if (a > 0 && a < 100)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="c-operator">||</span></td>
+                                    <td>逻辑或</td>
+                                    <td><code>if (a < 0 || a > 100)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="c-operator">!</span></td>
+                                    <td>逻辑非</td>
+                                    <td><code>if (!flag)</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">if语句的嵌套</h3>
+                    <div class="subsection-content">
+                        <p>if语句可以嵌套使用，实现更复杂的逻辑判断。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">嵌套if语句示例</div>
+                            <pre><code><span class="c-comment">// 嵌套if语句示例</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">char</span> gender;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入性别(M/F): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &gender);
+    
+    <span class="c-keyword">if</span> (age >= <span class="c-number">18</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"您已成年"</span>);
+        <span class="c-keyword">if</span> (gender == <span class="c-string">'M'</span> || gender == <span class="c-string">'m'</span>) {
+            <span class="c-function">printf</span>(<span class="c-string">"，先生可以参加工作了！\n"</span>);
+        } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (gender == <span class="c-string">'F'</span> || gender == <span class="c-string">'f'</span>) {
+            <span class="c-function">printf</span>(<span class="c-string">"，女士可以参加工作了！\n"</span>);
+        } <span class="c-keyword">else</span> {
+            <span class="c-function">printf</span>(<span class="c-string">"，可以参加工作了！\n"</span>);
+        }
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"您还未成年"</span>);
+        <span class="c-keyword">if</span> (age >= <span class="c-number">6</span>) {
+            <span class="c-function">printf</span>(<span class="c-string">"，该上小学了！\n"</span>);
+        } <span class="c-keyword">else</span> {
+            <span class="c-function">printf</span>(<span class="c-string">"，还是幼儿园宝宝！\n"</span>);
+        }
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">逻辑运算符的优先级</h3>
+                    <div class="subsection-content">
+                        <p>逻辑运算符有优先级，&&的优先级高于||，但建议使用括号明确优先级。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">逻辑运算符优先级示例</div>
+                            <pre><code><span class="c-comment">// 逻辑运算符优先级</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score = <span class="c-number">85</span>;
+    <span class="c-keyword">int</span> attendance = <span class="c-number">95</span>;
+    
+    <span class="c-comment">// 使用括号明确优先级</span>
+    <span class="c-keyword">if</span> ((score >= <span class="c-number">60</span> && attendance >= <span class="c-number">80</span>) || score >= <span class="c-number">90</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"及格或优秀！\n"</span>);
+    }
+    
+    <span class="c-comment">// 逻辑运算符的短路特性</span>
+    <span class="c-keyword">int</span> x = <span class="c-number">0</span>;
+    <span class="c-keyword">if</span> (x != <span class="c-number">0</span> && <span class="c-number">10</span> / x > <span class="c-number">1</span>) {  <span class="c-comment">// 不会除零错误</span>
+        <span class="c-function">printf</span>(<span class="c-string">"不会执行到这里\n"</span>);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>短路特性：</strong>
+                            <p>&&：左边为假时，右边不执行<br>
+                            ||：左边为真时，右边不执行</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">常见条件判断模式</h3>
+                    <div class="subsection-content">
+                        <p>学习一些常见的条件判断模式，可以让代码更简洁。</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">条件判断模式示例</div>
+                            <pre><code><span class="c-comment">// 常见条件判断模式</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+    
+    <span class="c-comment">// 1. 判断范围</span>
+    <span class="c-keyword">if</span> (num >= <span class="c-number">1</span> && num <= <span class="c-number">100</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"在1-100范围内\n"</span>);
+    }
+    
+    <span class="c-comment">// 2. 判断是否为偶数</span>
+    <span class="c-keyword">if</span> (num % <span class="c-number">2</span> == <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"是偶数\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"是奇数\n"</span>);
+    }
+    
+    <span class="c-comment">// 3. 判断正负零</span>
+    <span class="c-keyword">if</span> (num > <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"正数\n"</span>);
+    } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num < <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"负数\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"零\n"</span>);
+    }
+    
+    <span class="c-comment">// 4. 多条件判断</span>
+    <span class="c-keyword">char</span> grade;
+    <span class="c-keyword">if</span> (num >= <span class="c-number">90</span>) grade = <span class="c-string">'A'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">80</span>) grade = <span class="c-string">'B'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">70</span>) grade = <span class="c-string">'C'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">60</span>) grade = <span class="c-string">'D'</span>;
+    <span class="c-keyword">else</span> grade = <span class="c-string">'F'</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 三元运算符 -->
+            <section id="ternary" class="section">
+                <h2 class="section-title">三元运算符</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">三元运算符语法</h3>
+                    <div class="subsection-content">
+                        <p>三元运算符是if-else的简写形式，用于简单的条件赋值。它是C语言中唯一的三元运算符（需要三个操作数）。</p>
+                        
+                        <h4>三元运算符的语法</h4>
+                        <p><code>变量 = 条件 ? 值1 : 值2;</code></p>
+                        <ul>
+                            <li>如果条件为真，返回值1</li>
+                            <li>如果条件为假，返回值2</li>
+                        </ul>
+                        
+                        <h4>何时使用三元运算符？</h4>
+                        <p><strong>适合使用：</strong>简单的条件赋值，一行代码就能表达清楚</p>
+                        <p><strong>不适合使用：</strong>复杂的条件判断，需要执行多条语句的情况</p>
+                        
+                        <div class="code-block">
+                            <div class="code-block-title">三元运算符示例</div>
+                            <pre><code><span class="c-comment">// 三元运算符用法</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
+    
+    <span class="c-comment">// 三元运算符：条件 ? 值1 : 值2</span>
+    <span class="c-keyword">int</span> max = (a > b) ? a : b;
+    <span class="c-function">printf</span>(<span class="c-string">"较大值: %d\n"</span>, max);
+    
+    <span class="c-comment">// 等价的if-else（更冗长）</span>
+    <span class="c-keyword">int</span> max2;
+    <span class="c-keyword">if</span> (a > b) {
+        max2 = a;
+    } <span class="c-keyword">else</span> {
+        max2 = b;
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"较大值2: %d\n"</span>, max2);
+    
+    <span class="c-comment">// 在printf中直接使用</span>
+    <span class="c-function">printf</span>(<span class="c-string">"结果: %s\n"</span>, (a > b) ? <span class="c-string">"a较大"</span> : <span class="c-string">"b较大"</span>);
+    
+    <span class="c-comment">// 判断奇偶数</span>
+    <span class="c-keyword">int</span> num = <span class="c-number">7</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"%d是%s\n"</span>, num, (num % <span class="c-number">2</span> == <span class="c-number">0</span>) ? <span class="c-string">"偶数"</span> : <span class="c-string">"奇数"</span>);
+    
+    <span class="c-comment">// 计算绝对值</span>
+    <span class="c-keyword">int</span> x = <span class="c-number">-5</span>;
+    <span class="c-keyword">int</span> abs_x = (x < <span class="c-number">0</span>) ? -x : x;
+    <span class="c-function">printf</span>(<span class="c-string">"%d的绝对值是%d\n"</span>, x, abs_x);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                        
+                        <div class="tip-box">
+                            <strong>使用建议：</strong>
+                            <p>• 三元运算符适合简单的二选一逻辑<br>
+                            • 如果逻辑复杂或需要多条语句，还是用if-else更清晰<br>
+                            • 可以嵌套使用，但不建议嵌套太多层，会降低可读性</p>
+                        </div>
+                        
+                        <h4>嵌套的三元运算符</h4>
+                        <p>三元运算符可以嵌套，但要注意可读性。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">嵌套三元运算符</div>
+                            <pre><code><span class="c-comment">// 嵌套三元运算符（不推荐过度使用）</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score = <span class="c-number">85</span>;
+    
+    <span class="c-comment">// 嵌套的三元运算符</span>
+    <span class="c-keyword">char</span> grade = (score >= <span class="c-number">90</span>) ? <span class="c-string">'A'</span> : 
+                  (score >= <span class="c-number">80</span>) ? <span class="c-string">'B'</span> : 
+                  (score >= <span class="c-number">60</span>) ? <span class="c-string">'C'</span> : <span class="c-string">'D'</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"成绩%d，等级%c\n"</span>, score, grade);
+    
+    <span class="c-comment">// 对比：用if-else更清晰</span>
+    <span class="c-keyword">char</span> grade2;
+    <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) grade2 = <span class="c-string">'A'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">80</span>) grade2 = <span class="c-string">'B'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) grade2 = <span class="c-string">'C'</span>;
+    <span class="c-keyword">else</span> grade2 = <span class="c-string">'D'</span>;
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">三元运算符练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：找最小值</strong></p>
+                            <p>使用三元运算符，编写程序输入两个数，输出较小的那个。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a, b;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入两个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d %d"</span>, &a, &b);
+    
+    <span class="c-keyword">int</span> min = (a < b) ? a : b;
+    <span class="c-function">printf</span>(<span class="c-string">"较小值是: %d\n"</span>, min);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：限制范围</strong></p>
+                            <p>输入一个整数，如果超过100就输出100，如果小于0就输出0，否则输出原值。使用三元运算符实现。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
+    
+    <span class="c-comment">// 嵌套三元运算符</span>
+    <span class="c-keyword">int</span> result = (num > <span class="c-number">100</span>) ? <span class="c-number">100</span> : (num < <span class="c-number">0</span>) ? <span class="c-number">0</span> : num;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"限制后的值: %d\n"</span>, result);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 常见错误 -->
+            <section id="common-errors" class="section">
+                <h2 class="section-title">常见错误</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">最容易犯的错误</h3>
+                    <div class="subsection-content">
+                        <div class="error-examples">
+                            <div class="error-item">
+                                <strong>错误1：忘记scanf的&</strong>
+                                <div class="code-block">
+                                    <pre><code><span class="c-comment">// 错误</span>
+<span class="c-keyword">int</span> num;
+<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, num);  <span class="c-comment">// 缺少&</span>
+
+<span class="c-comment">// 正确</span>
+<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);</code></pre>
+                                </div>
+                            </div>
+                            
+                            <div class="error-item">
+                                <strong>错误2：赋值与比较混淆</strong>
+                                <div class="code-block">
+                                    <pre><code><span class="c-comment">// 错误</span>
+<span class="c-keyword">if</span> (x = <span class="c-number">5</span>) {  <span class="c-comment">// 赋值</span>
+    <span class="c-function">printf</span>(<span class="c-string">"相等"</span>);
+}
+
+<span class="c-comment">// 正确</span>
+<span class="c-keyword">if</span> (x == <span class="c-number">5</span>) {  <span class="c-comment">// 比较</span>
+    <span class="c-function">printf</span>(<span class="c-string">"相等"</span>);
+}</code></pre>
+                                </div>
+                            </div>
+                            
+                            <div class="error-item">
+                                <strong>错误3：错误的范围判断</strong>
+                                <div class="code-block">
+                                    <pre><code><span class="c-comment">// 错误</span>
+<span class="c-keyword">if</span> (<span class="c-number">0</span> < x < <span class="c-number">100</span>) {  <span class="c-comment">// 数学中正确，C语言中错误</span>
+    <span class="c-function">printf</span>(<span class="c-string">"在范围内"</span>);
+}
+
+<span class="c-comment">// 正确</span>
+<span class="c-keyword">if</span> (x > <span class="c-number">0</span> && x < <span class="c-number">100</span>) {
+    <span class="c-function">printf</span>(<span class="c-string">"在范围内"</span>);
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 为所有代码块添加复制按钮
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            
+            codeBlocks.forEach(function(block) {
+                const title = block.querySelector('.code-block-title');
+                if (title) {
+                    // 创建复制按钮
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.textContent = '复制';
+                    
+                    // 添加点击事件
+                    copyButton.addEventListener('click', function() {
+                        const code = block.querySelector('code');
+                        if (code) {
+                            // 获取代码内容
+                            const textToCopy = code.textContent;
+                            
+                            // 创建临时文本区域
+                            const textArea = document.createElement('textarea');
+                            textArea.value = textToCopy;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            
+                            try {
+                                // 执行复制命令
+                                const successful = document.execCommand('copy');
+                                if (successful) {
+                                    // 显示复制成功状态
+                                    copyButton.textContent = '已复制';
+                                    copyButton.classList.add('copied');
+                                    
+                                    // 2秒后恢复按钮状态
+                                    setTimeout(function() {
+                                        copyButton.textContent = '复制';
+                                        copyButton.classList.remove('copied');
+                                    }, 2000);
+                                }
+                            } catch (err) {
+                                console.error('复制失败:', err);
+                            }
+                            
+                            // 移除临时文本区域
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                    
+                    // 将按钮添加到标题栏
+                    title.appendChild(copyButton);
+                }
+            });
+        });
+
+        // 导航栏高亮效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.tutorial-nav a');
+            const sections = document.querySelectorAll('.section');
+            
+            // 点击导航链接时更新高亮
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 滚动时自动高亮对应章节
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -70% 0px',
+                threshold: 0
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>

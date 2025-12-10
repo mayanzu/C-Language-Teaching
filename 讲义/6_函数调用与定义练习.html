@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数调用与定义练习 - C语言教程</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 侧边导航栏 -->
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#function-definition">函数定义</a></li>
+            <li><a href="#function-declaration">函数声明</a></li>
+            <li><a href="#function-call">函数调用</a></li>
+            <li><a href="#parameters">参数传递</a></li>
+            <li><a href="#recursion">递归函数</a></li>
+            
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="tutorial-content">
+        <!-- 页面标题 -->
+        <header class="tutorial-header">
+            <h1>函数调用与定义练习</h1>
+            <p>掌握 C 语言函数的定义、声明和调用方法</p>
+        </header>
+            <!-- 简介 -->
+            <section id="intro" class="section">
+                <h2 class="section-title">函数基础</h2>
+                <div class="subsection-content">
+                    <p>函数是C语言程序的基本组成单元，用于封装可重复使用的代码块。每个函数都有特定的功能，通过函数名、参数和返回值进行交互。</p>
+                    
+                    <div class="new-learner-tip">
+                        <strong>新手注意：</strong>
+                        <ul>
+                            <li>函数必须先声明后使用</li>
+                            <li>main函数是程序的入口点</li>
+                            <li>函数可以调用其他函数</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 函数定义 -->
+            <section id="function-definition" class="section">
+                <h2 class="section-title">函数定义</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数的组成结构</h3>
+                    <div class="subsection-content">
+                        <h4>什么是函数？</h4>
+                        <p>函数是C语言中用于<strong>封装特定功能代码</strong>的基本单元。可以把函数理解为一个"黑盒子"：给它输入（参数），它经过处理后给出输出（返回值）。使用函数可以让代码更加模块化、易于维护和复用。</p>
+                        
+                        <h4>为什么要使用函数？</h4>
+                        <ul>
+                            <li><strong>代码复用：</strong>相同的功能不需要重复编写，一次定义多次使用</li>
+                            <li><strong>模块化：</strong>将复杂问题分解成多个小问题，逐个解决</li>
+                            <li><strong>易于维护：</strong>修改功能时只需修改对应的函数，不影响其他代码</li>
+                            <li><strong>提高可读性：</strong>良好命名的函数让代码意图更清晰</li>
+                        </ul>
+                        
+                        <h4>函数的四个组成部分</h4>
+                        <p>每个函数都由四个基本部分组成：</p>
+                        <ul>
+                            <li><strong>返回值类型：</strong>函数返回的数据类型（int, double, void等）</li>
+                            <li><strong>函数名：</strong>遵循标识符命名规则，建议使用动词或动词短语</li>
+                            <li><strong>参数列表：</strong>函数接收的输入数据（可以为空）</li>
+                            <li><strong>函数体：</strong>实现功能的代码块，用大括号 {} 包围</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">函数基本格式</div>
+                        <pre><code><span class="c-comment">// 函数定义的基本格式</span>
+<span class="c-keyword">返回值类型</span> <span class="c-function">函数名</span>(<span class="c-keyword">参数类型1 参数名1, 参数类型2 参数名2</span>) {
+    <span class="c-comment">// 函数体：实现功能的代码</span>
+    <span class="c-keyword">return</span> <span class="c-keyword">返回值</span>;  <span class="c-comment">// void类型不需要return</span>
+}</code></pre>
+                    </div>
+                    
+                        <h4>简单示例：求两数之和</h4>
+                        <div class="code-block">
+                        <div class="code-block-title">有参数有返回值的函数</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数定义：计算两数之和</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a + b;  <span class="c-comment">// 返回结果</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> sum = <span class="c-function">add</span>(<span class="c-number">5</span>, <span class="c-number">3</span>);  <span class="c-comment">// 调用函数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"5 + 3 = %d\n"</span>, sum);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>⚠️ 函数定义的注意事项：</strong>
+                        <ul>
+                            <li>函数名应该清晰表达功能（如calculateSum而不是func1）</li>
+                            <li>形参和实参的数量、类型必须匹配</li>
+                            <li>return语句会立即结束函数并返回值</li>
+                            <li>void函数不能返回值，其他类型函数必须return对应类型的值</li>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数的组成结构练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：编写最大值函数</strong></p>
+                            <p>编写一个函数，接收两个整数作为参数，返回较大的那个数。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 返回两个数中的最大值</span>
+<span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a &gt; b ? a : b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">20</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"较大值: %d\n"</span>, <span class="c-function">max</span>(x, y));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：打印星号行</strong></p>
+                            <p>编写一个void函数，接收一个整数n，打印n个星号。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 打印n个星号</span>
+<span class="c-keyword">void</span> <span class="c-function">printStars</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"*"</span>);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printStars</span>(<span class="c-number">5</span>);  <span class="c-comment">// 输出: *****</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习3：判断奇偶数</strong></p>
+                            <p>编写函数判断一个整数是否为偶数，是返回1，否则返回0。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 判断是否为偶数</span>
+<span class="c-keyword">int</span> <span class="c-function">isEven</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">return</span> n % <span class="c-number">2</span> == <span class="c-number">0</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num = <span class="c-number">8</span>;
+    <span class="c-keyword">if</span>(<span class="c-function">isEven</span>(num)) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d是偶数\n"</span>, num);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"%d是奇数\n"</span>, num);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数类型综合练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：温度转换函数</strong></p>
+                            <p>编写函数将摄氏温度转换为华氏温度，公式：F = C × 9/5 + 32。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 摄氏度转华氏度</span>
+<span class="c-keyword">double</span> <span class="c-function">celsiusToFahrenheit</span>(<span class="c-keyword">double</span> celsius) {
+    <span class="c-keyword">return</span> celsius * <span class="c-number">9.0</span> / <span class="c-number">5.0</span> + <span class="c-number">32.0</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> c = <span class="c-number">25.0</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"%.1f°C = %.1f°F\n"</span>, c, <span class="c-function">celsiusToFahrenheit</span>(c));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：判断闰年函数</strong></p>
+                            <p>编写函数判断某年是否为闰年。闰年规则：能被4整除但不能被100整除，或能被400整除。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 判断是否为闰年（返回1表示是，0表示否）</span>
+<span class="c-keyword">int</span> <span class="c-function">isLeapYear</span>(<span class="c-keyword">int</span> year) {
+    <span class="c-keyword">return</span> (year % <span class="c-number">4</span> == <span class="c-number">0</span> && year % <span class="c-number">100</span> != <span class="c-number">0</span>) || (year % <span class="c-number">400</span> == <span class="c-number">0</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> year = <span class="c-number">2024</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"%d年%s闰年\n"</span>, year, <span class="c-function">isLeapYear</span>(year) ? <span class="c-string">"是"</span> : <span class="c-string">"不是"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习3：圆的面积</strong></p>
+                            <p>编写函数计算圆的面积，公式：S = π × r²（π取3.14）。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 计算圆的面积</span>
+<span class="c-keyword">double</span> <span class="c-function">circleArea</span>(<span class="c-keyword">double</span> radius) {
+    <span class="c-keyword">return</span> <span class="c-number">3.14</span> * radius * radius;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> r = <span class="c-number">5.0</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"半径%.1f的圆面积: %.2f\n"</span>, r, <span class="c-function">circleArea</span>(r));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 函数声明 -->
+            <section id="function-declaration" class="section">
+                <h2 class="section-title">函数声明</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数原型声明</h3>
+                    <div class="subsection-content">
+                        <h4>什么是函数声明？</h4>
+                        <p>函数声明（也叫函数原型）是告诉编译器函数存在的一种方式。它只描述函数的接口（返回值类型、函数名、参数类型），不包含函数的具体实现。</p>
+                        
+                        <h4>为什么需要函数声明？</h4>
+                        <ul>
+                            <li><strong>编译顺序：</strong>C语言从上到下编译，如果函数定义在调用之后，需要先声明</li>
+                            <li><strong>代码组织：</strong>可以把函数定义放在文件末尾，保持main函数在前面，便于阅读</li>
+                            <li><strong>多文件开发：</strong>在头文件中声明函数，在源文件中定义，实现模块化编程</li>
+                        </ul>
+                        
+                        <h4>函数声明的格式</h4>
+                        <div class="code-block">
+                        <div class="code-block-title">函数声明的基本格式</div>
+                        <pre><code><span class="c-comment">// 格式：返回值类型 函数名(参数类型列表);</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);      <span class="c-comment">// 可以省略参数名</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);  <span class="c-comment">// 也可以带参数名</span>
+<span class="c-keyword">void</span> <span class="c-function">greet</span>(<span class="c-keyword">char</span>[]);        <span class="c-comment">// 数组参数</span></code></pre>
+                    </div>
+                        
+                        <h4>简单示例</h4>
+                        <div class="code-block">
+                        <div class="code-block-title">函数声明示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"较大值: %d\n"</span>, <span class="c-function">max</span>(a, b));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 函数定义在后面</span>
+<span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> x, <span class="c-keyword">int</span> y) {
+    <span class="c-keyword">return</span> x &gt; y ? x : y;
+}</code></pre>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数声明练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：计算立方</strong></p>
+                            <p>先声明函数cube，再在main中调用它计算一个数的立方，最后定义函数。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">int</span> <span class="c-function">cube</span>(<span class="c-keyword">int</span>);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> n = <span class="c-number">3</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"%d的立方: %d\n"</span>, n, <span class="c-function">cube</span>(n));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 函数定义</span>
+<span class="c-keyword">int</span> <span class="c-function">cube</span>(<span class="c-keyword">int</span> x) {
+    <span class="c-keyword">return</span> x * x * x;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：多函数声明</strong></p>
+                            <p>声明并定义三个函数：add（加）、sub（减）、mul（乘），在main中调用它们。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);
+<span class="c-keyword">int</span> <span class="c-function">sub</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);
+<span class="c-keyword">int</span> <span class="c-function">mul</span>(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"10 + 5 = %d\n"</span>, <span class="c-function">add</span>(<span class="c-number">10</span>, <span class="c-number">5</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"10 - 5 = %d\n"</span>, <span class="c-function">sub</span>(<span class="c-number">10</span>, <span class="c-number">5</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"10 * 5 = %d\n"</span>, <span class="c-function">mul</span>(<span class="c-number">10</span>, <span class="c-number">5</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a + b; }
+<span class="c-keyword">int</span> <span class="c-function">sub</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a - b; }
+<span class="c-keyword">int</span> <span class="c-function">mul</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a * b; }</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+
+            </section>
+
+            <!-- 函数调用 -->
+            <section id="function-call" class="section">
+                <h2 class="section-title">函数调用</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数调用的方式</h3>
+                    <div class="subsection-content">
+                        <h4>如何调用函数？</h4>
+                        <p>函数调用就是使用已经定义好的函数。调用时需要提供函数名和必要的参数（实参），函数执行后可能会返回一个值。</p>
+                        
+                        <h4>函数调用的几种方式</h4>
+                        <ul>
+                            <li><strong>赋值方式：</strong>将函数返回值赋给变量</li>
+                            <li><strong>表达式方式：</strong>直接在表达式中调用函数</li>
+                            <li><strong>语句方式：</strong>单独作为一条语句（常用于void函数）</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">函数调用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">square</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">return</span> n * n;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 方式1：赋值给变量</span>
+    <span class="c-keyword">int</span> result = <span class="c-function">square</span>(<span class="c-number">5</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"5的平方: %d\n"</span>, result);
+    
+    <span class="c-comment">// 方式2：直接用在表达式中</span>
+    <span class="c-function">printf</span>(<span class="c-string">"3的平方: %d\n"</span>, <span class="c-function">square</span>(<span class="c-number">3</span>));
+    
+    <span class="c-comment">// 方式3：作为参数传递</span>
+    <span class="c-function">printf</span>(<span class="c-string">"结果: %d\n"</span>, <span class="c-function">square</span>(<span class="c-number">2</span>) + <span class="c-function">square</span>(<span class="c-number">3</span>));
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">函数调用练习</h3>
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：多次调用函数</strong></p>
+                            <p>定义函数abs求绝对值，在main中调用它计算-5和3的绝对值。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">abs</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">return</span> n &lt; <span class="c-number">0</span> ? -n : n;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"-5的绝对值: %d\n"</span>, <span class="c-function">abs</span>(-<span class="c-number">5</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"3的绝对值: %d\n"</span>, <span class="c-function">abs</span>(<span class="c-number">3</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：函数嵌套调用</strong></p>
+                            <p>定义min和max函数，编写函数middle，找出三个数中的中间值。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">min</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a &lt; b ? a : b; }
+<span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a &gt; b ? a : b; }
+
+<span class="c-keyword">int</span> <span class="c-function">middle</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b, <span class="c-keyword">int</span> c) {
+    <span class="c-keyword">return</span> a + b + c - <span class="c-function">min</span>(<span class="c-function">min</span>(a, b), c) - <span class="c-function">max</span>(<span class="c-function">max</span>(a, b), c);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"中间值: %d\n"</span>, <span class="c-function">middle</span>(<span class="c-number">5</span>, <span class="c-number">2</span>, <span class="c-number">8</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习3：连续调用</strong></p>
+                            <p>定义函数increment(n)返回n+1，调用它三次计算10+1+1+1的结果。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+                                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">increment</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">return</span> n + <span class="c-number">1</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> result = <span class="c-function">increment</span>(<span class="c-function">increment</span>(<span class="c-function">increment</span>(<span class="c-number">10</span>)));
+    <span class="c-function">printf</span>(<span class="c-string">"结果: %d\n"</span>, result);  <span class="c-comment">// 13</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">实际应用：简单计算器</h3>
+                    <div class="code-block">
+                        <div class="code-block-title">函数调用综合示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">double</span> <span class="c-function">add</span>(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>);
+<span class="c-keyword">double</span> <span class="c-function">subtract</span>(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>);
+<span class="c-keyword">double</span> <span class="c-function">multiply</span>(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>);
+<span class="c-keyword">double</span> <span class="c-function">divide</span>(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> accounts[<span class="c-number">10</span>][<span class="c-number">20</span>];  <span class="c-comment">// 最多10个账户，每个账户名最多19字符</span>
+    <span class="c-keyword">double</span> balances[<span class="c-number">10</span>] = {<span class="c-number">0</span>}; <span class="c-comment">// 账户余额</span>
+    <span class="c-keyword">int</span> accountCount = <span class="c-number">0</span>;     <span class="c-comment">// 当前账户数量</span>
+    <span class="c-keyword">int</span> choice;
+    
+    <span class="c-keyword">do</span> {
+        <span class="c-function">displayMenu</span>();  <span class="c-comment">// 函数调用：显示菜单</span>
+        <span class="c-function">printf</span>(<span class="c-string">"请选择操作 (1-6): "</span>);
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &choice);
+        
+        <span class="c-keyword">switch</span>(choice) {
+            <span class="c-keyword">case</span> <span class="c-number">1</span>: {
+                <span class="c-keyword">int</span> result = <span class="c-function">createAccount</span>(accounts, balances, &accountCount);  <span class="c-comment">// 函数调用：创建账户</span>
+                <span class="c-keyword">if</span>(result) {
+                    <span class="c-function">printf</span>(<span class="c-string">"账户创建成功!\n"</span>);
+                } <span class="c-keyword">else</span> {
+                    <span class="c-function">printf</span>(<span class="c-string">"账户已满，无法创建!\n"</span>);
+                }
+                <span class="c-keyword">break</span>;
+            }
+            <span class="c-keyword">case</span> <span class="c-number">2</span>: {
+                <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+                <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
+                <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
+                <span class="c-keyword">int</span> index = <span class="c-function">findAccount</span>(accounts, name, accountCount);  <span class="c-comment">// 函数调用：查找账户</span>
+                <span class="c-keyword">if</span>(index != -<span class="c-number">1</span>) {
+                    <span class="c-function">displayBalance</span>(accounts, balances, index);  <span class="c-comment">// 函数调用：显示余额</span>
+                } <span class="c-keyword">else</span> {
+                    <span class="c-function">printf</span>(<span class="c-string">"账户不存在!\n"</span>);
+                }
+                <span class="c-keyword">break</span>;
+            }
+            <span class="c-keyword">case</span> <span class="c-number">3</span>: {
+                <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+                <span class="c-keyword">double</span> amount;
+                <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
+                <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
+                <span class="c-function">printf</span>(<span class="c-string">"请输入存款金额: "</span>);
+                <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amount);
+                
+                <span class="c-keyword">int</span> index = <span class="c-function">findAccount</span>(accounts, name, accountCount);
+                <span class="c-keyword">if</span>(index != -<span class="c-number">1</span>) {
+                    <span class="c-function">deposit</span>(balances, index, amount);  <span class="c-comment">// 函数调用：存款</span>
+                    <span class="c-function">printf</span>(<span class="c-string">"存款成功!\n"</span>);
+                } <span class="c-keyword">else</span> {
+                    <span class="c-function">printf</span>(<span class="c-string">"账户不存在!\n"</span>);
+                }
+                <span class="c-keyword">break</span>;
+            }
+            <span class="c-keyword">case</span> <span class="c-number">4</span>: {
+                <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+                <span class="c-keyword">double</span> amount;
+                <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
+                <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
+                <span class="c-function">printf</span>(<span class="c-string">"请输入取款金额: "</span>);
+                <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amount);
+                
+                <span class="c-keyword">int</span> index = <span class="c-function">findAccount</span>(accounts, name, accountCount);
+                <span class="c-keyword">if</span>(index != -<span class="c-number">1</span>) {
+                    <span class="c-keyword">int</span> result = <span class="c-function">withdraw</span>(balances, index, amount);  <span class="c-comment">// 函数调用：取款</span>
+                    <span class="c-keyword">if</span>(result) {
+                        <span class="c-function">printf</span>(<span class="c-string">"取款成功!\n"</span>);
+                    } <span class="c-keyword">else</span> {
+                        <span class="c-function">printf</span>(<span class="c-string">"余额不足!\n"</span>);
+                    }
+                } <span class="c-keyword">else</span> {
+                    <span class="c-function">printf</span>(<span class="c-string">"账户不存在!\n"</span>);
+                }
+                <span class="c-keyword">break</span>;
+            }
+            <span class="c-keyword">case</span> <span class="c-number">5</span>:
+                <span class="c-function">displayAllAccounts</span>(accounts, balances, accountCount);  <span class="c-comment">// 函数调用：显示所有账户</span>
+                <span class="c-keyword">break</span>;
+            <span class="c-keyword">case</span> <span class="c-number">6</span>:
+                <span class="c-function">printf</span>(<span class="c-string">"感谢使用，再见!\n"</span>);
+                <span class="c-keyword">break</span>;
+            <span class="c-keyword">default</span>:
+                <span class="c-function">printf</span>(<span class="c-string">"无效选择!\n"</span>);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    } <span class="c-keyword">while</span>(choice != <span class="c-number">6</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 函数定义</span>
+<span class="c-keyword">void</span> <span class="c-function">displayMenu</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"=== 银行账户管理系统 ===\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"1. 创建账户\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"2. 查询余额\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"3. 存款\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"4. 取款\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"5. 显示所有账户\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"6. 退出\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"========================\n"</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">createAccount</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> *count) {
+    <span class="c-keyword">if</span>(*count >= <span class="c-number">10</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;  <span class="c-comment">// 账户已满</span>
+    
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-function">printf</span>(<span class="c-string">"请输入账户名: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
+    
+    <span class="c-comment">// 检查账户是否已存在</span>
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < *count; i++) {
+        <span class="c-keyword">if</span>(<span class="c-function">strcmp</span>(accounts[i], name) == <span class="c-number">0</span>) {
+            <span class="c-function">printf</span>(<span class="c-string">"账户已存在!\n"</span>);
+            <span class="c-keyword">return</span> <span class="c-number">0</span>;
+        }
+    }
+    
+    <span class="c-function">strcpy</span>(accounts[*count], name);
+    balances[*count] = <span class="c-number">0.0</span>;
+    (*count)++;
+    <span class="c-keyword">return</span> <span class="c-number">1</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">findAccount</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">char</span> name[], <span class="c-keyword">int</span> count) {
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
+        <span class="c-keyword">if</span>(<span class="c-function">strcmp</span>(accounts[i], name) == <span class="c-number">0</span>) {
+            <span class="c-keyword">return</span> i;
+        }
+    }
+    <span class="c-keyword">return</span> -<span class="c-number">1</span>;  <span class="c-comment">// 未找到</span>
+}
+
+<span class="c-keyword">void</span> <span class="c-function">deposit</span>(<span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> index, <span class="c-keyword">double</span> amount) {
+    balances[index] += amount;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">withdraw</span>(<span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> index, <span class="c-keyword">double</span> amount) {
+    <span class="c-keyword">if</span>(balances[index] >= amount) {
+        balances[index] -= amount;
+        <span class="c-keyword">return</span> <span class="c-number">1</span>;  <span class="c-comment">// 成功</span>
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;  <span class="c-comment">// 失败</span>
+}
+
+<span class="c-keyword">void</span> <span class="c-function">displayBalance</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> index) {
+    <span class="c-function">printf</span>(<span class="c-string">"账户: %s\n"</span>, accounts[index]);
+    <span class="c-function">printf</span>(<span class="c-string">"余额: %.2f元\n"</span>, balances[index]);
+}
+
+<span class="c-keyword">void</span> <span class="c-function">displayAllAccounts</span>(<span class="c-keyword">char</span> accounts[][20], <span class="c-keyword">double</span> balances[], <span class="c-keyword">int</span> count) {
+    <span class="c-function">printf</span>(<span class="c-string">"=== 所有账户信息 ===\n"</span>);
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d. %s: %.2f元\n"</span>, i+<span class="c-number">1</span>, accounts[i], balances[index]);
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 参数传递 -->
+            <section id="parameters" class="section">
+                <h2 class="section-title">参数传递</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">值传递与地址传递</h3>
+                    <div class="subsection-content">
+                        <h4>什么是参数传递？</h4>
+                        <p>参数传递是指将实参的值传递给函数形参的过程。C语言有两种主要的参数传递方式：<strong>值传递</strong>和<strong>地址传递</strong>。</p>
+                        
+                        <h4>两种传递方式的区别</h4>
+                        <ul>
+                            <li><strong>值传递：</strong>传递变量的副本，函数内修改不影响原变量</li>
+                            <li><strong>地址传递：</strong>传递变量的地址（指针），函数内可以修改原变量</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">值传递 vs 地址传递</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 值传递：不能修改原变量</span>
+<span class="c-keyword">void</span> <span class="c-function">modifyValue</span>(<span class="c-keyword">int</span> x) {
+    x = x * <span class="c-number">2</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"函数内x: %d\n"</span>, x);
+}
+
+<span class="c-comment">// 地址传递：可以修改原变量</span>
+<span class="c-keyword">void</span> <span class="c-function">modifyPtr</span>(<span class="c-keyword">int</span> *x) {
+    *x = *x * <span class="c-number">2</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">10</span>;
+    
+    <span class="c-function">modifyValue</span>(a);     <span class="c-comment">// a不变，仍为10</span>
+    <span class="c-function">modifyPtr</span>(&amp;b);      <span class="c-comment">// b改变，变为20</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d\n"</span>, a, b);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    </div>
+                    
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：交换两个变量</strong></p>
+                            <p>编写swap函数，使用指针参数交换两个整数的值。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">swap</span>(<span class="c-keyword">int</span> *x, <span class="c-keyword">int</span> *y) {
+    <span class="c-keyword">int</span> t = *x; *x = *y; *y = t;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a=<span class="c-number">10</span>, b=<span class="c-number">20</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"交换前: a=%d, b=%d\n"</span>, a, b);
+    <span class="c-function">swap</span>(&a, &b);
+    <span class="c-function">printf</span>(<span class="c-string">"交换后: a=%d, b=%d\n"</span>, a, b);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：增加变量值</strong></p>
+                            <p>编写increment函数，接收一个指针，将指向的值加1。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">increment</span>(<span class="c-keyword">int</span> *n) {
+    (*n)++;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num = <span class="c-number">5</span>;
+    <span class="c-function">increment</span>(&num);
+    <span class="c-function">printf</span>(<span class="c-string">"num = %d\n"</span>, num);  <span class="c-comment">// 输出6</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习3：求两个数的商和余数</strong></p>
+                            <p>编写divmod函数，计算a÷b的商和余数，通过指针参数返回两个结果。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">divmod</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b, <span class="c-keyword">int</span> *q, <span class="c-keyword">int</span> *r) {
+    *q = a / b;
+    *r = a % b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> quotient, remainder;
+    <span class="c-function">divmod</span>(<span class="c-number">17</span>, <span class="c-number">5</span>, &quotient, &remainder);
+    <span class="c-function">printf</span>(<span class="c-string">"17÷5 = %d...%d\n"</span>, quotient, remainder);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">数组作为函数参数</h3>
+                    <div class="subsection-content">
+                        <h4>数组参数的特点</h4>
+                        <p>数组作为函数参数时，传递的是<strong>数组首地址</strong>（指针），因此函数内可以修改原数组的元素。同时需要传递数组大小，因为函数无法自动获知数组长度。</p>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">数组参数示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 计算数组元素之和</span>
+<span class="c-keyword">int</span> <span class="c-function">arraySum</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < size; i++) {
+        sum += arr[i];
+    }
+    <span class="c-keyword">return</span> sum;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> nums[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
+    <span class="c-function">printf</span>(<span class="c-string">"数组和: %d\n"</span>, <span class="c-function">arraySum</span>(nums, <span class="c-number">5</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    </div>
+                    
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：找数组最大值</strong></p>
+                            <p>编写函数findMax，返回数组中的最大值。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">findMax</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">int</span> max = arr[<span class="c-number">0</span>];
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i < size; i++) {
+        <span class="c-keyword">if</span>(arr[i] > max) max = arr[i];
+    }
+    <span class="c-keyword">return</span> max;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">3</span>, <span class="c-number">9</span>, <span class="c-number">1</span>, <span class="c-number">7</span>, <span class="c-number">5</span>};
+    <span class="c-function">printf</span>(<span class="c-string">"最大值: %d\n"</span>, <span class="c-function">findMax</span>(arr, <span class="c-number">5</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：数组元素翻倍</strong></p>
+                            <p>编写函数doubleArray，将数组中每个元素乘以2。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">doubleArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < size; i++) {
+        arr[i] *= <span class="c-number">2</span>;
+    }
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>};
+    <span class="c-function">doubleArray</span>(arr, <span class="c-number">3</span>);
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);  <span class="c-comment">// 输出: 2 4 6</span>
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习3：字符串长度</strong></p>
+                            <p>编写函数myStrlen，计算字符串长度（不使用strlen）。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">myStrlen</span>(<span class="c-keyword">char</span> str[]) {
+    <span class="c-keyword">int</span> len = <span class="c-number">0</span>;
+    <span class="c-keyword">while</span>(str[len] != <span class="c-string">'\0'</span>) {
+        len++;
+    }
+    <span class="c-keyword">return</span> len;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"长度: %d\n"</span>, <span class="c-function">myStrlen</span>(<span class="c-string">"Hello"</span>));  <span class="c-comment">// 5</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                    <div class="code-block">
+                        <div class="code-block-title">综合参数传递应用</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-comment">// 学生结构体</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
+    <span class="c-keyword">int</span> id;
+    <span class="c-keyword">int</span> scores[<span class="c-number">3</span>];  <span class="c-comment">// 三科成绩</span>
+} Student;
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">void</span> <span class="c-function">inputStudent</span>(Student *s);
+<span class="c-keyword">void</span> <span class="c-function">printStudent</span>(<span class="c-keyword">const</span> Student *s);
+<span class="c-keyword">double</span> <span class="c-function">calculateAverage</span>(<span class="c-keyword">const</span> <span class="c-keyword">int</span> scores[], <span class="c-keyword">int</span> count);
+<span class="c-keyword">char</span> <span class="c-function">getGrade</span>(<span class="c-keyword">double</span> average);
+<span class="c-keyword">void</span> <span class="c-function">sortStudentsByAverage</span>(Student students[], <span class="c-keyword">int</span> count);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    Student students[<span class="c-number">3</span>];
+    
+    <span class="c-function">printf</span>(<span class="c-string">"=== 学生信息录入 ===\n"</span>);
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"\n录入第%d个学生信息:\n"</span>, i+<span class="c-number">1</span>);
+        <span class="c-function">inputStudent</span>(&students[i]);  <span class="c-comment">// 结构体指针传递</span>
+    }
+    
+    <span class="c-function">printf</span>(<span class="c-string">"\n=== 学生信息显示 ===\n"</span>);
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">printStudent</span>(&students[i]);  <span class="c-comment">// 结构体指针传递</span>
+    }
+    
+    <span class="c-function">sortStudentsByAverage</span>(students, <span class="c-number">3</span>);  <span class="c-comment">// 数组传递</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"\n=== 按平均分排序后 ===\n"</span>);
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">printStudent</span>(&students[i]);
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-keyword">void</span> <span class="c-function">inputStudent</span>(Student *s) {
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, s-&gt;name);
+    <span class="c-function">printf</span>(<span class="c-string">"学号: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &s-&gt;id);
+    <span class="c-function">printf</span>(<span class="c-string">"三科成绩 (语文 数学 英语): "</span>);
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &s-&gt;scores[i]);
+    }
+}
+
+<span class="c-keyword">void</span> <span class="c-function">printStudent</span>(<span class="c-keyword">const</span> Student *s) {
+    <span class="c-keyword">double</span> avg = <span class="c-function">calculateAverage</span>(s-&gt;scores, <span class="c-number">3</span>);  <span class="c-comment">// 数组传递</span>
+    <span class="c-keyword">char</span> grade = <span class="c-function">getGrade</span>(avg);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s, 学号: %d\n"</span>, s-&gt;name, s-&gt;id);
+    <span class="c-function">printf</span>(<span class="c-string">"成绩: %d %d %d, 平均分: %.1f, 等级: %c\n"</span>, 
+           s-&gt;scores[<span class="c-number">0</span>], s-&gt;scores[<span class="c-number">1</span>], s-&gt;scores[<span class="c-number">2</span>], avg, grade);
+}
+
+<span class="c-keyword">double</span> <span class="c-function">calculateAverage</span>(<span class="c-keyword">const</span> <span class="c-keyword">int</span> scores[], <span class="c-keyword">int</span> count) {
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
+        sum += scores[i];
+    }
+    <span class="c-keyword">return</span> (<span class="c-keyword">double</span>)sum / count;
+}
+
+<span class="c-keyword">char</span> <span class="c-function">getGrade</span>(<span class="c-keyword">double</span> average) {
+    <span class="c-keyword">if</span>(average >= <span class="c-number">90</span>) <span class="c-keyword">return</span> <span class="c-string">'A'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span>(average >= <span class="c-number">80</span>) <span class="c-keyword">return</span> <span class="c-string">'B'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span>(average >= <span class="c-number">70</span>) <span class="c-keyword">return</span> <span class="c-string">'C'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">if</span>(average >= <span class="c-number">60</span>) <span class="c-keyword">return</span> <span class="c-string">'D'</span>;
+    <span class="c-keyword">else</span> <span class="c-keyword">return</span> <span class="c-string">'F'</span>;
+}
+
+<span class="c-keyword">void</span> <span class="c-function">sortStudentsByAverage</span>(Student students[], <span class="c-keyword">int</span> count) {
+    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count-<span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span>(<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < count-i-<span class="c-number">1</span>; j++) {
+            <span class="c-keyword">double</span> avg1 = <span class="c-function">calculateAverage</span>(students[j].scores, <span class="c-number">3</span>);
+            <span class="c-keyword">double</span> avg2 = <span class="c-function">calculateAverage</span>(students[j+<span class="c-number">1</span>].scores, <span class="c-number">3</span>);
+            
+            <span class="c-keyword">if</span>(avg1 < avg2) {
+                Student temp = students[j];
+                students[j] = students[j+<span class="c-number">1</span>];
+                students[j+<span class="c-number">1</span>] = temp;
+            }
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 递归函数 -->
+            <section id="recursion" class="section">
+                <h2 class="section-title">递归函数</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">递归的基本概念</h3>
+                    <div class="subsection-content">
+                        <h4>什么是递归？</h4>
+                        <p>递归是指<strong>函数调用自己</strong>的编程技巧。递归函数通过将大问题分解成相同类型的小问题来解决，直到问题简单到可以直接求解为止。</p>
+                        
+                        <h4>递归的两个要素</h4>
+                        <ul>
+                            <li><strong>递归终止条件：</strong>必须有明确的结束条件，否则会无限递归</li>
+                            <li><strong>递归调用：</strong>函数调用自己，且每次调用都向终止条件靠近</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                        <div class="code-block-title">简单递归示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 计算阶乘：n! = n × (n-1)!</span>
+<span class="c-keyword">int</span> <span class="c-function">factorial</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span> (n &lt;= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;  <span class="c-comment">// 终止条件</span>
+    <span class="c-keyword">return</span> n * <span class="c-function">factorial</span>(n - <span class="c-number">1</span>);  <span class="c-comment">// 递归调用</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"5! = %d\n"</span>, <span class="c-function">factorial</span>(<span class="c-number">5</span>));  <span class="c-comment">// 120</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    </div>
+                    
+                    <div class="practice-questions">
+                        <div class="question-item">
+                            <p><strong>练习1：求1到n的和</strong></p>
+                            <p>用递归实现sum(n) = 1+2+...+n。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">sum</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n == <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    <span class="c-keyword">return</span> n + <span class="c-function">sum</span>(n - <span class="c-number">1</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"1到10的和: %d\n"</span>, <span class="c-function">sum</span>(<span class="c-number">10</span>));  <span class="c-comment">// 55</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习2：计算幂次</strong></p>
+                            <p>用递归计算x的n次方。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">power</span>(<span class="c-keyword">int</span> x, <span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n == <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    <span class="c-keyword">return</span> x * <span class="c-function">power</span>(x, n - <span class="c-number">1</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"2^3 = %d\n"</span>, <span class="c-function">power</span>(<span class="c-number">2</span>, <span class="c-number">3</span>));  <span class="c-comment">// 8</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p><strong>练习3：斐波那契数列</strong></p>
+                            <p>用递归计算斐波那契数列第n项（fib(n) = fib(n-1) + fib(n-2)）。</p>
+                            <details class="answer">
+                                <summary>查看参考答案</summary>
+                                <div class="code-block">
+    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">fib</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span>(n &lt;= <span class="c-number">1</span>) <span class="c-keyword">return</span> n;
+    <span class="c-keyword">return</span> <span class="c-function">fib</span>(n - <span class="c-number">1</span>) + <span class="c-function">fib</span>(n - <span class="c-number">2</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"第6项: %d\n"</span>, <span class="c-function">fib</span>(<span class="c-number">6</span>));  <span class="c-comment">// 8</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 练习题 -->
+
+        </div>
+    </div>
+
+    <script>
+        // 为所有代码块添加复制按钮
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            
+            codeBlocks.forEach(function(block) {
+                const title = block.querySelector('.code-block-title');
+                if (title) {
+                    // 创建复制按钮
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.textContent = '复制';
+                    
+                    // 添加点击事件
+                    copyButton.addEventListener('click', function() {
+                        const code = block.querySelector('code');
+                        if (code) {
+                            // 获取代码内容
+                            const textToCopy = code.textContent;
+                            
+                            // 创建临时文本区域
+                            const textArea = document.createElement('textarea');
+                            textArea.value = textToCopy;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            
+                            try {
+                                // 执行复制命令
+                                const successful = document.execCommand('copy');
+                                if (successful) {
+                                    // 显示复制成功状态
+                                    copyButton.textContent = '已复制';
+                                    copyButton.classList.add('copied');
+                                    
+                                    // 2秒后恢复按钮状态
+                                    setTimeout(function() {
+                                        copyButton.textContent = '复制';
+                                        copyButton.classList.remove('copied');
+                                    }, 2000);
+                                }
+                            } catch (err) {
+                                console.error('复制失败:', err);
+                            }
+                            
+                            // 移除临时文本区域
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                    
+                    // 将按钮添加到标题栏
+                    title.appendChild(copyButton);
+                }
+            });
+        });
+
+        // 导航栏高亮效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.tutorial-nav a');
+            const sections = document.querySelectorAll('.section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -70% 0px',
+                threshold: 0
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
