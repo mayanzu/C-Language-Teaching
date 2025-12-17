@@ -30,14 +30,50 @@
             <section id="intro" class="section">
                 <h2 class="section-title">指针基础</h2>
                 <div class="subsection-content">
-                    <p>指针是C语言最重要也是最难理解的概念之一。指针存储的是内存地址，通过指针可以间接访问和修改数据。</p>
+                    <h3>为什么要学习指针？</h3>
+                    <p>指针是C语言最重要也是最难理解的概念之一。掌握指针不仅是学好C语言的关键，也是理解计算机系统底层原理的基础。</p>
+                    
+                    <h4>指针的价值</h4>
+                    <ul>
+                        <li><strong>直接操作内存</strong>：通过指针可以直接访问和修改任意内存位置的数据</li>
+                        <li><strong>高效的数据传递</strong>：传递指针比复制整个数据结构更加高效</li>
+                        <li><strong>实现动态数据结构</strong>：链表、树、图等高级数据结构必须依赖指针</li>
+                        <li><strong>系统级编程</strong>：操作系统、驱动程序、嵌入式开发都大量使用指针</li>
+                    </ul>
+
+                    <h4>学习指针的四个阶段</h4>
+                    <div class="tip-box">
+                        <p><strong>阶段1：基本概念</strong></p>
+                        <p>理解什么是指针、什么是内存地址、如何声明和初始化指针。</p>
+                        
+                        <p><strong>阶段2：基本操作</strong></p>
+                        <p>掌握取地址运算符&、解引用运算符*、指针与数组的关系。</p>
+                        
+                        <p><strong>阶段3：高级特性</strong></p>
+                        <p>学习指针算术、多级指针、函数指针、动态内存管理。</p>
+                        
+                        <p><strong>阶段4：实践应用</strong></p>
+                        <p>在实际项目中灵活运用指针，实现复杂的数据结构和算法。</p>
+                    </div>
+
+                    <h4>本章节学习目标</h4>
+                    <div class="tip-box">
+                        <ul>
+                            <li>✅ 理解指针的本质和内存地址的概念</li>
+                            <li>✅ 掌握指针的声明、初始化和基本操作</li>
+                            <li>✅ 熟练使用取地址运算符&和解引用运算符*</li>
+                            <li>✅ 理解数组名与指针的关系，掌握指针访问数组</li>
+                            <li>✅ 了解常见的指针错误和安全使用方法</li>
+                        </ul>
+                    </div>
                     
                     <div class="new-learner-tip">
                         <strong>新手注意：</strong>
                         <ul>
-                            <li>指针变量存储地址</li>
-                            <li>`&` 取地址，`*` 解引用</li>
-                            <li>使用前必须初始化</li>
+                            <li>指针变量存储地址，不是存储普通数据</li>
+                            <li>`&` 取地址，`*` 解引用，这两个运算符是一对相反的操作</li>
+                            <li>使用指针前必须初始化，否则会导致程序崩溃</li>
+                            <li>多练习、多思考，指针的学习需要时间和耐心</li>
                         </ul>
                     </div>
                 </div>
@@ -48,25 +84,116 @@
                 <h2 class="section-title">指针基础</h2>
                 
                 <div class="subsection">
-                    <h3 class="subsection-title">指针的定义和基本概念</h3>
+                    <h3 class="subsection-title">什么是指针？</h3>
+                    <div class="subsection-content">
+                        <p>指针是C语言中最重要也是最强大的特性之一。理解指针是掌握C语言的关键。</p>
+                        
+                        <h4>核心概念</h4>
+                        <ul>
+                            <li><strong>指针是一个变量</strong>：和int、char等普通变量一样，指针也是变量</li>
+                            <li><strong>指针存储地址</strong>：普通变量存储数据值，而指针变量存储的是内存地址</li>
+                            <li><strong>通过地址访问数据</strong>：指针可以通过地址间接访问和修改其他变量的值</li>
+                        </ul>
+
+                        <h4>为什么需要指针？</h4>
+                        <div class="tip-box">
+                            <p><strong>1. 动态内存管理</strong></p>
+                            <p>程序运行时可以动态分配和释放内存，实现灵活的数据结构（如链表、树等）。</p>
+                            
+                            <p><strong>2. 高效的数据传递</strong></p>
+                            <p>函数参数传递时，传递指针比复制整个数据结构更高效，特别是处理大型数据时。</p>
+                            
+                            <p><strong>3. 实现复杂的数据结构</strong></p>
+                            <p>链表、树、图等高级数据结构都需要指针来实现节点之间的连接。</p>
+                            
+                            <p><strong>4. 函数返回多个值</strong></p>
+                            <p>通过指针参数，函数可以修改多个外部变量，实现返回多个值的效果。</p>
+                        </div>
+
+                        <h4>内存地址的概念</h4>
+                        <p>计算机内存就像一个巨大的公寓楼，每个房间（内存单元）都有唯一的门牌号（地址）。</p>
+                        <ul>
+                            <li><strong>每个变量都有地址</strong>：变量在内存中占据一定空间，这个空间的起始位置就是变量的地址</li>
+                            <li><strong>地址是数字</strong>：在32位系统中地址是32位整数，在64位系统中是64位整数</li>
+                            <li><strong>地址用十六进制表示</strong>：如 0x7fff5fbff8ac，以0x开头表示十六进制</li>
+                        </ul>
+
+                        <h4>指针变量的声明语法</h4>
+                        <div class="code-block">
+                            <pre>类型名 *指针变量名;</pre>
+                            <p>例如：</p>
+                            <ul>
+                                <li><code>int *p;</code> - 声明一个指向整型的指针</li>
+                                <li><code>char *str;</code> - 声明一个指向字符的指针</li>
+                                <li><code>double *d_ptr;</code> - 声明一个指向双精度浮点数的指针</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ 重要提醒：</strong>
+                            <ul>
+                                <li>星号(*) 是指针声明的标志，表示这是一个指针变量</li>
+                                <li><code>int *p;</code> 中的 <code>int</code> 表示p指向的数据类型是int，不是p本身的类型</li>
+                                <li>指针本身的大小是固定的（32位系统4字节，64位系统8字节），与指向的数据类型无关</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">指针的定义和初始化示例</h3>
+                    
+                    <div class="subsection-content">
+                        <p><strong>代码功能说明：</strong></p>
+                        <p>这个程序演示了指针的最基本用法：</p>
+                        <ul>
+                            <li>如何声明一个指针变量</li>
+                            <li>如何用 <code>&</code> 运算符获取变量的地址</li>
+                            <li>如何用 <code>*</code> 运算符通过指针访问和修改数据</li>
+                            <li>指针和普通变量的区别：指针存储地址，普通变量存储值</li>
+                        </ul>
+                        
+                        <div class="tip-box">
+                            <p><strong>重点理解：</strong></p>
+                            <ul>
+                                <li><code>int a = 42;</code> - 普通变量，a存储的是数值42</li>
+                                <li><code>int *p;</code> - 指针变量，p将用来存储地址</li>
+                                <li><code>p = &a;</code> - 将a的地址赋给p，现在p“指向”a</li>
+                                <li><code>*p</code> - 解引用，访问p所指地址处的值（即a的值）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <div class="code-block">
                     <div class="code-block-title">指针定义示例</div>
-                    <pre><code><span class="c-comment">// 指针的基本概念</span>
+                    <pre><code><span class="c-comment">// 指针的基本概念演示</span>
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> a = <span class="c-number">42</span>;        <span class="c-comment">// 普通变量</span>
-    <span class="c-keyword">int</span> *p;           <span class="c-comment">// 指针变量声明</span>
+    <span class="c-comment">// 步骤1：声明一个普通的整型变量</span>
+    <span class="c-keyword">int</span> a = <span class="c-number">42</span>;
     
-    p = &amp;a;            <span class="c-comment">// 指针指向变量a的地址</span>
+    <span class="c-comment">// 步骤2：声明一个指向int类型的指针变量</span>
+    <span class="c-comment">// *表示p是一个指针，int表示它指向int类型的数据</span>
+    <span class="c-keyword">int</span> *p;
     
+    <span class="c-comment">// 步骤3：使用&运算符获取变量a的地址，并赋给指针p</span>
+    p = &amp;a;
+    
+    <span class="c-comment">// 打印变量a的值（直接访问）</span>
     <span class="c-function">printf</span>(<span class="c-string">"变量a的值: %d\n"</span>, a);
-    <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (void*)&amp;a);
-    <span class="c-function">printf</span>(<span class="c-string">"指针p的值: %p\n"</span>, (void*)p);
-    <span class="c-function">printf</span>(<span class="c-string">"指针p指向的值: %d\n"</span>, *p);
     
-    <span class="c-comment">// 修改指针指向的值</span>
-    *p = <span class="c-number">100</span>;
+    <span class="c-comment">// 打印变量a的内存地址（用%p格式打印地址）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (void*)&amp;a);
+    
+    <span class="c-comment">// 打印指针p中存储的地址值（应该与&a相同）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"指针p的值: %p\n"</span>, (void*)p);
+    
+    <span class="c-comment">// 使用*运算符解引用：通过指针p访问它指向的值</span>
+    <span class="c-function">printf</span>(<span class="c-string">"通过指针p访问的值: %d\n"</span>, *p);
+    
+    <span class="c-comment">// 通过指针修改变量a的值</span>
+    *p = <span class="c-number">100</span>;  <span class="c-comment">// 这相当于 a = 100;</span>
     <span class="c-function">printf</span>(<span class="c-string">"修改后a的值: %d\n"</span>, a);
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -75,95 +202,97 @@
                 </div>
 
                 <div class="practice-questions">
-                    <h3 class="subsection-title">就地练习：指针遍历与边界检查</h3>
-                    <div class="question-item">
-                        <p><strong>练习4：</strong> 使用指针遍历整型数组，输出元素并进行边界检查，避免越界访问；尝试通过指针修改某一元素。</p>
-                        <details>
-                            <summary>参考答案与示例代码</summary>
-                            <div class="code-block">
-                                <div class="code-block-title">遍历与修改示例</div>
-                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> arr[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
-    <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(arr) / <span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
-    <span class="c-keyword">int</span> *p = arr;
-
-    <span class="c-function">printf</span>(<span class="c-string">"指针遍历:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; size; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"*(p+%d)=%d\n"</span>, i, *(p+i));
-    }
-
-    <span class="c-comment">// 边界检查示例</span>
-    <span class="c-keyword">int</span> idx = <span class="c-number">3</span>;
-    <span class="c-keyword">if</span> (idx &gt;= <span class="c-number">0</span> &amp;&amp; idx &lt; size) {
-        *(p + idx) = <span class="c-number">999</span>;
-        <span class="c-function">printf</span>(<span class="c-string">"修改后 arr[%d]=%d\n"</span>, idx, arr[idx]);
-    } <span class="c-keyword">else</span> {
-        <span class="c-function">printf</span>(<span class="c-string">"索引越界\n"</span>);
-    }
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                            </div>
-                        </details>
-                    </div>
-                </div>
-
-                <div class="practice-questions">
-                    <h3 class="subsection-title">就地练习：&运算符与不同类型</h3>
-                    <div class="question-item">
-                        <p><strong>练习2：</strong> 对 `int`、`double`、`char` 三种变量分别取地址，使用相应类型的指针读取值；补充打印三者的地址并比较是否不同。</p>
-                        <details>
-                            <summary>参考答案与示例代码</summary>
-                            <div class="code-block">
-                                <div class="code-block-title">多类型取址与访问</div>
-                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> x = <span class="c-number">10</span>;
-    <span class="c-keyword">double</span> y = <span class="c-number">3.14</span>;
-    <span class="c-keyword">char</span> c = <span class="c-string">'A'</span>;
-
-    <span class="c-keyword">int</span> *px = &amp;x;
-    <span class="c-keyword">double</span> *py = &amp;y;
-    <span class="c-keyword">char</span> *pc = &amp;c;
-
-    <span class="c-function">printf</span>(<span class="c-string">"&amp;x=%p, &amp;y=%p, &amp;c=%p\n"</span>, (void*)&amp;x, (void*)&amp;y, (void*)&amp;c);
-    <span class="c-function">printf</span>(<span class="c-string">"*px=%d, *py=%f, *pc=%c\n"</span>, *px, *py, *pc);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                            </div>
-                        </details>
-                    </div>
-                </div>
-
-                <div class="practice-questions">
                     <h3 class="subsection-title">就地练习：指针初始化与安全读写</h3>
                     <div class="question-item">
                         <p><strong>练习1：</strong> 声明一个 `int` 指针并安全地指向变量，打印地址和值；尝试在未初始化时进行空指针检查，避免未定义行为。</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
+                            
+                            <div class="tip-box">
+                                <p><strong>代码思路：</strong></p>
+                                <ul>
+                                    <li>指针声明后先初始化为NULL，防止成为野指针</li>
+                                    <li>使用前检查指针是否为NULL，确保安全</li>
+                                    <li>只有当指针指向有效地址后，才能进行解引用操作</li>
+                                </ul>
+                            </div>
+                            
                             <div class="code-block">
                                 <div class="code-block-title">安全初始化与访问</div>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明一个普通变量</span>
     <span class="c-keyword">int</span> a = <span class="c-number">42</span>;
-    <span class="c-keyword">int</span> *p = NULL;  <span class="c-comment">// 先置为NULL，避免野指针</span>
+    
+    <span class="c-comment">// 步骤1：声明指针并初始化为NULL（非常重要！）</span>
+    <span class="c-comment">// NULL表示空指针，不指向任何有效地址</span>
+    <span class="c-keyword">int</span> *p = NULL;
 
-    <span class="c-comment">// 未初始化时不能解引用，先检查</span>
+    <span class="c-comment">// 步骤2：使用前检查指针是否为NULL</span>
     <span class="c-keyword">if</span> (p == NULL) {
-        <span class="c-function">printf</span>(<span class="c-string">"p为NULL，暂不可访问\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"p为NULL，还没有指向任何变量\n"</span>);
     }
 
-    p = &amp;a;  <span class="c-comment">// 指向有效变量</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a的地址: %p, 值: %d\n"</span>, (void*)&amp;a, a);
-    <span class="c-function">printf</span>(<span class="c-string">"p的值(地址): %p, *p(解引用): %d\n"</span>, (void*)p, *p);
+    <span class="c-comment">// 步骤3：让指针指向一个有效的变量</span>
+    p = &amp;a;
+    <span class="c-function">printf</span>(<span class="c-string">"\na的地址: %p, a的值: %d\n"</span>, (void*)&amp;a, a);
+    
+    <span class="c-comment">// 步骤44：现在可以安全地使用指针了</span>
+    <span class="c-function">printf</span>(<span class="c-string">"p指向的地址: %p\n"</span>, (void*)p);
+    <span class="c-function">printf</span>(<span class="c-string">"p指向的值: %d\n"</span>, *p);
 
-    *p = <span class="c-number">100</span>;  <span class="c-comment">// 通过指针修改原值</span>
-    <span class="c-function">printf</span>(<span class="c-string">"修改后 a = %d\n"</span>, a);
+    <span class="c-comment">// 步骤5：通过指针修改变量a的值</span>
+    *p = <span class="c-number">100</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"\n修改后 a 的值: %d\n"</span>, a);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习：指针基本操作</h3>
+                    <div class="question-item">
+                        <p><strong>练习2：</strong> 对 `int`、`double`、`char` 三种变量分别取地址，使用相应类型的指针读取值；补充打印三者的地址并比较是否不同。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            
+                            <div class="tip-box">
+                                <p><strong>代码要点：</strong></p>
+                                <ul>
+                                    <li>不同类型的指针必须与目标变量类型匹配</li>
+                                    <li><code>int*</code> 只能指向int，<code>double*</code> 只能指向double</li>
+                                    <li>不同变量在内存中有不同的地址</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="code-block">
+                                <div class="code-block-title">多类型取址与访问</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明三种不同类型的变量</span>
+    <span class="c-keyword">int</span> x = <span class="c-number">10</span>;           <span class="c-comment">// 整型变量</span>
+    <span class="c-keyword">double</span> y = <span class="c-number">3.14</span>;      <span class="c-comment">// 双精度浮点型</span>
+    <span class="c-keyword">char</span> c = <span class="c-string">'A'</span>;         <span class="c-comment">// 字符型</span>
+
+    <span class="c-comment">// 声明相应类型的指针，并用&获取变量的地址</span>
+    <span class="c-keyword">int</span> *px = &amp;x;        <span class="c-comment">// px指向x</span>
+    <span class="c-keyword">double</span> *py = &amp;y;   <span class="c-comment">// py指向y</span>
+    <span class="c-keyword">char</span> *pc = &amp;c;      <span class="c-comment">// pc指向c</span>
+
+    <span class="c-comment">// 打印三个变量的地址（地址各不相同）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"x的地址: %p\n"</span>, (void*)&amp;x);
+    <span class="c-function">printf</span>(<span class="c-string">"y的地址: %p\n"</span>, (void*)&amp;y);
+    <span class="c-function">printf</span>(<span class="c-string">"c的地址: %p\n\n"</span>, (void*)&amp;c);
+
+    <span class="c-comment">// 通过指针访问各自指向的值</span>
+    <span class="c-function">printf</span>(<span class="c-string">"*px = %d\n"</span>, *px);     <span class="c-comment">// 输出 10</span>
+    <span class="c-function">printf</span>(<span class="c-string">"*py = %.2f\n"</span>, *py); <span class="c-comment">// 输出 3.14</span>
+    <span class="c-function">printf</span>(<span class="c-string">"*pc = %c\n"</span>, *pc);     <span class="c-comment">// 输出 A</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -174,66 +303,150 @@
 
                 <div class="subsection">
                     <h3 class="subsection-title">不同类型的指针</h3>
+                    <div class="subsection-content">
+                        <h4>为什么指针需要类型？</h4>
+                        <p>很多初学者会疑惑：既然指针只是存储地址，为什么还要区分 <code>int*</code>、<code>char*</code>、<code>double*</code> 等不同类型呢？</p>
+                        
+                        <div class="concept-box">
+                            <p><strong>答案有三个关键原因：</strong></p>
+                            
+                            <p><strong>1. 解引用时需要知道读取多少字节</strong></p>
+                            <ul>
+                                <li><code>*int_ptr</code> 需要读取4个字节（int类型）</li>
+                                <li><code>*char_ptr</code> 只需要读取1个字节（char类型）</li>
+                                <li><code>*double_ptr</code> 需要读取8个字节（double类型）</li>
+                            </ul>
+                            
+                            <p><strong>2. 指针运算时需要知道增减多少</strong></p>
+                            <ul>
+                                <li><code>int_ptr + 1</code> 地址增加4字节</li>
+                                <li><code>char_ptr + 1</code> 地址增加1字节</li>
+                                <li><code>double_ptr + 1</code> 地址增加8字节</li>
+                            </ul>
+                            
+                            <p><strong>3. 类型安全检查</strong></p>
+                            <p>编译器可以根据指针类型检查赋值是否合法，防止类型错误。</p>
+                        </div>
+
+                        <h4>指针大小的统一性</h4>
+                        <div class="callout tip">
+                            <p><strong>重要结论：</strong></p>
+                            <p>无论指向什么类型，所有指针变量本身的大小都是一样的：</p>
+                            <ul>
+                                <li>32位系统：所有指针都是4字节</li>
+                                <li>64位系统：所有指针都是8字节</li>
+                            </ul>
+                            <p>因为指针存储的是地址，而地址空间的大小由系统位数决定。</p>
+                        </div>
+                    </div>
                     
                     <div class="pointer-types">
                         <div class="pointer-type">
                             <h4>1. 基本数据类型指针</h4>
+                            
+                            <div class="subsection-content">
+                                <p><strong>代码功能：</strong>这个程序展示了一个重要的概念：所有指针的大小都是相同的，与它们指向的数据类型无关。</p>
+                                
+                                <div class="tip-box">
+                                    <p><strong>关键知识点：</strong></p>
+                                    <ul>
+                                        <li>指针大小由系统位数决定，不是数据类型</li>
+                                        <li>32位系统：所有指针都是4字节</li>
+                                        <li>64位系统：所有指针都是8字节</li>
+                                        <li>但解引用时读取的字节数取决于数据类型</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
                             <div class="code-block">
                                 <div class="code-block-title">各种基本类型指针</div>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-comment">// 不同类型的变量</span>
+    <span class="c-comment">// 声明四种不同类型的变量</span>
     <span class="c-keyword">int</span> int_var = <span class="c-number">42</span>;
     <span class="c-keyword">float</span> float_var = <span class="c-number">3.14f</span>;
     <span class="c-keyword">double</span> double_var = <span class="c-number">2.71828</span>;
     <span class="c-keyword">char</span> char_var = <span class="c-string">'A'</span>;
     
-    <span class="c-comment">// 对应的指针类型</span>
+    <span class="c-comment">// 声明对应类型的指针</span>
     <span class="c-keyword">int</span> *int_ptr = &amp;int_var;
     <span class="c-keyword">float</span> *float_ptr = &amp;float_var;
     <span class="c-keyword">double</span> *double_ptr = &amp;double_var;
     <span class="c-keyword">char</span> *char_ptr = &amp;char_var;
     
-    <span class="c-function">printf</span>(<span class="c-string">"int指针大小: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(int_ptr));
-    <span class="c-function">printf</span>(<span class="c-string">"float指针大小: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(float_ptr));
-    <span class="c-function">printf</span>(<span class="c-string">"double指针大小: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(double_ptr));
-    <span class="c-function">printf</span>(<span class="c-string">"char指针大小: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(char_ptr));
+    <span class="c-comment">// 打印每个指针的大小（会发现它们大小相同）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"=== 指针大小测试 ===\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"int*    大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(int_ptr));
+    <span class="c-function">printf</span>(<span class="c-string">"float*  大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(float_ptr));
+    <span class="c-function">printf</span>(<span class="c-string">"double* 大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(double_ptr));
+    <span class="c-function">printf</span>(<span class="c-string">"char*   大小: %u 字节\n\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(char_ptr));
     
-    <span class="c-comment">// 所有指针大小都相同（在64位系统上通常是8字节）</span>
-    <span class="c-function">printf</span>(<span class="c-string">"\n通过指针访问:\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"*int_ptr = %d\n"</span>, *int_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"*float_ptr = %f\n"</span>, *float_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"*double_ptr = %f\n"</span>, *double_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"*char_ptr = %c\n"</span>, *char_ptr);
+    <span class="c-comment">// 通过指针访问各自指向的值</span>
+    <span class="c-function">printf</span>(<span class="c-string">"=== 通过指针访问值 ===\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"*int_ptr    = %d\n"</span>, *int_ptr);
+    <span class="c-function">printf</span>(<span class="c-string">"*float_ptr  = %.2f\n"</span>, *float_ptr);
+    <span class="c-function">printf</span>(<span class="c-string">"*double_ptr = %.5f\n"</span>, *double_ptr);
+    <span class="c-function">printf</span>(<span class="c-string">"*char_ptr   = %c\n"</span>, *char_ptr);
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
                         </div>
                         <div class="practice-questions">
-                            <h3 class="subsection-title">就地练习：二级指针修改值</h3>
+                            <h3 class="subsection-title">就地练习：不同类型指针操作</h3>
                             <div class="question-item">
                                 <p><strong>练习3：</strong> 使用二级指针 `int **pp` 修改一个 `int` 变量的值，并将一级指针改为指向另一个变量，观察输出变化。</p>
                                 <details>
                                     <summary>参考答案与示例代码</summary>
+                                    
+                                    <div class="tip-box">
+                                        <p><strong>代码分析：</strong></p>
+                                        <p>二级指针是“指向指针的指针”，听起来很绕口，但思路很简单：</p>
+                                        <ul>
+                                            <li><code>int a</code> - 普通变量，存储整数</li>
+                                            <li><code>int *p</code> - 一级指针，存储a的地址</li>
+                                            <li><code>int **pp</code> - 二级指针，存储p的地址</li>
+                                            <li><code>**pp</code> - 两次解引用，最终访问到a的值</li>
+                                        </ul>
+                                    </div>
+                                    
                                     <div class="code-block">
                                         <div class="code-block-title">二级指针操作</div>
                                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明两个普通变量</span>
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
     <span class="c-keyword">int</span> b = <span class="c-number">20</span>;
-    <span class="c-keyword">int</span> *p = &amp;a;      <span class="c-comment">// 一级指针</span>
-    <span class="c-keyword">int</span> **pp = &amp;p;     <span class="c-comment">// 二级指针</span>
-
-    **pp = <span class="c-number">100</span>;  <span class="c-comment">// 通过二级指针修改a</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a=%d, *p=%d\n"</span>, a, *p);
-
-    *pp = &amp;b;        <span class="c-comment">// 让p改为指向b</span>
-    **pp = <span class="c-number">300</span>;  <span class="c-comment">// 修改b</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d, *p=%d\n"</span>, a, b, *p);
-
+    
+    <span class="c-comment">// p是一级指针，指向a</span>
+    <span class="c-keyword">int</span> *p = &amp;a;
+    
+    <span class="c-comment">// pp是二级指针，指向p</span>
+    <span class="c-keyword">int</span> **pp = &amp;p;
+    
+    <span class="c-comment">// 通过二级指针修改a的值</span>
+    <span class="c-comment">// **pp 等价于 *p，也等价于 a</span>
+    <span class="c-function">printf</span>(<span class="c-string">"==== 初始值 ====\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"a = %d, *p = %d, **pp = %d\n\n"</span>, a, *p, **pp);
+    
+    **pp = <span class="c-number">100</span>;  <span class="c-comment">// 修改a的值为100</span>
+    <span class="c-function">printf</span>(<span class="c-string">"==== 修改后 ====\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"a = %d, *p = %d, **pp = %d\n\n"</span>, a, *p, **pp);
+    
+    <span class="c-comment">// 通过二级指针修改一级指针的指向</span>
+    <span class="c-comment">// *pp 就是 p，所以这一行相当于 p = &b;</span>
+    *pp = &amp;b;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"==== p指向变为b后 ====\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"a = %d, b = %d, *p = %d\n\n"</span>, a, b, *p);
+    
+    <span class="c-comment">// 现在再次通过**pp修改，会改变b</span>
+    **pp = <span class="c-number">300</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"==== 再次修改后 ====\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"a = %d, b = %d, *p = %d\n"</span>, a, b, *p);
+    
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                     </div>
@@ -243,30 +456,53 @@
 
                         <div class="pointer-type">
                             <h4>2. void指针（通用指针）</h4>
+                            
+                            <div class="subsection-content">
+                                <p><strong>什么是void指针？</strong></p>
+                                <p><code>void*</code> 是一种特殊的指针类型，被称为“通用指针”或“泛型指针”。它可以指向任何类型的数据。</p>
+                                
+                                <div class="tip-box">
+                                    <p><strong>重要特点：</strong></p>
+                                    <ul>
+                                        <li>void指针<strong>可以指向</strong>任何类型的数据</li>
+                                        <li>void指针<strong>不能直接解引用</strong>，必须先转换为具体类型</li>
+                                        <li>void指针<strong>不能进行算术运算</strong>（因为不知道每步该增减多少）</li>
+                                    </ul>
+                                </div>
+                                
+                                <p><strong>使用场景：</strong>void指针常用于函数参数，允许函数接受任何类型的指针（例如 <code>qsort</code>  函数）。</p>
+                            </div>
+                            
                             <div class="code-block">
                                 <div class="code-block-title">void指针的使用</div>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明三种不同类型的变量</span>
     <span class="c-keyword">int</span> int_var = <span class="c-number">42</span>;
     <span class="c-keyword">float</span> float_var = <span class="c-number">3.14f</span>;
     <span class="c-keyword">char</span> char_var = <span class="c-string">'A'</span>;
     
-    <span class="c-comment">// void指针可以指向任何类型</span>
+    <span class="c-comment">// 声明一个void指针（通用指针）</span>
     <span class="c-keyword">void</span> *void_ptr;
     
-    <span class="c-comment">// 指向不同类型的变量</span>
+    <span class="c-comment">// void指针可以指向int类型</span>
     void_ptr = &amp;int_var;
+    <span class="c-comment">// 使用时必须先转换为int*，然后才能解引用</span>
     <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向int: %d\n"</span>, *(int*)void_ptr);
     
+    <span class="c-comment">// void指针也可以指向float类型</span>
     void_ptr = &amp;float_var;
-    <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向float: %f\n"</span>, *(float*)void_ptr);
+    <span class="c-comment">// 转换为float*再解引用</span>
+    <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向float: %.2f\n"</span>, *(float*)void_ptr);
     
+    <span class="c-comment">// void指针还可以指向char类型</span>
     void_ptr = &amp;char_var;
+    <span class="c-comment">// 转换为char*再解引用</span>
     <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向char: %c\n"</span>, *(char*)void_ptr);
     
-    <span class="c-comment">// void指针不能直接解引用，必须先转换为具体类型</span>
-    <span class="c-comment">// *void_ptr;  // 错误！</span>
+    <span class="c-comment">// 注意：不能直接解引用void指针！下面这行会报错：</span>
+    <span class="c-comment">// *void_ptr;  // 错误！必须先转换类型</span>
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -275,43 +511,45 @@
 
                         <div class="pointer-type">
                             <h4>3. NULL指针</h4>
+                            
+                            <div class="subsection-content">
+                                <p><strong>什么是NULL指针？</strong></p>
+                                <p>NULL是一个特殊的指针值，表示指针不指向任何有效的内存地址。在C语言中，NULL通常定义为0。</p>
+                                
+                                <div class="tip-box">
+                                    <p><strong>使用NULL指针的重要性：</strong></p>
+                                    <ul>
+                                        <li><strong>初始化：</strong>指针声明后应立即初始化为NULL，避免野指针</li>
+                                        <li><strong>安全检查：</strong>使用指针前检查是否为NULL，防止程序崩溃</li>
+                                        <li><strong>释放后置空NULL：</strong>释放内存后将指针设为NULL，防止重复释放</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
                             <div class="code-block">
-                                <div class="code-block-title">NULL指针的安全使用</div>
+                                <div class="code-block-title">NULL指针的正确使用</div>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-comment">// NULL指针的定义</span>
-    <span class="c-keyword">int</span> *null_ptr = NULL;
-    <span class="c-keyword">char</span> *another_null = <span class="c-number">0</span>;  <span class="c-comment">// 也可以直接用0</span>
+    <span class="c-comment">// 步骤1：声明指针并初始化为NULL（良好习惯）</span>
+    <span class="c-keyword">int</span> *ptr = NULL;
     
-    <span class="c-function">printf</span>(<span class="c-string">"null_ptr的值: %p\n"</span>, (void*)null_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"another_null的值: %p\n"</span>, (void*)another_null);
-    
-    <span class="c-comment">// 检查指针是否为NULL</span>
-    <span class="c-keyword">if</span> (null_ptr == NULL) {
-        <span class="c-function">printf</span>(<span class="c-string">"null_ptr是NULL指针\n"</span>);
+    <span class="c-comment">// 步骤2：使用前检查指针是否为NULL</span>
+    <span class="c-keyword">if</span> (ptr == NULL) {
+        <span class="c-function">printf</span>(<span class="c-string">"指针是NULL，不能使用\n"</span>);
     }
     
-    <span class="c-comment">// 安全的指针使用模式</span>
-    <span class="c-keyword">int</span> *safe_ptr = NULL;
+    <span class="c-comment">// 步骤3：让指针指向一个有效的变量</span>
+    <span class="c-keyword">int</span> value = <span class="c-number">100</span>;
+    ptr = &amp;value;
     
-    <span class="c-comment">// 使用前检查</span>
-    <span class="c-keyword">if</span> (safe_ptr != NULL) {
-        <span class="c-function">printf</span>(<span class="c-string">"safe_ptr指向的值: %d\n"</span>, *safe_ptr);
-    } <span class="c-keyword">else</span> {
-        <span class="c-function">printf</span>(<span class="c-string">"safe_ptr是NULL，不能解引用\n"</span>);
+    <span class="c-comment">// 步骤4：再次检查，现在可以安全使用了</span>
+    <span class="c-keyword">if</span> (ptr != NULL) {
+        <span class="c-function">printf</span>(<span class="c-string">"指针有效，值为: %d\n"</span>, *ptr);
     }
     
-    <span class="c-comment">// 动态分配内存后检查</span>
-    safe_ptr = (<span class="c-keyword">int</span>*)malloc(<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-keyword">if</span> (safe_ptr != NULL) {
-        *safe_ptr = <span class="c-number">100</span>;
-        <span class="c-function">printf</span>(<span class="c-string">"动态分配成功: %d\n"</span>, *safe_ptr);
-        free(safe_ptr);  <span class="c-comment">// 释放内存</span>
-        safe_ptr = NULL;  <span class="c-comment">// 置为NULL避免悬空指针</span>
-    } <span class="c-keyword">else</span> {
-        <span class="c-function">printf</span>(<span class="c-string">"内存分配失败\n"</span>);
-    }
+    <span class="c-comment">// 步骤5：不再使用时设回 NULL（好习惯）</span>
+    ptr = NULL;
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -322,6 +560,39 @@
 
                 <div class="subsection">
                     <h3 class="subsection-title">指针的常见错误</h3>
+                    <div class="subsection-content">
+                        <h4>为什么指针容易出错？</h4>
+                        <p>指针是C语言中最容易出错的特性，主要原因有：</p>
+                        <ul>
+                            <li><strong>直接操作内存</strong>：指针可以访问任意内存地址，错误操作可能破坏数据</li>
+                            <li><strong>缺乏边界检查</strong>：C语言不会自动检查指针访问是否越界</li>
+                            <li><strong>生命周期管理</strong>：需要手动管理内存的分配和释放</li>
+                            <li><strong>隐藏的bug</strong>：有些指针错误不会立即崩溃，但会导致难以追踪的bug</li>
+                        </ul>
+
+                        <h4>指针错误的三大类别</h4>
+                        <div class="tip-box">
+                            <p><strong>1、未初始化指针（野指针）</strong></p>
+                            <p>指针声明后没有赋值，包含随机的垃圾值。</p>
+                            
+                            <p><strong>2、空指针解引用</strong></p>
+                            <p>对NULL指针进行解引用操作，导致程序崩溃。</p>
+                            
+                            <p><strong>3、悬空指针</strong></p>
+                            <p>指针所指向的内存已经被释放，但指针仍然保留旧地址。</p>
+                        </div>
+
+                        <h4>安全使用指针的黄金法则</h4>
+                        <div class="callout tip">
+                            <ol>
+                                <li><strong>总是初始化</strong>：声明指针后立即初始化，如果暂无目标就置为NULL</li>
+                                <li><strong>使用前检查</strong>：解引用前检查指针是否为NULL</li>
+                                <li><strong>释放后置NULL</strong>：free后立即将指针置为NULL</li>
+                                <li><strong>避免越界访问</strong>：数组访问前检查下标范围</li>
+                                <li><strong>不返回局部变量地址</strong>：局部变量在函数返回后失效</li>
+                            </ol>
+                        </div>
+                    </div>
                     
                     <div class="pointer-errors">
                         <div class="error-item">
@@ -427,7 +698,63 @@
                 <h2 class="section-title">地址运算符</h2>
                 
                 <div class="subsection">
-                    <h3 class="subsection-title">&运算符的使用</h3>
+                    <h3 class="subsection-title">取地址运算符 & 详解</h3>
+                    <div class="subsection-content">
+                        <h4>什么是地址运算符？</h4>
+                        <p>地址运算符 <code>&</code>（ampersand）是一个一元运算符，用于获取变量的内存地址。</p>
+                        
+                        <h4>基本语法</h4>
+                        <div class="syntax-box">
+                            <pre>&变量名</pre>
+                            <p>返回值：该变量在内存中的起始地址</p>
+                            <p>例如：<code>&a</code> 返回变量a的内存地址</p>
+                        </div>
+
+                        <h4>工作原理</h4>
+                        <div class="tip-box">
+                            <p><strong>步骤1：</strong> 程序为每个变量分配内存空间</p>
+                            <p><strong>步骤2：</strong> 每个内存空间都有唯一的地址编号</p>
+                            <p><strong>步骤3：</strong> & 运算符返回这个地址编号</p>
+                            <p><strong>步骤4：</strong> 可以将这个地址赋值给指针变量</p>
+                        </div>
+
+                        <h4>使用场景</h4>
+                        <ul>
+                            <li><strong>初始化指针</strong>：将变量地址赋给指针 <code>int *p = &a;</code></li>
+                            <li><strong>函数参数传递</strong>：传递变量地址实现引用传递 <code>func(&x);</code></li>
+                            <li><strong>获取数组地址</strong>：<code>&arr[0]</code> 获取数组第一个元素的地址</li>
+                            <li><strong>结构体成员地址</strong>：<code>&student.age</code> 获取结构体成员的地址</li>
+                        </ul>
+
+                        <h4>类型匹配规则</h4>
+                        <div class="warning-box">
+                            <strong>⚠️ 类型必须匹配：</strong>
+                            <ul>
+                                <li><code>&int_var</code> 的结果类型是 <code>int*</code></li>
+                                <li><code>&double_var</code> 的结果类型是 <code>double*</code></li>
+                                <li><code>&char_var</code> 的结果类型是 <code>char*</code></li>
+                                <li>不同类型的指针不能随意赋值（除非使用强制类型转换）</li>
+                            </ul>
+                        </div>
+
+                        <h4>常见错误示例</h4>
+                        <div class="callout warning">
+                            <p>❌ <code>int *p = &42;</code> - 错误！不能对字面常量取地址</p>
+                            <p>❌ <code>int *p = &(a+b);</code> - 错误！不能对表达式结果取地址</p>
+                            <p>❌ <code>double *p = &int_var;</code> - 错误！类型不匹配</p>
+                            <p>✅ <code>int *p = &int_var;</code> - 正确！类型匹配</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">&运算符的使用示例</h3>
+                    
+                    <div class="subsection-content">
+                        <p><strong>代码功能说明：</strong></p>
+                        <p>这个程序演示如何对不同类型的变量使用 <code>&</code> 运算符获取地址，以及如何利用这些地址来操作数据。</p>
+                    </div>
+                    
                     <div class="code-block">
                     <div class="code-block-title">取地址运算符示例</div>
                     <pre><code><span class="c-comment">// 地址运算符 & 的使用</span>
@@ -519,6 +846,72 @@
                     </div>
                 </div>
 
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习：取地址运算符的应用</h3>
+                    <div class="question-item">
+                        <p><strong>练习4：</strong> 编写一个函数，通过地址传递的方式交换两个整型变量的值，并在主函数中验证交换结果。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">交换变量值</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">swap</span>(<span class="c-keyword">int</span> *a, <span class="c-keyword">int</span> *b) {
+    <span class="c-keyword">int</span> temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">20</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"交换前: x = %d, y = %d\n"</span>, x, y);
+    
+    <span class="c-function">swap</span>(&amp;x, &amp;y);
+    <span class="c-function">printf</span>(<span class="c-string">"交换后: x = %d, y = %d\n"</span>, x, y);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习：地址传递修改变量</h3>
+                    <div class="question-item">
+                        <p><strong>练习5：</strong> 编写函数通过指针参数修改传入变量的值，对比值传递和地址传递的区别。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">值传递vs地址传递</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">modify_value</span>(<span class="c-keyword">int</span> x) {
+    x = <span class="c-number">100</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"函数内(值传递): x = %d\n"</span>, x);
+}
+
+<span class="c-keyword">void</span> <span class="c-function">modify_by_pointer</span>(<span class="c-keyword">int</span> *p) {
+    *p = <span class="c-number">200</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"函数内(地址传递): *p = %d\n"</span>, *p);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
+    
+    <span class="c-function">modify_value</span>(a);
+    <span class="c-function">printf</span>(<span class="c-string">"函数外: a = %d\n\n"</span>, a);
+    
+    <span class="c-function">modify_by_pointer</span>(&amp;b);
+    <span class="c-function">printf</span>(<span class="c-string">"函数外: b = %d\n"</span>, b);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
                 <div class="subsection">
                     <h3 class="subsection-title">实际应用：函数参数传递</h3>
                     <div class="code-block">
@@ -574,30 +967,111 @@
                 <h2 class="section-title">解引用</h2>
                 
                 <div class="subsection">
-                    <h3 class="subsection-title">*运算符的使用</h3>
+                    <h3 class="subsection-title">解引用运算符 * 详解</h3>
+                    <div class="subsection-content">
+                        <h4>什么是解引用？</h4>
+                        <p>解引用（Dereference）是指通过指针访问它所指向的内存地址中存储的值。解引用运算符是 <code>*</code>。</p>
+                        
+                        <h4>理解解引用的含义</h4>
+                        <div class="concept-box">
+                            <p><strong>概念类比：</strong></p>
+                            <p>如果指针是一个"地址簿"，记录了某个房间的门牌号，那么：</p>
+                            <ul>
+                                <li><strong>指针变量</strong>：地址簿本身（存储门牌号）</li>
+                                <li><strong>指针的值</strong>：地址簿中记录的门牌号</li>
+                                <li><strong>解引用</strong>：根据门牌号找到房间，查看或修改房间里的东西</li>
+                            </ul>
+                        </div>
+
+                        <h4>* 运算符的双重身份</h4>
+                        <div class="warning-box">
+                            <strong>⚠️ 注意区分：</strong>
+                            <p><strong>1. 声明时的 *</strong>（声明符号）</p>
+                            <pre>int *p;  // 这里的*表示p是一个指针</pre>
+                            
+                            <p><strong>2. 使用时的 *</strong>（解引用运算符）</p>
+                            <pre>*p = 10;  // 这里的*表示访问p指向的内存</pre>
+                        </div>
+
+                        <h4>解引用的语法</h4>
+                        <div class="code-block">
+                            <pre>*指针变量</pre>
+                            <p><strong>读取值：</strong><code>value = *p;</code> - 将p指向的值赋给value</p>
+                            <p><strong>修改值：</strong><code>*p = 100;</code> - 将p指向的内存位置的值改为100</p>
+                        </div>
+
+                        <h4>解引用的工作过程</h4>
+                        <div class="tip-box">
+                            <p><strong>执行 *p 时发生的事情：</strong></p>
+                            <ol>
+                                <li>读取指针变量p中存储的地址值</li>
+                                <li>CPU跳转到这个内存地址</li>
+                                <li>读取该地址处存储的数据</li>
+                                <li>返回这个数据（如果是赋值，则修改这个位置的数据）</li>
+                            </ol>
+                        </div>
+
+                        <h4>使用解引用的注意事项</h4>
+                        <ul>
+                            <li><strong>必须先初始化</strong>：使用前指针必须指向有效的内存地址</li>
+                            <li><strong>避免空指针解引用</strong>：解引用NULL指针会导致程序崩溃</li>
+                            <li><strong>避免野指针</strong>：未初始化的指针包含随机值，解引用很危险</li>
+                            <li><strong>类型安全</strong>：解引用得到的值类型与指针声明的类型一致</li>
+                        </ul>
+
+                        <h4>安全使用模式</h4>
+                        <div class="callout success">
+                            <p>✅ <strong>推荐做法：</strong></p>
+                            <pre>int *p = NULL;  // 初始化为NULL
+if (p != NULL) {
+    *p = 10;    // 使用前检查
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">解引用运算符使用示例</h3>
+                    
+                    <div class="subsection-content">
+                        <p><strong>代码功能说明:</strong></p>
+                        <p>这个程序演示了解引用运算符 <code>*</code> 的基本用法：如何通过指针读取和修改数据，以及多级指针的解引用。</p>
+                        
+                        <div class="tip-box">
+                            <p><strong>关键步骤：</strong></p>
+                            <ul>
+                                <li><code>*p</code> - 访问p指向的值</li>
+                                <li><code>*p = 100</code> - 通过指针修改原变量</li>
+                                <li><code>**pp</code> - 两次解引用，访问二级指针最终指向的值</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <div class="code-block">
                     <div class="code-block-title">解引用运算符示例</div>
-                    <pre><code><span class="c-comment">// 解引用运算符 * 的使用</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+                    <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明变量并初始化</span>
     <span class="c-keyword">int</span> a = <span class="c-number">50</span>;
+    <span class="c-comment">// 声明指针并指向a</span>
     <span class="c-keyword">int</span> *p = &amp;a;
     
-    <span class="c-function">printf</span>(<span class="c-string">"直接访问: a = %d\n"</span>, a);
-    <span class="c-function">printf</span>(<span class="c-string">"通过指针访问: *p = %d\n"</span>, *p);
+    <span class="c-comment">// 比较直接访问和通过指针访问</span>
+    <span class="c-function">printf</span>(<span class="c-string">"直接访问a: %d\n"</span>, a);
+    <span class="c-function">printf</span>(<span class="c-string">"通过指针*p访问: %d\n\n"</span>, *p);
     
-    <span class="c-comment">// 通过解引用修改值</span>
-    *p = <span class="c-number">100</span>;
-    <span class="c-function">printf</span>(<span class="c-string">"修改后: a = %d, *p = %d\n"</span>, a, *p);
+    <span class="c-comment">// 通过解引用修改变量的值</span>
+    *p = <span class="c-number">100</span>;  <span class="c-comment">// 等价于 a = 100;</span>
+    <span class="c-function">printf</span>(<span class="c-string">"修改后a = %d, *p = %d\n\n"</span>, a, *p);
     
-    <span class="c-comment">// 指针的指针</span>
-    <span class="c-keyword">int</span> **pp = &amp;p;
-    <span class="c-function">printf</span>(<span class="c-string">"指针的指针: **pp = %d\n"</span>, **pp);
+    <span class="c-comment">// 二级指针：指向指针的指针</span>
+    <span class="c-keyword">int</span> **pp = &amp;p;  <span class="c-comment">// pp存储p的地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"通过二级指针**pp访问: %d\n\n"</span>, **pp);
     
-    <span class="c-comment">// 修改指针指向的指针</span>
-    **pp = <span class="c-number">200</span>;
-    <span class="c-function">printf</span>(<span class="c-string">"最终结果: a = %d\n"</span>, a);
+    <span class="c-comment">// 通过二级指针修改值</span>
+    **pp = <span class="c-number">200</span>;  <span class="c-comment">// 等价于 *p = 200; 也等价于 a = 200;</span>
+    <span class="c-function">printf</span>(<span class="c-string">"最终a的值: %d\n"</span>, a);
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -752,6 +1226,73 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习:解引用与多级指针</h3>
+                    <div class="question-item">
+                        <p><strong>练习6:</strong> 声明一个二级指针,通过二级指针修改变量的值,并打印中间过程的地址和值。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">二级指针操作</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> value = <span class="c-number">42</span>;
+    <span class="c-keyword">int</span> *ptr = &amp;value;
+    <span class="c-keyword">int</span> **ptr_ptr = &amp;ptr;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"原始值: %d\n"</span>, value);
+    <span class="c-function">printf</span>(<span class="c-string">"通过一级指针: *ptr = %d\n"</span>, *ptr);
+    <span class="c-function">printf</span>(<span class="c-string">"通过二级指针: **ptr_ptr = %d\n\n"</span>, **ptr_ptr);
+    
+    **ptr_ptr = <span class="c-number">100</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"修改后: value = %d\n"</span>, value);
+    
+    <span class="c-function">printf</span>(<span class="c-string">"\n地址信息:\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"&amp;value = %p\n"</span>, (void*)&amp;value);
+    <span class="c-function">printf</span>(<span class="c-string">"ptr = %p, &amp;ptr = %p\n"</span>, (void*)ptr, (void*)&amp;ptr);
+    <span class="c-function">printf</span>(<span class="c-string">"ptr_ptr = %p\n"</span>, (void*)ptr_ptr);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习:安全解引用</h3>
+                    <div class="question-item">
+                        <p><strong>练习7:</strong> 编写一个安全的函数,接受指针参数,在解引用前先检查是否为NULL,避免崩溃。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">安全解引用函数</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">safe_print</span>(<span class="c-keyword">int</span> *ptr) {
+    <span class="c-keyword">if</span> (ptr == NULL) {
+        <span class="c-function">printf</span>(<span class="c-string">"错误: 指针为NULL\n"</span>);
+        <span class="c-keyword">return</span>;
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"值: %d\n"</span>, *ptr);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">50</span>;
+    <span class="c-keyword">int</span> *valid = &amp;x;
+    <span class="c-keyword">int</span> *null_ptr = NULL;
+    
+    <span class="c-function">safe_print</span>(valid);     <span class="c-comment">// 正常输出</span>
+    <span class="c-function">safe_print</span>(null_ptr);  <span class="c-comment">// 安全处理</span>
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
             </section>
 
             <!-- 指针与数组 -->
@@ -759,7 +1300,98 @@
                 <h2 class="section-title">指针与数组</h2>
                 
                 <div class="subsection">
-                    <h3 class="subsection-title">数组与指针的关系</h3>
+                    <h3 class="subsection-title">数组名与指针的本质关系</h3>
+                    <div class="subsection-content">
+                        <h4>数组在内存中的存储</h4>
+                        <p>数组是一组连续存储的相同类型数据的集合。理解数组的内存布局对掌握指针操作至关重要。</p>
+                        
+                        <div class="tip-box">
+                            <p><strong>内存布局示例：</strong></p>
+                            <pre>int arr[5] = {10, 20, 30, 40, 50};</pre>
+                            <p>在内存中的排列（假设起始地址为0x1000）：</p>
+                            <ul>
+                                <li>arr[0] = 10 → 地址 0x1000</li>
+                                <li>arr[1] = 20 → 地址 0x1004（int占4字节）</li>
+                                <li>arr[2] = 30 → 地址 0x1008</li>
+                                <li>arr[3] = 40 → 地址 0x100C</li>
+                                <li>arr[4] = 50 → 地址 0x1010</li>
+                            </ul>
+                        </div>
+
+                        <h4>数组名的特殊性</h4>
+                        <div class="callout tip">
+                            <p><strong>核心概念：</strong></p>
+                            <ul>
+                                <li><strong>数组名是常量指针</strong>：arr 实际上是指向数组第一个元素的指针常量</li>
+                                <li><strong>arr 等价于 &arr[0]</strong>：它们的值相同，都是数组首元素的地址</li>
+                                <li><strong>数组名不可修改</strong>：不能对数组名进行赋值操作（arr = ...是非法的）</li>
+                                <li><strong>自动转换</strong>：在大多数表达式中，数组名会自动转换为指向首元素的指针</li>
+                            </ul>
+                        </div>
+
+                        <h4>指针访问数组的两种方式</h4>
+                        <div class="code-block">
+                            <p><strong>方式1：下标法</strong></p>
+                            <pre>int *p = arr;
+value = p[i];  // 通过下标访问</pre>
+                            
+                            <p><strong>方式2：指针运算法</strong></p>
+                            <pre>int *p = arr;
+value = *(p + i);  // 通过指针运算访问</pre>
+                            
+                            <p><strong>两种方式等价：</strong><code>p[i]</code> ≡ <code>*(p + i)</code></p>
+                        </div>
+
+                        <h4>指针算术的规则</h4>
+                        <div class="tip-box">
+                            <p><strong>重要特性：指针运算会自动考虑数据类型大小</strong></p>
+                            <ul>
+                                <li><code>p + 1</code> 不是简单的地址加1</li>
+                                <li>实际增加的字节数 = 1 × sizeof(数据类型)</li>
+                                <li>对于int指针：p + 1 地址增加4字节</li>
+                                <li>对于double指针：p + 1 地址增加8字节</li>
+                                <li>对于char指针：p + 1 地址增加1字节</li>
+                            </ul>
+                        </div>
+
+                        <h4>数组名与指针的区别</h4>
+                        <div class="tip-box">
+                            <p><strong>特性对比：</strong></p>
+                            <ul>
+                                <li><strong>本质</strong>：数组名是地址常量，指针变量是地址变量</li>
+                                <li><strong>可否修改</strong>：数组名不可修改，指针可以修改</li>
+                                <li><strong>sizeof结果</strong>：数组名是整个数组的大小，指针是指针本身的大小（4或8字节）</li>
+                                <li><strong>&运算符</strong>：&arr 是数组指针，&p 是指针的指针</li>
+                            </ul>
+                        </div>
+
+                        <h4>常见应用场景</h4>
+                        <ul>
+                            <li><strong>数组遍历</strong>：用指针递增的方式遍历数组元素</li>
+                            <li><strong>函数传参</strong>：数组作为参数传递时，实际传递的是指针</li>
+                            <li><strong>字符串处理</strong>：字符串本质是字符数组，用指针操作更灵活</li>
+                            <li><strong>动态数组</strong>：配合malloc/calloc实现动态大小的数组</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">数组与指针关系示例</h3>
+                    
+                    <div class="subsection-content">
+                        <p><strong>代码功能说明：</strong></p>
+                        <p>这个程序展示了数组和指针之间的等价性，演示了如何用两种不同的方式访问数组元素。</p>
+                        
+                        <div class="tip-box">
+                            <p><strong>核心知识点：</strong></p>
+                            <ul>
+                                <li><code>arr[i]</code> 和 <code>*(arr + i)</code> 完全等价</li>
+                                <li>指针可以像数组一样使用下标</li>
+                                <li>数组名在表达式中会自动转换为指针</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <div class="code-block">
                     <div class="code-block-title">指针数组操作示例</div>
                     <pre><code><span class="c-comment">// 指针与数组的关系</span>
@@ -768,14 +1400,15 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[<span class="c-number">5</span>] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
     <span class="c-keyword">int</span> *p = arr;  <span class="c-comment">// 数组名就是指向第一个元素的指针</span>
+    <span class="c-keyword">int</span> i;  <span class="c-comment">// VC2010要求变量声明在块开头</span>
     
     <span class="c-function">printf</span>(<span class="c-string">"数组访问:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"arr[%d] = %d\n"</span>, i, arr[i]);
     }
     
     <span class="c-function">printf</span>(<span class="c-string">"\n指针访问:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"*(p+%d) = %d\n"</span>, i, *(p + i));
     }
     
@@ -823,7 +1456,7 @@
     <span class="c-comment">// 指针之间的距离</span>
     <span class="c-keyword">int</span> *ptr1 = &amp;arr[<span class="c-number">1</span>];
     <span class="c-keyword">int</span> *ptr2 = &amp;arr[<span class="c-number">4</span>];
-    <span class="c-function">printf</span>(<span class="c-string">"\nptr2 - ptr1 = %td\n"</span>, ptr2 - ptr1);  <span class="c-comment">// 距离为3</span>
+    <span class="c-function">printf</span>(<span class="c-string">"\nptr2 - ptr1 = %d\n"</span>, (<span class="c-keyword">int</span>)(ptr2 - ptr1));  <span class="c-comment">// 距离为3</span>
     
     <span class="c-comment">// 自增自减</span>
     ptr = arr;
@@ -858,24 +1491,24 @@
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)int_ptr);
     int_ptr++;
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)int_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"  步长: %td 字节\n"</span>, (char*)int_ptr - (char*)int_arr);
+    <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n"</span>, (<span class="c-keyword">int</span>)((char*)int_ptr - (char*)int_arr));
     
     <span class="c-function">printf</span>(<span class="c-string">"\ndouble指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)double_ptr);
     double_ptr++;
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)double_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"  步长: %td 字节\n"</span>, (char*)double_ptr - (char*)double_arr);
+    <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n"</span>, (<span class="c-keyword">int</span>)((char*)double_ptr - (char*)double_arr));
     
     <span class="c-function">printf</span>(<span class="c-string">"\nchar指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)char_ptr);
     char_ptr++;
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)char_ptr);
-    <span class="c-function">printf</span>(<span class="c-string">"  步长: %td 字节\n"</span>, (char*)char_ptr - (char*)char_arr);
+    <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n"</span>, (<span class="c-keyword">int</span>)((char*)char_ptr - (char*)char_arr));
     
     <span class="c-function">printf</span>(<span class="c-string">"\n数据类型大小:\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(int) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(double) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(char) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(int) = %lu\n"</span>, (<span class="c-keyword">unsigned long</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(double) = %lu\n"</span>, (<span class="c-keyword">unsigned long</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(char) = %lu\n"</span>, (<span class="c-keyword">unsigned long</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -896,8 +1529,9 @@
 
 <span class="c-comment">// 形式1: 数组形式（实际是指针）</span>
 <span class="c-keyword">void</span> <span class="c-function">print_array1</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"形式1 - 数组形式:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; size; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -905,8 +1539,9 @@
 
 <span class="c-comment">// 形式2: 指针形式</span>
 <span class="c-keyword">void</span> <span class="c-function">print_array2</span>(<span class="c-keyword">int</span> *arr, <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"形式2 - 指针形式:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; size; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, *(arr + i));
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -914,8 +1549,9 @@
 
 <span class="c-comment">// 形式3: 指定大小的数组</span>
 <span class="c-keyword">void</span> <span class="c-function">print_array3</span>(<span class="c-keyword">int</span> arr[<span class="c-number">5</span>]) {  <span class="c-comment">// 大小信息在这里是装饰性的</span>
+    <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"形式3 - 指定大小:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -1033,8 +1669,9 @@
 
 <span class="c-comment">// 打印数组</span>
 <span class="c-keyword">void</span> <span class="c-function">print_array</span>(DynamicArray *arr) {
+    <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"数组内容 ("</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; arr-&gt;size; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; arr-&gt;size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, arr-&gt;data[i]);
         <span class="c-keyword">if</span> (i &lt; arr-&gt;size - <span class="c-number">1</span>) <span class="c-function">printf</span>(<span class="c-string">", "</span>);
     }
@@ -1051,10 +1688,11 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     DynamicArray arr;
+    <span class="c-keyword">int</span> i;
     init_array(&amp;arr, <span class="c-number">2</span>);
     
     <span class="c-function">printf</span>(<span class="c-string">"添加元素:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt;= <span class="c-number">8</span>; i++) {
+    <span class="c-keyword">for</span>(i = <span class="c-number">1</span>; i &lt;= <span class="c-number">8</span>; i++) {
         add_element(&amp;arr, i * <span class="c-number">10</span>);
         <span class="c-function">printf</span>(<span class="c-string">"添加 %d 后，容量: %d\n"</span>, i * <span class="c-number">10</span>, arr.capacity);
     }
@@ -1066,6 +1704,102 @@
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
+                    </div>
+                </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习:指针遍历数组</h3>
+                    <div class="question-item">
+                        <p><strong>练习8:</strong> 使用指针遍历整型数组,输出元素并进行边界检查,避免越界访问;尝试通过指针修改某一元素。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">指针遍历与修改</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
+    <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(arr) / <span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
+    <span class="c-keyword">int</span> *p = arr;
+    <span class="c-keyword">int</span> i;
+    <span class="c-keyword">int</span> idx = <span class="c-number">3</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"指针遍历:\n"</span>);
+    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; size; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"*(p+%d) = %d\n"</span>, i, *(p+i));
+    }
+
+    <span class="c-comment">// 边界检查修改</span>
+    <span class="c-keyword">if</span> (idx &gt;= <span class="c-number">0</span> &amp;&amp; idx &lt; size) {
+        *(p + idx) = <span class="c-number">999</span>;
+        <span class="c-function">printf</span>(<span class="c-string">"\n修改后 arr[%d] = %d\n"</span>, idx, arr[idx]);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习:指针算术运算</h3>
+                    <div class="question-item">
+                        <p><strong>练习9:</strong> 声明一个整型数组,使用指针的自增运算符遍历数组,打印每个元素的地址和值。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">指针自增遍历</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">100</span>, <span class="c-number">200</span>, <span class="c-number">300</span>, <span class="c-number">400</span>, <span class="c-number">500</span>};
+    <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(arr) / <span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
+    <span class="c-keyword">int</span> *p = arr;
+    <span class="c-keyword">int</span> i;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"使用指针自增遍历:\n"</span>);
+    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; size; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"地址: %p, 值: %d\n"</span>, (void*)p, *p);
+        p++;  <span class="c-comment">// 指针自增</span>
+    }
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="practice-questions">
+                    <h3 class="subsection-title">就地练习:字符串指针操作</h3>
+                    <div class="question-item">
+                        <p><strong>练习10:</strong> 使用指针实现一个简单的字符串长度计算函数,不使用strlen库函数。</p>
+                        <details>
+                            <summary>参考答案与示例代码</summary>
+                            <div class="code-block">
+                                <div class="code-block-title">字符串长度计算</div>
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">my_strlen</span>(<span class="c-keyword">const</span> <span class="c-keyword">char</span> *str) {
+    <span class="c-keyword">int</span> len = <span class="c-number">0</span>;
+    <span class="c-keyword">while</span> (*str != <span class="c-string">'\0'</span>) {
+        len++;
+        str++;  <span class="c-comment">// 指针移动到下一个字符</span>
+    }
+    <span class="c-keyword">return</span> len;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> text[] = <span class="c-string">"Hello, Pointer!"</span>;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"字符串: %s\n"</span>, text);
+    <span class="c-function">printf</span>(<span class="c-string">"长度: %d\n"</span>, my_strlen(text));
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </section>

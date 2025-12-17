@@ -818,7 +818,7 @@
         i++;
     }
     
-    <span class="c-function">printf</span>(<span class="c-string">"%d! = %lld\n"</span>, n, factorial);
+    <span class="c-function">printf</span>(<span class="c-string">"%d! = %I64d\n"</span>, n, factorial);
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -874,14 +874,13 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-comment">// for(初始化; 条件; 更新)</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">int</span> i;
+    <span class="<span class="c-keyword">for</span> (i =n> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d次循环\n"</span>, i);
     }
     
     <span class="c-comment">// 计算1到10的和</span>
-    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++) {
+    <span class="c-keyword">int</span> s<span class="c-keyword">for</span> (i =n> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++) {
         sum += i;
     }
     <span class="c-function">printf</span>(<span class="c-string">"1到10的和: %d\n"</span>, sum);
@@ -903,10 +902,10 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"for循环执行流程:\n"</span>);
     
-    <span class="c-comment">// for(初始化; 条件; 更新)</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">3</span>; i++) {
+    <span class="<span class="c-keyword">for</span> (i =n> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"  初始化: i=1\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"  条件: i(%d) <= 3 为真\n"</span>, i);
         <span class="c-function">printf</span>(<span class="c-string">"  执行循环体: 第%d次\n"</span>, i);
@@ -933,26 +932,24 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> j, k, a;
     <span class="c-comment">// 1. 省略初始化</span>
     <span class="c-keyword">int</span> i = <span class="c-number">1</span>;
     <span class="c-keyword">for</span> (; i <= <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"省略初始化: %d\n"</span>, i);
     }
     
-    <span class="c-comment">// 2. 省略更新</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= <span class="c-number">3</span>; ) {
+  <span class="c-keyword">for</span> (j =r</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= <span class="c-number">3</span>; ) {
         <span class="c-function">printf</span>(<span class="c-string">"省略更新: %d\n"</span>, j);
         j++;  <span class="c-comment">// 在循环体内更新</span>
     }
     
-    <span class="c-comment">// 3. 省略条件(死循环)</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> k = <span class="c-number">1</span>; ; k++) {
+    <sp<span class="c-keyword">for</span> (k =r</span> (<span class="c-keyword">int</span> k = <span class="c-number">1</span>; ; k++) {
         <span class="c-function">printf</span>(<span class="c-string">"死循环: %d\n"</span>, k);
         <span class="c-keyword">if</span> (k >= <span class="c-number">3</span>) <span class="c-keyword">break</span>;  <span class="c-comment">// 必须有跳出条件</span>
     }
     
-    <span class="c-comment">// 4. 多个变量</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">10</span>; a <= <span class="c-number">3</span>; a++, b--) {
+  <span class="c-keyword">for</span> (a =r</span> (<span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">10</span>; a <= <span class="c-number">3</span>; a++, b--) {
         <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d\n"</span>, a, b);
     }
     
@@ -973,19 +970,16 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> i, j, row, col;
     <span class="c-comment">// 打印乘法表</span>
-    <span class="c-function">printf</span>(<span class="c-string">"九九乘法表:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">9</span>; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
+    <span class="c-function">printf<span class="c-keyword">for</span> (i =ord">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span><span class="c-keyword">for</span> (j =ord">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"%d×%d=%2d "</span>, j, i, i*j);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
     
     <span class="c-comment">// 打印矩形</span>
-    <span class="c-function">printf</span>(<span class="c-string">"\n5×3的矩形:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> row = <span class="c-number">1</span>; row <= <span class="c-number">3</span>; row++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> col = <span class="c-number">1</span>; col <= <span class="c-number">5</span>; col++) {
+    <span class="c-function">printf</s<span class="c-keyword">for</span> (row =d">for</span> (<span class="c-keyword">int</span> row = <span class="c-number">1</span>; ro<span class="c-keyword">for</span> (col =d">for</span> (<span class="c-keyword">int</span> col = <span class="c-number">1</span>; col <= <span class="c-number">5</span>; col++) {
             <span class="c-function">printf</span>(<span class="c-string">"* "</span>);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -1006,14 +1000,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> rows, cols;
+    <span class="c-keyword">int</span> i, j;
     
     <span class="c-function">printf</span>(<span class="c-string">"请输入行数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &rows);
     <span class="c-function">printf</span>(<span class="c-string">"请输入列数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &cols);
     
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= rows; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= cols; j++) {
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= rows; i++) {
+        <span class="c-keyword">for</span> (j = <span class="c-number">1</span>; j <= cols; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"* "</span>);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -1034,13 +1029,15 @@
                                     <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num, i, isPrime;
+    
     <span class="c-function">printf</span>(<span class="c-string">"1-100之间的素数:\n"</span>);
     
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> num = <span class="c-number">2</span>; num <= <span class="c-number">100</span>; num++) {
-        <span class="c-keyword">int</span> isPrime = <span class="c-number">1</span>;  <span class="c-comment">// 假设是素数</span>
+    <span class="c-keyword">for</span> (num = <span class="c-number">2</span>; num <= <span class="c-number">100</span>; num++) {
+        isPrime = <span class="c-number">1</span>;  <span class="c-comment">// 假设是素数</span>
         
         <span class="c-comment">// 检查是否有因子</span>
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i <= num; i++) {
+        <span class="c-keyword">for</span> (i = <span class="c-number">2</span>; i * i <= num; i++) {
             <span class="c-keyword">if</span> (num % i == <span class="c-number">0</span>) {
                 isPrime = <span class="c-number">0</span>;  <span class="c-comment">// 不是素数</span>
                 <span class="c-keyword">break</span>;

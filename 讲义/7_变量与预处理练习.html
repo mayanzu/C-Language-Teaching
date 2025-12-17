@@ -417,7 +417,7 @@
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">trackCalls</span>();
     }
     
@@ -493,8 +493,8 @@
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"生成ID:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">int</span> i;
+    <span class="c-function">printf</span>(<spa<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"ID: %d\n"</span>, <span class="c-function">generate_id</span>());
     }
     
@@ -504,8 +504,7 @@
     <span class="c-function">log_message</span>(<span class="c-string">"初始化完成"</span>);
     
     <span class="c-function">printf</span>(<span class="c-string">"\n运行平均值:\n"</span>);
-    <span class="c-keyword">double</span> values[] = {<span class="c-number">10.0</span>, <span class="c-number">15.0</span>, <span class="c-number">12.0</span>, <span class="c-number">18.0</span>, <span class="c-number">14.0</span>};
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">double</span> values[] = {<span class="c-number">10.0</span>, <span class="c-number">15.0</span>, <span class="c-number">12.0</span>, <span class="c-number">18.0</span>,<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"添加 %.1f，平均值: %.2f\n"</span>, values[i], <span class="c-function">running_average</span>(values[i]));
     }
     
@@ -660,10 +659,10 @@
 <span class="c-keyword">extern</span> <span class="c-keyword">void</span> <span class="c-function">print_statistics</span>();
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> i;
     <span class="c-keyword">double</span> values[] = {<span class="c-number">85.5</span>, <span class="c-number">92.0</span>, <span class="c-number">78.5</span>, <span class="c-number">96.5</span>, <span class="c-number">88.0</span>};
     
-    <span class="c-function">printf</span>(<span class="c-string">"添加数据并计算平均值:\n"</span>);
-    <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-function">printf</span>(<span clas<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-keyword">double</span> avg = <span class="c-function">calculate_average</span>(values[i]);
         <span class="c-function">printf</span>(<span class="c-string">"添加 %.1f，当前平均值: %.2f\n"</span>, values[i], avg);
     }
@@ -873,7 +872,7 @@
 <span class="c-keyword">#define</span> PRINT_ARRAY(arr, size) \
     <span class="c-keyword">do</span> { \
         <span class="c-function">printf</span>(<span class="c-string">"数组内容: "</span>); \
-        <span class="c-keyword">for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; (size); i++) { \
+        <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; (size); i++) { \
             <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, (arr)[i]); \
         } \
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>); \
@@ -974,7 +973,7 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 数组操作</span>
     <span class="c-keyword">int</span> numbers[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
-    <span class="c-function">printf</span>(<span class="c-string">"数组大小: %zu\n"</span>, ARRAY_SIZE(numbers));
+    <span class="c-function">printf</span>(<span class="c-string">"数组大小: %u\n"</span>, ARRAY_SIZE(numbers));
     
     <span class="c-comment">// 数学计算</span>
     <span class="c-keyword">double</span> angle_deg = <span class="c-number">90.0</span>;
@@ -1294,8 +1293,8 @@
 };
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"PackedStruct 大小: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> PackedStruct));
-    <span class="c-function">printf</span>(<span class="c-string">"NormalStruct 大小: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> NormalStruct));
+    <span class="c-function">printf</span>(<span class="c-string">"PackedStruct 大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> PackedStruct));
+    <span class="c-function">printf</span>(<span class="c-string">"NormalStruct 大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> NormalStruct));
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>

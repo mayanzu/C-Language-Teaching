@@ -920,8 +920,8 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5 / 2) = %zu\n"</span>, <span class="c-function">sizeof</span>(<span class="c-number">5</span> / <span class="c-number">2</span>));  <span class="c-comment">// 输出: sizeof(5 / 2) = 4</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5.0 / 2) = %zu\n"</span>, <span class="c-function">sizeof</span>(<span class="c-number">5.0</span> / <span class="c-number">2</span>));  <span class="c-comment">// 输出: sizeof(5.0 / 2) = 8</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5 / 2) = %u\n"</span>, <span class="c-function">sizeof</span>(<span class="c-number">5</span> / <span class="c-number">2</span>));  <span class="c-comment">// 输出: sizeof(5 / 2) = 4</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5.0 / 2) = %u\n"</span>, <span class="c-function">sizeof</span>(<span class="c-number">5.0</span> / <span class="c-number">2</span>));  <span class="c-comment">// 输出: sizeof(5.0 / 2) = 8</span>
     
     <span class="c-comment">// 分析:</span>
     <span class="c-comment">// 5 / 2 是整数除法，结果为int类型，sizeof(int) = 4</span>
