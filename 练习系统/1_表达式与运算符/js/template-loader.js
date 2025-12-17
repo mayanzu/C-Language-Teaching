@@ -296,7 +296,7 @@ class TemplateLoader {
     },
     {
         "id": 18,
-        "question": "下列代码的输出是什么？\n```c\nint a = 1, b = 2, c = 3;\nprintf(\"%d\\n\", a = b = c);\n```",
+        "question": "下列代码的输出是什么？\n\n<C>\nint a = 1, b = 2, c = 3;\nprintf(\"%d\\n\", a = b = c);\n</C>",
         "options": [
             "`1`",
             "`2`",
@@ -400,7 +400,7 @@ class TemplateLoader {
     },
     {
         "id": 26,
-        "question": "下列代码中，`result` 的最终值是多少？\n```c\nint x = 5, y = 10;\nint result = (x > y ? x : y) = 20;\n```",
+        "question": "下列代码中，`result` 的最终值是多少？\n\n<C>\nint x = 5, y = 10;\nint result = (x > y ? x : y) = 20;\n</C>",
         "options": [
             "`20`",
             "`10`",
@@ -426,7 +426,7 @@ class TemplateLoader {
     },
     {
         "id": 28,
-        "question": "下列代码中，变量 `a` 和 `b` 的最终值分别是多少？\n```c\nint a = 0, b = 0;\nif (a++ || ++b) { }\nprintf(\"%d %d\", a, b);\n```",
+        "question": "下列代码中，变量 `a` 和 `b` 的最终值分别是多少？\n\n<C>\nint a = 0, b = 0;\nif (a++ || ++b) { }\nprintf(\"%d %d\", a, b);\n</C>",
         "options": [
             "`0 0`",
             "`1 0`",
