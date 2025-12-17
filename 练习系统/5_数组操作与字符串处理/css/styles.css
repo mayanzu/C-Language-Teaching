@@ -711,6 +711,36 @@ body {
     line-height: 1.6;
 }
 
+/* 题目中的代码示例容器 */
+.code-example-container {
+    margin: var(--spacing-lg) 0;
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.code-example-container pre {
+    padding: var(--spacing-lg);
+    margin: 0;
+    overflow-x: auto;
+}
+
+.code-example-container code {
+    color: var(--color-code-dark);
+    font-family: "SF Mono", Monaco, "Cascadia Code", "Consolas", monospace;
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+}
+
+.code-with-line-numbers {
+    counter-reset: line;
+}
+
+.code-with-line-numbers code {
+    display: block;
+}
+
 /* 苹果风格代码高亮 - Xcode Light 主题 */
 .code-keyword {
     color: #ad3da4; /* 紫色 - 关键字 */

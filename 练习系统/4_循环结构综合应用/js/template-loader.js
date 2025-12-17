@@ -44,11 +44,11 @@ class TemplateLoader {
             // ========== 第1-8题：while循环基础 ==========
             {
                 id: 1,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint i = 1;\nwhile (i <= 5) {\n    printf(\"%d \", i);\n    i++;\n}\n</C>",
-                options: ["1 2 3 4 5", "0 1 2 3 4", "1 2 3 4", "2 3 4 5 6"],
+                question: "以下代码的输出结果是什么？\n\n<C>\nint i = 0;\nwhile (i++ < 5) {\n    printf(\"%d \", i);\n}\n</C>",
+                options: ["`1 2 3 4 5`", "`0 1 2 3 4`", "`0 1 2 3 4 5`", "`1 2 3 4 5 6`"],
                 correctAnswer: 0,
-                explanation: "while循环从i=1开始，当i<=5时执行循环体，每次输出i并自增。输出1到5，共5次。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1;\n    while (i <= 5) {\n        printf(\"%d \", i);  // 输出1 2 3 4 5\n        i++;\n    }\n    return 0;\n}"
+                explanation: "这是**后缀自增在循环条件中**的陷阱！`i++<5`先用i的值（0）比较，然后i自增为1。执行流程：1) i=0比较0<5真，i变1，输出1；2) i=1比较1<5真，i变2，输出2；...；5) i=4比较4<5真，i变5，输出5；6) i=5比较5<5假，退出。**关键点**：后缀++先使用再自增，所以判断时用旧值，输出时用新值。**易错点**：误以为从0开始输出或从1到6。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 0;\n    \n    /* 后缀自增：先比较后自增 */\n    while (i++ < 5) {  /* 先用i值比较，再i自增 */\n        printf(\"%d \", i);  /* 输出自增后的值 */\n    }\n    printf(\"\\n最终i=%d\\n\", i);  /* 输出6 */\n    \n    /* 对比：前缀自增 */\n    int j = 0;\n    while (++j < 5) {  /* 先自增，再比较 */\n        printf(\"%d \", j);  /* 输出1 2 3 4 */\n    }\n    printf(\"\\n最终j=%d\\n\", j);  /* 输出5 */\n    \n    return 0;\n}"
             },
             {
                 id: 2,
@@ -84,11 +84,11 @@ class TemplateLoader {
             },
             {
                 id: 6,
-                question: "以下代码计算阶乘，输出结果是什么？\n\n<C>\nint n = 5, fact = 1;\nwhile (n > 0) {\n    fact *= n;\n    n--;\n}\nprintf(\"%d\", fact);\n</C>",
-                options: ["120", "24", "60", "720"],
+                question: "以下代码的输出结果是什么？\n\n<C>\nint i;\nfor (i = 0; i < 5; i++) {\n    printf(\"%d \", i);\n    i++;  /* 循环体内也自增 */\n}\n</C>",
+                options: ["`0 2 4`", "`0 1 2 3 4`", "`0 1 2 3 4 5`", "无限循环"],
                 correctAnswer: 0,
-                explanation: "计算5的阶乘：fact=1×5×4×3×2×1=120。这是while循环计算阶乘的经典应用。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int n = 5, fact = 1;\n    while (n > 0) {\n        fact *= n;  // fact = fact * n\n        printf(\"n=%d, fact=%d\\n\", n, fact);\n        n--;\n    }\n    printf(\"5的阶乘=%d\", fact);  // 输出120\n    return 0;\n}"
+                explanation: "这是**循环体内修改循环变量**的陷阱！每次迭代：1) 循环体内`i++`使i增1；2) for语句的`i++`再增1，所以i每次增2。执行流程：i=0输出0，体内i变1，for的i++使i变2；i=2<5输出2，体内i变3，for的i++使i变4；i=4<5输出4，体内i变5，for的i++使i变6；i=6不<5退出。**易错点**：忘记for语句本身也有i++。**重要规则**：避免在循环体内修改循环变量！",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int i;\n    \n    /* 危险：循环体内修改循环变量 */\n    for (i = 0; i < 5; i++) {\n        printf(\"%d \", i);  /* 输出0 2 4 */\n        i++;  /* 体内自增，加上for的i++，每次增2 */\n    }\n    printf(\"\\n最终i=%d\\n\", i);  /* i=6 */\n    \n    /* 正确做法：不在体内修改i */\n    for (i = 0; i < 5; i++) {\n        printf(\"%d \", i);  /* 输出0 1 2 3 4 */\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 7,
@@ -126,11 +126,11 @@ class TemplateLoader {
             },
             {
                 id: 11,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint sum = 0, i = 1;\ndo {\n    sum += i;\n    i++;\n} while (i <= 5);\nprintf(\"%d\", sum);\n</C>",
-                options: ["10", "15", "5", "0"],
+                question: "以下代码的输出结果是什么？\n\n<C>\nint count = 0;\nint flag = 0;\ndo {\n    count++;\n} while (flag);\nprintf(\"%d\", count);\n</C>",
+                options: ["`0`", "`1`", "无限循环", "编译错误"],
                 correctAnswer: 1,
-                explanation: "do-while累加1到5：sum=1+2+3+4+5=15。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int sum = 0, i = 1;\n    do {\n        sum += i;\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n        i++;\n    } while (i <= 5);\n    printf(\"最终sum=%d\", sum);  // 输出15\n    return 0;\n}"
+                explanation: "这是**do-while至少执行一次**的经典陷阱！即使条件`while(flag)`一开始就为假（flag=0），do-while仍会先执行一次循环体，使count变为1，然后判断条件flag=0为假，退出循环。输出1。**关键区别**：while循环条件为假时一次不执行，do-while即使条件为假也至少执行一次。**应用场景**：菜单系统、至少需要执行一次的输入验证。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int count = 0;\n    int flag = 0;\n    \n    /* do-while至少执行一次 */\n    do {\n        count++;\n        printf(\"执行了一次\\n\");\n    } while (flag);  /* flag=0为假，但已执行过一次 */\n    printf(\"count=%d\\n\", count);  /* 输出1 */\n    \n    /* 对比：while一次都不执行 */\n    int count2 = 0;\n    while (flag) {  /* flag=0，一次都不执行 */\n        count2++;\n    }\n    printf(\"count2=%d\\n\", count2);  /* 输出0 */\n    \n    return 0;\n}"
             },
             {
                 id: 12,
@@ -166,11 +166,11 @@ class TemplateLoader {
             },
             {
                 id: 16,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint i = 1, product = 1;\ndo {\n    product *= i;\n    i++;\n} while (i <= 4);\nprintf(\"%d\", product);\n</C>",
-                options: ["24", "10", "120", "4"],
+                question: "以下代码的输出结果是什么？\n\n<C>\nint i, j;\nfor (i = 0, j = 10; i < j; i++, j--) {\n    printf(\"%d \", i + j);\n}\n</C>",
+                options: ["`10 10 10 10 10`", "`10 8 6 4 2`", "`0 2 4 6 8`", "`10`"],
                 correctAnswer: 0,
-                explanation: "计算1×2×3×4=24。do-while循环计算阶乘，从1累乘到4。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1, product = 1;\n    do {\n        product *= i;\n        printf(\"i=%d, product=%d\\n\", i, product);\n        i++;\n    } while (i <= 4);\n    printf(\"最终product=%d\", product);  // 输出24\n    return 0;\n}"
+                explanation: "这是**逗号表达式在for循环中**的巧妙应用！for循环的初始化、更新部分都可以包含多个表达式（用逗号分隔）。执行流程：1) i=0,j=10，i+j=10；2) i=1,j=9，i+j=10；3) i=2,j=8，i+j=10；4) i=3,j=7，i+j=10；5) i=4,j=6，i+j=10；6) i=5,j=5不满足i<j退出。输出5个10。**关键点**：i递增的同时j递减，和保持不变。**应用**：双指针技巧、数组两端向中间遍历。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int i, j;\n    \n    /* 逗号表达式：i递增j递减 */\n    for (i = 0, j = 10; i < j; i++, j--) {\n        printf(\"i=%d, j=%d, 和=%d\\n\", i, j, i + j);\n    }\n    /* 输出：\n     * i=0, j=10, 和=10\n     * i=1, j=9,  和=10\n     * i=2, j=8,  和=10\n     * i=3, j=7,  和=10\n     * i=4, j=6,  和=10\n     */\n    \n    printf(\"循环后i=%d, j=%d\\n\", i, j);  /* i=5, j=5 */\n    \n    return 0;\n}"
             },
             
             // ========== 第17-23题：break和continue的使用 ==========
@@ -250,11 +250,11 @@ class TemplateLoader {
             },
             {
                 id: 26,
-                question: "以下嵌套while打印三角形，第3行输出几个星号？\n\n<C>\nint i = 1, j;\nwhile (i <= 5) {\n    j = 1;\n    while (j <= i) {\n        printf(\"*\");\n        j++;\n    }\n    printf(\"\\n\");\n    i++;\n}\n</C>",
-                options: ["1", "2", "3", "5"],
-                correctAnswer: 2,
-                explanation: "内层循环次数等于i。i=3时内层循环3次，输出3个星号。这是打印直角三角形的经典算法。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1, j;\n    while (i <= 5) {\n        printf(\"第%d行: \", i);\n        j = 1;\n        while (j <= i) {  // j<=i，输出i个星号\n            printf(\"*\");\n            j++;\n        }\n        printf(\"\\n\");\n        i++;\n    }\n    // 第3行输出3个星号\n    return 0;\n}"
+                question: "以下嵌套循环的输出结果是什么？\n\n<C>\nint i, j;\nfor (i = 0; i < 2; i++) {\n    for (j = 0; j < 3; j++) {\n        if (j == 1) continue;\n        printf(\"%d%d \", i, j);\n    }\n}\n</C>",
+                options: ["`00 02 10 12`", "`00 01 02 10 11 12`", "`00 10`", "`02 12`"],
+                correctAnswer: 0,
+                explanation: "这是**嵌套循环中continue作用域**陷阱！`continue`只跳过**当前迭代**，继续**同层**循环的下一次迭代。执行流程：i=0时：j=0输出00，j=1时continue跳过，j=2输出02；i=1时：j=0输出10，j=1时continue跳过，j=2输出12。输出`00 02 10 12`。**关键区别**：continue跳过剩余代码但继续循环，break直接退出循环。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int i, j;\n    \n    /* continue只跳过当前迭代 */\n    printf(\"输出：\");\n    for (i = 0; i < 2; i++) {\n        for (j = 0; j < 3; j++) {\n            if (j == 1) continue;  /* 跳过j=1，继续ad=2 */\n            printf(\"%d%d \", i, j);\n        }\n    }\n    printf(\"\\n\");  /* 输出00 02 10 12 */\n    \n    /* 对比break */\n    printf(\"使用break：\");\n    for (i = 0; i < 2; i++) {\n        for (j = 0; j < 3; j++) {\n            if (j == 1) break;  /* j=1时退出内层 */\n            printf(\"%d%d \", i, j);\n        }\n    }\n    printf(\"\\n\");  /* 输出00 10 */\n    \n    return 0;\n}"
             },
             {
                 id: 27,
@@ -266,11 +266,11 @@ class TemplateLoader {
             },
             {
                 id: 28,
-                question: "以下嵌套do-while的输出是什么？\n\n<C>\nint i = 1, j;\ndo {\n    j = 1;\n    do {\n        printf(\"%d \", i * j);\n        j++;\n    } while (j <= 3);\n    printf(\"\\n\");\n    i++;\n} while (i <= 2);\n</C>",
-                options: ["1 2 3\\n2 4 6\\n", "1 2\\n3 4\\n", "1 2 3 4 5 6", "1\\n2\\n"],
-                correctAnswer: 0,
-                explanation: "外层i=1时，内层输出1×1=1, 1×2=2, 1×3=3；外层i=2时，内层输出2×1=2, 2×4=4, 2×3=6。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1, j;\n    do {\n        j = 1;\n        do {\n            printf(\"%d \", i * j);\n            j++;\n        } while (j <= 3);\n        printf(\"\\n\");\n        i++;\n    } while (i <= 2);\n    // 输出：\n    // 1 2 3\n    // 2 4 6\n    return 0;\n}"
+                question: "以下代码的输出结果是什么？\n\n<C>\nint i = 5;\nwhile (i = 0) {  /* 注意：=而不是== */\n    printf(\"%d \", i);\n}\nprintf(\"结束\");\n</C>",
+                options: ["`5 4 3 2 1 0 结束`", "无限循环", "`结束`", "编译错误"],
+                correctAnswer: 2,
+                explanation: "这是**循环条件中赋值与比较混淆**的危险陷阱！`while(i=0)`是**赋值表达式**，将i赋值为0，并返回0（假）。循环条件一开始就为假，循环体**一次都不执行**，直接输出“结束”。**致命错误**：写成`while(i=0)`而不是`while(i==0)`或`while(i!=0)`。**防范方法**：1) 开启编译器警告；2) 使用Yoda条件：`if(0==i)`而不是`if(i==0)`。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 5;\n    \n    /* 错误：赋值而不是比较 */\n    while (i = 0) {  /* i被赋值为0，表达式值为0（假） */\n        printf(\"%d \", i);  /* 不执行 */\n    }\n    printf(\"结束\\n\");  /* 直接输出 */\n    printf(\"i的值为: %d\\n\", i);  /* i=0（被修改了） */\n    \n    /* 正确写法 */\n    i = 5;\n    while (i != 0) {  /* 使用比较运算符 */\n        printf(\"%d \", i);\n        i--;\n    }\n    printf(\"\\n正确结束\\n\");\n    \n    /* 防御性编程：Yoda条件 */\n    if (0 == i) {  /* 写成i=0会编译错误 */\n        printf(\"安全\\n\");\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 29,

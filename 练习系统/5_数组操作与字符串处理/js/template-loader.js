@@ -75,11 +75,11 @@ class TemplateLoader {
         return [
   {
     "id": 1,
-    "question": "以下关于一维数组的定义，正确的是？",
-    "options": ["`int a[] = {1, 2, 3};`", "`int a[3] = {1, 2, 3, 4};`", "`int a(3) = {1, 2, 3};`", "`int a[];`"],
-    "correctAnswer": 0,
-    "explanation": "选项A正确：定义数组时可以不指定大小，由初始化列表确定。选项B错误：初始化元素数量超过了数组大小。选项C错误：数组定义使用方括号 `[]`，不是圆括号 `()`。选项D错误：定义数组时必须指定大小或初始化列表。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    // 正确的定义方式\n    int a[] = {1, 2, 3};  // 大小由初始化列表确定为3\n    \n    // 也可以这样定义\n    int b[3] = {1, 2, 3};  // 明确指定大小为3\n    \n    // 错误的定义方式\n    // int c[3] = {1, 2, 3, 4};  // 错误：初始化元素过多\n    // int d(3) = {1, 2, 3};     // 错误：应使用方括号\n    // int e[];                  // 错误：未指定大小或初始化列表\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么（假设set为32位系统）？\n\n<C>\nvoid func(int arr[]) {\n    printf(\"%d\", sizeof(arr));\n}\n\nint main() {\n    int a[10];\n    printf(\"%d \", sizeof(a));\n    func(a);\n    return 0;\n}\n</C>",
+    "options": ["`40 40`", "`40 4`", "`10 10`", "`10 4`"],
+    "correctAnswer": 1,
+    "explanation": "这是**数组退化为指针**的经典陷阱！在main中，`a`是数组，`sizeof(a)`返回整个数组大小：10×4=40字节。**关键陷阱**：作为函数参数时，`int arr[]`自动退化为指针`int *arr`，`sizeof(arr)`返回指针大小而不是数组大小！32位系统上指针为4字节。输出`40 4`。**易错点**：误以为func内的arr仍是数组。**解决方案**：单独传递数组大小参数。",
+    "codeExample": "#include <stdio.h>\n\n/* 数组参数退化为指针 */\nvoid func(int arr[]) {  /* 等价于 int *arr */\n    printf(\"%zu\\n\", sizeof(arr));  /* 输出指针大小4或64 */\n}\n\nint main() {\n    int a[10];\n    \n    /* main中，a是数组 */\n    printf(\"main中: %zu \", sizeof(a));  /* 10*4=40 */\n    \n    /* 传递给函数后退化为指针 */\n    printf(\"func中: \");\n    func(a);  /* 输出4或64 */\n    \n    /* 正确做法：传递大小 */\n    printf(\"数组大小: %zu\\n\", sizeof(a)/sizeof(a[0]));  /* 10 */\n    \n    return 0;\n}"
   },
   {
     "id": 2,
@@ -115,11 +115,11 @@ class TemplateLoader {
   },
   {
     "id": 6,
-    "question": "若 `char str[10] = \"Hello\";`，则 `strlen(str)` 的值是？",
-    "options": ["`5`", "`6`", "`10`", "不确定"],
-    "correctAnswer": 0,
-    "explanation": "`strlen()` 函数返回字符串的长度（不包括结尾的 `'\\0'`）。`str` 数组中存放的是字符串 `\"Hello\"`，包含5个字符 `'H', 'e', 'l', 'l', 'o'` 和一个 `'\\0'`，所以 `strlen(str)` 返回5，而 `sizeof(str)` 返回数组大小10。",
-    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str[10] = \"Hello\";  // 实际内容: 'H', 'e', 'l', 'l', 'o', '\\0', 0, 0, 0, 0\n    \n    printf(\"字符串长度: %zu\\n\", strlen(str));  // 输出：5\n    printf(\"数组大小: %zu\\n\", sizeof(str));    // 输出：10\n    \n    // 遍历数组内容\n    for(int i = 0; i < 10; i++) {\n        if(str[i] == '\\0') {\n            printf(\"str[%d] = '\\\\0'\\n\", i);\n        } else {\n            printf(\"str[%d] = '%c'\\n\", i, str[i]);\n        }\n    }\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar *s1 = \"Hello\";\nchar s2[] = \"Hello\";\ns1[0] = 'h';  /* 修改字符串字面量 */\ns2[0] = 'h';  /* 修改字符数组 */\nprintf(\"%s %s\", s1, s2);\n</C>",
+    "options": ["`hello hello`", "`Hello hello`", "未定义行为（崩溃）", "编译错误"],
+    "correctAnswer": 2,
+    "explanation": "这是**字符串字面量修改**的严重陷阱！`char *s1=\"Hello\"`使s1指向**字符串常量区**，内容只读，修改`s1[0]`是**未定义行为**（通常导致程序崩溃）。`char s2[]=\"Hello\"`会将字符串**复制到栈上的数组**，s2是可写的，修改`s2[0]`合法。**关键区别**：指针指向常量区（只读），数组复制到栈区（可写）。**易错点**：两者看起来相似但内存位置完全不同。**安全建议**：使用`const char *s1=\"Hello\"`防止误修改。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    /* 危险：指向字符串字面量（只读） */\n    char *s1 = \"Hello\";\n    /* s1[0] = 'h';  未定义行为！可能崩溃 */\n    \n    /* 安全：数组存储在栈上（可写） */\n    char s2[] = \"Hello\";\n    s2[0] = 'h';  /* 合法 */\n    printf(\"%s\\n\", s2);  /* 输出: hello */\n    \n    /* 正确做法：使用const防止修改 */\n    const char *s3 = \"Hello\";\n    /* s3[0] = 'h';  编译错误，const保护 */\n    \n    /* 内存位置对比 */\n    printf(\"s1地址: %p (常量区)\\n\", (void*)s1);\n    printf(\"s2地址: %p (栈区)\\n\", (void*)s2);\n    \n    return 0;\n}"
   },
   {
     "id": 7,
@@ -155,11 +155,11 @@ class TemplateLoader {
   },
   {
     "id": 11,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint a[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\nint sum = 0;\nfor(int i = 0; i < 3; i++) {\n    sum += a[i][i];\n}\nprintf(\"%d\", sum);\n</C>",
-    "options": ["`6`", "`15`", "`24`", "`45`"],
-    "correctAnswer": 1,
-    "explanation": "这段代码计算的是二维数组对角线元素的和。`a[0][0]=1, a[1][1]=5, a[2][2]=9`，所以 `sum=1+5+9=15`。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\n    int sum = 0;\n    \n    // 计算对角线元素的和\n    for(int i = 0; i < 3; i++) {\n        sum += a[i][i];  // a[0][0], a[1][1], a[2][2]\n    }\n    \n    printf(\"对角线元素的和: %d\\n\", sum);  // 输出：对角线元素的和: 15\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint a[2][3] = {1, 2, 3, 4, 5, 6};  /* 未用嵌套花括号 */\nint *p = (int *)a;\nprintf(\"%d %d %d\", a[0][1], a[1][0], *(p+3));\n</C>",
+    "options": ["`2 4 4`", "`2 3 3`", "`1 4 4`", "`2 4 3`"],
+    "correctAnswer": 0,
+    "explanation": "这是**多维数组内存布局**陷阱！二维数组在内存中**按行优先连续存储**：`a[0][0]=1, a[0][1]=2, a[0][2]=3, a[1][0]=4, a[1][1]=5, a[1][2]=6`。即使初始化时没用嵌套花括号，编译器按顺序填充。`a[0][1]=2`（第1行第2列），`a[1][0]=4`（第2行第1列），`*(p+3)`指向第4个元素即`a[1][0]=4`。输出`2 4 4`。**关键知识**：`int a[2][3]`在内存中等同于长度为6的一维数组，只是逻辑上分为2行3列。**易错点**：误以为`*(p+3)`=3。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[2][3] = {1, 2, 3, 4, 5, 6};  /* 连续填充 */\n    int *p = (int *)a;\n    \n    /* 内存布局（按行优先） */\n    printf(\"内存顺序: \");\n    for (int i = 0; i < 6; i++) {\n        printf(\"%d \", *(p+i));  /* 1 2 3 4 5 6 */\n    }\n    printf(\"\\n\");\n    \n    /* 二维下标访问 */\n    printf(\"a[0][1]=%d\\n\", a[0][1]);  /* 2 */\n    printf(\"a[1][0]=%d\\n\", a[1][0]);  /* 4 */\n    printf(\"*(p+3)=%d\\n\", *(p+3));    /* 4 */\n    \n    /* 地址验证 */\n    printf(\"&a[1][0]=%p, p+3=%p\\n\", \n           (void*)&a[1][0], (void*)(p+3));  /* 地址相同 */\n    \n    return 0;\n}"
   },
   {
     "id": 12,
@@ -195,11 +195,11 @@ class TemplateLoader {
   },
   {
     "id": 16,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint a[2][3] = {{1, 2, 3}, {4, 5, 6}};\nint *p = &a[0][0];\nprintf(\"%d\", *(p+4));\n</C>",
-    "options": ["`2`", "`3`", "`4`", "`5`"],
-    "correctAnswer": 3,
-    "explanation": "二维数组在内存中是连续存储的，按行优先顺序。`a[0][0]=1, a[0][1]=2, a[0][2]=3, a[1][0]=4, a[1][1]=5, a[1][2]=6`。`p` 指向 `a[0][0]`，`*(p+4)` 等价于 `a[1][1]`，值为 `5`。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[2][3] = {{1, 2, 3}, {4, 5, 6}};\n    int *p = &a[0][0];  // p指向数组第一个元素\n    \n    // 输出所有元素\n    for(int i = 0; i < 6; i++) {\n        printf(\"*(p+%d) = %d \", i, *(p+i));\n    }\n    printf(\"\\n\");\n    \n    /* 输出结果：\n    *(p+0) = 1 *(p+1) = 2 *(p+2) = 3 *(p+3) = 4 *(p+4) = 5 *(p+5) = 6 \n    */\n    \n    printf(\"*(p+4) = %d\\n\", *(p+4));  // 输出：*(p+4) = 5\n    \n    return 0;\n}"
+    "question": "以下代码的运行结果是什么？\n\n<C>\nint a[5] = {1, 2, 3, 4, 5};\nint b = 100;\na[10] = 99;  /* 数组越界写入 */\nprintf(\"%d %d\", a[10], b);\n</C>",
+    "options": ["`99 100`", "编译错误", "运行时崩溃或随机值", "`0 0`"],
+    "correctAnswer": 2,
+    "explanation": "这是**数组越界不报错**的危险陷阱！C语言编译器**不检查数组边界**，`a[10]`访问超出数组范围的内存。`a[10]=99`可能覆盖其他变量（如b）、栈帧、返回地址等，导致**未定义行为**：程序可能崩溃、输出随机值、或看似正常运行但隐藏严重bug。**关键危险**：1) 编译通过不代表正确；2) 可能破坏其他数据；3) 难以调试（表现不确定）。**防范**：1) 手动检查索引范围；2) 使用边界检查工具；3) 开启编译器警告。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[5] = {1, 2, 3, 4, 5};\n    int b = 100;\n    \n    /* 危险：数组越界写入 */\n    printf(\"越界前b=%d\\n\", b);\n    a[10] = 99;  /* 未定义行为！可能覆盖b或其他内存 */\n    printf(\"越界后b=%d\\n\", b);  /* b可能被改变 */\n    printf(\"a[10]=%d\\n\", a[10]);  /* 读取也是未定义行为 */\n    \n    /* 正确做法：检查边界 */\n    int index = 10;\n    if (index >= 0 && index < 5) {\n        a[index] = 99;\n    } else {\n        printf(\"错误：索引%d越界！\\n\", index);\n    }\n    \n    return 0;\n}"
   },
   {
     "id": 17,
@@ -235,11 +235,11 @@ class TemplateLoader {
   },
   {
     "id": 21,
-    "question": "以下哪个函数可以将整数转换为字符串？",
-    "options": ["`sprintf()`", "`atoi()`", "`strlen()`", "`strcmp()`"],
-    "correctAnswer": 0,
-    "explanation": "选项A正确：`sprintf()` 函数可以将格式化的数据写入字符串，包括将整数转换为字符串。选项B错误：`atoi()` 将字符串转换为整数，方向相反。选项C错误：`strlen()` 计算字符串长度。选项D错误：`strcmp()` 比较字符串。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num = 12345;\n    char str[20];\n    \n    // 将整数转换为字符串\n    sprintf(str, \"%d\", num);\n    \n    printf(\"整数: %d\\n\", num);  // 输出：整数: 12345\n    printf(\"字符串: %s\\n\", str);  // 输出：字符串: 12345\n    \n    // 也可以转换为其他格式\n    sprintf(str, \"%08d\", num);  // 8位宽度，前面补0\n    printf(\"格式化字符串: %s\\n\", str);  // 输出：格式化字符串: 00012345\n    \n    return 0;\n}"
+    "question": "以下代码的运行结果是什么？\n\n<C>\nchar dest[5];\nchar src[] = \"HelloWorld\";  /* 10个字符+\\0 */\nstrcpy(dest, src);\nprintf(\"%s\", dest);\n</C>",
+    "options": ["`Hello`", "`HelloWorld`", "缓冲区溢出（崩溃或随机行为）", "编译错误"],
+    "correctAnswer": 2,
+    "explanation": "这是**strcpy缓冲区溢出**的经典漏洞！`dest`只有5字节，但`src`需要11字节（10字符+\\0）。`strcpy`不检查目标缓冲区大小，会**越界写入**6个字节，覆盖dest后面的内存，导致**栈破坏、程序崩溃、或被利用执行恶意代码**。**真实危害**：历史上大量安全漏洞源于此（如缓冲区溢出攻击）。**安全替代**：1) `strncpy(dest, src, sizeof(dest)-1)`；2) `snprintf(dest, sizeof(dest), \"%s\", src)`；3) 使用更安全的字符串库。**关键教训**：永远检查缓冲区边界！",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char dest[5];\n    char src[] = \"HelloWorld\";  /* 需要11字节 */\n    \n    /* 危险：strcpy不检查大小 */\n    /* strcpy(dest, src);  缓冲区溢出！ */\n    \n    /* 安全做法1: strncpy */\n    strncpy(dest, src, sizeof(dest) - 1);\n    dest[sizeof(dest) - 1] = '\\0';  /* 确保结尾 */\n    printf(\"截断后: %s\\n\", dest);  /* 输出: Hell */\n    \n    /* 安全做法2: snprintf */\n    char dest2[5];\n    snprintf(dest2, sizeof(dest2), \"%s\", src);\n    printf(\"snprintf: %s\\n\", dest2);  /* 输出: Hell */\n    \n    /* 检查是否截断 */\n    if (strlen(src) >= sizeof(dest)) {\n        printf(\"警告：源字符串过长！\\n\");\n    }\n    \n    return 0;\n}"
   },
   {
     "id": 22,
@@ -275,11 +275,11 @@ class TemplateLoader {
   },
   {
     "id": 26,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nchar str[20] = \\\"Programming\\\";\nint len = 0;\nwhile(str[len] != '\\\\0') {\n    len++;\n}\nprintf(\\\"%d\\\", len);\n</C>",
-    "options": ["`10`", "`11`", "`12`", "`20`"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint a[5] = {1, 2, 3, 4, 5};\nint *p = a + 2;  /* p指向a[2] */\nprintf(\"%d %d %d\", p[-1], p[0], p[1]);\n</C>",
+    "options": ["`1 2 3`", "`2 3 4`", "`3 4 5`", "未定义行为"],
     "correctAnswer": 1,
-    "explanation": "这段代码手动计算字符串 `\\\"Programming\\\"` 的长度。字符串 `\\\"Programming\\\"` 包含11个字符 `(P,r,o,g,r,a,m,m,i,n,g)`，所以 `len=11`。",
-    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str[20] = \"Programming\";\n    int len = 0;\n    \n    // 手动计算字符串长度\n    while(str[len] != '\\0') {\n        len++;\n    }\n    \n    printf(\"手动计算的长度: %d\\n\", len);  // 输出：手动计算的长度: 11\n    \n    // 使用strlen函数验证\n    printf(\"strlen计算的长度: %zu\\n\", strlen(str));  // 输出：strlen计算的长度: 11\n    \n    return 0;\n}"
+    "explanation": "这是**数组指针算术**的灵活运用！`p=a+2`使p指向`a[2]=3`。指针下标可以是负数：`p[-1]`等价于`*(p-1)`即`a[1]=2`，`p[0]`等价于`*p`即`a[2]=3`，`p[1]`等价于`*(p+1)`即`a[3]=4`。输出`2 3 4`。**关键知识**：1) `p[i]`等价于`*(p+i)`；2) i可以为负数（只要不越界）；3) `&a[i]`等价于`a+i`。**易错点**：误以为负数下标非法。**实际应用**：滑动窗口算法、双向遍历等。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[5] = {1, 2, 3, 4, 5};\n    int *p = a + 2;  /* p指向a[2]=3 */\n    \n    /* 指针下标可以为负数 */\n    printf(\"p[-2]=%d\\n\", p[-2]);  /* a[0]=1 */\n    printf(\"p[-1]=%d\\n\", p[-1]);  /* a[1]=2 */\n    printf(\"p[0]=%d\\n\",  p[0]);   /* a[2]=3 */\n    printf(\"p[1]=%d\\n\",  p[1]);   /* a[3]=4 */\n    printf(\"p[2]=%d\\n\",  p[2]);   /* a[4]=5 */\n    \n    /* 等价表达式 */\n    printf(\"\\n等价验证:\\n\");\n    printf(\"p[1] = %d\\n\", p[1]);    /* 4 */\n    printf(\"*(p+1) = %d\\n\", *(p+1));  /* 4 */\n    printf(\"a[3] = %d\\n\", a[3]);    /* 4 */\n    \n    return 0;\n}"
   },
   {
     "id": 27,
@@ -291,11 +291,11 @@ class TemplateLoader {
   },
   {
     "id": 28,
-    "question": "以下代码执行后，输出结果是？\n\n<C>\nint a[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};\nint sum = 0;\nfor(int i = 0; i < 3; i++) {\n    for(int j = 0; j < 4; j++) {\n        if(i == j) {\n            sum += a[i][j];\n        }\n    }\n}\nprintf(\\\"%d\\\", sum);\n</C>",
-    "options": ["`6`", "`15`", "`18`", "`22`"],
+    "question": "以下代码能正常运行吗？\n\n<C>\nchar a[] = \"Hello\";\nchar *p = \"Hello\";\na = \"World\";  /* 重新赋值数组 */\np = \"World\";  /* 重新赋值指针 */\nprintf(\"%s %s\", a, p);\n</C>",
+    "options": ["`World World`", "`Hello World`", "编译错误（a不能重新赋值）", "`Hello Hello`"],
     "correctAnswer": 2,
-    "explanation": "这段代码计算的是二维数组中行号和列号相等的元素的和。`a[0][0]=1, a[1][1]=6, a[2][2]=11`，所以 `sum=1+6+11=18`。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};\n    int sum = 0;\n    \n    // 计算行号和列号相等的元素的和\n    for(int i = 0; i < 3; i++) {\n        for(int j = 0; j < 4; j++) {\n            if(i == j) {\n                sum += a[i][j];\n                printf(\"a[%d][%d] = %d\\n\", i, j, a[i][j]);\n            }\n        }\n    }\n    \n    printf(\"和: %d\\n\", sum);  // 输出：和: 18\n    \n    return 0;\n}"
+    "explanation": "这是**字符数组与字符指针**的本质区别陷阱！`char a[]=\"Hello\"`中，a是**数组名**，是**常量**（代表数组首地址），**不能被重新赋值**。`a=\"World\"`编译错误。`char *p=\"Hello\"`中，p是**指针变量**，可以重新赋值指向其他字符串。`p=\"World\"`合法。**关键区别**：1) 数组名是常量，指针是变量；2) `sizeof(a)`=6，`sizeof(p)`=4/8（指针大小）；3) a在栈上分配内存，p指向常量区。**易错点**：误以为数组和指针完全等价。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char a[] = \"Hello\";  /* 数组，内容在栈上 */\n    char *p = \"Hello\";   /* 指针，指向常量区 */\n    \n    /* 错误：数组名不能重新赋值 */\n    /* a = \"World\";  编译错误！ */\n    \n    /* 正确：修改数组内容 */\n    strcpy(a, \"World\");  /* 合法 */\n    printf(\"a=%s\\n\", a);  /* 输出: World */\n    \n    /* 正确：指针重新赋值 */\n    p = \"World\";  /* 合法，改变指向 */\n    printf(\"p=%s\\n\", p);  /* 输出: World */\n    \n    /* 大小差异 */\n    printf(\"sizeof(a)=%zu\\n\", sizeof(a));  /* 6 */\n    printf(\"sizeof(p)=%zu\\n\", sizeof(p));  /* 4或8 */\n    \n    return 0;\n}"
   },
   {
     "id": 29,

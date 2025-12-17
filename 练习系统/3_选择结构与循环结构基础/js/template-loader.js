@@ -42,11 +42,11 @@ class TemplateLoader {
             // ========== 第1-10题：if多分支选择结构 ==========
             {
                 "id": 1,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint score = 85;\nif (score >= 90) {\n    printf(\"优秀\");\n} else if (score >= 80) {\n    printf(\"良好\");\n} else if (score >= 60) {\n    printf(\"及格\");\n} else {\n    printf(\"不及格\");\n}\n</C>",
-                "options": ["优秀", "良好", "及格", "不及格"],
-                "correctAnswer": 1,
-                "explanation": "score=85满足第二个条件`score >= 80`，执行相应分支输出\"良好\"。if-else if结构一旦找到满足的条件就不再检查后续分支。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int score = 85;\n    if (score >= 90) {\n        printf(\"优秀\");\n    } else if (score >= 80) {\n        printf(\"良好\");  // 执行这里\n    } else if (score >= 60) {\n        printf(\"及格\");\n    } else {\n        printf(\"不及格\");\n    }\n    return 0;\n}"
+                "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 5;\nif (x > 3)\n    if (x < 7)\n        printf(\"A\");\nelse\n    printf(\"B\");\n</C>",
+                "options": ["`A`", "`B`", "`AB`", "编译错误"],
+                "correctAnswer": 0,
+                "explanation": "这是经典的**悬挂else（dangling else）**陷阱！`else` 总是与最近的未配对的 `if` 匹配，而不是按缩进判断。这里的 `else` 属于内层 `if (x < 7)`，而不是外层 `if (x > 3)`。x=5 满足 `x>3` 和 `x<7`，执行内层if输出A。**易错点**：根据缩进以为else属于外层if。**正确做法**：始终使用花括号避免歧义！",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 5;\n    \n    /* 危险代码: else属于哪个if？ */\n    if (x > 3)\n        if (x < 7)\n            printf(\"A\");  /* x=5满足，输出A */\n    else\n        printf(\"B\");  /* else实际属于内层if! */\n    \n    printf(\"\\n\");\n    \n    /* 正确做法: 使用花括号明确结构 */\n    if (x > 3) {\n        if (x < 7) {\n            printf(\"A\");\n        }\n    } else {\n        printf(\"B\");  /* 现在属于外层if */\n    }\n    \n    return 0;\n}"
             },
             {
                 "id": 2,
@@ -82,11 +82,11 @@ class TemplateLoader {
             },
             {
                 "id": 6,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 5, b = 10, c = 15;\nif (a < b && b < c) {\n    printf(\"递增\");\n} else if (a > b && b > c) {\n    printf(\"递减\");\n} else {\n    printf(\"无序\");\n}\n</C>",
-                "options": ["递增", "递减", "无序", "编译错误"],
-                "correctAnswer": 0,
-                "explanation": "a=5, b=10, c=15满足`a<b && b<c`，三个数递增，输出\"递增\"。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int a = 5, b = 10, c = 15;\n    if (a < b && b < c) {  // 满足\n        printf(\"递增\");  // 执行这里\n    } else if (a > b && b > c) {\n        printf(\"递减\");\n    } else {\n        printf(\"无序\");\n    }\n    return 0;\n}"
+                "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 0, y = 10;\nif (x++ > 0 && y++ > 5) {\n    printf(\"条件满足\");\n}\nprintf(\"%d %d\", x, y);\n</C>",
+                "options": ["`1 11`", "`1 10`", "`0 10`", "`0 11`"],
+                "correctAnswer": 1,
+                "explanation": "这是**逻辑与(&&)短路求值**陷阱！`x++` 先使用x的值（0），然后自增x变成1。由于 `x++ > 0`（即 `0 > 0`）为假，`&&` 右侧的 `y++ > 5` **根本不执行**（短路）！所以 `y` 保持为10没有自增。最终输出 `1 10`。**关键点**：`&&` 左侧为假时，右侧不执行；`||` 左侧为真时，右侧不执行。",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 0, y = 10;\n    \n    /* x++ > 0 为假，y++不执行（短路） */\n    if (x++ > 0 && y++ > 5) {\n        printf(\"条件满足\");\n    }\n    printf(\"%d %d\\n\", x, y);  /* 输出: 1 10 */\n    \n    /* 演示||的短路 */\n    int a = 1, b = 10;\n    if (a++ > 0 || b++ > 5) {  /* a++>0为真，b++不执行 */\n        printf(\"满足\\n\");\n    }\n    printf(\"%d %d\\n\", a, b);  /* 输出: 2 10 */\n    \n    return 0;\n}"
             },
             {
                 "id": 7,
@@ -106,11 +106,11 @@ class TemplateLoader {
             },
             {
                 "id": 9,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint score = 90;\nif (score >= 90) {\n    printf(\"A\");\n}\nif (score >= 80) {\n    printf(\"B\");\n}\nif (score >= 60) {\n    printf(\"C\");\n}\n</C>",
-                "options": ["A", "AB", "ABC", "B"],
-                "correctAnswer": 2,
-                "explanation": "这里有3个独立的if语句（不是if-else if结构），所以会依次判断每个条件。score=90满足所有三个条件，输出\"ABC\"。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int score = 90;\n    // 注意：这是3个独立的if，不是if-else if\n    if (score >= 90) {\n        printf(\"A\");  // 执行\n    }\n    if (score >= 80) {\n        printf(\"B\");  // 也执行\n    }\n    if (score >= 60) {\n        printf(\"C\");  // 还执行\n    }\n    return 0;\n}"
+                "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 1, y = 2;\nif (x & y) {  /* 注意：这里是& 不是&& */\n    printf(\"A\");\n} else {\n    printf(\"B\");\n}\n</C>",
+                "options": ["`A`", "`B`", "编译错误", "未定义行为"],
+                "correctAnswer": 1,
+                "explanation": "这是**位运算符与逻辑运算符混淆**陷阱！`&` 是**按位与**，`&&` 才是**逻辑与**。`x & y` 即 `1 & 2`：二进制 `01 & 10 = 00`（结果为0），0被视为假，执行else输出B。**易错点**：误以为单个`&`和双`&&`效果相同。**重要区别**：`&&` 有短路特性且返回0/1，`&` 按位操作所有位且不短路。",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 1, y = 2;\n    \n    /* 错误: 使用&而不是&& */\n    if (x & y) {  /* 1 & 2 = 0 (二进制01 & 10 = 00) */\n        printf(\"A\");\n    } else {\n        printf(\"B\");  /* 输出B */\n    }\n    \n    printf(\"\\n\");\n    \n    /* 正确: 使用逻辑与 */\n    if (x && y) {  /* 两者都非零，为真 */\n        printf(\"都为真\\n\");\n    }\n    \n    /* 演示区别 */\n    printf(\"x & y = %d\\n\", x & y);    /* 0 */\n    printf(\"x && y = %d\\n\", x && y);  /* 1 */\n    \n    return 0;\n}"
             },
             {
                 "id": 10,
@@ -124,11 +124,11 @@ class TemplateLoader {
             // ========== 第11-20题：switch多分支选择结构 ==========
             {
                 "id": 11,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint day = 3;\nswitch(day) {\n    case 1: printf(\"周一\"); break;\n    case 2: printf(\"周二\"); break;\n    case 3: printf(\"周三\"); break;\n    case 4: printf(\"周四\"); break;\n    default: printf(\"其他\");\n}\n</C>",
-                "options": ["周一", "周二", "周三", "其他"],
+                "question": "以下代码的输出结果是什么（default在中间且无break）？\n\n<C>\nint x = 5;\nswitch (x) {\n    case 1: printf(\"A\"); break;\n    default: printf(\"D\");\n    case 2: printf(\"B\"); break;\n}\n</C>",
+                "options": ["`A`", "`D`", "`DB`", "`B`"],
                 "correctAnswer": 2,
-                "explanation": "day=3匹配case 3，输出\"周三\"。由于有break语句，执行完case 3后跳出switch。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int day = 3;\n    switch(day) {\n        case 1: printf(\"周一\"); break;\n        case 2: printf(\"周二\"); break;\n        case 3: printf(\"周三\"); break;  // 匹配并执行\n        case 4: printf(\"周四\"); break;\n        default: printf(\"其他\");\n    }\n    return 0;\n}"
+                "explanation": "这是**switch中default位置与fall-through组合**陷阱！x=5不匹配任何case，执行default输出D。**关键点**：default后没有break，会继续执行后面的case 2输出B！最终输出DB。**易错点**：default可以放在switch的任何位置，不仅仅是最后；它也遵循fall-through规则。",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 5;\n    \n    /* default在中间且无break */\n    switch (x) {\n        case 1: printf(\"A\"); break;\n        default: printf(\"D\");  /* 执行这里，无break! */\n        case 2: printf(\"B\"); break;  /* 继续执行 */\n    }\n    printf(\"\\n\");  /* 输出DB */\n    \n    /* 正确做法: default加break */\n    x = 5;\n    switch (x) {\n        case 1: printf(\"A\"); break;\n        default: printf(\"D\"); break;  /* 加break */\n        case 2: printf(\"B\"); break;\n    }\n    printf(\"\\n\");  /* 输出D */\n    \n    return 0;\n}"
             },
             {
                 "id": 12,
@@ -148,11 +148,11 @@ class TemplateLoader {
             },
             {
                 "id": 14,
-                "question": "以下代码的输出结果是什么（default在中间）？\n\n<C>\nint x = 5;\nswitch(x) {\n    case 1: printf(\"A\"); break;\n    default: printf(\"D\");\n    case 2: printf(\"B\"); break;\n}\n</C>",
-                "options": ["A", "D", "DB", "B"],
-                "correctAnswer": 1,
-                "explanation": "x=5不匹配任何case，执行default输出\"D\"。default可以放在任何位置，不一定要在最后。由于default后没有break，会继续执行case 2。等等，这里有break！所以只输出\"D\"。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 5;\n    switch(x) {\n        case 1: printf(\"A\"); break;\n        default: printf(\"D\");  // 执行这里，但没有break\n        case 2: printf(\"B\"); break;  // 也会执行\n    }\n    // 输出：DB\n    return 0;\n}"
+                "question": "以下代码的输出结果是什么？\n\n<C>\nint score = 85, level;\nswitch (score / 10) {\n    case 10:\n    case 9: level = 5; break;\n    case 8: level = 4;  /* 注意没有break! */\n    case 7: level = 3; break;\n    default: level = 1;\n}\nprintf(\"%d\", level);\n</C>",
+                "options": ["`5`", "`4`", "`3`", "`1`"],
+                "correctAnswer": 2,
+                "explanation": "这是**合并case与fall-through组合**的复杂陷阱！score/10=8，匹配case 8执行 `level=4`。**关键错误**：case 8后没有break，继续执行下一条语句 `level=3`！然后break退出，输出3。**易错点**：误以为输出4。这种缺少break的bug非常隐蔽且危险！",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int score = 85, level;\n    \n    /* 错误: case 8缺少break */\n    switch (score / 10) {  /* 85/10 = 8 */\n        case 10:\n        case 9: level = 5; break;\n        case 8: level = 4;  /* 执行这里，无break! */\n        case 7: level = 3; break;  /* 继续执行，level被改为3 */\n        default: level = 1;\n    }\n    printf(\"%d\\n\", level);  /* 输出3而不是4! */\n    \n    /* 正确做法: 每个case后加break */\n    score = 85;\n    switch (score / 10) {\n        case 10:\n        case 9: level = 5; break;\n        case 8: level = 4; break;  /* 加break */\n        case 7: level = 3; break;\n        default: level = 1;\n    }\n    printf(\"%d\\n\", level);  /* 输出4 */\n    \n    return 0;\n}"
             },
             {
                 "id": 15,
@@ -206,11 +206,11 @@ class TemplateLoader {
             // ========== 第21-30题：选择结构的嵌套（高难度） ==========
             {
                 "id": 21,
-                "question": "以下嵌套选择结构的输出是什么？\n\n<C>\nint a = 10, b = 5, c = 8;\nif (a > b) {\n    if (a > c) {\n        printf(\"A\");\n    } else {\n        printf(\"B\");\n    }\n} else {\n    if (b > c) {\n        printf(\"C\");\n    } else {\n        printf(\"D\");\n    }\n}\n</C>",
-                "options": ["A", "B", "C", "D"],
-                "correctAnswer": 0,
-                "explanation": "a=10>b=5满足外层if，进入内层。a=10>c=8满足内层if，输出\"A\"。这是if语句两层嵌套的典型例子。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int a = 10, b = 5, c = 8;\n    if (a > b) {  // 10>5满足\n        if (a > c) {  // 10>8满足\n            printf(\"A\");  // 执行这里\n        } else {\n            printf(\"B\");\n        }\n    } else {\n        if (b > c) {\n            printf(\"C\");\n        } else {\n            printf(\"D\");\n        }\n    }\n    return 0;\n}"
+                "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 5, b = 10, c = 15;\nint result = a > b ? (b > c ? 1 : 2) : (a > c ? 3 : 4);\nprintf(\"%d\", result);\n</C>",
+                "options": ["`1`", "`2`", "`3`", "`4`"],
+                "correctAnswer": 3,
+                "explanation": "这是**嵌套三元运算符**的复杂陷阱！执行流程：1) `a>b`（5>10）为假，跳过冲号前的部分；2) 执行冲号后 `(a>c ? 3 : 4)`；3) `a>c`（5>15）为假，返回4。**关键点**：三元运算符 `? :` 的结合性是右结合，嵌套时需要仔细分析。**易错点**：嵌套三元运算符读起来困难，建议使用if-else更清晰。",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 5, b = 10, c = 15;\n    \n    /* 复杂的嵌套三元运算符 */\n    int result = a > b ? (b > c ? 1 : 2) : (a > c ? 3 : 4);\n    /*\n     * 执行流程：\n     * 1. a > b？5 > 10？为假\n     * 2. 跳过冲号前，执行 (a > c ? 3 : 4)\n     * 3. a > c？5 > 15？为假\n     * 4. 返回 4\n     */\n    printf(\"%d\\n\", result);  /* 输出4 */\n    \n    /* 正确做法: 用if-else更清晰 */\n    int result2;\n    if (a > b) {\n        if (b > c) {\n            result2 = 1;\n        } else {\n            result2 = 2;\n        }\n    } else {\n        if (a > c) {\n            result2 = 3;\n        } else {\n            result2 = 4;  /* 执行这里 */\n        }\n    }\n    printf(\"%d\\n\", result2);  /* 输出4 */\n    \n    return 0;\n}"
             },
             {
                 "id": 22,
@@ -246,11 +246,11 @@ class TemplateLoader {
             },
             {
                 "id": 26,
-                "question": "以下代码计算分段函数，当x=15时输出是什么？\n\n<C>\nint x = 15, y;\nif (x < 0) {\n    y = -1;\n} else if (x == 0) {\n    y = 0;\n} else {\n    if (x < 10) {\n        y = x * 2;\n    } else {\n        y = x + 10;\n    }\n}\nprintf(\"%d\", y);\n</C>",
-                "options": ["25", "30", "20", "-1"],
+                "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 1, b = 0, c = 1;\nif (a || b && c) {  /* 注意运算符优先级 */\n    printf(\"True\");\n} else {\n    printf(\"False\");\n}\n</C>",
+                "options": ["`True`", "`False`", "编译错误", "未定义行为"],
                 "correctAnswer": 0,
-                "explanation": "x=15>0且x>=10，进入最外层else的内层else，y=x+10=25。这是if嵌套实现分段函数的例子。",
-                "codeExample": "#include <stdio.h>\nint main() {\n    int x = 15, y;\n    if (x < 0) {\n        y = -1;\n    } else if (x == 0) {\n        y = 0;\n    } else {  // x>0\n        if (x < 10) {\n            y = x * 2;\n        } else {  // x>=10，15满足\n            y = x + 10;  // y=25\n        }\n    }\n    printf(\"%d\", y);  // 输出25\n    return 0;\n}"
+                "explanation": "这是**逻辑运算符优先级**陷阱！`&&` 的优先级**高于** `||`，所以表达式相当于 `a || (b && c)`。执行流程：1) 先计算 `b && c`：`0 && 1 = 0`；2) 再计算 `a || 0`：`1 || 0 = 1`（真）。输出True。**易错点**：误以为从左到右计算 `(a || b) && c`，那将得 `(1||0) && 1 = 1`。**关键知识**：`&&` > `||` > `? :`，建议用括号明确意图。",
+                "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 0, c = 1;\n    \n    /* &&优先级高于|| */\n    if (a || b && c) {  /* 等价于: a || (b && c) */\n        printf(\"True\\n\");  /* 1 || (0 && 1) = 1 || 0 = 1 */\n    } else {\n        printf(\"False\\n\");\n    }\n    \n    /* 对比：如果理解为(a||b) && c */\n    if ((a || b) && c) {  /* 显式加括号 */\n        printf(\"True\\n\");  /* (1 || 0) && 1 = 1 && 1 = 1 */\n    }\n    \n    /* 演示差异 */\n    a = 1; b = 0; c = 0;\n    printf(\"a || b && c = %d\\n\", a || b && c);    /* 1 */\n    printf(\"(a || b) && c = %d\\n\", (a || b) && c);  /* 0 */\n    \n    return 0;\n}"
             },
             {
                 "id": 27,

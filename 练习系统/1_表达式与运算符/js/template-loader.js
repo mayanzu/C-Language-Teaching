@@ -75,16 +75,16 @@ class TemplateLoader {
         return [
     {
         "id": 1,
-        "question": "假设 `int a = 10, b = 3;`，请问表达式 `a / b` 的结果是多少？",
+        "question": "假设 `int a = 1, b = 2, c = 3, d = 4;`，请问表达式 `a | b & c ^ d` 的结果是多少？（考虑位运算优先级）",
         "options": [
-            "`3.333...`",
-            "`3`",
             "`1`",
-            "`0`"
+            "`3`",
+            "`5`",
+            "`7`"
         ],
         "correctAnswer": 1,
-        "explanation": "在C语言中，两个整数相除得到整数结果，`10 / 3 = 3`（向下取整）。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 10, b = 3;\n    printf(\"%d\\n\", a / b);  // 输出: 3\n    return 0;\n}"
+        "explanation": "位运算优先级：`^ > & > |`。计算过程：`c ^ d = 3 ^ 4 = 7`，`b & 7 = 2 & 7 = 2`，`a | 2 = 1 | 2 = 3`。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3, d = 4;\n    int result = a | b & c ^ d;\n    printf(\"%d\\n\", result);  /* 输出: 3 */\n    /* 详细分析: c^d=3^4=7, b&7=2&7=2, a|2=1|2=3 */\n    return 0;\n}"
     },
     {
         "id": 2,
@@ -140,16 +140,16 @@ class TemplateLoader {
     },
     {
         "id": 6,
-        "question": "假设 `int a = 1, b = 0;`，请问表达式 `(a > b) ? a + 1 : b - 1` 的结果是多少？",
+        "question": "假设 `unsigned int a = 1;` 和 `int b = -1;`，请问条件表达式 `a > b` 的结果是什么？",
         "options": [
-            "`1`",
-            "`2`",
-            "`0`",
-            "`-1`"
+            "真（1），因为 1 > -1",
+            "假（0），因为 b 被转换为很大的正数",
+            "未定义行为",
+            "编译错误"
         ],
         "correctAnswer": 1,
-        "explanation": "三元运算符：`a > b` 为真（`1 > 0`），所以返回 `a + 1 = 1 + 1 = 2`。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 0;\n    int result = (a > b) ? a + 1 : b - 1;\n    printf(\"%d\\n\", result);  // 输出: 2\n    return 0;\n}"
+        "explanation": "有符号数和无符号数比较时，有符号数会被转换为无符号数。`-1` 转换为 `unsigned int` 后是一个非常大的正数（`4294967295` 在32位系统），所以 `1 > 4294967295` 为假。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    unsigned int a = 1;\n    int b = -1;\n    /* b转换为unsigned后是4294967295 */\n    printf(\"%d\\n\", a > b);  /* 输出: 0 (假) */\n    printf(\"b转为unsigned: %u\\n\", (unsigned int)b);\n    return 0;\n}"
     },
     {
         "id": 7,
@@ -166,16 +166,16 @@ class TemplateLoader {
     },
     {
         "id": 8,
-        "question": "假设 `int i = 5;`，表达式 `(double)i / 2` 的结果是多少？",
+        "question": "假设 `int x;`，执行语句 `x = (1, 2, 3);` 后，`x` 的值是多少？",
         "options": [
+            "`1`",
             "`2`",
-            "`2.5`",
-            "`2.0`",
-            "`5`"
+            "`3`",
+            "编译错误"
         ],
-        "correctAnswer": 1,
-        "explanation": "类型转换后，`5.0 / 2 = 2.5`（`double`类型）。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int i = 5;\n    double result = (double)i / 2;\n    printf(\"%.1f\\n\", result);  // 输出: 2.5\n    return 0;\n}"
+        "correctAnswer": 2,
+        "explanation": "逗号运算符从左到右求值，返回最右边表达式的值。`(1, 2, 3)` 的值是 `3`。注意：`int x = 1, 2, 3;` 是编译错误（逗号分隔符）。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int x;\n    x = (1, 2, 3);  /* 逗号运算符,返回3 */\n    printf(\"%d\\n\", x);  /* 输出: 3 */\n    \n    /* int y = 1, 2, 3;  这是错误的! */\n    int y = (1, 2, 3);  /* 这是正确的 */\n    return 0;\n}"
     },
     {
         "id": 9,
@@ -205,16 +205,16 @@ class TemplateLoader {
     },
     {
         "id": 11,
-        "question": "假设 `int a = 1, b = 2;`，表达式 `a + b * (a - b)` 的结果是多少？",
+        "question": "假设 `int a = 2, b = 3, c = 4;`，请问表达式 `a + b << 1 & c` 的结果是多少？（考虑完整的运算符优先级）",
         "options": [
             "`0`",
-            "`1`",
-            "`-1`",
-            "`3`"
+            "`4`",
+            "`10`",
+            "`20`"
         ],
-        "correctAnswer": 2,
-        "explanation": "先算括号：`a - b = 1 - 2 = -1`，然后 `b * (-1) = 2 * (-1) = -2`，最后 `a + (-2) = 1 + (-2) = -1`。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2;\n    int result = a + b * (a - b);\n    printf(\"%d\\n\", result);  // 输出: -1\n    return 0;\n}"
+        "correctAnswer": 0,
+        "explanation": "运算符优先级：算术(`+`) > 移位(`<<`) > 位与(`&`)。计算过程：先算 `a + b = 5`，再算 `5 << 1 = 10`，最后 `10 & 4 = 0`（二进制：1010 & 0100 = 0000）。这是一个典型的优先级陷阱题。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 2, b = 3, c = 4;\n    int result = a + b << 1 & c;\n    /* 优先级: + > << > & */\n    /* ((a+b) << 1) & c */\n    /* (5 << 1) & 4 */\n    /* 10 & 4 = 0 */\n    printf(\"%d\\n\", result);  /* 输出: 0 */\n    return 0;\n}"
     },
     {
         "id": 12,
@@ -270,16 +270,16 @@ class TemplateLoader {
     },
     {
         "id": 16,
-        "question": "假设 `int num = 0x8A;` (十六进制)，表达式 `num >> 3` 的结果（十进制）是多少？",
+        "question": "假设 `char c = 200;`（假设 `char` 是有符号的），当执行 `int i = c;` 时，`i` 的值是多少？",
         "options": [
-            "`17`",
-            "`45`",
-            "`10`",
-            "`69`"
+            "`200`",
+            "`-56`",
+            "`56`",
+            "未定义行为"
         ],
-        "correctAnswer": 0,
-        "explanation": "`0x8A = 138`（十进制），右移3位相当于除以8，`138 >> 3 = 17`。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int num = 0x8A;\n    int result = num >> 3;\n    printf(\"%d\\n\", result);  // 输出: 17\n    return 0;\n}"
+        "correctAnswer": 1,
+        "explanation": "有符号 `char` 的范围是 -128 到 127。200 超出范围，会发生整数溢出。200 的二进制是 `11001000`，作为有符号数解释为 `-56`（补码）。赋值给 `int` 时进行符号扩展。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    char c = 200;  /* 溢出,变成-56 */\n    int i = c;     /* 符号扩展 */\n    printf(\"%d\\n\", i);  /* 输出: -56 */\n    \n    unsigned char uc = 200;\n    int j = uc;    /* 无符号,值仍是200 */\n    printf(\"%d\\n\", j);  /* 输出: 200 */\n    return 0;\n}"
     },
     {
         "id": 17,
@@ -296,16 +296,16 @@ class TemplateLoader {
     },
     {
         "id": 18,
-        "question": "下列哪个表达式可以将整数变量 `x` 的值限制在 [1, 10] 的范围内？",
+        "question": "下列代码的输出是什么？\n```c\nint a = 1, b = 2, c = 3;\nprintf(\"%d\\n\", a = b = c);\n```",
         "options": [
-            "`x = (x < 1) ? 1 : (x > 10) ? 10 : x;`",
-            "`x = x < 1 && x > 10 ? x : 10;`",
-            "`x = (x % 10) + 1;`",
-            "`x = (x > 1) ? 10 : 1;`"
+            "`1`",
+            "`2`",
+            "`3`",
+            "`6`"
         ],
-        "correctAnswer": 0,
-        "explanation": "嵌套三元运算符：如果 `x < 1` 则设为1，否则如果 `x > 10` 则设为10，否则保持 `x` 不变。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 15;\n    x = (x < 1) ? 1 : (x > 10) ? 10 : x;\n    printf(\"%d\\n\", x);  // 输出: 10\n    return 0;\n}"
+        "correctAnswer": 2,
+        "explanation": "连续赋值从右到左执行：`b = c`（`b` 变为3，返回3），`a = 3`（`a` 变为3，返回3），最后 `printf` 输出3。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3;\n    printf(\"%d\\n\", a = b = c);  /* 输出: 3 */\n    printf(\"a=%d, b=%d, c=%d\\n\", a, b, c);  /* a=3, b=3, c=3 */\n    return 0;\n}"
     },
     {
         "id": 19,
@@ -335,16 +335,16 @@ class TemplateLoader {
     },
     {
         "id": 21,
-        "question": "假设 `int x = 1, y = 2;`，执行语句 `x = y = x + y;` 后，`x` 和 `y` 的值分别是多少？",
+        "question": "假设 `int i = 10;`，执行 `printf(\"%d %d\\n\", sizeof(i++), i);` 的输出是什么？",
         "options": [
-            "`x=3, y=3`",
-            "`x=3, y=2`",
-            "`x=1, y=3`",
-            "`x=2, y=3`"
+            "`4 11` (假设int占4字节)",
+            "`4 10`",
+            "`8 10`",
+            "未定义行为"
         ],
-        "correctAnswer": 0,
-        "explanation": "先计算 `x + y = 1 + 2 = 3`，然后从右到左赋值：`y = 3`（返回3），`x = 3`。所以 `x=3, y=3`。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 1, y = 2;\n    x = y = x + y;  // 先计算 x+y=3，然后 y=3, x=3\n    printf(\"x=%d, y=%d\\n\", x, y);  // 输出: x=3, y=3\n    return 0;\n}"
+        "correctAnswer": 1,
+        "explanation": "`sizeof` 运算符的操作数不会被求值（除非是变长数组）。所以 `i++` 不会执行，`i` 仍然是10。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int i = 10;\n    /* sizeof不对操作数求值 */\n    printf(\"%lu %d\\n\", (unsigned long)sizeof(i++), i);  /* 输出: 4 10 */\n    \n    /* 对比:真正执行i++ */\n    int j = 10;\n    (void)(j++);\n    printf(\"%d\\n\", j);  /* 输出: 11 */\n    return 0;\n}"
     },
     {
         "id": 22,
@@ -400,16 +400,16 @@ class TemplateLoader {
     },
     {
         "id": 26,
-        "question": "假设 `int x = 10;`，表达式 `x > 0 ? (x++) : (x--);` 执行后，`x` 的值是多少？",
+        "question": "下列代码中，`result` 的最终值是多少？\n```c\nint x = 5, y = 10;\nint result = (x > y ? x : y) = 20;\n```",
         "options": [
-            "`9`",
+            "`20`",
             "`10`",
-            "`11`",
-            "`12`"
+            "`5`",
+            "编译错误"
         ],
-        "correctAnswer": 2,
-        "explanation": "`x > 0` 为真（`10 > 0`），执行 `x++`，`x` 先使用值10，然后 `x` 变为11。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    int result = x > 0 ? (x++) : (x--);\n    printf(\"x=%d, result=%d\\n\", x, result);  // 输出: x=11, result=10\n    return 0;\n}"
+        "correctAnswer": 3,
+        "explanation": "三元运算符 `?:` 的结果不是左值（lvalue），不能被赋值。这段代码会产生编译错误。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 5, y = 10;\n    /* 错误: 三元运算符结果不是左值 */\n    /* int result = (x > y ? x : y) = 20; */\n    \n    /* 正确的写法: */\n    int *p = (x > y ? &x : &y);\n    *p = 20;  /* 通过指针赋值 */\n    printf(\"y=%d\\n\", y);  /* 输出: 20 */\n    return 0;\n}"
     },
     {
         "id": 27,
@@ -426,16 +426,16 @@ class TemplateLoader {
     },
     {
         "id": 28,
-        "question": "假设 `int i = 8;`，表达式 `i > 10 || ++i` 求值后，`i` 的值是多少？",
+        "question": "下列代码中，变量 `a` 和 `b` 的最终值分别是多少？\n```c\nint a = 0, b = 0;\nif (a++ || ++b) { }\nprintf(\"%d %d\", a, b);\n```",
         "options": [
-            "`8`",
-            "`9`",
-            "`10`",
-            "无法确定"
+            "`0 0`",
+            "`1 0`",
+            "`1 1`",
+            "`0 1`"
         ],
-        "correctAnswer": 1,
-        "explanation": "`i > 10` 为假（`8 > 10`），继续计算 `++i`，`i` 变为9。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int i = 8;\n    int result = i > 10 || ++i;\n    printf(\"i=%d, result=%d\\n\", i, result);  // 输出: i=9, result=1\n    return 0;\n}"
+        "correctAnswer": 2,
+        "explanation": "短路求值分析：`a++` 后置自增先返回0（假），然后 `a` 变为1。因为第一个操作数为假（0），`||` 运算符需要继续求值第二个操作数 `++b`。`++b` 前置自增使 `b` 变为1并返回1（真）。所以最终 `a=1, b=1`。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 0, b = 0;\n    if (a++ || ++b) { }\n    /* a++返回0(假),a变为1 */\n    /* 继续求值++b,b变为1 */\n    printf(\"%d %d\\n\", a, b);  /* 输出: 1 1 */\n    return 0;\n}"
     },
     {
         "id": 29,

@@ -83,16 +83,16 @@ class TemplateLoader {
         const questions = [
             {
                 id: 1,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 5;  // 二进制: 0101\nint y = 3;  // 二进制: 0011\nprintf(\"%d\", x & y);\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    int x = 2, y = 3;\n    if (x & y == 2)  /* 陷阱：优先级 */\n        printf(\"True\");\n    else\n        printf(\"False\");\n    return 0;\n}\n</C>",
                 options: [
-                    "`1`",
-                    "`3`",
-                    "`5`",
-                    "`7`"
+                    "`True`",
+                    "`False`",
+                    "编译错误",
+                    "未定义行为"
                 ],
-                correctAnswer: 0,
-                explanation: "按位与运算（&）：对应位都是1时结果为1。0101 & 0011 = 0001，十进制为1。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 5;  // 0101\n    int y = 3;  // 0011\n    \n    printf(\"x & y = %d\\n\", x & y);   // 0001 = 1\n    printf(\"x | y = %d\\n\", x | y);   // 0111 = 7\n    printf(\"x ^ y = %d\\n\", x ^ y);   // 0110 = 6\n    printf(\"~x = %d\\n\", ~x);         // 按位取反\n    \n    return 0;\n}"
+                correctAnswer: 1,
+                explanation: "这是**位运算与关系运算符优先级**陷阱！`==`优先级高于`&`，表达式被解析为`x & (y==2)`而非`(x&y)==2`。**执行过程**：1)`y==2`为假(0)；2)`x&0`=0；3)if(0)为假，输出False。**正确写法**：`if((x&y)==2)`。**关键误区**：误以为&优先级高于==。**优先级表**：算术>移位>关系>位运算>逻辑。**实际案例**：`if(flags&MASK==MASK)`是常见错误，应写`if((flags&MASK)==MASK)`。**记忆技巧**：位运算优先级很低，几乎总需要括号。**类似陷阱**：`a|b==c`、`a^b!=0`等都需要加括号。",
+                codeExample: "#include <stdio.h>\n\n#define FLAG_READ  0x01\n#define FLAG_WRITE 0x02\n\nint main() {\n    int x = 2, y = 3;\n    \n    /* 错误：& 优先级低于 == */\n    if (x & y == 2)  /* 解析为: x & (y==2) = 2 & 0 = 0 */\n        printf(\"错误写法: True\\n\");\n    else\n        printf(\"错误写法: False\\n\");  /* 输出此行 */\n    \n    /* 正确：加括号 */\n    if ((x & y) == 2)  /* (2&3)==2 → 2==2 → True */\n        printf(\"正确写法: True\\n\");  /* 输出此行 */\n    else\n        printf(\"正确写法: False\\n\");\n    \n    /* 实际应用场景 */\n    int permissions = FLAG_READ | FLAG_WRITE;  /* 3 (0011) */\n    \n    /* 错误检查 */\n    if (permissions & FLAG_READ == FLAG_READ)  /* 错误！ */\n        printf(\"有读权限(错误)\\n\");\n    else\n        printf(\"无读权限(错误)\\n\");  /* 误判 */\n    \n    /* 正确检查 */\n    if ((permissions & FLAG_READ) == FLAG_READ)  /* 正确 */\n        printf(\"有读权限(正确)\\n\");  /* 输出 */\n    \n    /* 更简洁写法 */\n    if (permissions & FLAG_READ)  /* 非零即真 */\n        printf(\"有读权限(简洁)\\n\");\n    \n    return 0;\n}"
             },
             {
                 id: 2,
@@ -148,16 +148,16 @@ class TemplateLoader {
             },
             {
                 id: 6,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 7;  // 二进制: 0111\nprintf(\"%d\", ~x);\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    signed char x = -4;  /* 11111100 (8位补码) */\n    int y = x >> 1;  /* 算术右移 */\n    printf(\"%d\", y);\n    return 0;\n}\n</C>",
                 options: [
-                    "`-8`",
-                    "`-7`",
-                    "`7`",
-                    "`8`"
+                    "`-2`",
+                    "`2`",
+                    "`126`",
+                    "未定义行为"
                 ],
                 correctAnswer: 0,
-                explanation: "按位取反（~）：所有位取反。对于有符号整数，~x = -(x+1)。~7 = -8。这涉及补码表示。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 7;\n    printf(\"~%d = %d\\n\", x, ~x);  // -8\n    \n    // 验证公式: ~x = -(x+1)\n    printf(\"-(x+1) = %d\\n\", -(x+1));\n    \n    // 其他例子\n    printf(\"~0 = %d\\n\", ~0);    // -1\n    printf(\"~(-1) = %d\\n\", ~(-1));  // 0\n    \n    return 0;\n}"
+                explanation: "这是**有符号数右移的符号扩展**陷阱！对于**有符号负数**，右移是**算术右移**（符号扩展），左侧填充符号位1。-4的二进制(8位)是11111100，右移1位后11111110，仍是负数-2。**无符号数右移**是**逻辑右移**，左侧填充0。**关键知识**：1)C标准未明确规定有符号数右移行为，但大多数编译器实现为算术右移；2)无符号数保证逻辑右移；3)左移对有符号和无符号都是逻辑左移（右侧填0）。**实际应用**：除以2的幂用右移需注意符号，`x>>1`对负数不等于`x/2`（向零舍入vs向下舍入）。**安全做法**：需要除法语义时用除法，不用右移。**易错点**：误以为右移总是填0。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    /* 有符号数右移 */\n    signed char x = -4;  /* 11111100 */\n    printf(\"x = %d (11111100)\\n\", x);\n    \n    int y = x >> 1;  /* 算术右移: 11111110 = -2 */\n    printf(\"x >> 1 = %d\\n\", y);  /* -2 */\n    printf(\"x / 2 = %d\\n\", x / 2);  /* -2 */\n    \n    /* 无符号数右移 */\n    unsigned char ux = 252;  /* 11111100 */\n    printf(\"\\nux = %u (11111100)\\n\", ux);\n    \n    unsigned int uy = ux >> 1;  /* 逻辑右移: 01111110 = 126 */\n    printf(\"ux >> 1 = %u\\n\", uy);  /* 126 */\n    printf(\"ux / 2 = %u\\n\", ux / 2);  /* 126 */\n    \n    /* 陷阱对比 */\n    signed char s = -8;\n    unsigned char u = 248;  /* 相同位模式 */\n    \n    printf(\"\\n有符号 -8 >> 2 = %d\\n\", s >> 2);  /* -2 (填充1) */\n    printf(\"无符号 248 >> 2 = %u\\n\", u >> 2);  /* 62 (填充0) */\n    \n    /* 左移：都是逻辑左移 */\n    printf(\"\\n-4 << 1 = %d\\n\", -4 << 1);  /* -8 */\n    printf(\"252 << 1 = %u\\n\", 252u << 1);  /* 504 */\n    \n    return 0;\n}"
             },
             {
                 id: 7,
@@ -213,16 +213,16 @@ class TemplateLoader {
             },
             {
                 id: 11,
-                question: "关于 `fgetc` 函数，以下说法正确的是：",
+                question: "以下代码可能产生什么问题？\n\n<C>\nFILE *fp = fopen(\"binary.dat\", \"rb\");\nif (fp != NULL) {\n    char ch;  /* 错误：应该是int */\n    while ((ch = fgetc(fp)) != EOF) {\n        putchar(ch);\n    }\n    fclose(fp);\n}\n</C>",
                 options: [
-                    "`fgetc` 返回类型是 `char`",
-                    "`fgetc` 返回类型是 `int`",
-                    "`fgetc` 不能检测文件结束",
-                    "`fgetc` 只能读取ASCII字符"
+                    "没有问题",
+                    "无法读取文件",
+                    "可能死循环（遇到0xFF字节）",
+                    "编译错误"
                 ],
-                correctAnswer: 1,
-                explanation: "`fgetc` 返回 `int` 类型，因为需要能表示EOF（通常是-1）。如果返回char，无法区分EOF和字符0xFF。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    FILE *fp = fopen(\"input.txt\", \"r\");\n    if (fp == NULL) {\n        printf(\"文件打开失败\\n\");\n        return 1;\n    }\n    \n    int ch;  // 注意：int类型，不是char\n    while ((ch = fgetc(fp)) != EOF) {\n        putchar(ch);\n    }\n    \n    if (feof(fp)) {\n        printf(\"\\n到达文件末尾\\n\");\n    }\n    \n    fclose(fp);\n    return 0;\n}"
+                correctAnswer: 2,
+                explanation: "这是**fgetc返回类型错误**的经典陷阱！`fgetc`返回`int`而非`char`，因为需要表示EOF(通常-1)和所有字节值(0-255)。**问题根源**：若文件包含字节0xFF(255)，`fgetc`返回255，赋值给`char`（有符号8位）后变成-1，而`EOF`也是-1，导致误判为文件结束或死循环（取决于char是否有符号）。**执行场景**：1)读到0xFF字节；2)255转为signed char变成-1；3)-1==EOF误判结束，或-1!=EOF继续循环输出0xFF；4)二进制文件常含0xFF。**正确写法**：`int ch`。**为什么返回int**：需要257个值(0-255+EOF)，char只能表示256个。**类似陷阱**：getchar、fgetc、getc都返回int。**易错点**：误以为\"读字符\"就用char。",
+                codeExample: "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    /* 创建包含0xFF的测试文件 */\n    FILE *fp = fopen(\"test.bin\", \"wb\");\n    if (fp) {\n        unsigned char data[] = {0x41, 0x42, 0xFF, 0x43, 0x44};  /* AB<0xFF>CD */\n        fwrite(data, 1, 5, fp);\n        fclose(fp);\n    }\n    \n    printf(\"=== 错误写法（char） ===\\n\");\n    fp = fopen(\"test.bin\", \"rb\");\n    if (fp) {\n        char ch;  /* 错误！ */\n        int count = 0;\n        while ((ch = fgetc(fp)) != EOF && count++ < 10) {  /* 可能死循环 */\n            printf(\"读到: 0x%02X\\n\", (unsigned char)ch);\n        }\n        if (count >= 10) printf(\"检测到死循环！\\n\");\n        fclose(fp);\n    }\n    \n    printf(\"\\n=== 正确写法（int） ===\\n\");\n    fp = fopen(\"test.bin\", \"rb\");\n    if (fp) {\n        int ch;  /* 正确！ */\n        while ((ch = fgetc(fp)) != EOF) {\n            printf(\"读到: 0x%02X\\n\", ch);\n        }\n        printf(\"正常读取完毕\\n\");\n        fclose(fp);\n    }\n    \n    /* EOF值 */\n    printf(\"\\nEOF = %d\\n\", EOF);  /* 通常是-1 */\n    printf(\"0xFF as signed char = %d\\n\", (char)0xFF);  /* -1 */\n    printf(\"0xFF as int = %d\\n\", 0xFF);  /* 255 */\n    \n    return 0;\n}"
             },
             {
                 id: 12,
@@ -278,16 +278,16 @@ class TemplateLoader {
             },
             {
                 id: 16,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 0b1010;  // 二进制字面量\nint y = 0x0A;    // 十六进制字面量\nprintf(\"%d %d\", x, y);\n</C>",
+                question: "以下代码在32位系统上的行为是什么？\n\n<C>\nint main() {\n    int x = 1;\n    int y = x << 31;  /* 左移31位 */\n    printf(\"%d\", y);\n    return 0;\n}\n</C>",
                 options: [
-                    "`10 10`",
-                    "`1010 10`",
-                    "`10 0A`",
-                    "编译错误"
+                    "`2147483648`",
+                    "`-2147483648`",
+                    "未定义行为",
+                    "`0`"
                 ],
-                correctAnswer: 0,
-                explanation: "`0b1010` 是二进制表示（某些编译器支持），等于10。`0x0A` 是十六进制表示，也等于10。两者都输出10。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 10;      // 十进制\n    int b = 012;     // 八进制（前缀0）\n    int c = 0x0A;    // 十六进制（前缀0x）\n    int d = 0b1010;  // 二进制（某些编译器支持）\n    \n    printf(\"十进制: %d\\n\", a);    // 10\n    printf(\"八进制: %d\\n\", b);    // 10\n    printf(\"十六进制: %d\\n\", c);  // 10\n    printf(\"二进制: %d\\n\", d);    // 10\n    \n    // 不同格式输出\n    printf(\"\\n以不同格式输出10:\\n\");\n    printf(\"十进制: %d\\n\", 10);\n    printf(\"八进制: %o\\n\", 10);\n    printf(\"十六进制: %x\\n\", 10);\n    \n    return 0;\n}"
+                correctAnswer: 2,
+                explanation: "这是**有符号整数左移溢出**的未定义行为陷阱！C标准规定，**有符号数左移导致符号位变化是未定义行为**(UB)。1<<31在32位int上会设置符号位，结果未定义。**问题分析**：1)int是有符号类型；2)左移31位后，1进入符号位；3)C89/C99标准：有符号溢出是UB；4)实际行为：可能得到负数、崩溃或被编译器优化掉。**正确做法**：使用无符号类型`unsigned int x=1; unsigned int y=x<<31;`结果是0x80000000(2147483648u)。**相关规则**：1)无符号数左移溢出是良定义的（模运算）；2)右移超过位宽是UB；3)移位负数是UB。**实际案例**：`1<<31`常用于位掩码，必须写`1U<<31`。**编译器行为**：GCC可能优化为-2147483648，但不可依赖。**检测工具**：UBSan能检测此类UB。",
+                codeExample: "#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    printf(\"int位数: %lu\\n\", sizeof(int) * 8);\n    \n    /* 未定义行为：有符号左移溢出 */\n    int x = 1;\n    /* int y = x << 31;  危险！UB！ */\n    \n    /* 正确：使用无符号数 */\n    unsigned int ux = 1;\n    unsigned int uy = ux << 31;\n    printf(\"1U << 31 = %u (0x%X)\\n\", uy, uy);  /* 2147483648 */\n    \n    /* 位掩码的正确写法 */\n    unsigned int mask = 1U << 31;  /* 最高位 */\n    printf(\"最高位掩码: 0x%08X\\n\", mask);\n    \n    /* 其他UB场景 */\n    /* int a = 1 << 32;   超出位宽，UB */\n    /* int b = 1 << -1;  负数移位，UB */\n    /* int c = INT_MAX + 1;  有符号溢出，UB */\n    \n    /* 无符号数的良定义行为 */\n    unsigned int u1 = UINT_MAX + 1;  /* 模运算，结果0 */\n    printf(\"UINT_MAX + 1 = %u\\n\", u1);  /* 0 */\n    \n    unsigned int u2 = 255U;\n    unsigned int u3 = u2 << 25;  /* 溢出但良定义 */\n    printf(\"255U << 25 = %u\\n\", u3);\n    \n    /* 安全检查 */\n    int shift = 31;\n    if (shift >= 0 && shift < 32) {\n        unsigned int result = 1U << shift;\n        printf(\"1U << %d = %u\\n\", shift, result);\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 17,
@@ -343,16 +343,16 @@ class TemplateLoader {
             },
             {
                 id: 21,
-                question: "以下代码实现的功能是：\n\n<C>\nint swap_bits(int x) {\n    int even = x & 0xAAAAAAAA;  // 偶数位\n    int odd = x & 0x55555555;   // 奇数位\n    return (even >> 1) | (odd << 1);\n}\n</C>",
+                question: "以下代码的执行结果是什么？\n\n<C>\nFILE *fp = fopen(\"data.txt\", \"w\");\nif (fp) {\n    fprintf(fp, \"First line\\n\");\n    fclose(fp);\n}\n\nfp = fopen(\"data.txt\", \"w+\");  /* 再次打开 */\nif (fp) {\n    fprintf(fp, \"Second line\\n\");\n    fclose(fp);\n}\n/* data.txt的最终内容是什么？ */\n</C>",
                 options: [
-                    "交换两个数",
-                    "交换相邻的位",
-                    "反转所有位",
-                    "清除所有位"
+                    "First line (第一行)\nSecond line (第二行)",
+                    "仅 Second line",
+                    "First line (覆盖失败)",
+                    "文件打开失败"
                 ],
                 correctAnswer: 1,
-                explanation: "提取偶数位和奇数位，然后交换它们的位置。0xAAAAAAAA是10101010...，0x55555555是01010101...。",
-                codeExample: "#include <stdio.h>\n\nint swap_bits(int x) {\n    int even = x & 0xAAAAAAAA;  // 提取偶数位\n    int odd = x & 0x55555555;   // 提取奇数位\n    return (even >> 1) | (odd << 1);  // 交换\n}\n\nvoid print_binary(int x) {\n    for (int i = 31; i >= 0; i--) {\n        printf(\"%d\", (x >> i) & 1);\n        if (i % 4 == 0) printf(\" \");\n    }\n    printf(\"\\n\");\n}\n\nint main() {\n    int x = 23;  // 10111\n    printf(\"原始值 %d:\\n\", x);\n    print_binary(x);\n    \n    int result = swap_bits(x);\n    printf(\"\\n交换后 %d:\\n\", result);\n    print_binary(result);\n    \n    return 0;\n}"
+                explanation: "这是**文件打开模式w/w+清空文件**的陷阱！**关键知识**：`\"w\"`和`\"w+\"`模式都会**清空已存在文件**。第一次写入\"First line\"后关闭，第二次以`\"w+\"`打开时**文件被清空**，然后写入\"Second line\"，最终文件只有第二行。**模式区别**：`\"w\"`只写；`\"w+\"`读写但清空；`\"r+\"`读写不清空；`\"a\"`/`\"a+\"`追加不清空。**易错场景**：1)误用w+想读写不清空(应用r+)；2)想追加用了w(应用a)；3)检查文件存在后用w打开(被清空)。**正确做法**：需要保留内容用`\"r+\"`或`\"a\"`；需要读写且可能不存在先检查再选模式。**实际案例**：配置文件更新误用w+丢失数据。**记忆口诀**：w开头都清空，r开头都保留，a开头都追加。",
+                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    /* 初始写入 */\n    FILE *fp = fopen(\"test.txt\", \"w\");\n    if (fp) {\n        fprintf(fp, \"Line 1\\nLine 2\\nLine 3\\n\");\n        fclose(fp);\n        printf(\"初始写入完成\\n\");\n    }\n    \n    /* 错误：w+会清空文件 */\n    printf(\"\\n=== 使用w+模式 ===\\n\");\n    fp = fopen(\"test.txt\", \"w+\");  /* 文件被清空！ */\n    if (fp) {\n        fprintf(fp, \"New content\\n\");\n        fclose(fp);\n    }\n    /* 文件现在只有\"New content\" */\n    \n    /* 正确：r+模式保留内容 */\n    printf(\"\\n=== 使用r+模式 ===\\n\");\n    fp = fopen(\"test.txt\", \"w\");  /* 重新初始化 */\n    fprintf(fp, \"Line 1\\nLine 2\\nLine 3\\n\");\n    fclose(fp);\n    \n    fp = fopen(\"test.txt\", \"r+\");  /* 不清空 */\n    if (fp) {\n        fseek(fp, 0, SEEK_END);  /* 移到末尾 */\n        fprintf(fp, \"Line 4\\n\");  /* 追加 */\n        fclose(fp);\n    }\n    /* 文件有4行 */\n    \n    /* 追加模式 */\n    printf(\"\\n=== 使用a模式 ===\\n\");\n    fp = fopen(\"test.txt\", \"a\");  /* 追加，不清空 */\n    if (fp) {\n        fprintf(fp, \"Line 5\\n\");\n        fclose(fp);\n    }\n    \n    /* 读取验证 */\n    printf(\"\\n=== 最终内容 ===\\n\");\n    fp = fopen(\"test.txt\", \"r\");\n    if (fp) {\n        char line[100];\n        while (fgets(line, sizeof(line), fp)) {\n            printf(\"%s\", line);\n        }\n        fclose(fp);\n    }\n    \n    /* 模式对照表 */\n    printf(\"\\n=== 模式说明 ===\\n\");\n    printf(\"r  : 读，文件必须存在\\n\");\n    printf(\"r+ : 读写，不清空，文件必须存在\\n\");\n    printf(\"w  : 写，清空或创建\\n\");\n    printf(\"w+ : 读写，清空或创建\\n\");\n    printf(\"a  : 追加，不清空，创建\\n\");\n    printf(\"a+ : 读写追加，不清空，创建\\n\");\n    \n    return 0;\n}"
             },
             {
                 id: 22,
@@ -408,16 +408,16 @@ class TemplateLoader {
             },
             {
                 id: 26,
-                question: "关于 `rewind` 函数，以下说法正确的是：",
+                question: "以下代码存在什么问题？\n\n<C>\nFILE *fp = fopen(\"large.dat\", \"rb\");\nif (fp) {\n    fseek(fp, 5000000000L, SEEK_SET);  /* 5GB偏移 */\n    int data;\n    fread(&data, sizeof(int), 1, fp);  /* 读取数据 */\n    printf(\"%d\", data);\n    fclose(fp);\n}\n</C>",
                 options: [
-                    "`rewind` 删除文件",
-                    "`rewind` 将文件指针移到开头",
-                    "`rewind` 关闭文件",
-                    "`rewind` 创建新文件"
+                    "没有问题",
+                    "未检查fseek返回值，可能seek失败",
+                    "文件太大无法打开",
+                    "fread用法错误"
                 ],
                 correctAnswer: 1,
-                explanation: "`rewind(fp)` 等价于 `fseek(fp, 0, SEEK_SET)`，将文件位置指针移到文件开头。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    FILE *fp = fopen(\"test.txt\", \"w+\");\n    if (fp == NULL) return 1;\n    \n    // 写入数据\n    fprintf(fp, \"Line 1\\n\");\n    fprintf(fp, \"Line 2\\n\");\n    fprintf(fp, \"Line 3\\n\");\n    \n    // 回到文件开头\n    rewind(fp);\n    \n    // 读取数据\n    char buffer[100];\n    while (fgets(buffer, sizeof(buffer), fp)) {\n        printf(\"%s\", buffer);\n    }\n    \n    fclose(fp);\n    return 0;\n}"
+                explanation: "这是**未检查fseek返回值**的陷阱！`fseek`失败时返回非零值，但代码未检查。**失败场景**：1)偏移超出文件大小(文本模式或某些系统)；2)文件不可seek(管道、终端)；3)32位系统long不足以表示大偏移。**问题后果**：seek失败后文件位置未变，fread读取错误位置或失败，data未初始化或是垃圾值。**正确做法**：1)检查`fseek`返回值；2)检查`fread`返回值；3)大文件用`fseeko`(off_t类型)；4)检查`ftell`返回-1L表示错误。**标准规定**：fseek成功返回0，失败返回非零。**实际案例**：seek超出2GB在某些系统失败；seek管道总失败。**完整检查**：`if(fseek(fp,pos,SEEK_SET)!=0||fread(&data,sizeof(int),1,fp)!=1)`。**易错点**：误以为fseek总成功。",
+                codeExample: "#include <stdio.h>\n#include <errno.h>\n#include <string.h>\n\nint main() {\n    /* 创建测试文件 */\n    FILE *fp = fopen(\"test.dat\", \"wb\");\n    if (fp) {\n        int data = 12345;\n        fwrite(&data, sizeof(int), 1, fp);\n        fclose(fp);\n    }\n    \n    /* 错误示范：不检查返回值 */\n    printf(\"=== 错误示范 ===\\n\");\n    fp = fopen(\"test.dat\", \"rb\");\n    if (fp) {\n        fseek(fp, 1000000L, SEEK_SET);  /* 超出文件大小 */\n        int data = -1;\n        fread(&data, sizeof(int), 1, fp);  /* 可能读取失败 */\n        printf(\"读到: %d\\n\", data);  /* 可能是垃圾值 */\n        fclose(fp);\n    }\n    \n    /* 正确示范：检查所有返回值 */\n    printf(\"\\n=== 正确示范 ===\\n\");\n    fp = fopen(\"test.dat\", \"rb\");\n    if (fp == NULL) {\n        perror(\"fopen失败\");\n        return 1;\n    }\n    \n    long offset = 1000000L;\n    if (fseek(fp, offset, SEEK_SET) != 0) {\n        perror(\"fseek失败\");\n        printf(\"无法seek到位置 %ld\\n\", offset);\n        fclose(fp);\n        return 1;\n    }\n    \n    int data;\n    size_t nread = fread(&data, sizeof(int), 1, fp);\n    if (nread != 1) {\n        if (feof(fp)) {\n            printf(\"到达文件末尾\\n\");\n        } else if (ferror(fp)) {\n            perror(\"fread失败\");\n        }\n        fclose(fp);\n        return 1;\n    }\n    \n    printf(\"成功读到: %d\\n\", data);\n    fclose(fp);\n    \n    /* 演示ftell错误检查 */\n    printf(\"\\n=== ftell检查 ===\\n\");\n    fp = fopen(\"test.dat\", \"rb\");\n    if (fp) {\n        long pos = ftell(fp);\n        if (pos == -1L) {\n            perror(\"ftell失败\");\n        } else {\n            printf(\"当前位置: %ld\\n\", pos);\n        }\n        fclose(fp);\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 27,
@@ -434,16 +434,16 @@ class TemplateLoader {
             },
             {
                 id: 28,
-                question: "关于文件定位函数，以下说法正确的是：",
+                question: "以下代码在Windows系统上的行为是什么？\n\n<C>\nFILE *fp = fopen(\"test.txt\", \"w\");  /* 文本模式 */\nif (fp) {\n    fwrite(\"A\\nB\\nC\", 5, 1, fp);  /* 写5字节 */\n    fclose(fp);\n}\n/* 文件实际大小是多少字节？ */\n</C>",
                 options: [
-                    "`SEEK_SET` 表示从文件末尾开始",
-                    "`SEEK_CUR` 表示从当前位置开始",
-                    "`SEEK_END` 表示从文件开头开始",
-                    "文件定位只能用于文本文件"
+                    "`5`字节",
+                    "`6`字节",
+                    "`7`字节",
+                    "取决于系统"
                 ],
-                correctAnswer: 1,
-                explanation: "`SEEK_SET` 从文件开头，`SEEK_CUR` 从当前位置，`SEEK_END` 从文件末尾。可用于文本和二进制文件。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    FILE *fp = fopen(\"test.txt\", \"w+\");\n    if (fp == NULL) return 1;\n    \n    fprintf(fp, \"0123456789\");\n    \n    // 从开头偏移5\n    fseek(fp, 5, SEEK_SET);\n    printf(\"位置: %ld\\n\", ftell(fp));  // 5\n    \n    // 从当前位置偏移2\n    fseek(fp, 2, SEEK_CUR);\n    printf(\"位置: %ld\\n\", ftell(fp));  // 7\n    \n    // 从末尾偏移-3\n    fseek(fp, -3, SEEK_END);\n    printf(\"位置: %ld\\n\", ftell(fp));  // 7\n    \n    fclose(fp);\n    return 0;\n}"
+                correctAnswer: 3,
+                explanation: "这是**文本模式vs二进制模式的换行符转换**陷阱！在**Windows**，文本模式会将`\\n`(LF)转换为`\\r\\n`(CRLF)，5字节变7字节(A\\r\\nB\\r\\nC)。在**Unix/Linux**，不转换，仍是5字节。**关键区别**：1)**文本模式(\"w\")**：写入时LF→CRLF(Win)，读取时CRLF→LF；行尾转换；2)**二进制模式(\"wb\")**：不转换，原样读写。**问题场景**：1)用文本模式写二进制数据→数据损坏(0x0A被扩展)；2)用fwrite写文本→字节数与预期不符；3)跨平台文件→换行符不一致。**正确做法**：1)文本用fprintf+文本模式；2)二进制用fwrite+二进制模式；3)跨平台统一用二进制模式。**实际案例**：图片用文本模式打开损坏；网络协议混用模式导致长度错误。**检测方法**：文本模式ftell可能不准确。**记忆要点**：Windows文本模式会转换，Unix不转换；二进制模式都不转换。",
+                codeExample: "#include <stdio.h>\n#include <string.h>\n\nlong get_file_size(const char *filename) {\n    FILE *fp = fopen(filename, \"rb\");\n    if (!fp) return -1;\n    fseek(fp, 0, SEEK_END);\n    long size = ftell(fp);\n    fclose(fp);\n    return size;\n}\n\nint main() {\n    const char *data = \"A\\nB\\nC\";  /* 5字节 */\n    \n    /* 文本模式写入 */\n    printf(\"=== 文本模式 ===\\n\");\n    FILE *fp = fopen(\"text_mode.txt\", \"w\");  /* 文本模式 */\n    if (fp) {\n        size_t written = fwrite(data, 1, 5, fp);\n        printf(\"写入字节数: %zu\\n\", written);  /* 返回5 */\n        fclose(fp);\n    }\n    long size = get_file_size(\"text_mode.txt\");\n    printf(\"文件实际大小: %ld字节\\n\", size);  /* Windows:7, Unix:5 */\n    \n    /* 二进制模式写入 */\n    printf(\"\\n=== 二进制模式 ===\\n\");\n    fp = fopen(\"binary_mode.bin\", \"wb\");  /* 二进制模式 */\n    if (fp) {\n        size_t written = fwrite(data, 1, 5, fp);\n        printf(\"写入字节数: %zu\\n\", written);  /* 返回5 */\n        fclose(fp);\n    }\n    size = get_file_size(\"binary_mode.bin\");\n    printf(\"文件实际大小: %ld字节\\n\", size);  /* 都是5 */\n    \n    /* 读取对比 */\n    printf(\"\\n=== 读取对比 ===\\n\");\n    unsigned char buffer[20];\n    \n    fp = fopen(\"text_mode.txt\", \"rb\");  /* 用二进制读文本文件 */\n    if (fp) {\n        size_t nread = fread(buffer, 1, 20, fp);\n        printf(\"文本模式文件实际内容(%zu字节): \", nread);\n        for (size_t i = 0; i < nread; i++) {\n            if (buffer[i] == '\\r') printf(\"<CR>\");\n            else if (buffer[i] == '\\n') printf(\"<LF>\");\n            else printf(\"%c\", buffer[i]);\n        }\n        printf(\"\\n\");\n        fclose(fp);\n    }\n    \n    /* 二进制数据错误示例 */\n    printf(\"\\n=== 陷阱演示：二进制数据用文本模式 ===\\n\");\n    unsigned char bin_data[] = {0x41, 0x0A, 0x42, 0x0A, 0x43};  /* 含0x0A */\n    \n    fp = fopen(\"wrong.dat\", \"w\");  /* 错误：文本模式 */\n    if (fp) {\n        fwrite(bin_data, 1, 5, fp);\n        fclose(fp);\n    }\n    printf(\"原始数据5字节，错误模式写入后: %ld字节\\n\",\n           get_file_size(\"wrong.dat\"));  /* Windows:7字节，数据损坏！ */\n    \n    fp = fopen(\"correct.dat\", \"wb\");  /* 正确：二进制模式 */\n    if (fp) {\n        fwrite(bin_data, 1, 5, fp);\n        fclose(fp);\n    }\n    printf(\"原始数据5字节，正确模式写入后: %ld字节\\n\",\n           get_file_size(\"correct.dat\"));  /* 都是5字节 */\n    \n    return 0;\n}"
             },
             {
                 id: 29,

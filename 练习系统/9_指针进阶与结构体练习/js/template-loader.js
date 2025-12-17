@@ -83,16 +83,16 @@ class TemplateLoader {
         const questions = [
             {
                 id: 1,
-                question: "关于指针数组和数组指针，以下说法正确的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    int a = 10;\n    int *p = &a;\n    int **pp = &p;\n    **pp = **pp + 1;  /* 修改a的值 */\n    printf(\"%d %d %d\", a, *p, **pp);\n    return 0;\n}\n</C>",
                 options: [
-                    "`int *p[5]` 是数组指针",
-                    "`int (*p)[5]` 是指针数组",
-                    "`int *p[5]` 是指针数组，包含5个int指针",
-                    "`int (*p)[5]` 和 `int *p[5]` 完全相同"
+                    "`10 10 10`",
+                    "`11 11 11`",
+                    "`10 11 11`",
+                    "编译错误"
                 ],
-                correctAnswer: 2,
-                explanation: "`int *p[5]` 是指针数组，包含5个指向int的指针。`int (*p)[5]` 是数组指针，指向一个包含5个int的数组。注意括号的位置改变了含义。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    // 指针数组：5个指针\n    int a = 1, b = 2, c = 3;\n    int *p[3];\n    p[0] = &a;\n    p[1] = &b;\n    p[2] = &c;\n    printf(\"指针数组: %d %d %d\\n\", *p[0], *p[1], *p[2]);\n    \n    // 数组指针：指向整个数组\n    int arr[5] = {10, 20, 30, 40, 50};\n    int (*ptr)[5] = &arr;\n    printf(\"数组指针: %d %d\\n\", (*ptr)[0], (*ptr)[1]);\n    \n    return 0;\n}"
+                correctAnswer: 1,
+                explanation: "这是**二级指针解引用**陷阱！`pp`指向指针`p`，`p`指向`a`。`**pp`等价于`a`，执行`**pp=**pp+1`即`a=a+1`，将a从10变为11。**关键点**：二级指针的两次解引用直接访问最终变量，所有表达式（a、*p、**pp）都指向同一个内存位置，值同步变化为11。**易错点**：误以为**pp只能读取不能修改。**实际应用**：函数通过二级指针修改调用者的指针变量。**陷阱本质**：`**pp`和`a`是同一个左值。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int *p = &a;\n    int **pp = &p;\n    \n    printf(\"初始: a=%d, *p=%d, **pp=%d\\n\", a, *p, **pp);\n    \n    /* 通过二级指针修改 */\n    **pp = **pp + 1;\n    printf(\"修改后: a=%d, *p=%d, **pp=%d\\n\", a, *p, **pp);\n    /* 输出: 11 11 11 */\n    \n    /* 验证：都是同一个变量 */\n    printf(\"地址: &a=%p, p=%p, *pp=%p\\n\", (void*)&a, (void*)p, (void*)*pp);\n    /* 三个地址相同 */\n    \n    /* 实际应用：修改指针本身 */\n    int b = 20;\n    *pp = &b;  /* 修改p，使其指向b */\n    printf(\"现在 *p=%d, **pp=%d\\n\", *p, **pp);  /* 20 20 */\n    \n    return 0;\n}"
             },
             {
                 id: 2,
@@ -148,16 +148,16 @@ class TemplateLoader {
             },
             {
                 id: 6,
-                question: "以下代码的输出结果是什么？\n\n<C>\nstruct Point {\n    int x;\n    int y;\n};\n\nint main() {\n    struct Point p = {10, 20};\n    struct Point *ptr = &p;\n    printf(\"%d %d\", ptr->x, (*ptr).y);\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nint main() {\n    struct Node n1 = {10, NULL};\n    struct Node n2 = {20, &n1};\n    struct Node *p = &n2;\n    printf(\"%d\", p->next->data);\n    p->next = p->next->next;  /* 修改链接 */\n    printf(\" %d\", p->data);\n    return 0;\n}\n</C>",
                 options: [
                     "`10 20`",
                     "`20 10`",
-                    "编译错误",
-                    "`0 0`"
+                    "段错误（崩溃）",
+                    "`10 10`"
                 ],
                 correctAnswer: 0,
-                explanation: "`ptr->x` 和 `(*ptr).y` 都是访问结构体成员的方式。`->` 用于指针，`.` 用于结构体变量。两种方式等价。",
-                codeExample: "#include <stdio.h>\n\nstruct Point {\n    int x;\n    int y;\n};\n\nint main() {\n    struct Point p = {10, 20};\n    struct Point *ptr = &p;\n    \n    // 两种访问方式\n    printf(\"ptr->x = %d\\n\", ptr->x);  // 10\n    printf(\"(*ptr).x = %d\\n\", (*ptr).x);  // 10\n    printf(\"ptr->y = %d\\n\", ptr->y);  // 20\n    printf(\"(*ptr).y = %d\\n\", (*ptr).y);  // 20\n    \n    return 0;\n}"
+                explanation: "这是**结构体指针链式访问与修改**陷阱！初始：p指向n2，n2.next指向n1。`p->next->data`是`n1.data`=10。`p->next=p->next->next`执行为`n2.next=n1.next=NULL`（将n2的next改为NULL）。但`p->data`仍是`n2.data`=20，因为修改的是n2的next成员，不是p本身。**执行顺序**：1)输出10；2)n2.next变为NULL；3)输出20。**关键误区**：误以为修改next会影响p->data。**陷阱本质**：p始终指向n2，修改next只改变链接关系，不改变p的指向和data值。**实际风险**：若后续访问p->next->data会崩溃（NULL解引用）。",
+                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nint main() {\n    struct Node n1 = {10, NULL};\n    struct Node n2 = {20, &n1};\n    struct Node *p = &n2;\n    \n    printf(\"初始链: n2(%d)->n1(%d)->NULL\\n\", n2.data, n1.data);\n    printf(\"p->next->data = %d\\n\", p->next->data);  /* 10 */\n    \n    /* 修改链接 */\n    p->next = p->next->next;  /* n2.next = NULL */\n    printf(\"修改后: p->data = %d\\n\", p->data);  /* 20 */\n    printf(\"现在链: n2(%d)->NULL\\n\", p->data);\n    \n    /* 危险！现在p->next是NULL */\n    /* printf(\"%d\", p->next->data);  段错误！ */\n    \n    /* 正确检查 */\n    if (p->next != NULL) {\n        printf(\"%d\", p->next->data);\n    } else {\n        printf(\"链表已断开\\n\");\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 7,
@@ -213,16 +213,16 @@ class TemplateLoader {
             },
             {
                 id: 11,
-                question: "关于指向指针的指针（二级指针），以下说法正确的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    int a = 1, b = 2, c = 3;\n    int *arr[] = {&a, &b, &c};  /* 指针数组 */\n    int **p = arr;  /* 二级指针指向数组 */\n    p++;  /* 指针移动 */\n    printf(\"%d\", **p);\n    return 0;\n}\n</C>",
                 options: [
-                    "二级指针只能指向指针变量",
-                    "二级指针可以指向任何变量",
-                    "二级指针使用 `***` 解引用",
-                    "二级指针不能修改原变量的值"
+                    "`1`",
+                    "`2`",
+                    "`3`",
+                    "未定义行为"
                 ],
-                correctAnswer: 0,
-                explanation: "二级指针 `int **p` 指向指针变量。使用 `**p` 解引用两次访问最终的值。可以通过二级指针修改原变量。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 100;\n    int *p = &x;   // p指向x\n    int **pp = &p;  // pp指向p\n    \n    printf(\"x = %d\\n\", x);\n    printf(\"*p = %d\\n\", *p);\n    printf(\"**pp = %d\\n\", **pp);\n    \n    **pp = 200;  // 通过二级指针修改x\n    printf(\"修改后 x = %d\\n\", x);\n    \n    return 0;\n}"
+                correctAnswer: 1,
+                explanation: "这是**二级指针指向指针数组的指针运算**陷阱！`int **p=arr`使p指向arr[0]（即&a）。`p++`后p指向arr[1]（即&b）。`**p`等价于`*arr[1]`=`*(&b)`=b=2。**关键知识**：指针数组名arr退化为指向首元素的指针（int**类型），可赋值给二级指针。**运算规则**：p++移动sizeof(int*)字节，指向下一个指针元素。**易错点**：误以为**p会直接变为2，忽略了p++的影响。**实际应用**：命令行参数`char *argv[]`常用`char **p`遍历。**陷阱组合**：++优先级 + 指针数组退化 + 二级指针解引用。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3;\n    int *arr[] = {&a, &b, &c};\n    int **p = arr;\n    \n    /* 初始状态 */\n    printf(\"p指向arr[0], **p = %d\\n\", **p);  /* 1 */\n    \n    /* 指针移动 */\n    p++;\n    printf(\"p++后指向arr[1], **p = %d\\n\", **p);  /* 2 */\n    \n    /* 继续移动 */\n    p++;\n    printf(\"再++后指向arr[2], **p = %d\\n\", **p);  /* 3 */\n    \n    /* 回到开头 */\n    p = arr;\n    printf(\"重置: **p = %d\\n\", **p);  /* 1 */\n    \n    /* 直接访问 */\n    printf(\"**(arr+1) = %d\\n\", **(arr+1));  /* 2 */\n    printf(\"*arr[2] = %d\\n\", *arr[2]);  /* 3 */\n    \n    /* 模拟命令行参数遍历 */\n    char *argv[] = {\"prog\", \"arg1\", \"arg2\", NULL};\n    char **p2 = argv;\n    while (*p2 != NULL) {\n        printf(\"%s\\n\", *p2);\n        p2++;\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 12,
@@ -278,16 +278,16 @@ class TemplateLoader {
             },
             {
                 id: 16,
-                question: "以下代码实现的功能是：\n\n<C>\nvoid swap(int **p1, int **p2) {\n    int *temp = *p1;\n    *p1 = *p2;\n    *p2 = temp;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint add(int x) { return x + 10; }\nint mul(int x) { return x * 2; }\nint sub(int x) { return x - 5; }\n\nint main() {\n    int (*f[3])(int) = {add, mul, sub};  /* 函数指针数组 */\n    int x = 5;\n    printf(\"%d\", f[1](f[0](x)));\n    return 0;\n}\n</C>",
                 options: [
-                    "交换两个整数的值",
-                    "交换两个指针指向的地址",
-                    "交换两个指针变量本身",
-                    "代码有错误"
+                    "`20`",
+                    "`30`",
+                    "`10`",
+                    "`25`"
                 ],
                 correctAnswer: 1,
-                explanation: "函数交换两个指针指向的地址。通过二级指针修改一级指针的值（地址）。",
-                codeExample: "#include <stdio.h>\n\nvoid swap(int **p1, int **p2) {\n    int *temp = *p1;\n    *p1 = *p2;\n    *p2 = temp;\n}\n\nint main() {\n    int a = 10, b = 20;\n    int *pa = &a, *pb = &b;\n    \n    printf(\"交换前: pa指向%d, pb指向%d\\n\", *pa, *pb);\n    \n    swap(&pa, &pb);  // 传递指针的地址\n    \n    printf(\"交换后: pa指向%d, pb指向%d\\n\", *pa, *pb);\n    \n    return 0;\n}"
+                explanation: "这是**函数指针数组的嵌套调用**陷阱！`f[0]`是add，`f[1]`是mul。**执行顺序**：1)内层`f[0](x)`=`add(5)`=5+10=15；2)外层`f[1](15)`=`mul(15)`=15*2=30。**关键点**：数组索引f[0]、f[1]分别对应函数add、mul；嵌套调用从内到外执行。**易错点**：误以为是f[1](5)然后f[0]，或混淆索引对应的函数。**语法要点**：`int (*f[3])(int)`声明，括号`(*f[3])`表示f是数组，数组元素是函数指针。**实际应用**：状态机、命令分发器、计算器运算符表。**陷阱组合**：数组索引 + 函数调用 + 嵌套求值顺序。",
+                codeExample: "#include <stdio.h>\n\nint add(int x) { return x + 10; }\nint mul(int x) { return x * 2; }\nint sub(int x) { return x - 5; }\n\nint main() {\n    /* 函数指针数组声明 */\n    int (*f[3])(int) = {add, mul, sub};\n    \n    int x = 5;\n    \n    /* 单次调用 */\n    printf(\"f[0](5) = %d\\n\", f[0](5));  /* add: 15 */\n    printf(\"f[1](5) = %d\\n\", f[1](5));  /* mul: 10 */\n    printf(\"f[2](5) = %d\\n\", f[2](5));  /* sub: 0 */\n    \n    /* 嵌套调用（从内到外） */\n    printf(\"f[1](f[0](5)) = %d\\n\", f[1](f[0](5)));  /* mul(add(5)) = mul(15) = 30 */\n    printf(\"f[2](f[1](5)) = %d\\n\", f[2](f[1](5)));  /* sub(mul(5)) = sub(10) = 5 */\n    \n    /* 实际应用：计算器 */\n    typedef int (*Op)(int, int);\n    int add2(int a, int b) { return a + b; }\n    int sub2(int a, int b) { return a - b; }\n    Op ops[] = {add2, sub2};\n    printf(\"10 + 20 = %d\\n\", ops[0](10, 20));  /* 30 */\n    printf(\"10 - 20 = %d\\n\", ops[1](10, 20));  /* -10 */\n    \n    return 0;\n}"
             },
             {
                 id: 17,
@@ -343,16 +343,16 @@ class TemplateLoader {
             },
             {
                 id: 21,
-                question: "以下代码中存在什么问题？\n\n<C>\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nstruct Node *create() {\n    struct Node node;\n    node.data = 10;\n    node.next = NULL;\n    return &node;\n}\n</C>",
+                question: "以下代码在32位系统上的输出最可能是多少？\n\n<C>\nstruct Data1 {\n    char a;  /* 1字节 */\n    int b;   /* 4字节 */\n    char c;  /* 1字节 */\n};\n\nstruct Data2 {\n    char a;  /* 1字节 */\n    char c;  /* 1字节 */\n    int b;   /* 4字节 */\n};\n\nint main() {\n    printf(\"%d %d\", sizeof(struct Data1), sizeof(struct Data2));\n    return 0;\n}\n</C>",
                 options: [
-                    "没有问题",
-                    "返回了局部变量的地址",
-                    "结构体定义错误",
-                    "指针使用错误"
+                    "`6 6`",
+                    "`12 8`",
+                    "`8 8`",
+                    "`12 12`"
                 ],
                 correctAnswer: 1,
-                explanation: "函数返回局部变量node的地址，node在函数结束后被销毁，导致悬空指针。应使用动态分配（malloc）。",
-                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\n// 错误方法\n// struct Node *wrong_create() {\n//     struct Node node;\n//     node.data = 10;\n//     node.next = NULL;\n//     return &node;  // 危险！\n// }\n\n// 正确方法：动态分配\nstruct Node *correct_create() {\n    struct Node *node = (struct Node*)malloc(sizeof(struct Node));\n    if (node != NULL) {\n        node->data = 10;\n        node->next = NULL;\n    }\n    return node;\n}\n\nint main() {\n    struct Node *n = correct_create();\n    if (n != NULL) {\n        printf(\"data = %d\\n\", n->data);\n        free(n);\n    }\n    \n    return 0;\n}"
+                explanation: "这是**结构体内存对齐**陷阱！32位系统int需4字节对齐。**Data1布局**：char a(1字节)+填充(3字节)+int b(4字节)+char c(1字节)+填充(3字节)=12字节。**Data2布局**：char a(1字节)+char c(1字节)+填充(2字节)+int b(4字节)=8字节。**对齐规则**：1)每个成员相对结构体起始地址的偏移必须是其大小的倍数；2)结构体总大小必须是最大成员大小的倍数。**陷阱本质**：成员顺序影响填充，Data2优化排列减少浪费。**实际意义**：嵌入式系统、网络协议、性能优化需考虑对齐。**易错点**：简单相加1+4+1=6。",
+                codeExample: "#include <stdio.h>\n#include <stddef.h>\n\nstruct Data1 {\n    char a;  /* offset 0, size 1 */\n    /* padding 3 bytes (对齐到4) */\n    int b;   /* offset 4, size 4 */\n    char c;  /* offset 8, size 1 */\n    /* padding 3 bytes (总大小对齐到4的倍数) */\n};  /* total: 12 bytes */\n\nstruct Data2 {\n    char a;  /* offset 0, size 1 */\n    char c;  /* offset 1, size 1 */\n    /* padding 2 bytes (对齐到4) */\n    int b;   /* offset 4, size 4 */\n};  /* total: 8 bytes */\n\n/* 使用#pragma pack压缩对齐 */\n#pragma pack(push, 1)\nstruct Data3 {\n    char a;\n    int b;\n    char c;\n};  /* 紧凑: 6 bytes */\n#pragma pack(pop)\n\nint main() {\n    printf(\"Data1: %lu bytes\\n\", sizeof(struct Data1));  /* 12 */\n    printf(\"Data2: %lu bytes\\n\", sizeof(struct Data2));  /* 8 */\n    printf(\"Data3 (packed): %lu bytes\\n\", sizeof(struct Data3));  /* 6 */\n    \n    /* 查看成员偏移 */\n    printf(\"Data1.a offset: %lu\\n\", offsetof(struct Data1, a));  /* 0 */\n    printf(\"Data1.b offset: %lu\\n\", offsetof(struct Data1, b));  /* 4 */\n    printf(\"Data1.c offset: %lu\\n\", offsetof(struct Data1, c));  /* 8 */\n    \n    return 0;\n}"
             },
             {
                 id: 22,
@@ -408,16 +408,16 @@ class TemplateLoader {
             },
             {
                 id: 26,
-                question: "以下代码实现的功能是：\n\n<C>\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nvoid insert_front(struct Node **head, int value) {\n    struct Node *new_node = malloc(sizeof(struct Node));\n    new_node->data = value;\n    new_node->next = *head;\n    *head = new_node;\n}\n</C>",
+                question: "以下删除链表节点的代码有什么问题？\n\n<C>\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nvoid delete_node(struct Node *head, int value) {\n    struct Node *p = head;\n    while (p != NULL && p->next != NULL) {\n        if (p->next->data == value) {\n            p->next = p->next->next;  /* 删除 */\n            return;\n        }\n        p = p->next;\n    }\n}\n</C>",
                 options: [
-                    "在链表末尾插入节点",
-                    "在链表开头插入节点",
-                    "删除链表节点",
-                    "查找链表节点"
+                    "没有问题",
+                    "无法删除第一个节点",
+                    "存在内存泄漏",
+                    "B和C都正确"
                 ],
-                correctAnswer: 1,
-                explanation: "函数在链表头部插入新节点。使用二级指针修改头指针，新节点的next指向原头节点，然后更新头指针。",
-                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nvoid insert_front(struct Node **head, int value) {\n    struct Node *new_node = malloc(sizeof(struct Node));\n    new_node->data = value;\n    new_node->next = *head;\n    *head = new_node;\n}\n\nvoid print_list(struct Node *head) {\n    while (head != NULL) {\n        printf(\"%d -> \", head->data);\n        head = head->next;\n    }\n    printf(\"NULL\\n\");\n}\n\nint main() {\n    struct Node *head = NULL;\n    \n    insert_front(&head, 30);\n    insert_front(&head, 20);\n    insert_front(&head, 10);\n    \n    print_list(head);  // 10 -> 20 -> 30 -> NULL\n    \n    return 0;\n}"
+                correctAnswer: 3,
+                explanation: "这是**链表删除的双重陷阱**！**问题1**：无法删除第一个节点，因为从p->next开始检查，头节点永远不会被删。应使用二级指针`struct Node **head`或特殊处理头节点。**问题2**：内存泄漏，`p->next=p->next->next`跳过节点但未释放其内存。**正确做法**：1)保存待删节点`struct Node *temp=p->next`；2)修改链接`p->next=temp->next`；3)释放内存`free(temp)`。**易错场景**：空链表、删除头节点、删除尾节点、节点不存在。**陷阱组合**：边界条件 + 内存管理 + 指针操作。",
+                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\n/* 错误版本（有问题） */\nvoid delete_wrong(struct Node *head, int value) {\n    struct Node *p = head;\n    while (p != NULL && p->next != NULL) {\n        if (p->next->data == value) {\n            p->next = p->next->next;  /* 泄漏！ */\n            return;\n        }\n        p = p->next;\n    }\n}\n\n/* 正确版本：使用二级指针 */\nvoid delete_correct(struct Node **head, int value) {\n    struct Node **p = head;  /* 二级指针 */\n    while (*p != NULL) {\n        if ((*p)->data == value) {\n            struct Node *temp = *p;  /* 保存 */\n            *p = (*p)->next;  /* 修改链接 */\n            free(temp);  /* 释放内存 */\n            return;\n        }\n        p = &((*p)->next);  /* 移动到next的地址 */\n    }\n}\n\n/* 正确版本2：特殊处理头节点 */\nvoid delete_correct2(struct Node **head, int value) {\n    if (*head == NULL) return;\n    \n    /* 删除头节点 */\n    if ((*head)->data == value) {\n        struct Node *temp = *head;\n        *head = (*head)->next;\n        free(temp);\n        return;\n    }\n    \n    /* 删除其他节点 */\n    struct Node *p = *head;\n    while (p->next != NULL) {\n        if (p->next->data == value) {\n            struct Node *temp = p->next;\n            p->next = temp->next;\n            free(temp);\n            return;\n        }\n        p = p->next;\n    }\n}\n\nint main() {\n    /* 测试代码略 */\n    return 0;\n}"
             },
             {
                 id: 27,
@@ -434,16 +434,16 @@ class TemplateLoader {
             },
             {
                 id: 28,
-                question: "关于联合体（union）和结构体，以下说法正确的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nunion Data {\n    int i;\n    char c[4];\n};\n\nint main() {\n    union Data d;\n    d.i = 0x12345678;  /* 小端系统 */\n    printf(\"%02X\", (unsigned char)d.c[0]);\n    return 0;\n}\n</C>",
                 options: [
-                    "联合体和结构体完全相同",
-                    "联合体所有成员共享同一块内存",
-                    "联合体可以同时存储所有成员的值",
-                    "联合体比结构体占用更多空间"
+                    "`12`",
+                    "`78`",
+                    "`56`",
+                    "`34`"
                 ],
                 correctAnswer: 1,
-                explanation: "联合体所有成员共享同一块内存，同一时间只能存储一个成员的值。联合体大小等于最大成员的大小。",
-                codeExample: "#include <stdio.h>\n\nunion Data {\n    int i;\n    float f;\n    char str[20];\n};\n\nstruct DataStruct {\n    int i;\n    float f;\n    char str[20];\n};\n\nint main() {\n    printf(\"union大小: %lu\\n\", sizeof(union Data));  // 20\n    printf(\"struct大小: %lu\\n\", sizeof(struct DataStruct));  // 28\n    \n    union Data u;\n    u.i = 10;\n    printf(\"u.i = %d\\n\", u.i);\n    \n    u.f = 3.14;  // 覆盖i的值\n    printf(\"u.f = %.2f\\n\", u.f);\n    printf(\"u.i = %d (被覆盖)\\n\", u.i);\n    \n    return 0;\n}"
+                explanation: "这是**联合体与字节序**陷阱！联合体成员共享内存，int i和char c[4]指向同一地址。在**小端系统**（x86/x64），int值0x12345678存储为：低地址78 56 34 12高地址。`d.c[0]`访问最低地址字节，即0x78。**大端系统**会输出12。**关键知识**：1)联合体所有成员从同一地址开始；2)小端系统低字节存低地址，大端相反；3)可用union检测系统字节序。**实际应用**：网络字节序转换、二进制协议解析、类型双关（type punning）。**陷阱组合**：联合体共享内存 + 字节序 + 数组索引。**易错点**：误以为c[0]是0x12。",
+                codeExample: "#include <stdio.h>\n\nunion Data {\n    int i;\n    char c[4];\n};\n\nint main() {\n    union Data d;\n    d.i = 0x12345678;\n    \n    /* 小端系统（x86/x64）输出 */\n    printf(\"c[0]=%02X\\n\", (unsigned char)d.c[0]);  /* 78 */\n    printf(\"c[1]=%02X\\n\", (unsigned char)d.c[1]);  /* 56 */\n    printf(\"c[2]=%02X\\n\", (unsigned char)d.c[2]);  /* 34 */\n    printf(\"c[3]=%02X\\n\", (unsigned char)d.c[3]);  /* 12 */\n    \n    /* 检测系统字节序 */\n    union {\n        int i;\n        char c;\n    } test;\n    test.i = 1;\n    if (test.c == 1) {\n        printf(\"小端系统\\n\");\n    } else {\n        printf(\"大端系统\\n\");\n    }\n    \n    /* 实际应用：字节序转换 */\n    unsigned int ip = 0xC0A80101;  /* 192.168.1.1 */\n    union {\n        unsigned int i;\n        unsigned char c[4];\n    } addr;\n    addr.i = ip;\n    printf(\"IP: %u.%u.%u.%u\\n\", addr.c[3], addr.c[2], addr.c[1], addr.c[0]);\n    /* 小端系统输出: 192.168.1.1 */\n    \n    return 0;\n}"
             },
             {
                 id: 29,

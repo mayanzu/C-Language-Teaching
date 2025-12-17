@@ -70,7 +70,7 @@
                         <strong>新手注意：</strong>
                         <ul>
                             <li>指针变量存储地址，不是存储普通数据</li>
-                            <li>`&` 取地址，`*` 解引用，这两个运算符是一对相反的操作</li>
+                            <li><code>&</code> 取地址，<code>*</code> 解引用，这两个运算符是一对相反的操作</li>
                             <li>使用指针前必须初始化，否则会导致程序崩溃</li>
                             <li>多练习、多思考，指针的学习需要时间和耐心</li>
                         </ul>
@@ -203,7 +203,7 @@
                 <div class="practice-questions">
                     <h3 class="subsection-title">就地练习：指针初始化与安全读写</h3>
                     <div class="question-item">
-                        <p><strong>练习1：</strong> 声明一个 `int` 指针并安全地指向变量，打印地址和值；尝试在未初始化时进行空指针检查，避免未定义行为。</p>
+                        <p><strong>练习1：</strong> 声明一个 <code>int</code> 指针并安全地指向变量，打印地址和值；尝试在未初始化时进行空指针检查，避免未定义行为。</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
                             
@@ -255,7 +255,7 @@
                 <div class="practice-questions">
                     <h3 class="subsection-title">就地练习：指针基本操作</h3>
                     <div class="question-item">
-                        <p><strong>练习2：</strong> 对 `int`、`double`、`char` 三种变量分别取地址，使用相应类型的指针读取值；补充打印三者的地址并比较是否不同。</p>
+                        <p><strong>练习2：</strong> 对 <code>int</code>、<code>double</code>、<code>char</code> 三种变量分别取地址，使用相应类型的指针读取值；补充打印三者的地址并比较是否不同。</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
                             
@@ -328,7 +328,7 @@
                         </div>
 
                         <h4>指针大小的统一性</h4>
-                        <div class="callout tip">
+                        <div class="tip-box">
                             <p><strong>重要结论：</strong></p>
                             <p>无论指向什么类型，所有指针变量本身的大小都是一样的：</p>
                             <ul>
@@ -395,7 +395,7 @@
                         <div class="practice-questions">
                             <h3 class="subsection-title">就地练习：不同类型指针操作</h3>
                             <div class="question-item">
-                                <p><strong>练习3：</strong> 使用二级指针 `int **pp` 修改一个 `int` 变量的值，并将一级指针改为指向另一个变量，观察输出变化。</p>
+                                <p><strong>练习3：</strong> 使用二级指针 <code>int **pp</code> 修改一个 <code>int</code> 变量的值，并将一级指针改为指向另一个变量，观察输出变化。</p>
                                 <details>
                                     <summary>参考答案与示例代码</summary>
                                     
@@ -582,7 +582,7 @@
                         </div>
 
                         <h4>安全使用指针的黄金法则</h4>
-                        <div class="callout tip">
+                        <div class="tip-box">
                             <ol>
                                 <li><strong>总是初始化</strong>：声明指针后立即初始化，如果暂无目标就置为NULL</li>
                                 <li><strong>使用前检查</strong>：解引用前检查指针是否为NULL</li>
@@ -737,7 +737,7 @@
                         </div>
 
                         <h4>常见错误示例</h4>
-                        <div class="callout warning">
+                        <div class="warning-box">
                             <p>❌ <code>int *p = &42;</code> - 错误！不能对字面常量取地址</p>
                             <p>❌ <code>int *p = &(a+b);</code> - 错误！不能对表达式结果取地址</p>
                             <p>❌ <code>double *p = &int_var;</code> - 错误！类型不匹配</p>
@@ -1019,7 +1019,7 @@
                         </ul>
 
                         <h4>安全使用模式</h4>
-                        <div class="callout success">
+                        <div class="tip-box">
                             <p>✅ <strong>推荐做法：</strong></p>
                             <pre>int *p = NULL;  // 初始化为NULL
 if (p != NULL) {
@@ -1102,7 +1102,7 @@ if (p != NULL) {
                         </div>
 
                         <h4>数组名的特殊性</h4>
-                        <div class="callout tip">
+                        <div class="tip-box">
                             <p><strong>核心概念：</strong></p>
                             <ul>
                                 <li><strong>数组名是常量指针</strong>：arr 实际上是指向数组第一个元素的指针常量</li>

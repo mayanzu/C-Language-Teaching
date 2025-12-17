@@ -83,16 +83,16 @@ class TemplateLoader {
         const questions = [
             {
                 id: 1,
-                question: "关于指针和地址，以下说法正确的是：",
+                question: "以下代码的运行结果是什么？\n\n<C>\nint *p;\nprintf(\"%d\", *p);\n</C>",
                 options: [
-                    "指针就是地址，地址就是指针",
-                    "指针是一个变量，用来存储地址",
-                    "地址运算符 `&` 用于获取指针的值",
-                    "所有类型的指针大小都不同"
+                    "`0`",
+                    "编译错误",
+                    "未定义行为（可能崩溃）",
+                    "输出随机值"
                 ],
-                correctAnswer: 1,
-                explanation: "指针是一种特殊的变量，用于存储内存地址。地址是内存中的位置，而指针是存储地址的变量。在大多数系统上，所有类型的指针大小相同（通常是4字节或8字节）。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int *p;  // 定义指针变量\n    p = &a;  // 指针p存储变量a的地址\n    \n    printf(\"a的值: %d\\n\", a);\n    printf(\"a的地址: %p\\n\", (void*)&a);\n    printf(\"p的值(即a的地址): %p\\n\", (void*)p);\n    printf(\"指针大小: %lu字节\\n\", sizeof(p));\n    \n    return 0;\n}"
+                correctAnswer: 2,
+                explanation: "这是**野指针**的经典陷阱！指针p声明后未初始化，其值是**随机的垃圾值**（可能指向任意内存）。对野指针解引用`*p`是**严重的未定义行为**，可能导致：1) 程序崩溃（访问非法内存）；2) 读取随机数据；3) 破坏其他数据；4) 安全漏洞。**关键原则**：指针使用前必须初始化！可初始化为NULL、已有变量地址或动态分配内存。**易错点**：误以为未初始化指针默认为NULL。**防范措施**：养成习惯`int *p = NULL;`或立即赋值。",
+                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    /* 危险：野指针 */\n    int *p1;  /* 未初始化，值随机 */\n    /* printf(\\\"%d\\\", *p1);  未定义行为！可能崩溃 */\n    \n    /* 安全做法1：初始化为NULL */\n    int *p2 = NULL;\n    if (p2 != NULL) {  /* 使用前检查 */\n        printf(\\\"%d\\\\n\\\", *p2);\n    } else {\n        printf(\\\"p2是空指针\\\\n\\\");\n    }\n    \n    /* 安全做法2：指向已有变量 */\n    int x = 42;\n    int *p3 = &x;  /* 立即初始化 */\n    printf(\\\"*p3=%d\\\\n\\\", *p3);  /* 安全 */\n    \n    /* 安全做法3：动态分配 */\n    int *p4 = (int*)malloc(sizeof(int));\n    if (p4 != NULL) {\n        *p4 = 100;\n        printf(\\\"*p4=%d\\\\n\\\", *p4);\n        free(p4);\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 2,
@@ -148,16 +148,16 @@ class TemplateLoader {
             },
             {
                 id: 6,
-                question: "以下代码的输出结果是什么？\n\n<C>\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint main() {\n    int x = 5, y = 10;\n    swap(&x, &y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nvoid swap(int *a, int *b) {\n    int *temp = a;  /* 交换指针 */\n    a = b;\n    b = temp;\n}\n\nint main() {\n    int x = 5, y = 10;\n    int *p1 = &x, *p2 = &y;\n    swap(p1, p2);\n    printf(\"%d %d\", x, y);\n    return 0;\n}\n</C>",
                 options: [
-                    "`5 10`",
                     "`10 5`",
+                    "`5 10`",
                     "编译错误",
                     "未定义行为"
                 ],
                 correctAnswer: 1,
-                explanation: "通过指针作为函数参数，可以修改原变量的值。`swap` 函数接收x和y的地址，通过解引用交换了它们的值。",
-                codeExample: "#include <stdio.h>\n\nvoid swap(int *a, int *b) {\n    int temp = *a;  // temp = 5\n    *a = *b;        // x = 10\n    *b = temp;      // y = 5\n}\n\nint main() {\n    int x = 5, y = 10;\n    printf(\"交换前: x=%d, y=%d\\n\", x, y);\n    swap(&x, &y);\n    printf(\"交换后: x=%d, y=%d\\n\", x, y);\n    return 0;\n}"
+                explanation: "这是**指针值传递vs地址传递**的经典陷阱！函数`swap`接收的是指针的**副本**（值传递），交换a和b只是交换了局部副本，**不影响main中的p1和p2**，更不影响x和y。原变量x=5, y=10保持不变。**关键误区**：误以为传指针就能改变指针本身。**正确理解**：传指针可改变指向的值（*p），但不能改变指针本身（p）。要改变指针本身需传**指针的指针**`void swap(int **a, int **b)`。**对比**：若写`*a=10`可改变x，但`a=...`只改变局部副本。",
+                codeExample: "#include <stdio.h>\n\n/* 错误：交换指针副本 */\nvoid swap_wrong(int *a, int *b) {\n    int *temp = a;\n    a = b;  /* 只改变局部副本！ */\n    b = temp;\n}\n\n/* 正确1：交换指向的值 */\nvoid swap_value(int *a, int *b) {\n    int temp = *a;\n    *a = *b;  /* 改变原变量 */\n    *b = temp;\n}\n\n/* 正确2：用指针的指针 */\nvoid swap_ptr(int **a, int **b) {\n    int *temp = *a;\n    *a = *b;  /* 改变原指针 */\n    *b = temp;\n}\n\nint main() {\n    int x = 5, y = 10;\n    int *p1 = &x, *p2 = &y;\n    \n    swap_wrong(p1, p2);\n    printf(\\\"错误方法: x=%d, y=%d\\\\n\\\", x, y);  /* 5 10 */\n    \n    swap_value(&x, &y);\n    printf(\\\"正确1: x=%d, y=%d\\\\n\\\", x, y);  /* 10 5 */\n    \n    swap_ptr(&p1, &p2);\n    printf(\\\"正确2: *p1=%d, *p2=%d\\\\n\\\", *p1, *p2);  /* 5 10 */\n    \n    return 0;\n}"
             },
             {
                 id: 7,
@@ -213,16 +213,16 @@ class TemplateLoader {
             },
             {
                 id: 11,
-                question: "以下代码中，哪个是正确的指针初始化方式？",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint a[5] = {1, 2, 3, 4, 5};\nint *p = a;\nprintf(\"%d %d\", *p++, *++p);\n</C>",
                 options: [
-                    "`int *p = NULL;`",
-                    "`int *p = 0;`",
-                    "`int x = 10; int *p = &x;`",
-                    "以上都正确"
+                    "`1 2`",
+                    "`1 3`",
+                    "`2 3`",
+                    "未定义行为"
                 ],
                 correctAnswer: 3,
-                explanation: "这三种都是正确的初始化方式。`NULL` 和 `0` 都表示空指针，`&x` 让指针指向变量x。未初始化的指针是野指针，应避免使用。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    // 方法1: NULL指针\n    int *p1 = NULL;\n    \n    // 方法2: 0（等价于NULL）\n    int *p2 = 0;\n    \n    // 方法3: 指向变量\n    int x = 10;\n    int *p3 = &x;\n    \n    // 检查指针是否为NULL\n    if (p1 == NULL) {\n        printf(\"p1 是空指针\\n\");\n    }\n    \n    if (p3 != NULL) {\n        printf(\"p3 指向有效地址，值为: %d\\n\", *p3);\n    }\n    \n    return 0;\n}"
+                explanation: "这是**序列点与副作用**的严重陷阱！在同一个表达式中对p进行两次修改（`*p++`和`*++p`）且无序列点分隔，**求值顺序未定义**，导致**未定义行为**。不同编译器、优化级别可能产生不同结果。**关键问题**：1) `*p++`先取值再p自增；2) `*++p`先p自增再取值；3) 两者对p的修改冲突。**正确做法**：分开写`printf(\\\"%d\\\", *p++); printf(\\\"%d\\\", *p);`。**易错点**：误以为从左到右求值。**类似陷阱**：`i = i++`、`a[i] = i++`等。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int a[5] = {1, 2, 3, 4, 5};\n    int *p = a;\n    \n    /* 危险：未定义行为 */\n    /* printf(\\\"%d %d\\\", *p++, *++p);  结果不确定！ */\n    \n    /* 正确做法：分开操作 */\n    printf(\\\"第1个元素: %d\\\\n\\\", *p);  /* 1 */\n    p++;  /* 移动到下一个 */\n    printf(\\\"第2个元素: %d\\\\n\\\", *p);  /* 2 */\n    \n    /* 理解各种运算符 */\n    p = a;  /* 重置 */\n    int val1 = *p++;  /* 先取值(1)，后p自增 */\n    printf(\\\"*p++: val=%d, *p=%d\\\\n\\\", val1, *p);  /* 1, 2 */\n    \n    p = a;  /* 重置 */\n    int val2 = *++p;  /* 先p自增，后取值(2) */\n    printf(\\\"*++p: val=%d, *p=%d\\\\n\\\", val2, *p);  /* 2, 2 */\n    \n    p = a;  /* 重置 */\n    int val3 = (*p)++;  /* 先取a[0]的值(1)，后a[0]自增为2 */\n    printf(\\\"(*p)++: val=%d, a[0]=%d\\\\n\\\", val3, a[0]);  /* 1, 2 */\n    \n    return 0;\n}"
             },
             {
                 id: 12,
@@ -278,16 +278,16 @@ class TemplateLoader {
             },
             {
                 id: 16,
-                question: "以下代码的输出结果是什么？\n\n<C>\nchar *str = \"Hello\";\nprintf(\"%c %c\", str[0], *str);\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nchar *s1 = \"Hello\";\nchar *s2 = \"Hello\";\nif (s1 == s2) {\n    printf(\"相同\");\n} else {\n    printf(\"不同\");\n}\n</C>",
                 options: [
-                    "`H H`",
-                    "`H e`",
-                    "`e H`",
+                    "一定输出`相同`",
+                    "一定输出`不同`",
+                    "编译器优化决定，可能相同或不同",
                     "编译错误"
                 ],
-                correctAnswer: 0,
-                explanation: "`str[0]` 和 `*str` 都访问字符串的第一个字符'H'。这两种写法是等价的。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    char *str = \"Hello\";\n    \n    printf(\"str[0] = %c\\n\", str[0]);  // H\n    printf(\"*str = %c\\n\", *str);      // H\n    printf(\"str[1] = %c\\n\", str[1]);  // e\n    printf(\"*(str+1) = %c\\n\", *(str+1));  // e\n    \n    return 0;\n}"
+                correctAnswer: 2,
+                explanation: "这是**指针比较vs字符串比较**的陷阱！`s1 == s2`比较的是**指针地址**，而非字符串内容。大多数编译器会进行**字符串常量池优化**，将相同字面量存储在同一地址，此时s1和s2指向同一内存，输出\\\"相同\\\"。但这是**未保证的实现细节**，不同编译器或优化级别可能不同。**正确做法**：用`strcmp(s1,s2)==0`比较内容。**关键区别**：`==`比较地址，`strcmp`比较内容。**易错点**：误以为`==`能比较字符串。**安全原则**：永远用`strcmp`比较字符串！",
+                codeExample: "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char *s1 = \\\"Hello\\\";\n    char *s2 = \\\"Hello\\\";\n    char s3[] = \\\"Hello\\\";\n    char s4[] = \\\"Hello\\\";\n    \n    /* 指针比较（地址） */\n    if (s1 == s2) {\n        printf(\\\"s1和s2地址相同（编译器优化）\\\\n\\\");\n    }\n    \n    if (s3 == s4) {\n        printf(\\\"不会执行\\\\n\\\");\n    } else {\n        printf(\\\"s3和s4是不同数组，地址不同\\\\n\\\");\n    }\n    \n    /* 正确：内容比较 */\n    if (strcmp(s1, s2) == 0) {\n        printf(\\\"s1和s2内容相同\\\\n\\\");  /* 总是执行 */\n    }\n    \n    if (strcmp(s3, s4) == 0) {\n        printf(\\\"s3和s4内容相同\\\\n\\\");  /* 总是执行 */\n    }\n    \n    /* 打印地址对比 */\n    printf(\\\"s1地址: %p\\\\n\\\", (void*)s1);\n    printf(\\\"s2地址: %p\\\\n\\\", (void*)s2);  /* 可能与s1相同 */\n    printf(\\\"s3地址: %p\\\\n\\\", (void*)s3);\n    printf(\\\"s4地址: %p\\\\n\\\", (void*)s4);  /* 必与s3不同 */\n    \n    return 0;\n}"
             },
             {
                 id: 17,
@@ -343,16 +343,16 @@ class TemplateLoader {
             },
             {
                 id: 21,
-                question: "以下代码中存在什么问题？\n\n<C>\nint *func() {\n    int x = 100;\n    return &x;\n}\n\nint main() {\n    int *p = func();\n    printf(\"%d\", *p);\n    return 0;\n}\n</C>",
+                question: "以下代码的运行结果是什么？\n\n<C>\nint *func() {\n    int x = 100;\n    return &x;\n}\n\nint main() {\n    int *p = func();\n    int y = 200;  /* 新变量 */\n    printf(\"%d\", *p);\n    return 0;\n}\n</C>",
                 options: [
-                    "没有问题",
-                    "返回了局部变量的地址，导致悬空指针",
-                    "指针类型不匹配",
-                    "printf使用错误"
+                    "输出`100`",
+                    "输出`200`",
+                    "未定义行为（可能输出随机值或崩溃）",
+                    "编译错误"
                 ],
-                correctAnswer: 1,
-                explanation: "函数返回局部变量x的地址，但x在函数返回后被销毁，导致悬空指针。应该返回动态分配的内存或static变量的地址。",
-                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\n// 错误示例\n// int *wrong() {\n//     int x = 100;\n//     return &x;  // 危险！x被销毁\n// }\n\n// 正确方法1：使用static\nint *method1() {\n    static int x = 100;\n    return &x;  // static变量不会被销毁\n}\n\n// 正确方法2：动态分配\nint *method2() {\n    int *p = (int*)malloc(sizeof(int));\n    *p = 100;\n    return p;  // 返回堆内存地址\n}\n\nint main() {\n    int *p1 = method1();\n    printf(\"method1: %d\\n\", *p1);\n    \n    int *p2 = method2();\n    printf(\"method2: %d\\n\", *p2);\n    free(p2);  // 记得释放\n    \n    return 0;\n}"
+                correctAnswer: 2,
+                explanation: "这是**悬空指针（dangling pointer）**的严重陷阱！`func()`返回局部变量x的地址，但**x在函数返回时被销毁**，其栈空间被释放。p指向的是**已失效的内存**，解引用`*p`是**未定义行为**。**可能结果**：1) 碰巧输出100（栈未被覆盖）；2) 输出200（y覆盖了x的位置）；3) 输出随机值；4) 程序崩溃。**根本问题**：局部变量生命周期仅在函数内。**正确做法**：1) 返回static变量；2) 返回动态分配内存；3) 通过参数传出。**易错点**：误以为返回地址就能访问。",
+                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\n/* 错误：返回局部变量地址 */\nint *wrong() {\n    int x = 100;\n    return &x;  /* 危险！x被销毁 */\n}\n\n/* 正确1：使用static */\nint *method1() {\n    static int x = 100;  /* static生命周期整个程序 */\n    return &x;\n}\n\n/* 正确2：动态分配 */\nint *method2() {\n    int *p = (int*)malloc(sizeof(int));\n    if (p != NULL) {\n        *p = 100;\n    }\n    return p;  /* 堆内存，调用者需free */\n}\n\n/* 正确3：通过参数传出 */\nvoid method3(int *out) {\n    *out = 100;  /* 修改调用者的变量 */\n}\n\nint main() {\n    /* 危险演示 */\n    /* int *p1 = wrong(); */\n    /* printf(\\\"%d\\\\n\\\", *p1);  未定义行为！ */\n    \n    /* 正确用法 */\n    int *p2 = method1();\n    printf(\\\"method1: %d\\\\n\\\", *p2);\n    \n    int *p3 = method2();\n    if (p3 != NULL) {\n        printf(\\\"method2: %d\\\\n\\\", *p3);\n        free(p3);  /* 必须释放 */\n    }\n    \n    int result;\n    method3(&result);\n    printf(\\\"method3: %d\\\\n\\\", result);\n    \n    return 0;\n}"
             },
             {
                 id: 22,
@@ -408,16 +408,16 @@ class TemplateLoader {
             },
             {
                 id: 26,
-                question: "以下代码实现的功能是：\n\n<C>\nvoid reverse(int *arr, int size) {\n    int *left = arr;\n    int *right = arr + size - 1;\n    while (left < right) {\n        int temp = *left;\n        *left = *right;\n        *right = temp;\n        left++;\n        right--;\n    }\n}\n</C>",
+                question: "以下代码哪行会导致编译错误？\n\n<C>\nint x = 10, y = 20;\nconst int *p1 = &x;\nint * const p2 = &x;\n*p1 = 30;  /* A */\np1 = &y;  /* B */\n*p2 = 30;  /* C */\np2 = &y;  /* D */\n</C>",
                 options: [
-                    "对数组排序",
-                    "反转数组元素顺序",
-                    "查找数组最大值",
-                    "复制数组"
+                    "`A`和`D`",
+                    "`B`和`C`",
+                    "`A`和`C`",
+                    "`B`和`D`"
                 ],
-                correctAnswer: 1,
-                explanation: "使用双指针法反转数组。左指针从头开始，右指针从尾开始，交换元素后向中间移动，直到两指针相遇。",
-                codeExample: "#include <stdio.h>\n\nvoid reverse(int *arr, int size) {\n    int *left = arr;\n    int *right = arr + size - 1;\n    while (left < right) {\n        int temp = *left;\n        *left = *right;\n        *right = temp;\n        left++;\n        right--;\n    }\n}\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int size = 5;\n    \n    printf(\"原数组: \");\n    for (int i = 0; i < size; i++) {\n        printf(\"%d \", arr[i]);\n    }\n    \n    reverse(arr, size);\n    \n    printf(\"\\n反转后: \");\n    for (int i = 0; i < size; i++) {\n        printf(\"%d \", arr[i]);\n    }\n    \n    return 0;\n}"
+                correctAnswer: 0,
+                explanation: "这是**const指针修饰位置**的经典陷阱！**理解口诀**：const在*左边修饰值（指向的内容），const在*右边修饰指针（地址本身）。`const int *p1`（const在*左）：**指向常量的指针**，不能通过p1修改值（A错误），但p1可指向其他地址（B正确）。`int * const p2`（const在*右）：**常量指针**，p2不能改变指向（D错误），但可修改指向的值（C正确）。**记忆技巧**：从右向左读，`int * const`=\"常量的指针到int\"。**易错点**：混淆两种const位置的含义。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 10, y = 20;\n    \n    /* 1. 指向常量的指针（const int *） */\n    const int *p1 = &x;\n    /* *p1 = 30;  错误！不能修改指向的值 */\n    p1 = &y;  /* 正确：可以改变指针 */\n    printf(\"p1现在指向y: %d\\n\", *p1);\n    \n    /* 2. 常量指针（int * const） */\n    int * const p2 = &x;\n    *p2 = 30;  /* 正确：可以修改指向的值 */\n    /* p2 = &y;  错误！不能改变指针 */\n    printf(\"x被修改为: %d\\n\", x);\n    \n    /* 3. 指向常量的常量指针（const int * const） */\n    const int * const p3 = &x;\n    /* *p3 = 40;  错误！ */\n    /* p3 = &y;   错误！ */\n    printf(\"p3只读: %d\\n\", *p3);\n    \n    /* 4. 理解const位置 */\n    /* const在*左边：修饰值 */\n    const int *p4;  /* 等价于 int const *p4 */\n    /* const在*右边：修饰指针 */\n    int * const p5 = &x;\n    \n    return 0;\n}"
             },
             {
                 id: 27,
@@ -434,16 +434,16 @@ class TemplateLoader {
             },
             {
                 id: 28,
-                question: "关于指针的 `++` 和 `--` 运算，以下说法正确的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint a[5] = {1, 2, 3, 4, 5};\nint *p = a;\nprintf(\"%d %d %d\", *p, *(p+2), p[3]);\n</C>",
                 options: [
-                    "指针自增移动一个字节",
-                    "指针自增移动一个数据类型的大小",
-                    "所有指针自增都移动4字节",
-                    "指针不能进行自增运算"
+                    "`1 2 3`",
+                    "`1 3 4`",
+                    "`0 2 3`",
+                    "`1 3 5`"
                 ],
                 correctAnswer: 1,
-                explanation: "指针自增会根据指向的数据类型自动调整移动距离。`int*` 自增移动4字节，`char*` 自增移动1字节，`double*` 自增移动8字节。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr_int[] = {10, 20, 30};\n    char arr_char[] = {'a', 'b', 'c'};\n    double arr_double[] = {1.1, 2.2, 3.3};\n    \n    int *p_int = arr_int;\n    char *p_char = arr_char;\n    double *p_double = arr_double;\n    \n    printf(\"int指针: %p\\n\", (void*)p_int);\n    p_int++;\n    printf(\"自增后: %p (移动%lu字节)\\n\", (void*)p_int, sizeof(int));\n    \n    printf(\"\\nchar指针: %p\\n\", (void*)p_char);\n    p_char++;\n    printf(\"自增后: %p (移动%lu字节)\\n\", (void*)p_char, sizeof(char));\n    \n    return 0;\n}"
+                explanation: "这是**数组与指针等价性**的题目。`*p`即`a[0]=1`；`*(p+2)`即`a[2]=3`；`p[3]`即`*(p+3)`即`a[3]=4`。输出`1 3 4`。**关键规则**：1) `p[i]`完全等价于`*(p+i)`；2) 数组名a在表达式中退化为指向首元素的指针；3) `&a[i]`等价于`a+i`。**易错点**：误以为`p[3]`=5（第3个元素是下标2）。**记忆**：C语言数组下标从0开始，p[3]是第4个元素。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int a[5] = {1, 2, 3, 4, 5};\n    int *p = a;  /* p指向a[0] */\n    \n    /* 等价表达式演示 */\n    printf(\"a[0] = %d, *p = %d, p[0] = %d\\n\", a[0], *p, p[0]);\n    printf(\"a[2] = %d, *(p+2) = %d, p[2] = %d\\n\", a[2], *(p+2), p[2]);\n    printf(\"a[3] = %d, *(a+3) = %d, p[3] = %d\\n\", a[3], *(a+3), p[3]);\n    \n    /* 地址等价性 */\n    printf(\"\\n地址验证:\\n\");\n    printf(\"&a[0] = %p, a = %p, p = %p\\n\", \n           (void*)&a[0], (void*)a, (void*)p);\n    printf(\"&a[2] = %p, a+2 = %p, p+2 = %p\\n\", \n           (void*)&a[2], (void*)(a+2), (void*)(p+2));\n    \n    /* 下标计数 */\n    printf(\"\\n下标说明:\\n\");\n    for (int i = 0; i < 5; i++) {\n        printf(\"a[%d] = %d\\n\", i, a[i]);\n    }\n    \n    return 0;\n}"
             },
             {
                 id: 29,

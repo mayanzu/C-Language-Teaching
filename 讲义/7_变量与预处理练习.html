@@ -302,7 +302,7 @@
                 <div class="practice-questions">
                     <h3 class="subsection-title">就地练习：extern多模块协作</h3>
                     <div class="question-item">
-                        <p><strong>练习2：</strong> 模拟两个文件：在一个文件中定义全局变量和函数，在另一个文件中使用 `extern` 声明并访问该变量。（简单模拟：可通过注释理解多文件逻辑）</p>
+                        <p><strong>练习2：</strong> 模拟两个文件：在一个文件中定义全局变量和函数，在另一个文件中使用 <code>extern</code> 声明并访问该变量。（简单模拟：可通过注释理解多文件逻辑）</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
                             <div class="code-block">
@@ -417,7 +417,7 @@
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">trackCalls</span>();
     }
     
@@ -494,7 +494,8 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
-    <span class="c-function">printf</span>(<spa<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-function">printf</span>(<span class="c-string">"生成ID:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"ID: %d\n"</span>, <span class="c-function">generate_id</span>());
     }
     
@@ -504,7 +505,8 @@
     <span class="c-function">log_message</span>(<span class="c-string">"初始化完成"</span>);
     
     <span class="c-function">printf</span>(<span class="c-string">"\n运行平均值:\n"</span>);
-    <span class="c-keyword">double</span> values[] = {<span class="c-number">10.0</span>, <span class="c-number">15.0</span>, <span class="c-number">12.0</span>, <span class="c-number">18.0</span>,<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">double</span> values[] = {<span class="c-number">10.0</span>, <span class="c-number">15.0</span>, <span class="c-number">12.0</span>, <span class="c-number">18.0</span>, <span class="c-number">20.0</span>};
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"添加 %.1f，平均值: %.2f\n"</span>, values[i], <span class="c-function">running_average</span>(values[i]));
     }
     
@@ -662,7 +664,8 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">double</span> values[] = {<span class="c-number">85.5</span>, <span class="c-number">92.0</span>, <span class="c-number">78.5</span>, <span class="c-number">96.5</span>, <span class="c-number">88.0</span>};
     
-    <span class="c-function">printf</span>(<span clas<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-function">printf</span>(<span class="c-string">"添加成绩并计算平均值:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-keyword">double</span> avg = <span class="c-function">calculate_average</span>(values[i]);
         <span class="c-function">printf</span>(<span class="c-string">"添加 %.1f，当前平均值: %.2f\n"</span>, values[i], avg);
     }
@@ -1104,7 +1107,7 @@
                 <div class="practice-questions">
                     <h3 class="subsection-title">就地练习：防止头文件重复包含</h3>
                     <div class="question-item">
-                        <p><strong>练习4：</strong> 编写一个头文件使用 `#ifndef`, `#define`, `#endif` 防止重复包含，并在主程序中多次包含该头文件验证。</p>
+                        <p><strong>练习4：</strong> 编写一个头文件使用 <code>#ifndef</code>, <code>#define</code>, <code>#endif</code> 防止重复包含，并在主程序中多次包含该头文件验证。</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
                             <div class="code-block">
@@ -1332,7 +1335,7 @@
                 <div class="practice-questions">
                     <h3 class="subsection-title">就地练习：条件编译应用</h3>
                     <div class="question-item">
-                        <p><strong>练习5：</strong> 使用 `#ifdef DEBUG` 实现调试信息输出，当定义 `DEBUG` 宏时打印详细日志，否则静默运行。</p>
+                        <p><strong>练习5：</strong> 使用 <code>#ifdef DEBUG</code> 实现调试信息输出，当定义 <code>DEBUG</code> 宏时打印详细日志，否则静默运行。</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
                             <div class="code-block">

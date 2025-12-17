@@ -43,11 +43,11 @@ class TemplateLoader {
         return [
             {
     "id": 1,
-    "question": "用 `printf` 输出格式说明符本身（如 `%d`），正确写法是？",
-    "options": ["`printf(\"%d\");`", "`printf(\"%%d\");`", "`printf(\"%\\\\d\");`", "`printf(\"d\");`"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint num;\nchar ch;\nscanf(\"%d\", &num);  /* 输入: 123<回车> */\nscanf(\"%c\", &ch);\nprintf(\"%d\", (int)ch);\n</C>",
+    "options": ["`123`", "`10`（换行符的ASCII码）", "`0`", "未定义行为"],
     "correctAnswer": 1,
-    "explanation": "在C语言中，要输出 `%` 字符本身，需要使用两个连续的 `%` 字符（`%%`）。这是因为 `%` 在 `printf` 中用作格式说明符的起始字符。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"%%d\\n\");  // 输出: %d\n    printf(\"%%f\\n\");  // 输出: %f\n    printf(\"%%s\\n\");  // 输出: %s\n    return 0;\n}"
+    "explanation": "`scanf(\"%d\")` 读取整数时会留下换行符在缓冲区中。紧接着的 `scanf(\"%c\")` 会读取这个换行符（ASCII码为10），而不是用户后续输入的字符。这是非常常见的 `scanf` 缓冲区残留问题。解决方法：在 `%c` 前加空格（`scanf(\" %c\", &ch)`）让 scanf 跳过所有空白字符。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num;\n    char ch;\n    \n    printf(\"输入整数: \");\n    scanf(\"%d\", &num);      /* 输入123<回车>，缓冲区剩余'\\n' */\n    \n    printf(\"输入字符: \");\n    scanf(\"%c\", &ch);       /* 直接读到换行符 */\n    printf(\"字符ASCII: %d\\n\", (int)ch);  /* 输出: 10 */\n    \n    /* 正确做法1: 在%c前加空格 */\n    scanf(\" %c\", &ch);      /* 空格让scanf跳过所有空白字符 */\n    \n    /* 正确做法2: 手动清空缓冲区 */\n    while (getchar() != '\\n');\n    scanf(\"%c\", &ch);\n    \n    return 0;\n}"
   },
   {
     "id": 2,
@@ -107,11 +107,11 @@ class TemplateLoader {
   },
   {
     "id": 9,
-    "question": "`scanf` 读含空格的字符串（如 `\"Hello World\"`），用哪个格式符？",
-    "options": ["`%s`", "`%[^\\n]`", "`%c`", "`%d`"],
-    "correctAnswer": 1,
-    "explanation": "`%[^\\n]` 可以读取包含空格的字符串，直到遇到换行符为止。而 `%s` 遇到空格、制表符、换行符就会停止读取。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    char str1[50], str2[50];\n    \n    printf(\"使用%%s读取: \");\n    scanf(\"%s\", str1);  // 输入: Hello World\n    // str1只包含\"Hello\"\n    \n    // 清空输入缓冲区\n    while (getchar() != '\\n');\n    \n    printf(\"使用%%[^\\n]读取: \");\n    scanf(\"%[^\\n]\", str2);  // 输入: Hello World\n    // str2包含\"Hello World\"\n    \n    printf(\"str1: %s\\n\", str1);  // 输出: Hello\n    printf(\"str2: %s\\n\", str2);  // 输出: Hello World\n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint len = printf(\"Score: %d\", 95);\nprintf(\"\\n返回值: %d\", len);\n</C>",
+    "options": ["`返回值: 0`", "`返回值: 95`", "`返回值: 10`", "`返回值: -1`"],
+    "correctAnswer": 2,
+    "explanation": "`printf` 函数的返回值是成功输出的字符数（不包括结尾的空字符）。`\"Score: 95\"` 共有10个字符（S、c、o、r、e、:、空格、9、5），所以返回10。这个返回值可用于检测输出是否成功，返回负数表示错误。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int len;\n    \n    /* printf返回输出的字符数 */\n    len = printf(\"Score: %d\", 95);  /* 输出10个字符 */\n    printf(\"\\n返回值: %d\\n\", len);   /* 输出: 10 */\n    \n    /* 应用:检测输出是否成功 */\n    len = printf(\"Hello\");\n    if (len < 0) {\n        fprintf(stderr, \"输出失败\\n\");\n    } else {\n        printf(\" - 成功输出%d个字符\\n\", len);\n    }\n    \n    /* 空字符串返回0 */\n    len = printf(\"\");\n    printf(\"空串返回: %d\\n\", len);   /* 输出: 0 */\n    \n    return 0;\n}"
   },
   {
     "id": 10,
@@ -123,11 +123,11 @@ class TemplateLoader {
   },
   {
     "id": 11,
-    "question": "`printf(\"%05d\", 42)` 的输出结果是什么？",
-    "options": ["`42000`", "`00042`", "`42   `", "`  042`"],
+    "question": "以下代码存在什么安全问题？\n\n<C>\nchar name[20];\nprintf(\"输入姓名: \");\ngets(name);  /* 或 scanf(\"%s\", name) */\nprintf(name);  /* 直接用用户输入作为格式字符串 */\n</C>",
+    "options": ["没有问题", "缓冲区溢出和格式化字符串漏洞", "只有缓冲区溢出风险", "只有格式化字符串风险"],
     "correctAnswer": 1,
-    "explanation": "`0` 标志表示用 `0` 填充，`5` 表示总宽度为5。所以会在数字前面补0，使总宽度达到5位。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"%05d\\n\", 42);     // 输出: 00042\n    printf(\"%05d\\n\", 1234);   // 输出: 01234\n    printf(\"%05d\\n\", 123456); // 输出: 123456 (超过宽度不截断)\n    printf(\"%-05d\\n\", 42);    // 输出: 42    (左对齐时0标志无效)\n    return 0;\n}"
+    "explanation": "有两个严重安全问题：1) `gets()`/`scanf(\"%s\")` 不检查输入长度，可能导致缓冲区溢出；2) `printf(name)` 直接将用户输入作为格式字符串，如果输入包含 `%x`、`%n` 等格式说明符，攻击者可读取栈内存或写入任意地址。正确做法：`fgets(name, sizeof(name), stdin);` 和 `printf(\"%s\", name);`。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    char name[20];\n    int secret = 0x12345678;\n    \n    /* 危险代码演示 */\n    printf(\"输入姓名: \");\n    /* gets(name);  C11已废弃，极其危险 */\n    fgets(name, sizeof(name), stdin);  /* 正确做法 */\n    \n    /* 错误：用户输入作为格式字符串 */\n    /* printf(name);  如果输入\"%x %x %x\"可泄露栈数据 */\n    \n    /* 正确做法 */\n    printf(\"姓名: %s\", name);\n    \n    /* 演示格式化字符串漏洞 */\n    printf(\"\\n--- 格式化字符串漏洞演示 ---\\n\");\n    printf(\"如果输入包含%%x: \");\n    /* 攻击输入: %x %x %x */\n    /* 错误的printf(name)会泄露: 12345678 ... */\n    \n    return 0;\n}"
   },
   {
     "id": 12,
@@ -147,11 +147,11 @@ class TemplateLoader {
   },
   {
     "id": 14,
-    "question": "`printf(\"%+d\", 42)` 的输出是什么？",
-    "options": ["`42`", "`+42`", "`-42`", "`错误`"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint a, b;\nint ret = scanf(\"%d%d\", &a, &b);  /* 输入: 10 abc */\nprintf(\"%d %d %d\", ret, a, b);\n</C>",
+    "options": ["`2 10 0`", "`1 10 <未定义>`", "`0 <未定义> <未定义>`", "`-1 <未定义> <未定义>`"],
     "correctAnswer": 1,
-    "explanation": "`+` 标志表示总是显示符号，无论数字是正数还是负数。正数会显示 `+` 号，负数会显示 `-` 号。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"%+d\\n\", 42);   // 输出: +42\n    printf(\"%+d\\n\", -42);  // 输出: -42\n    printf(\"%d\\n\", 42);    // 输出: 42 (不加+标志)\n    printf(\"%+5d\\n\", 42);  // 输出: '  +42'\n    return 0;\n}"
+    "explanation": "`scanf` 返回成功读取并赋值的项目数。输入 `10 abc` 时，第一个 `%d` 成功读取10，第二个 `%d` 遇到 `abc` 失败，所以返回1。变量 `a` 被赋值为10，`b` 的值未被修改（可能是随机值）。**关键错误**：未检查 `scanf` 返回值就使用变量！正确做法应判断 `ret == 2` 才使用 `a` 和 `b`。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = -1, b = -1;  /* 初始化避免未定义行为 */\n    int ret;\n    \n    printf(\"输入两个整数: \");\n    ret = scanf(\"%d%d\", &a, &b);  /* 输入: 10 abc */\n    \n    /* 错误: 不检查返回值直接使用 */\n    /* printf(\"%d %d\\n\", a, b);  b可能是随机值! */\n    \n    /* 正确: 检查返回值 */\n    if (ret == 2) {\n        printf(\"成功读取: %d %d\\n\", a, b);\n    } else {\n        printf(\"输入错误，只成功读取%d个整数\\n\", ret);\n        printf(\"a=%d, b=%d（b未被scanf修改）\\n\", a, b);\n        \n        /* 清空错误输入 */\n        while (getchar() != '\\n');\n    }\n    \n    return 0;\n}"
   },
   {
     "id": 15,
@@ -179,11 +179,11 @@ class TemplateLoader {
   },
   {
     "id": 18,
-    "question": "`printf` 中 `%g` 格式符的特点是？",
-    "options": ["总是使用科学计数法", "总是使用普通小数格式", "自动选择%f或%e中更短的格式", "只能输出整数"],
-    "correctAnswer": 2,
-    "explanation": "`%g` 会根据数值大小和精度自动选择 `%f` 或 `%e` 格式中更简洁的一种，并且会去除末尾无意义的零。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    double a = 0.0001234;\n    double b = 1234567.89;\n    double c = 123.456;\n    \n    printf(\"小数: %g\\n\", a);        // 输出: 0.0001234\n    printf(\"大数: %g\\n\", b);        // 输出: 1.23457e+06 (自动用科学计数法)\n    printf(\"普通数: %g\\n\", c);      // 输出: 123.456\n    printf(\"对比%%f: %f\\n\", c);     // 输出: 123.456000\n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nfloat a = 0.1f;\ndouble b = 0.1;\nif (a == b) {\n    printf(\"相等\");\n} else {\n    printf(\"不等\");\n}\n</C>",
+    "options": ["`相等`", "`不等`", "编译错误", "未定义行为"],
+    "correctAnswer": 1,
+    "explanation": "浮点数精度陷阱！`float a = 0.1f` 存储的是0.1的单精度近似值，`double b = 0.1` 存储的是0.1的双精度近似值。在比较时，`a` 被提升为 `double`，但这个提升后的值与 `b` 的二进制表示并不完全相同。**关键点**：永远不要用 `==` 直接比较浮点数！应使用误差范围：`fabs(a - b) < 1e-6`。",
+    "codeExample": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    float a = 0.1f;\n    double b = 0.1;\n    \n    /* 错误: 直接比较浮点数 */\n    if (a == b) {\n        printf(\"相等\\n\");\n    } else {\n        printf(\"不等\\n\");  /* 实际输出这个 */\n    }\n    \n    /* 查看精度差异 */\n    printf(\"a = %.20f\\n\", (double)a);  /* 0.10000000149011611938 */\n    printf(\"b = %.20f\\n\", b);          /* 0.10000000000000000555 */\n    \n    /* 正确: 使用误差范围 */\n    const double EPSILON = 1e-6;\n    if (fabs(a - b) < EPSILON) {\n        printf(\"近似相等\\n\");\n    }\n    \n    return 0;\n}"
   },
   {
     "id": 19,
@@ -203,11 +203,11 @@ class TemplateLoader {
   },
   {
     "id": 21,
-    "question": "关于 `scanf` 中的取地址符 `&`，以下说法正确的是？",
-    "options": ["`&` 只用于整型变量", "`&` 获取变量的内存地址传递给scanf", "数组名前也需要加&", "字符变量不需要&"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 2;\nswitch (x) {\n    case 1: printf(\"A\");\n    case 2: printf(\"B\");\n    case 3: printf(\"C\");\n    default: printf(\"D\");\n}\n</C>",
+    "options": ["`B`", "`BCD`", "`BD`", "`ABCD`"],
     "correctAnswer": 1,
-    "explanation": "`&` 是取地址运算符，用于获取变量的内存地址。`scanf` 需要知道变量的地址才能将读取的值存储到变量中。但数组名本身就是地址，不需要加&。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int num;\n    char ch;\n    char str[50];\n    \n    scanf(\"%d\", &num);    // 整型需要&\n    scanf(\"%c\", &ch);     // 字符也需要&\n    scanf(\"%s\", str);     // 数组名不需要&\n    // scanf(\"%s\", &str);  // 错误！数组名已是地址\n    \n    printf(\"%d %c %s\\n\", num, ch, str);\n    return 0;\n}"
+    "explanation": "这是 `switch` 的 **fall-through（贯穿）** 陷阱！由于每个 `case` 后没有 `break`，匹配到 `case 2` 后会继续执行后面所有的 `case`，包括 `default`。输出 `BCD`。**易错点**：很多人以为会自动break。正确做法是在每个 `case` 末尾加 `break;`（除非故意利用贯穿特性）。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 2;\n    \n    /* 错误: 忘记break导致贯穿 */\n    printf(\"无break: \");\n    switch (x) {\n        case 1: printf(\"A\");\n        case 2: printf(\"B\");  /* 从这里开始执行 */\n        case 3: printf(\"C\");  /* 继续执行 */\n        default: printf(\"D\"); /* 继续执行 */\n    }\n    printf(\"\\n\");  /* 输出: BCD */\n    \n    /* 正确: 每个case后加break */\n    printf(\"有break: \");\n    switch (x) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); break;  /* 执行后跳出 */\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    printf(\"\\n\");  /* 输出: B */\n    \n    return 0;\n}"
   },
   {
     "id": 22,
@@ -243,11 +243,11 @@ class TemplateLoader {
   },
   {
     "id": 26,
-    "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 0;\nif (x)\n    printf(\"True\");\nelse\n    printf(\"False\");\n</C>",
-    "options": ["`True`", "`False`", "`0`", "编译错误"],
-    "correctAnswer": 1,
-    "explanation": "在C语言中，0被视为假，非零值被视为真。x为0，条件为假，执行else分支输出False。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 0;\n    \n    if (x) {\n        printf(\"True\\n\");\n    } else {\n        printf(\"False\\n\");  // 输出False\n    }\n    \n    // 非零值都是真\n    if (1) printf(\"1是真\\n\");\n    if (-1) printf(\"-1也是真\\n\");\n    if (100) printf(\"100也是真\\n\");\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint ch;\nwhile ((ch = getchar()) != EOF) {\n    if (ch == 'q') break;\n    printf(\"%d \", ch);\n}\n/* 输入: ab<回车>q */\n</C>",
+    "options": ["`97 98 113`", "`97 98 10 113`", "`97 98 10`", "`97 98`"],
+    "correctAnswer": 2,
+    "explanation": "`getchar()` 会读取**所有**字符包括换行符。输入 `ab<回车>` 时，缓冲区内容是 `a`、`b`、`\\n`（ASCII=10）。循环会依次输出：97（'a'）、98（'b'）、10（换行符），然后输入 `q` 时触发 `break` 退出。**易错点**：很多人忘记换行符也会被读取！如果想跳过换行符，需要加判断：`if (ch == '\\n') continue;`。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int ch;\n    \n    printf(\"输入字符（q退出）: \");\n    /* 读取所有字符包括换行符 */\n    while ((ch = getchar()) != EOF) {\n        if (ch == 'q') break;\n        printf(\"%d \", ch);  /* 输入ab<回车>输出: 97 98 10 */\n    }\n    printf(\"\\n\");\n    \n    /* 改进: 跳过换行符 */\n    printf(\"\\n改进版（输入ab<回车>q）: \");\n    while ((ch = getchar()) != EOF) {\n        if (ch == '\\n') continue;  /* 跳过换行符 */\n        if (ch == 'q') break;\n        printf(\"%c \", ch);  /* 只输出字母: a b */\n    }\n    printf(\"\\n\");\n    \n    return 0;\n}"
   },
   {
     "id": 27,

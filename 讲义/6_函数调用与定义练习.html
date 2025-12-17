@@ -1198,7 +1198,8 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>};
-    <span class="c-function">doubleArray</span>(a<span class="c-keyword">for</span> (i =an>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-function">doubleArray</span>(arr, <span class="c-number">3</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);  <span class="c-comment">// 输出: 2 4 6</span>
     }
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1336,13 +1337,15 @@ p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// �
         <span class="c-function">inputStudent</span>(&students[i]);  <span class="c-comment">// 结构体指针传递</span>
     }
     
-    <span class="c-function">printf</span>(<span c<span class="c-keyword">for</span> (i =>for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-function">printf</span>(<span class="c-string">"\n所有学生信息:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printStudent</span>(&students[i]);  <span class="c-comment">// 结构体指针传递</span>
     }
     
     <span class="c-function">sortStudentsByAverage</span>(students, <span class="c-number">3</span>);  <span class="c-comment">// 数组传递</span>
     
-    <span class="c-function">printf</span>(<span cl<span class="c-keyword">for</span> (i =>for</span>(<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-function">printf</span>(<span class="c-string">"\n按平均分排序后:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printStudent</span>(&students[i]);
     }
     
