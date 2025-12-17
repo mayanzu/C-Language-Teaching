@@ -465,6 +465,39 @@
                             </div>
                         </div>
                         
+                        <div class="tip-box">
+                            <strong>🔍 二维数组指针表达式原理：</strong>
+                            <p>理解 <code>*(*(matrix + 1) + 2)</code> 如何等价于 <code>matrix[1][2]</code>：</p>
+                            <ul>
+                                <li><strong>第一步：matrix + 1</strong>
+                                    <ul>
+                                        <li><code>matrix</code> 是数组名，指向第0行（类型为 <code>int (*)[4]</code>，指向含4个int的数组）</li>
+                                        <li><code>matrix + 1</code> 指向第1行，地址跳过了一整行（4个int，共16字节）</li>
+                                        <li>此时 <code>matrix + 1</code> 等价于 <code>&matrix[1]</code></li>
+                                    </ul>
+                                </li>
+                                <li><strong>第二步：*(matrix + 1)</strong>
+                                    <ul>
+                                        <li>解引用得到第1行的首地址（类型变为 <code>int*</code>，指向单个int）</li>
+                                        <li>等价于 <code>matrix[1]</code>，也等价于 <code>&matrix[1][0]</code></li>
+                                    </ul>
+                                </li>
+                                <li><strong>第三步：*(matrix + 1) + 2</strong>
+                                    <ul>
+                                        <li>在第1行首地址基础上加2，指针移动2个int（8字节）</li>
+                                        <li>此时指向 <code>matrix[1][2]</code> 的位置</li>
+                                    </ul>
+                                </li>
+                                <li><strong>第四步：*(*(matrix + 1) + 2)</strong>
+                                    <ul>
+                                        <li>最外层解引用，取出该位置的值</li>
+                                        <li>最终得到 <code>matrix[1][2]</code> 的值</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p><strong>关键理解：</strong>二维数组 <code>int matrix[3][4]</code> 在内存中是连续存储的12个int，但编译器知道每行有4个元素。<code>matrix[i][j]</code> 的地址计算公式为：<code>matrix首地址 + (i × 4 + j) × sizeof(int)</code></p>
+                        </div>
+                        
                         <div class="code-block">
                             <div class="code-block-title">二维数组地址计算</div>
                             <pre><code><span class="c-comment">// 二维数组地址关系</span>

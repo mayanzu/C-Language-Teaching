@@ -141,6 +141,48 @@
                             <p>使用辗转相除法（欧几里得算法），用while循环求两个正整数的最大公约数。</p>
                             <details class="answer">
                                 <summary>查看参考答案</summary>
+                                <div class="tip-box">
+                                    <strong>🔍 欧几里得算法（辗转相除法）数学原理：</strong>
+                                    <ul>
+                                        <li><strong>核心定理：</strong>两个正整数的最大公约数等于其中较小的数和两数相除余数的最大公约数
+                                            <ul>
+                                                <li>数学表示：gcd(a, b) = gcd(b, a mod b)，其中 b ≠ 0</li>
+                                                <li>终止条件：当 b = 0 时，gcd(a, 0) = a</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>为什么这个算法是正确的（证明思路）：</strong>
+                                            <ul>
+                                                <li>设 d 是 a 和 b 的公约数，即 d | a 且 d | b（d整除a和b）</li>
+                                                <li>根据带余除法：a = b × q + r，其中 r = a mod b</li>
+                                                <li>因为 d | a 且 d | b，所以 d | (a - b×q)，即 d | r</li>
+                                                <li>因此 d 也是 b 和 r 的公约数</li>
+                                                <li>反过来，b 和 r 的公约数也必然是 a 和 b 的公约数</li>
+                                                <li>所以 gcd(a, b) = gcd(b, r) = gcd(b, a mod b)</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>执行过程示例（求 gcd(48, 18)）：</strong>
+                                            <pre>第1步: gcd(48, 18) → 48 ÷ 18 = 2 余 12
+      a=48, b=18, r=12 → gcd(18, 12)
+
+第2步: gcd(18, 12) → 18 ÷ 12 = 1 余 6
+      a=18, b=12, r=6  → gcd(12, 6)
+
+第3步: gcd(12, 6)  → 12 ÷ 6 = 2 余 0
+      a=12, b=6,  r=0  → gcd(6, 0)
+
+第4步: gcd(6, 0) = 6 （b为0，循环结束，a即为最大公约数）
+
+结果: gcd(48, 18) = 6</pre>
+                                        </li>
+                                        <li><strong>时间复杂度：</strong>
+                                            <ul>
+                                                <li>最坏情况：O(log min(a, b))，非常高效</li>
+                                                <li>最坏情况发生在连续的斐波那契数，如 gcd(89, 55)</li>
+                                                <li>每次迭代至少使数值减半，因此迭代次数是对数级的</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <div class="code-block">
                                     <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 

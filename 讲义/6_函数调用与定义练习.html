@@ -1415,6 +1415,43 @@ p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// �
                             <li><strong>递归调用（递推关系）：</strong>函数调用自己，且每次调用都向终止条件靠近</li>
                         </ul>
                         
+                        <div class="tip-box">
+                            <strong>🔍 递归的内存原理与调用栈：</strong>
+                            <p><strong>调用栈的工作机制：</strong></p>
+                            <ul>
+                                <li><strong>栈帧（Stack Frame）分配：</strong>
+                                    <ul>
+                                        <li>每次函数调用时，系统在栈上分配一块内存区域（栈帧）</li>
+                                        <li>栈帧包含：局部变量、函数参数、返回地址、寄存器状态等</li>
+                                        <li>递归每深入一层，就会在栈顶创建一个新的栈帧</li>
+                                    </ul>
+                                </li>
+                                <li><strong>栈的生长过程：</strong>
+                                    <ul>
+                                        <li>递推阶段：栈从低地址向高地址生长，每次调用压入新栈帧</li>
+                                        <li>回归阶段：函数返回时，栈帧被弹出，恢复上一层的状态</li>
+                                        <li>栈空间有限（通常1-8MB），过深递归会耗尽栈空间</li>
+                                    </ul>
+                                </li>
+                                <li><strong>栈溢出（Stack Overflow）风险：</strong>
+                                    <ul>
+                                        <li><strong>原因1：</strong>缺少终止条件，导致无限递归</li>
+                                        <li><strong>原因2：</strong>递归层数过深（如计算 <code>factorial(100000)</code>）</li>
+                                        <li><strong>原因3：</strong>每层栈帧占用较大（如包含大数组等局部变量）</li>
+                                        <li><strong>后果：</strong>程序崩溃，操作系统强制终止进程</li>
+                                    </ul>
+                                </li>
+                                <li><strong>递归深度估算：</strong>
+                                    <ul>
+                                        <li>假设栈空间2MB，每个栈帧约100字节，理论最大深度约20000层</li>
+                                        <li>实际可用深度更低（系统保留、其他函数占用等因素）</li>
+                                        <li>安全建议：递归深度控制在几千层以内</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p><strong>尾递归优化（编译器支持）：</strong>如果递归调用是函数的最后一个操作，某些编译器可将其优化为循环，避免栈增长。但VC2010的C编译器不支持此优化。</p>
+                        </div>
+                        
                         <div class="code-block">
                         <div class="code-block-title">简单递归示例</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
