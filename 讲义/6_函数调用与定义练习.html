@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -33,7 +33,7 @@
                 <div class="subsection-content">
                     <p>函数是C语言程序的基本组成单元，用于封装可重复使用的代码块。每个函数都有特定的功能，通过函数名、参数和返回值进行交互。</p>
                     
-                    <div class="new-learner-tip">
+                    <div class="callout-note">
                         <strong>新手注意：</strong>
                         <ul>
                             <li>函数必须先声明后使用</li>
@@ -97,7 +97,7 @@
 }</code></pre>
                     </div>
                     
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <strong>⚠️ 函数定义的注意事项：</strong>
                         <ul>
                             <li>函数名应该清晰表达功能（如calculateSum而不是func1）</li>
@@ -259,7 +259,7 @@
 }</code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>📌 最佳实践总结：</strong>
                             <ul>
                                 <li><strong>参数匹配：</strong>确保实参和形参的数量、类型完全对应</li>
@@ -499,7 +499,7 @@
                             </tbody>
                         </table>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>💡 重要提示：</strong>
                             <ul>
                                 <li><strong>定义即声明：</strong>函数定义自动包含声明，所以如果函数定义在调用之前，可以不写声明</li>
@@ -578,7 +578,7 @@
 }</code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>⚠️ 常见错误：</strong>
                             <ul>
                                 <li><strong>重复定义：</strong>同一个函数在多个文件中定义会导致链接错误</li>
@@ -934,7 +934,7 @@
 }</code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>💡 记忆技巧：</strong>
                             <ul>
                                 <li><strong>形参</strong>在函数<strong>定义</strong>处（形式上的）</li>
@@ -968,7 +968,7 @@
 }</code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>⚠️ 参数传递注意事项：</strong>
                             <ul>
                                 <li><strong>数量必须完全一致：</strong>多一个或少一个都会编译错误</li>
@@ -1011,7 +1011,7 @@
 }</code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>💡 理解指针的关键：</strong>
                             <ul>
                                 <li><code>&a</code> 表示"a的地址"</li>
@@ -1295,7 +1295,7 @@ Student *p = &s1;  <span class="c-comment">// p是指向s1的指针</span>
 p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// 方式2：箭头运算符（更常用）</span></code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>💡 结构体作为函数参数的要点：</strong>
                             <ul>
                                 <li>传递结构体变量：值传递，函数内修改不影响原结构体</li>
@@ -1418,7 +1418,7 @@ p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// �
                             <li><strong>递归调用（递推关系）：</strong>函数调用自己，且每次调用都向终止条件靠近</li>
                         </ul>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>🔍 递归的内存原理与调用栈：</strong>
                             <p><strong>调用栈的工作机制：</strong></p>
                             <ul>
@@ -1490,7 +1490,7 @@ p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// �
 <span class="c-comment">最终结果: factorial(3) = 6</span></code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>💡 理解递归的关键：</strong>
                             <ul>
                                 <li><strong>递推阶段：</strong>函数不断调用自己，问题规模逐渐缩小</li>
@@ -1538,7 +1538,7 @@ p-&gt;age = <span class="c-number">18</span>;      <span class="c-comment">// �
 }</code></pre>
                     </div>
                     
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>⚠️ 递归使用注意事项：</strong>
                             <ul>
                                 <li><strong>必须有明确的终止条件：</strong>否则会导致栈溢出（Stack Overflow）</li>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -53,7 +53,7 @@
                     </ul>
 
                     <h4>本章学习目标</h4>
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <p><strong>位运算部分</strong></p>
                         <ul>
                             <li>✅ 掌握6种位运算符（&, |, ^, ~, <<, >>）的原理和用法</li>
@@ -72,7 +72,7 @@
                         </ul>
                     </div>
                     
-                    <div class="new-learner-tip">
+                    <div class="callout-note">
                         <strong>新手注意：</strong>
                         <ul>
                             <li>位运算操作的是二进制位，需要理解二进制数的表示方法</li>
@@ -83,7 +83,7 @@
                         </ul>
                     </div>
 
-                    <div class="warning-box">
+                    <div class="callout-warning">
                         <strong>⚠️ 常见错误提示：</strong>
                         <ul>
                             <li>位运算的优先级较低，使用时要加括号：<code>if ((x & mask) != 0)</code></li>
@@ -104,7 +104,7 @@
                     <h3>位运算基本概念</h3>
                     <p>位运算是直接对整数在内存中的二进制位进行操作。理解位运算需要首先掌握二进制数的表示方法。</p>
                     
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <p><strong>二进制基础回顾</strong></p>
                         <p>整数在计算机中以二进制形式存储：</p>
                         <ul>
@@ -122,7 +122,7 @@
                         <p><strong>运算规则：</strong>对应位都是1时结果为1，否则为0</p>
                         <p><strong>应用场景：</strong>提取特定位、检查标志位、清零某些位</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>真值表：</strong></p>
                             <p>0 & 0 = 0<br>0 & 1 = 0<br>1 & 0 = 0<br>1 & 1 = 1</p>
                             <p><strong>示例：</strong>5 & 3 的计算过程</p>
@@ -140,7 +140,7 @@
                         <p><strong>运算规则：</strong>对应位有一个是1时结果为1，否则为0</p>
                         <p><strong>应用场景：</strong>设置特定位、合并标志位</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>真值表：</strong></p>
                             <p>0 | 0 = 0<br>0 | 1 = 1<br>1 | 0 = 1<br>1 | 1 = 1</p>
                             <p><strong>示例：</strong>5 | 3 的计算过程</p>
@@ -158,7 +158,7 @@
                         <p><strong>运算规则：</strong>对应位不同时结果为1，相同时为0</p>
                         <p><strong>应用场景：</strong>翻转特定位、简单加密、数据交换</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>真值表：</strong></p>
                             <p>0 ^ 0 = 0<br>0 ^ 1 = 1<br>1 ^ 0 = 1<br>1 ^ 1 = 0</p>
                             <p><strong>示例：</strong>5 ^ 3 的计算过程</p>
@@ -182,7 +182,7 @@
                         <p><strong>运算规则：</strong>将所有位取反（0变1，1变0）</p>
                         <p><strong>应用场景：</strong>获取反码、构造掩码</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>示例：</strong>~5 的计算过程（假设8位）</p>
                             <pre>  00000101  (5)
 ~
@@ -311,7 +311,7 @@
                         <p><strong>练习2：</strong> 编写程序，输入一个整数，判断它的二进制表示中有多少个1（汉明权重）。提示：可以使用 n & (n-1) 技巧。</p>
                         <details>
                             <summary>参考答案与示例代码</summary>
-                            <div class="tip-box">
+                            <div class="callout-tip">
                                 <strong>🔍 n & (n-1) 位运算技巧原理：</strong>
                                 <p><strong>这是一个经典的位运算优化技巧，用于清除二进制数中最右边的1。</strong></p>
                                 <ul>
@@ -567,7 +567,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                     <h3>移位运算基本概念</h3>
                     <p>移位运算是将二进制数向左或向右移动指定的位数。移位运算是计算机中最快的运算之一，因为它直接对应CPU的移位指令。</p>
                     
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <p><strong>移位运算的本质</strong></p>
                         <ul>
                             <li><strong>左移（<<）：</strong>将二进制数向左移动，右边空出的位用0填充</li>
@@ -576,7 +576,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                         </ul>
                     </div>
 
-                    <div class="warning-box">
+                    <div class="callout-warning">
                         <strong>⚠️ 移位运算注意事项：</strong>
                         <ul>
                             <li>移位的位数不能为负数</li>
@@ -592,7 +592,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                     <div class="subsection-content">
                         <p><strong>运算规则：</strong>将所有二进制位向左移动，右边用0填充</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>示例：</strong>8 << 2（将8左移2位）</p>
                             <pre>原始值: 00001000 (8)
 左移1位: 00010000 (16)
@@ -607,7 +607,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                     <div class="subsection-content">
                         <p><strong>运算规则：</strong>将所有二进制位向右移动</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>🔍 有符号数右移的硬件实现原理：</strong>
                             <ul>
                                 <li><strong>为什么需要区分逻辑右移和算术右移：</strong>
@@ -653,7 +653,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                             </ul>
                         </div>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>无符号数右移（逻辑右移）：</strong>左边用0填充</p>
                             <pre>原始值: 00100000 (32)
 右移1位: 00010000 (16)
@@ -1474,7 +1474,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
                     <h3>文件读写基本概念</h3>
                     <p>文件读写是程序与外部存储交互的主要方式。C语言提供了一系列函数来实现灵活的文件操作。</p>
                     
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <p><strong>文件读写的分类</strong></p>
                         <ul>
                             <li><strong>格式化I/O</strong>：fprintf, fscanf - 按照格式字符串读写，类似printf/scanf</li>
@@ -1566,7 +1566,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 }</code></pre>
                 </div>
                 
-                <div class="tip-box">
+                <div class="callout-tip">
                     <p><strong>💡 读写函数的选择建议</strong></p>
                     <ul>
                         <li><strong>fprintf/fscanf</strong>：处理结构化数据（如CSV格式），需要格式转换</li>
@@ -1583,7 +1583,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
                     <div class="subsection-content">
                         <p>二进制文件以字节形式存储数据，不进行格式转换，适合存储结构体、数组等复杂数据。</p>
                         
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <strong>⚠️ 二进制文件注意事项：</strong>
                             <ul>
                                 <li>必须使用 "b" 模式打开（rb, wb, ab等）</li>
@@ -1692,7 +1692,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 }</code></pre>
                     </div>
                     
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <p><strong>💡 文本文件 vs 二进制文件对比</strong></p>
                         <table>
                             <thead>
@@ -1886,7 +1886,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 }</code></pre>
                     </div>
                     
-                    <div class="new-learner-tip">
+                    <div class="callout-note">
                         <strong>💡 这个程序展示了完整的文件操作流程：</strong>
                         <ul>
                             <li><strong>启动加载</strong>：程序启动时从文件读取之前保存的数据</li>

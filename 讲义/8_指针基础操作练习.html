@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -41,32 +41,27 @@
                     </ul>
 
                     <h4>学习指针的四个阶段</h4>
-                    <div class="tip-box">
-                        <p><strong>阶段1：基本概念（本章）</strong></p>
-                        <p>理解什么是指针、什么是内存地址、如何声明和初始化指针。</p>
-                        
-                        <p><strong>阶段2：基本操作（本章）</strong></p>
-                        <p>掌握取地址运算符&、解引用运算符*、指针与数组的关系。</p>
-                        
-                        <p><strong>阶段3：高级特性（下一章）</strong></p>
-                        <p>学习指针算术、多级指针、函数指针、动态内存管理。</p>
-                        
-                        <p><strong>阶段4：实践应用</strong></p>
-                        <p>在实际项目中灵活运用指针，实现复杂的数据结构和算法。</p>
+                    <div class="callout-tip">
+                        <ol>
+                            <li><strong>基本概念（本章）</strong> - 理解什么是指针、什么是内存地址、如何声明和初始化指针</li>
+                            <li><strong>基本操作（本章）</strong> - 掌握取地址运算符&、解引用运算符*、指针与数组的关系</li>
+                            <li><strong>高级特性（下一章）</strong> - 学习指针算术、多级指针、函数指针、动态内存管理</li>
+                            <li><strong>实践应用</strong> - 在实际项目中灵活运用指针，实现复杂的数据结构和算法</li>
+                        </ol>
                     </div>
 
                     <h4>本章节学习目标</h4>
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <ul>
-                            <li>✅ 理解指针的本质和内存地址的概念</li>
-                            <li>✅ 掌握指针的声明、初始化和基本操作</li>
-                            <li>✅ 熟练使用取地址运算符&和解引用运算符*</li>
-                            <li>✅ 理解数组名与指针的关系，掌握指针访问数组</li>
-                            <li>✅ 了解常见的指针错误和安全使用方法</li>
+                            <li>理解指针的本质和内存地址的概念</li>
+                            <li>掌握指针的声明、初始化和基本操作</li>
+                            <li>熟练使用取地址运算符&和解引用运算符*</li>
+                            <li>理解数组名与指针的关系，掌握指针访问数组</li>
+                            <li>了解常见的指针错误和安全使用方法</li>
                         </ul>
                     </div>
                     
-                    <div class="new-learner-tip">
+                    <div class="callout-note">
                         <strong>新手注意：</strong>
                         <ul>
                             <li>指针变量存储地址，不是存储普通数据</li>
@@ -95,18 +90,13 @@
                         </ul>
 
                         <h4>为什么需要指针？</h4>
-                        <div class="tip-box">
-                            <p><strong>1. 动态内存管理</strong></p>
-                            <p>程序运行时可以动态分配和释放内存，实现灵活的数据结构（如链表、树等）。</p>
-                            
-                            <p><strong>2. 高效的数据传递</strong></p>
-                            <p>函数参数传递时，传递指针比复制整个数据结构更高效，特别是处理大型数据时。</p>
-                            
-                            <p><strong>3. 实现复杂的数据结构</strong></p>
-                            <p>链表、树、图等高级数据结构都需要指针来实现节点之间的连接。</p>
-                            
-                            <p><strong>4. 函数返回多个值</strong></p>
-                            <p>通过指针参数，函数可以修改多个外部变量，实现返回多个值的效果。</p>
+                        <div class="callout-tip">
+                            <ol>
+                                <li><strong>动态内存管理</strong> - 程序运行时可以动态分配和释放内存，实现灵活的数据结构（如链表、树等）</li>
+                                <li><strong>高效的数据传递</strong> - 函数参数传递时，传递指针比复制整个数据结构更高效，特别是处理大型数据时</li>
+                                <li><strong>实现复杂的数据结构</strong> - 链表、树、图等高级数据结构都需要指针来实现节点之间的连接</li>
+                                <li><strong>函数返回多个值</strong> - 通过指针参数，函数可以修改多个外部变量，实现返回多个值的效果</li>
+                            </ol>
                         </div>
 
                         <h4>内存地址的概念</h4>
@@ -128,7 +118,7 @@
                             </ul>
                         </div>
 
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <strong>⚠️ 重要提醒：</strong>
                             <ul>
                                 <li>星号(*) 是指针声明的标志，表示这是一个指针变量</li>
@@ -143,7 +133,7 @@
                     <h3 class="subsection-title">指针的定义和初始化示例</h3>
                     
                     <div class="subsection-content">
-                        <p><strong>代码功能说明：</strong></p>
+                        <p><strong>代码功能：</strong></p>
                         <p>这个程序演示了指针的最基本用法：</p>
                         <ul>
                             <li>如何声明一个指针变量</li>
@@ -152,8 +142,8 @@
                             <li>指针和普通变量的区别：指针存储地址，普通变量存储值</li>
                         </ul>
                         
-                        <div class="tip-box">
-                            <p><strong>重点理解：</strong></p>
+                        <div class="callout-tip">
+                            <p><strong>关键知识点：</strong></p>
                             <ul>
                                 <li><code>int a = 42;</code> - 普通变量，a存储的是数值42</li>
                                 <li><code>int *p;</code> - 指针变量，p将用来存储地址</li>
@@ -207,8 +197,8 @@
                         <details>
                             <summary>参考答案与示例代码</summary>
                             
-                            <div class="tip-box">
-                                <p><strong>代码思路：</strong></p>
+                            <div class="callout-tip">
+                                <p><strong>关键知识点：</strong></p>
                                 <ul>
                                     <li>指针声明后先初始化为NULL，防止成为野指针</li>
                                     <li>使用前检查指针是否为NULL，确保安全</li>
@@ -259,7 +249,7 @@
                         <details>
                             <summary>参考答案与示例代码</summary>
                             
-                            <div class="tip-box">
+                            <div class="callout-tip">
                                 <p><strong>代码要点：</strong></p>
                                 <ul>
                                     <li>不同类型的指针必须与目标变量类型匹配</li>
@@ -306,7 +296,7 @@
                         <h4>为什么指针需要类型？</h4>
                         <p>很多初学者会疑惑：既然指针只是存储地址，为什么还要区分 <code>int*</code>、<code>char*</code>、<code>double*</code> 等不同类型呢？</p>
                         
-                        <div class="concept-box">
+                        <div class="callout-tip">
                             <p><strong>答案有三个关键原因：</strong></p>
                             
                             <p><strong>1. 解引用时需要知道读取多少字节</strong></p>
@@ -328,7 +318,7 @@
                         </div>
 
                         <h4>指针大小的统一性</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>重要结论：</strong></p>
                             <p>无论指向什么类型，所有指针变量本身的大小都是一样的：</p>
                             <ul>
@@ -346,7 +336,7 @@
                             <div class="subsection-content">
                                 <p><strong>代码功能：</strong>这个程序展示了一个重要的概念：所有指针的大小都是相同的，与它们指向的数据类型无关。</p>
                                 
-                                <div class="tip-box">
+                                <div class="callout-tip">
                                     <p><strong>关键知识点：</strong></p>
                                     <ul>
                                         <li>指针大小由系统位数决定，不是数据类型</li>
@@ -399,7 +389,7 @@
                                 <details>
                                     <summary>参考答案与示例代码</summary>
                                     
-                                    <div class="tip-box">
+                                    <div class="callout-tip">
                                         <p><strong>代码分析：</strong></p>
                                         <p>二级指针是“指向指针的指针”，听起来很绕口，但思路很简单：</p>
                                         <ul>
@@ -460,7 +450,7 @@
                                 <p><strong>什么是void指针？</strong></p>
                                 <p><code>void*</code> 是一种特殊的指针类型，被称为“通用指针”或“泛型指针”。它可以指向任何类型的数据。</p>
                                 
-                                <div class="tip-box">
+                                <div class="callout-tip">
                                     <p><strong>重要特点：</strong></p>
                                     <ul>
                                         <li>void指针<strong>可以指向</strong>任何类型的数据</li>
@@ -515,7 +505,7 @@
                                 <p><strong>什么是NULL指针？</strong></p>
                                 <p>NULL是一个特殊的指针值，表示指针不指向任何有效的内存地址。在C语言中，NULL通常定义为0。</p>
                                 
-                                <div class="tip-box">
+                                <div class="callout-tip">
                                     <p><strong>使用NULL指针的重要性：</strong></p>
                                     <ul>
                                         <li><strong>初始化：</strong>指针声明后应立即初始化为NULL，避免野指针</li>
@@ -570,25 +560,22 @@
                         </ul>
 
                         <h4>指针错误的三大类别</h4>
-                        <div class="tip-box">
-                            <p><strong>1、未初始化指针（野指针）</strong></p>
-                            <p>指针声明后没有赋值，包含随机的垃圾值。</p>
-                            
-                            <p><strong>2、空指针解引用</strong></p>
-                            <p>对NULL指针进行解引用操作，导致程序崩溃。</p>
-                            
-                            <p><strong>3、悬空指针</strong></p>
-                            <p>指针所指向的内存已经被释放，但指针仍然保留旧地址。</p>
+                        <div class="callout-tip">
+                            <ol>
+                                <li><strong>未初始化指针（野指针）</strong> - 指针声明后没有赋值，包含随机的垃圾值</li>
+                                <li><strong>空指针解引用</strong> - 对NULL指针进行解引用操作，导致程序崩溃</li>
+                                <li><strong>悬空指针</strong> - 指针所指向的内存已经被释放，但指针仍然保留旧地址</li>
+                            </ol>
                         </div>
 
                         <h4>安全使用指针的黄金法则</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <ol>
-                                <li><strong>总是初始化</strong>：声明指针后立即初始化，如果暂无目标就置为NULL</li>
-                                <li><strong>使用前检查</strong>：解引用前检查指针是否为NULL</li>
-                                <li><strong>释放后置NULL</strong>：free后立即将指针置为NULL</li>
-                                <li><strong>避免越界访问</strong>：数组访问前检查下标范围</li>
-                                <li><strong>不返回局部变量地址</strong>：局部变量在函数返回后失效</li>
+                                <li><strong>总是初始化</strong> - 声明指针后立即初始化，如果暂无目标就置为NULL</li>
+                                <li><strong>使用前检查</strong> - 解引用前检查指针是否为NULL</li>
+                                <li><strong>释放后置NULL</strong> - free后立即将指针置为NULL</li>
+                                <li><strong>避免越界访问</strong> - 数组访问前检查下标范围</li>
+                                <li><strong>不返回局部变量地址</strong> - 局部变量在函数返回后失效</li>
                             </ol>
                         </div>
                     </div>
@@ -703,18 +690,23 @@
                         <p>地址运算符 <code>&</code>（ampersand）是一个一元运算符，用于获取变量的内存地址。</p>
                         
                         <h4>基本语法</h4>
-                        <div class="syntax-box">
+                        <div class="code-block">
                             <pre>&变量名</pre>
-                            <p>返回值：该变量在内存中的起始地址</p>
-                            <p>例如：<code>&a</code> 返回变量a的内存地址</p>
+                            <p><strong>返回值：</strong>该变量在内存中的起始地址</p>
+                            <p><strong>例如：</strong></p>
+                            <ul>
+                                <li><code>&a</code> - 返回变量a的内存地址</li>
+                            </ul>
                         </div>
 
                         <h4>工作原理</h4>
-                        <div class="tip-box">
-                            <p><strong>步骤1：</strong> 程序为每个变量分配内存空间</p>
-                            <p><strong>步骤2：</strong> 每个内存空间都有唯一的地址编号</p>
-                            <p><strong>步骤3：</strong> & 运算符返回这个地址编号</p>
-                            <p><strong>步骤4：</strong> 可以将这个地址赋值给指针变量</p>
+                        <div class="callout-tip">
+                            <ol>
+                                <li>程序为每个变量分配内存空间</li>
+                                <li>每个内存空间都有唯一的地址编号</li>
+                                <li>& 运算符返回这个地址编号</li>
+                                <li>可以将这个地址赋值给指针变量</li>
+                            </ol>
                         </div>
 
                         <h4>使用场景</h4>
@@ -726,8 +718,8 @@
                         </ul>
 
                         <h4>类型匹配规则</h4>
-                        <div class="warning-box">
-                            <strong>⚠️ 类型必须匹配：</strong>
+                        <div class="callout-warning">
+                            <strong>类型必须匹配：</strong>
                             <ul>
                                 <li><code>&int_var</code> 的结果类型是 <code>int*</code></li>
                                 <li><code>&double_var</code> 的结果类型是 <code>double*</code></li>
@@ -737,11 +729,17 @@
                         </div>
 
                         <h4>常见错误示例</h4>
-                        <div class="warning-box">
-                            <p>❌ <code>int *p = &42;</code> - 错误！不能对字面常量取地址</p>
-                            <p>❌ <code>int *p = &(a+b);</code> - 错误！不能对表达式结果取地址</p>
-                            <p>❌ <code>double *p = &int_var;</code> - 错误！类型不匹配</p>
-                            <p>✅ <code>int *p = &int_var;</code> - 正确！类型匹配</p>
+                        <div class="callout-warning">
+                            <p><strong>错误用法：</strong></p>
+                            <ul>
+                                <li><code>int *p = &42;</code> - 不能对字面常量取地址</li>
+                                <li><code>int *p = &(a+b);</code> - 不能对表达式结果取地址</li>
+                                <li><code>double *p = &int_var;</code> - 类型不匹配</li>
+                            </ul>
+                            <p><strong>正确用法：</strong></p>
+                            <ul>
+                                <li><code>int *p = &int_var;</code> - 类型匹配</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -750,7 +748,7 @@
                     <h3 class="subsection-title">&运算符的使用示例</h3>
                     
                     <div class="subsection-content">
-                        <p><strong>代码功能说明：</strong></p>
+                        <p><strong>代码功能：</strong></p>
                         <p>这个程序演示如何对不同类型的变量使用 <code>&</code> 运算符获取地址，以及如何利用这些地址来操作数据。</p>
                     </div>
                     
@@ -972,7 +970,7 @@
                         <p>解引用（Dereference）是指通过指针访问它所指向的内存地址中存储的值。解引用运算符是 <code>*</code>。</p>
                         
                         <h4>理解解引用的含义</h4>
-                        <div class="concept-box">
+                        <div class="callout-tip">
                             <p><strong>概念类比：</strong></p>
                             <p>如果指针是一个"地址簿"，记录了某个房间的门牌号，那么：</p>
                             <ul>
@@ -983,7 +981,7 @@
                         </div>
 
                         <h4>* 运算符的双重身份</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <strong>⚠️ 注意区分：</strong>
                             <p><strong>1. 声明时的 *</strong>（声明符号）</p>
                             <pre>int *p;  // 这里的*表示p是一个指针</pre>
@@ -995,12 +993,15 @@
                         <h4>解引用的语法</h4>
                         <div class="code-block">
                             <pre>*指针变量</pre>
-                            <p><strong>读取值：</strong><code>value = *p;</code> - 将p指向的值赋给value</p>
-                            <p><strong>修改值：</strong><code>*p = 100;</code> - 将p指向的内存位置的值改为100</p>
+                            <p><strong>例如：</strong></p>
+                            <ul>
+                                <li><code>value = *p;</code> - 将p指向的值赋给value（读取值）</li>
+                                <li><code>*p = 100;</code> - 将p指向的内存位置的值改为100（修改值）</li>
+                            </ul>
                         </div>
 
                         <h4>解引用的工作过程</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>执行 *p 时发生的事情：</strong></p>
                             <ol>
                                 <li>读取指针变量p中存储的地址值</li>
@@ -1019,8 +1020,8 @@
                         </ul>
 
                         <h4>安全使用模式</h4>
-                        <div class="tip-box">
-                            <p>✅ <strong>推荐做法：</strong></p>
+                        <div class="callout-tip">
+                            <p><strong>推荐做法：</strong></p>
                             <pre>int *p = NULL;  // 初始化为NULL
 if (p != NULL) {
     *p = 10;    // 使用前检查
@@ -1033,11 +1034,11 @@ if (p != NULL) {
                     <h3 class="subsection-title">解引用运算符使用示例</h3>
                     
                     <div class="subsection-content">
-                        <p><strong>代码功能说明:</strong></p>
+                        <p><strong>代码功能：</strong></p>
                         <p>这个程序演示了解引用运算符 <code>*</code> 的基本用法：如何通过指针读取和修改数据，以及多级指针的解引用。</p>
                         
-                        <div class="tip-box">
-                            <p><strong>关键步骤：</strong></p>
+                        <div class="callout-tip">
+                            <p><strong>关键知识点：</strong></p>
                             <ul>
                                 <li><code>*p</code> - 访问p指向的值</li>
                                 <li><code>*p = 100</code> - 通过指针修改原变量</li>
@@ -1088,7 +1089,7 @@ if (p != NULL) {
                         <h4>数组在内存中的存储</h4>
                         <p>数组是一组连续存储的相同类型数据的集合。理解数组的内存布局对掌握指针操作至关重要。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>内存布局示例：</strong></p>
                             <pre>int arr[5] = {10, 20, 30, 40, 50};</pre>
                             <p>在内存中的排列（假设起始地址为0x1000）：</p>
@@ -1102,7 +1103,7 @@ if (p != NULL) {
                         </div>
 
                         <h4>数组名的特殊性</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>核心概念：</strong></p>
                             <ul>
                                 <li><strong>数组名是常量指针</strong>：arr 实际上是指向数组第一个元素的指针常量</li>
@@ -1126,7 +1127,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         </div>
 
                         <h4>指针算术的规则</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>重要特性：指针运算会自动考虑数据类型大小</strong></p>
                             <ul>
                                 <li><code>p + 1</code> 不是简单的地址加1</li>
@@ -1138,7 +1139,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         </div>
 
                         <h4>数组名与指针的区别</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>特性对比：</strong></p>
                             <ul>
                                 <li><strong>本质</strong>：数组名是地址常量，指针变量是地址变量</li>
@@ -1162,11 +1163,11 @@ value = *(p + i);  // 通过指针运算访问</pre>
                     <h3 class="subsection-title">数组与指针关系示例</h3>
                     
                     <div class="subsection-content">
-                        <p><strong>代码功能说明：</strong></p>
+                        <p><strong>代码功能：</strong></p>
                         <p>这个程序展示了数组和指针之间的等价性，演示了如何用两种不同的方式访问数组元素。</p>
                         
-                        <div class="tip-box">
-                            <p><strong>核心知识点：</strong></p>
+                        <div class="callout-tip">
+                            <p><strong>关键知识点：</strong></p>
                             <ul>
                                 <li><code>arr[i]</code> 和 <code>*(arr + i)</code> 完全等价</li>
                                 <li>指针可以像数组一样使用下标</li>
@@ -1216,7 +1217,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         <p>指针算术（Pointer Arithmetic）是指对指针进行加减运算。与普通整数运算不同，指针运算会根据指针指向的数据类型自动计算偏移量。这是C语言中非常强大且高效的特性。</p>
                         
                         <h4>核心原理</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>关键概念：指针运算的步长</strong></p>
                             <p>当对指针进行加减运算时，实际移动的字节数 = 运算数 × sizeof(指针类型)</p>
                             <ul>
@@ -1237,7 +1238,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         </ul>
 
                         <h4>不支持的指针运算</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p>⚠️ <strong>以下操作是非法的：</strong></p>
                             <ul>
                                 <li>❌ 指针 + 指针：<code>ptr1 + ptr2</code></li>
@@ -1248,7 +1249,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         </div>
 
                         <h4>前置与后置自增/自减的区别</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <ul>
                                 <li><code>*ptr++</code> - 先取值，再指针后移（常用于遍历）</li>
                                 <li><code>*++ptr</code> - 先指针后移，再取值</li>
@@ -1265,7 +1266,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                             <li><strong>数据结构</strong>：链表、栈、队列等都依赖指针算术</li>
                         </ul>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者提示：</strong>
                             <ul>
                                 <li>指针运算只对数组或动态分配的连续内存有效</li>
@@ -1371,7 +1372,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         <p>在C语言中，当数组作为函数参数传递时，数组名会自动"退化"（decay）为指向数组首元素的指针。这是C语言的一个重要特性，理解它对掌握函数参数传递至关重要。</p>
                         
                         <h4>数组参数的本质</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>关键理解：</strong>以下三种声明在函数参数中完全等价</p>
                             <ul>
                                 <li><code>void func(int arr[])</code> - 数组形式（推荐，语义清晰）</li>
@@ -1383,7 +1384,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
 
                         <h4>为什么需要传递数组大小？</h4>
                         <p>因为数组退化为指针后，函数内部无法通过<code>sizeof</code>获取数组的真实大小。</p>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p>⚠️ <strong>常见错误：</strong></p>
                             <pre><code>void print_array(int arr[]) {
     int size = sizeof(arr) / sizeof(arr[0]);  // ❌ 错误！
@@ -1407,7 +1408,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         </ul>
 
                         <h4>const保护数组参数</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p>如果函数不应该修改数组，使用<code>const</code>关键字保护：</p>
                             <pre><code>void print_array(const int arr[], int size) {
     // arr[0] = 100;  // ❌ 编译错误！const保护
@@ -1425,7 +1426,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         </ul>
 
                         <h4>多维数组作为参数</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p>多维数组传递时，除了第一维可以省略，其他维度必须指定：</p>
                             <pre><code>void print_2d(int arr[][3], int rows) {  // ✅ 正确
     // 第一维可以省略，第二维必须指定
@@ -1444,7 +1445,7 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
                             <li>大数组用指针传递，小结构体可以值传递</li>
                         </ul>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>记忆要点：</strong>
                             <ul>
                                 <li>数组参数 = 指针参数（本质相同）</li>

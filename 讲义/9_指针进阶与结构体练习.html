@@ -46,7 +46,7 @@
                     </ul>
 
                     <h4>本章内容结构</h4>
-                    <div class="tip-box">
+                    <div class="callout-tip">
                         <p><strong>第一部分：高级指针技术</strong></p>
                         <ul>
                             <li>多级指针的概念和应用</li>
@@ -67,7 +67,7 @@
                         </ul>
                     </div>
                     
-                    <div class="new-learner-tip">
+                    <div class="callout-note">
                         <strong>学习建议：</strong>
                         <ul>
                             <li>注意括号的位置，它决定了指针类型的含义</li>
@@ -89,7 +89,7 @@
                         <h4>核心概念</h4>
                         <p>多级指针（也叫指针的指针）是指向指针的指针。简单来说，一级指针存储普通变量的地址，二级指针存储一级指针的地址，三级指针存储二级指针的地址，以此类推。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>指针层级理解：</strong></p>
                             <ul>
                                 <li><code>int value</code> - 普通整型变量，存储数据值</li>
@@ -109,7 +109,7 @@
                         </ul>
 
                         <h4>解引用规则</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>关键理解：</strong>每增加一个<code>*</code>号，就向下解引用一层</p>
                             <ul>
                                 <li><code>ptr</code> - 二级指针本身（存储一级指针的地址）</li>
@@ -119,7 +119,7 @@
                         </div>
 
                         <h4>实际应用场景</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 函数中修改指针</strong></p>
                             <p>如果函数需要修改指针变量本身（而不只是修改指针指向的值），就需要传递二级指针。</p>
                             
@@ -130,7 +130,7 @@
                             <p>删除链表节点时，需要修改前一个节点的next指针，使用二级指针可以简化代码。</p>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者注意：</strong>
                             <ul>
                                 <li>多级指针不要超过三级，否则代码难以理解和维护</li>
@@ -154,7 +154,7 @@
                             <li>如何通过二级指针修改一级指针的指向</li>
                         </ul>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>重点理解：</strong></p>
                             <ul>
                                 <li><code>int **ptr_to_ptr</code> - 声明二级指针</li>
@@ -209,7 +209,7 @@
                         <p><strong>代码功能说明：</strong></p>
                         <p>虽然三级指针在实际开发中很少使用，但理解它有助于深入掌握指针的本质。</p>
                         
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <strong>⚠️ 实际开发建议：</strong>
                             <p>三级及以上的指针会让代码难以理解和维护，应尽量避免使用。如果确实需要，考虑用结构体封装来简化设计。</p>
                         </div>
@@ -258,7 +258,7 @@
                         <details>
                             <summary>参考答案与示例代码</summary>
                             
-                            <div class="tip-box">
+                            <div class="callout-tip">
                                 <p><strong>代码分析：</strong></p>
                                 <p>二级指针是"指向指针的指针"，听起来很绕口，但思路很简单：</p>
                                 <ul>
@@ -401,7 +401,7 @@
                         <h4>核心原理</h4>
                         <p>指针算术（Pointer Arithmetic）是指对指针进行加减运算。与普通整数运算不同，指针运算会根据指针指向的数据类型自动计算偏移量。这是C语言中非常强大且高效的特性。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>关键概念：指针运算的步长</strong></p>
                             <p>当对指针进行加减运算时，实际移动的字节数 = 运算数 × sizeof(指针类型)</p>
                             <ul>
@@ -422,7 +422,7 @@
                         </ul>
 
                         <h4>不支持的指针运算</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p>⚠️ <strong>以下操作是非法的：</strong></p>
                             <ul>
                                 <li>❌ 指针 + 指针：<code>ptr1 + ptr2</code></li>
@@ -433,7 +433,7 @@
                         </div>
 
                         <h4>为什么需要指针算术？</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 高效的数组遍历</strong></p>
                             <p>使用指针遍历数组比下标访问更高效，编译器可以更好地优化。</p>
                             
@@ -447,7 +447,7 @@
                             <p>链表、栈、队列等数据结构都依赖指针算术来导航和操作节点。</p>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者提示：</strong>
                             <ul>
                                 <li>指针运算只对数组或动态分配的连续内存有效</li>
@@ -706,7 +706,7 @@
                         <h4>核心概念</h4>
                         <p>指针数组（Array of Pointers）是一个数组，它的每个元素都是指针。本质上，指针数组就是"数组"，只不过数组的元素类型是指针。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>声明语法：</strong></p>
                             <pre>类型名 *数组名[数组大小];</pre>
                             <p>例如：</p>
@@ -718,7 +718,7 @@
                         </div>
 
                         <h4>理解声明的关键</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>如何读懂 <code>int *ptr_arr[5]</code>？</strong></p>
                             <p>从标识符开始，按优先级阅读：</p>
                             <ol>
@@ -739,7 +739,7 @@
                         </ul>
 
                         <h4>指针数组 vs 数组指针</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p><strong>⚠️ 易混淆概念：</strong></p>
                             <ul>
                                 <li><code>int *ptr_arr[5]</code> - <strong>指针数组</strong>：数组的元素是指针</li>
@@ -749,7 +749,7 @@
                         </div>
 
                         <h4>常见应用场景</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 字符串数组</strong></p>
                             <pre><code>char *fruits[] = {"Apple", "Banana", "Cherry"};</code></pre>
                             <p>每个元素是指向字符串的指针。</p>
@@ -763,7 +763,7 @@
                             <p>存储多个函数指针，实现函数表。</p>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者注意：</strong>
                             <ul>
                                 <li>指针数组的每个元素都需要初始化或赋值</li>
@@ -787,7 +787,7 @@
                             <li>指针数组在整型和字符串中的应用</li>
                         </ul>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>重点理解：</strong></p>
                             <ul>
                                 <li><code>int *ptr_array[3]</code> - 声明包含3个int指针的数组</li>
@@ -1011,7 +1011,7 @@
                         <h4>核心概念</h4>
                         <p>数组指针（Pointer to Array）是指向整个数组的指针，而不是指向数组首元素的指针。数组指针本质上是"指针"，只不过它指向的是一个数组类型。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>声明语法：</strong></p>
                             <pre>类型名 (*指针名)[数组大小];</pre>
                             <p>例如：</p>
@@ -1023,7 +1023,7 @@
                         </div>
 
                         <h4>理解声明的关键</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>如何读懂 <code>int (*arr_ptr)[5]</code>？</strong></p>
                             <p>从括号开始，按优先级阅读：</p>
                             <ol>
@@ -1043,7 +1043,7 @@
                         </ul>
 
                         <h4>数组指针 vs 指针数组</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p><strong>⚠️ 易混淆概念对比：</strong></p>
                             <table style="width:100%; border-collapse: collapse;">
                                 <tr style="background-color: #f0f0f0;">
@@ -1066,7 +1066,7 @@
                         </div>
 
                         <h4>数组指针的步长特性</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>关键理解：</strong>数组指针+1不是移动sizeof(元素类型)字节，而是移动sizeof(整个数组)字节。</p>
                             <ul>
                                 <li><code>int (*p)[5]; p + 1</code> - 移动 5 × sizeof(int) = 20字节（假设int是4字节）</li>
@@ -1075,7 +1075,7 @@
                             <p>这使得数组指针非常适合逐行遍历二维数组！</p>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者注意：</strong>
                             <ul>
                                 <li>括号是必需的！<code>int *p[5]</code> 和 <code>int (*p)[5]</code> 完全不同</li>
@@ -1296,7 +1296,7 @@
                         <h4>核心概念</h4>
                         <p>函数指针（Function Pointer）是指向函数的指针变量。C语言中，函数名本身代表函数的入口地址，我们可以用指针存储这个地址，然后通过指针调用函数。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <strong>🔍 函数指针的内存存储原理：</strong>
                             <ul>
                                 <li><strong>函数在内存中的存储：</strong>
@@ -1341,7 +1341,7 @@
                             </ul>
                         </div>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>声明语法：</strong></p>
                             <pre>返回类型 (*指针名)(参数类型列表);</pre>
                             <p>例如：</p>
@@ -1353,7 +1353,7 @@
                         </div>
 
                         <h4>理解声明的关键</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>如何读懂 <code>int (*func_ptr)(int, int)</code>？</strong></p>
                             <ol>
                                 <li><code>*func_ptr</code> - 括号内，func_ptr首先是一个指针</li>
@@ -1373,7 +1373,7 @@
                         </ul>
 
                         <h4>函数指针的使用方式</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 赋值</strong></p>
                             <pre><code>int (*ptr)(int, int);
 ptr = add;           // 函数名就是地址
@@ -1390,7 +1390,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                         </div>
 
                         <h4>函数指针 vs 普通指针</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p><strong>⚠️ 重要区别：</strong></p>
                             <ul>
                                 <li><strong>普通指针</strong>：指向数据（变量），可以修改指向的数据</li>
@@ -1401,7 +1401,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                         </div>
 
                         <h4>常见应用场景</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 回调函数</strong></p>
                             <p>将函数指针作为参数传递，让被调函数在适当时机回调这个函数。</p>
                             
@@ -1412,7 +1412,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                             <p>标准库的排序和搜索函数使用函数指针作为比较器，实现通用算法。</p>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者提示：</strong>
                             <ul>
                                 <li>括号是必需的！<code>int *func(int)</code> 是返回int指针的函数，不是函数指针</li>
@@ -1718,7 +1718,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                         <h4>核心概念</h4>
                         <p>结构体（Structure）是C语言中用于组合多个不同类型数据的复合数据类型。可以把结构体理解为一个"数据容器"，里面可以装不同类型的相关数据。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>结构体的价值：</strong></p>
                             <ul>
                                 <li><strong>组织相关数据</strong>：将相关的不同类型数据组合在一起</li>
@@ -1729,7 +1729,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                         </div>
 
                         <h4>定义语法</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>基本语法：</strong></p>
                             <pre><code>struct 结构体名 {
     成员类型1 成员名1;
@@ -1745,7 +1745,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                         </div>
 
                         <h4>为什么需要结构体？</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>对比思考：</strong></p>
                             <p>不使用结构体时：</p>
                             <pre><code>char student1_name[50];
@@ -1761,7 +1761,7 @@ struct Student student2;  // 清晰明了！</code></pre>
                         </div>
 
                         <h4>访问结构体成员</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>两种访问方式：</strong></p>
                             <ul>
                                 <li><strong>点运算符（.）</strong>：用于结构体变量<br>
@@ -1772,7 +1772,7 @@ struct Student student2;  // 清晰明了！</code></pre>
                         </div>
 
                         <h4>结构体的初始化</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>三种初始化方式：</strong></p>
                             <pre><code>// 方式1：定义时初始化
 struct Student s1 = {"张三", 20, 95.5};
@@ -1788,7 +1788,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
                         </div>
 
                         <h4>结构体的内存布局</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p><strong>⚠️ 内存对齐：</strong></p>
                             <p>结构体成员在内存中可能不是紧密排列的，编译器会为了提高访问效率而进行内存对齐：</p>
                             <ul>
@@ -1799,7 +1799,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
                         </div>
 
                         <h4>实际应用场景</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 表示复杂对象</strong></p>
                             <p>学生、员工、商品、坐标点等现实世界的对象</p>
                             
@@ -1813,7 +1813,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
                             <p>将多个返回值封装在结构体中返回</p>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者提示：</strong>
                             <ul>
                                 <li>结构体定义后面的分号不要忘记</li>
@@ -2229,7 +2229,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
                         <h4>核心概念</h4>
                         <p>typedef是C语言的关键字，用于为已有的数据类型定义一个新的名字（别名）。它不创建新类型，只是给现有类型起个更容易理解的名字。</p>
                         
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>基本语法：</strong></p>
                             <pre>typedef 原类型名 新类型名;</pre>
                             <p>例如：</p>
@@ -2249,7 +2249,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
                         </ul>
 
                         <h4>typedef vs #define</h4>
-                        <div class="warning-box">
+                        <div class="callout-warning">
                             <p><strong>⚠️ 重要区别：</strong></p>
                             <table style="width:100%; border-collapse: collapse;">
                                 <tr style="background-color: #f0f0f0;">
@@ -2287,7 +2287,7 @@ String s1, s2;  // s1是char*，s2是char！</code></pre>
                         </div>
 
                         <h4>typedef的常见用法</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>1. 基本类型别名</strong></p>
                             <pre><code>typedef unsigned char byte;
 typedef unsigned int uint;</code></pre>
@@ -2310,7 +2310,7 @@ typedef struct Student* StudentPtr;</code></pre>
                         </div>
 
                         <h4>typedef的高级技巧</h4>
-                        <div class="tip-box">
+                        <div class="callout-tip">
                             <p><strong>技巧1：简化复杂声明</strong></p>
                             <pre><code>// 不用typedef（难读）
 int (*func_array[10])(int, int);
@@ -2331,7 +2331,7 @@ FuncPtr func_array[10];</code></pre>
 EventHandler onClick, onKeyPress;</code></pre>
                         </div>
 
-                        <div class="new-learner-tip">
+                        <div class="callout-note">
                             <strong>初学者提示：</strong>
                             <ul>
                                 <li>typedef不是定义变量，是定义类型别名</li>
