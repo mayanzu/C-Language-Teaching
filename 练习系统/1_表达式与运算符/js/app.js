@@ -489,6 +489,9 @@ class PracticeApp {
     highlightCCode(code) {
         // 使用更安全的处理方式，避免重复替换
         let highlighted = code;
+
+        // 0. 先转义HTML特殊字符，防止 <stdio.h> 等被浏览器解析为标签
+        highlighted = highlighted.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         
         // 1. 先处理字符串，避免与其他规则冲突
         highlighted = highlighted.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, '<span class="code-string">"$1"</span>');

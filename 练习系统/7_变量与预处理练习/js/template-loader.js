@@ -91,7 +91,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 1,
-                explanation: "这是**宏定义副作用**的经典陷阱！`INC(a)`展开为`a++`，这是一个**表达式**不是语句。`int b = a++`先将a的当前值5赋给b，然后a自增为6。输出`6 5`。**关键误区**：误以为宏会像函数一样先执行再返回。**宏本质**：文本替换，`INC(a)`直接替换成`a++`。**易错点**：后缀++先用后增，b得到自增前的值。**正确写法**：如需返回新值应用`++x`或真函数。**教训**：宏只是文本替换，没有函数的语义。",
+                explanation: "这是「宏定义副作用」的经典陷阱！`INC(a)`展开为`a++`，这是一个「表达式」不是语句。`int b = a++`先将a的当前值5赋给b，然后a自增为6。输出`6 5`。「关键误区」：误以为宏会像函数一样先执行再返回。「宏本质」：文本替换，`INC(a)`直接替换成`a++`。「易错点」：后缀++先用后增，b得到自增前的值。「正确写法」：如需返回新值应用`++x`或真函数。「教训」：宏只是文本替换，没有函数的语义。",
                 codeExample: "#include <stdio.h>\n\n/* 宏的副作用 */\n#define INC(x) x++\n\nint main() {\n    int a = 5;\n    \n    /* 宏展开: int b = a++; */\n    int b = INC(a);\n    printf(\"a=%d, b=%d\\n\", a, b);  /* 6, 5 */\n    \n    /* 正确做法：使用函数 */\n    int inc_func(int *p) {\n        return ++(*p);\n    }\n    \n    int c = 10;\n    int d = inc_func(&c);\n    printf(\"c=%d, d=%d\\n\", c, d);  /* 11, 11 */\n    \n    return 0;\n}"
             },
             {
@@ -117,7 +117,7 @@ class TemplateLoader {
                     "宏定义可以定义常量和带参数的宏"
                 ],
                 correctAnswer: 2,
-                explanation: "宏定义**不需要**以分号结尾。宏是预处理器的文本替换，不进行语法检查。加分号会导致替换时多出分号，可能引起错误。",
+                explanation: "宏定义「不需要」以分号结尾。宏是预处理器的文本替换，不进行语法检查。加分号会导致替换时多出分号，可能引起错误。",
                 codeExample: "#include <stdio.h>\n\n// 正确：不加分号\n#define PI 3.14159\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\n\n// 错误示例\n// #define VALUE 100;  // 分号会被替换进去\n\nint main() {\n    printf(\"PI = %f\\n\", PI);\n    printf(\"MAX(5, 10) = %d\\n\", MAX(5, 10));\n    \n    // 如果定义时加了分号\n    // int x = VALUE;  // 会变成: int x = 100;;（语法错误）\n    \n    return 0;\n}"
             },
             {
@@ -156,7 +156,7 @@ class TemplateLoader {
                     "`10 10`"
                 ],
                 correctAnswer: 2,
-                explanation: "这是**变量作用域与声明位置**的陷阱！在C89/C90中，**所有变量必须在代码块开头声明**，不能在使用后声明。现代编译器（C99+）允许在任意位置声明，但这里`int x=20`在第一个printf之后声明，**整个函数中的x都指向局部x**（从声明处开始有效），第一个printf访问未初始化的局部x是**未定义行为**。**VC2010行为**：编译错误，不允许混合声明。**关键规则**：局部变量的作用域从声明处到代码块结束，但编译器会在整个代码块中隐藏同名全局变量。",
+                explanation: "这是「变量作用域与声明位置」的陷阱！在C89/C90中，「所有变量必须在代码块开头声明」，不能在使用后声明。现代编译器（C99+）允许在任意位置声明，但这里`int x=20`在第一个printf之后声明，「整个函数中的x都指向局部x」（从声明处开始有效），第一个printf访问未初始化的局部x是「未定义行为」。**VC2010行为**：编译错误，不允许混合声明。「关键规则」：局部变量的作用域从声明处到代码块结束，但编译器会在整个代码块中隐藏同名全局变量。",
                 codeExample: "#include <stdio.h>\n\nint x = 10;  /* 全局变量 */\n\nvoid func_wrong() {\n    /* C89: 变量必须在开头声明 */\n    printf(\"%d \", x);  /* 访问哪个x？ */\n    int x = 20;  /* VC2010编译错误！ */\n    printf(\"%d\", x);\n}\n\nvoid func_correct() {\n    int x = 20;  /* 正确：开头声明 */\n    printf(\"%d \", x);  /* 20 */\n    printf(\"%d\", x);  /* 20 */\n}\n\nvoid func_global() {\n    printf(\"%d \", x);  /* 10（全局） */\n    printf(\"%d\", x);  /* 10 */\n}\n\nint main() {\n    /* func_wrong();  错误 */\n    func_correct();  /* 20 20 */\n    func_global();   /* 10 10 */\n    return 0;\n}"
             },
             {
@@ -196,7 +196,7 @@ class TemplateLoader {
                 ],
                 correctAnswer: 0,
                 explanation: "`extern` 用于声明在其他文件中定义的全局变量或函数，告诉编译器该变量或函数在别处定义，不分配新的存储空间。`extern` 声明不应该初始化（初始化会变成定义）。",
-                codeExample: "// file1.c\nint global_var = 100;  // 定义并初始化\n\nvoid print_var() {\n    printf(\"%d\\n\", global_var);\n}\n\n// file2.c\nextern int global_var;  // 声明，不分配空间\nextern void print_var();  // 函数声明\n\nint main() {\n    printf(\"%d\\n\", global_var);  // 访问file1.c中的变量\n    print_var();\n    return 0;\n}"
+                codeExample: "#include <stdio.h>\n\n// file1.c\nint global_var = 100;  // 定义并初始化\n\nvoid print_var() {\n    printf(\"%d\\n\", global_var);\n}\n\n// file2.c\nextern int global_var;  // 声明，不分配空间\nextern void print_var();  // 函数声明\n\nint main() {\n    printf(\"%d\\n\", global_var);  // 访问file1.c中的变量\n    print_var();\n    return 0;\n}"
             },
             {
                 id: 10,
@@ -221,7 +221,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 0,
-                explanation: "这是**#ifdef与#if的区别**陷阱！`#ifdef DEBUG`检查`DEBUG`**是否被定义**（不管值是什么），因为`#define DEBUG 0`已定义DEBUG，所以条件为真，输出`Debug`。**关键误区**：误以为`#ifdef`会检查值。**正确区分**：`#ifdef DEBUG`等价于`#if defined(DEBUG)`，只检查是否定义；`#if DEBUG`才检查值是否非零。**实际应用**：要根据值判断应用`#if DEBUG`；要检查是否定义用`#ifdef DEBUG`。**陷阱根源**：DEBUG=0仍然是已定义的。",
+                explanation: "这是**#ifdef与#if的区别**陷阱！`#ifdef DEBUG`检查`DEBUG`「是否被定义」（不管值是什么），因为`#define DEBUG 0`已定义DEBUG，所以条件为真，输出`Debug`。「关键误区」：误以为`#ifdef`会检查值。「正确区分」：`#ifdef DEBUG`等价于`#if defined(DEBUG)`，只检查是否定义；`#if DEBUG`才检查值是否非零。「实际应用」：要根据值判断应用`#if DEBUG`；要检查是否定义用`#ifdef DEBUG`。「陷阱根源」：DEBUG = 0仍然是已定义的。",
                 codeExample: "#include <stdio.h>\n\n#define DEBUG 0\n/* #define RELEASE */  /* 未定义 */\n\nint main() {\n    /* #ifdef: 检查是否定义 */\n    #ifdef DEBUG\n        printf(\"DEBUG已定义\\n\");  /* 输出！ */\n    #endif\n    \n    /* #if: 检查值 */\n    #if DEBUG\n        printf(\"DEBUG为真\\n\");  /* 不输出 */\n    #else\n        printf(\"DEBUG为假\\n\");  /* 输出！ */\n    #endif\n    \n    /* #ifndef: 检查是否未定义 */\n    #ifndef RELEASE\n        printf(\"RELEASE未定义\\n\");  /* 输出！ */\n    #endif\n    \n    /* 正确写法 */\n    #if defined(DEBUG) && DEBUG == 1\n        printf(\"Debug mode level 1\\n\");\n    #endif\n    \n    return 0;\n}"
             },
             {
@@ -286,7 +286,7 @@ class TemplateLoader {
                     "`35`"
                 ],
                 correctAnswer: 1,
-                explanation: "这是**宏定义缺少括号**的经典陷阱！`MUL(2+3, 4+5)`展开为`2+3*4+5`。**计算过程**：根据运算符优先级，乘法先于加法，`3*4=12`，然后`2+12+5=19`。**正确宏定义**：`#define MUL(a,b) ((a)*(b))`，展开为`((2+3)*(4+5))=5*9=45`。**陷阱本质**：宏是文本替换，不加括号会破坏运算优先级。**黄金法则**：1)参数加括号；2)整体加括号；3)多行宏用do-while(0)。**易错场景**：`10/MUL(2,3)`若无外括号变成`10/2*3=15`而非`10/6`。",
+                explanation: "这是「宏定义缺少括号」的经典陷阱！`MUL(2+3, 4+5)`展开为`2+3*4+5`。「计算过程」：根据运算符优先级，乘法先于加法，`3*4=12`，然后`2+12+5=19`。「正确宏定义」：`#define MUL(a,b) ((a)*(b))`，展开为`((2+3)*(4+5))=5*9=45`。「陷阱本质」：宏是文本替换，不加括号会破坏运算优先级。「黄金法则」：1)参数加括号；2)整体加括号；3)多行宏用do-while(0)。「易错场景」：`10/MUL(2,3)`若无外括号变成`10/2*3=15`而非`10/6`。",
                 codeExample: "#include <stdio.h>\n\n/* 错误：缺少括号 */\n#define MUL_WRONG(a, b) a * b\n\n/* 正确：参数和整体都加括号 */\n#define MUL_RIGHT(a, b) ((a) * (b))\n\nint main() {\n    /* 陷阱1：参数是表达式 */\n    printf(\"MUL_WRONG(2+3, 4+5) = %d\\n\",\n           MUL_WRONG(2+3, 4+5));  /* 19 */\n    printf(\"MUL_RIGHT(2+3, 4+5) = %d\\n\",\n           MUL_RIGHT(2+3, 4+5));  /* 45 */\n    \n    /* 陷阱2：整体参与运算 */\n    printf(\"10 / MUL_WRONG(2, 3) = %d\\n\",\n           10 / MUL_WRONG(2, 3));  /* 10/2*3=15 */\n    printf(\"10 / MUL_RIGHT(2, 3) = %d\\n\",\n           10 / MUL_RIGHT(2, 3));  /* 10/6=1 */\n    \n    return 0;\n}"
             },
             {
@@ -351,7 +351,7 @@ class TemplateLoader {
                     "`1 1 1 1`"
                 ],
                 correctAnswer: 1,
-                explanation: "这是**static局部变量生命周期**的陷阱！`static int count=0`**只在第一次调用时初始化**，之后保持值。**执行过程**：1)第一次调用：count初始化为0，不重置，count++得1，输出1；2)第二次：count保持1（不重新初始化），不重置，count++得2，输出2；3)第三次：count保持2，reset为真执行count=0，然后count++得1，输出1；4)第四次：count保持1，不重置，count++得2，输出2。**关键知识**：static变量初始化语句只执行一次。**易错点**：误以为每次调用都会执行`static int count=0`。",
+                explanation: "这是**static局部变量生命周期**的陷阱！`static int count=0`「只在第一次调用时初始化」，之后保持值。「执行过程」：1)第一次调用：count初始化为0，不重置，count++得1，输出1；2)第二次：count保持1（不重新初始化），不重置，count++得2，输出2；3)第三次：count保持2，reset为真执行count = 0，然后count++得1，输出1；4)第四次：count保持1，不重置，count++得2，输出2。「关键知识」：static变量初始化语句只执行一次。「易错点」：误以为每次调用都会执行`static int count=0`。",
                 codeExample: "#include <stdio.h>\n\nvoid func(int reset) {\n    static int count = 0;  /* 只初始化一次 */\n    printf(\"进入时count=%d, \", count);\n    \n    if (reset) {\n        count = 0;\n        printf(\"重置, \");\n    }\n    \n    count++;\n    printf(\"输出count=%d\\n\", count);\n}\n\nint main() {\n    printf(\"第1次: \"); func(0);  /* 1 */\n    printf(\"第2次: \"); func(0);  /* 2 */\n    printf(\"第3次: \"); func(1);  /* 重置后1 */\n    printf(\"第4次: \"); func(0);  /* 2 */\n    \n    /* 对比：非static变量 */\n    void func2() {\n        int count = 0;  /* 每次都初始化 */\n        count++;\n        printf(\"%d \", count);  /* 总是1 */\n    }\n    \n    return 0;\n}"
             },
             {
@@ -364,7 +364,7 @@ class TemplateLoader {
                     "`6 11 11`"
                 ],
                 correctAnswer: 1,
-                explanation: "宏展开为 `((x++) > (y++) ? (x++) : (y++))`。比较时 x=5, y=10，y较大。然后执行 `y++`（第三次），所以 x++ 执行一次变为6，y++ 执行两次（比较时一次，返回时一次）变为12。z得到11（y++返回自增前的值）。",
+                explanation: "宏展开为 `((x++) > (y++) ? (x++) : (y++))`。比较时 x = 5, y = 10，y较大。然后执行 `y++`（第三次），所以 x++ 执行一次变为6，y++ 执行两次（比较时一次，返回时一次）变为12。z得到11（y++返回自增前的值）。",
                 codeExample: "#include <stdio.h>\n\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\n\nint main() {\n    int x = 5, y = 10;\n    \n    // 宏展开: ((x++) > (y++) ? (x++) : (y++))\n    // 第1步: x++（5）> y++（10）？ 假\n    // 第2步: 执行 y++，返回10（自增前的值）\n    // 结果: x=6（自增1次），y=12（自增2次），z=11\n    \n    int z = MAX(x++, y++);\n    printf(\"x=%d, y=%d, z=%d\\n\", x, y, z);\n    \n    return 0;\n}"
             },
             {
@@ -416,7 +416,7 @@ class TemplateLoader {
                     "`6 11 11`"
                 ],
                 correctAnswer: 1,
-                explanation: "这是**宏参数多次求值**的危险陷阱！宏展开为`((x++)>(y++) ? (x++) : (y++))`。**执行过程**：1)比较：`x++`（5>10?假，x得6），`y++`（y得11）；2)因5<10，执行冒号后的`y++`，y再次自增得12，返回自增前的值11给z。**最终**：x自增1次得6，y自增2次得12，z=11。**陷阱本质**：宏是文本替换，参数在宏体中出现几次就求值几次。**正确做法**：1)不在宏参数中使用++/--；2)使用inline函数(C99)或普通函数。**黄金原则**：带副作用的表达式不要传给宏。",
+                explanation: "这是「宏参数多次求值」的危险陷阱！宏展开为`((x++)>(y++) ? (x++) : (y++))`。「执行过程」：1)比较：`x++`（5>10?假，x得6），`y++`（y得11）；2)因5<10，执行冒号后的`y++`，y再次自增得12，返回自增前的值11给z。「最终」：x自增1次得6，y自增2次得12，z = 11。「陷阱本质」：宏是文本替换，参数在宏体中出现几次就求值几次。「正确做法」：1)不在宏参数中使用++/--；2)使用inline函数(C99)或普通函数。「黄金原则」：带副作用的表达式不要传给宏。",
                 codeExample: "#include <stdio.h>\n\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\n\n/* 正确做法：使用函数 */\nint max_func(int a, int b) {\n    return a > b ? a : b;\n}\n\nint main() {\n    int x = 5, y = 10;\n    \n    /* 宏的危险用法 */\n    int z1 = MAX(x++, y++);\n    printf(\"宏: x=%d, y=%d, z=%d\\n\", x, y, z1);\n    /* x=6（1次++），y=12（2次++），z=11 */\n    \n    /* 函数的正确行为 */\n    int a = 5, b = 10;\n    int z2 = max_func(a++, b++);\n    printf(\"函数: a=%d, b=%d, z=%d\\n\", a, b, z2);\n    /* a=6（1次++），b=11（1次++），z=10 */\n    \n    return 0;\n}"
             },
             {
@@ -442,7 +442,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 2,
-                explanation: "这是**宏字符串化的展开顺序**陷阱！`#x`将参数**原样转为字符串**，不展开宏。`STR(VALUE)`直接字符串化参数VALUE，得到\"VALUE\"。`XSTR(VALUE)`先展开VALUE为100，然后传给STR(100)，再字符串化得到\"100\"。**关键规则**：1)#直接字符串化，不展开宏；2)宏嵌套时外层宏先展开参数。**实际应用**：要展开宏后字符串化需要两层宏。**易错点**：误以为#会先展开宏。**记忆诀窍**：#是\"拍照\"，拍下原样；要展开后拍照，需先\"洗照片\"（外层宏）。",
+                explanation: "这是「宏字符串化的展开顺序」陷阱！`#x`将参数「原样转为字符串」，不展开宏。`STR(VALUE)`直接字符串化参数VALUE，得到「VALUE」。`XSTR(VALUE)`先展开VALUE为100，然后传给STR(100)，再字符串化得到「100」。「关键规则」：1)#直接字符串化，不展开宏；2)宏嵌套时外层宏先展开参数。「实际应用」：要展开宏后字符串化需要两层宏。「易错点」：误以为#会先展开宏。「记忆诀窍」：#是「拍照」，拍下原样；要展开后拍照，需先「洗照片」（外层宏）。",
                 codeExample: "#include <stdio.h>\n\n#define STR(x) #x  /* 直接字符串化 */\n#define XSTR(x) STR(x)  /* 先展开再字符串化 */\n#define VALUE 100\n#define MAX 200\n\nint main() {\n    /* 直接字符串化 */\n    printf(\"%s\\n\", STR(VALUE));  /* \"VALUE\" */\n    printf(\"%s\\n\", STR(100));    /* \"100\" */\n    printf(\"%s\\n\", STR(a+b));   /* \"a+b\" */\n    \n    /* 先展开再字符串化 */\n    printf(\"%s\\n\", XSTR(VALUE));  /* \"100\" */\n    printf(\"%s\\n\", XSTR(MAX));    /* \"200\" */\n    \n    /* 实际应用：调试宏 */\n    #define DEBUG_VAR(v) printf(#v \" = %d\\n\", v)\n    int num = 42;\n    DEBUG_VAR(num);  /* \"num = 42\" */\n    DEBUG_VAR(VALUE);  /* \"VALUE = 100\" */\n    \n    return 0;\n}"
             },
             {

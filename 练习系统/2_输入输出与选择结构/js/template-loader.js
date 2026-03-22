@@ -150,7 +150,7 @@ class TemplateLoader {
     "question": "以下代码的输出结果是什么？\n\n<C>\nint a, b;\nint ret = scanf(\"%d%d\", &a, &b);  /* 输入: 10 abc */\nprintf(\"%d %d %d\", ret, a, b);\n</C>",
     "options": ["`2 10 0`", "`1 10 <未定义>`", "`0 <未定义> <未定义>`", "`-1 <未定义> <未定义>`"],
     "correctAnswer": 1,
-    "explanation": "`scanf` 返回成功读取并赋值的项目数。输入 `10 abc` 时，第一个 `%d` 成功读取10，第二个 `%d` 遇到 `abc` 失败，所以返回1。变量 `a` 被赋值为10，`b` 的值未被修改（可能是随机值）。**关键错误**：未检查 `scanf` 返回值就使用变量！正确做法应判断 `ret == 2` 才使用 `a` 和 `b`。",
+    "explanation": "`scanf` 返回成功读取并赋值的项目数。输入 `10 abc` 时，第一个 `%d` 成功读取10，第二个 `%d` 遇到 `abc` 失败，所以返回1。变量 `a` 被赋值为10，`b` 的值未被修改（可能是随机值）。「关键错误」：未检查 `scanf` 返回值就使用变量！正确做法应判断 `ret == 2` 才使用 `a` 和 `b`。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = -1, b = -1;  /* 初始化避免未定义行为 */\n    int ret;\n    \n    printf(\"输入两个整数: \");\n    ret = scanf(\"%d%d\", &a, &b);  /* 输入: 10 abc */\n    \n    /* 错误: 不检查返回值直接使用 */\n    /* printf(\"%d %d\\n\", a, b);  b可能是随机值! */\n    \n    /* 正确: 检查返回值 */\n    if (ret == 2) {\n        printf(\"成功读取: %d %d\\n\", a, b);\n    } else {\n        printf(\"输入错误，只成功读取%d个整数\\n\", ret);\n        printf(\"a=%d, b=%d（b未被scanf修改）\\n\", a, b);\n        \n        /* 清空错误输入 */\n        while (getchar() != '\\n');\n    }\n    \n    return 0;\n}"
   },
   {
@@ -182,7 +182,7 @@ class TemplateLoader {
     "question": "以下代码的输出结果是什么？\n\n<C>\nfloat a = 0.1f;\ndouble b = 0.1;\nif (a == b) {\n    printf(\"相等\");\n} else {\n    printf(\"不等\");\n}\n</C>",
     "options": ["`相等`", "`不等`", "编译错误", "未定义行为"],
     "correctAnswer": 1,
-    "explanation": "浮点数精度陷阱！`float a = 0.1f` 存储的是0.1的单精度近似值，`double b = 0.1` 存储的是0.1的双精度近似值。在比较时，`a` 被提升为 `double`，但这个提升后的值与 `b` 的二进制表示并不完全相同。**关键点**：永远不要用 `==` 直接比较浮点数！应使用误差范围：`fabs(a - b) < 1e-6`。",
+    "explanation": "浮点数精度陷阱！`float a = 0.1f` 存储的是0.1的单精度近似值，`double b = 0.1` 存储的是0.1的双精度近似值。在比较时，`a` 被提升为 `double`，但这个提升后的值与 `b` 的二进制表示并不完全相同。「关键点」：永远不要用 `==` 直接比较浮点数！应使用误差范围：`fabs(a - b) < 1e-6`。",
     "codeExample": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    float a = 0.1f;\n    double b = 0.1;\n    \n    /* 错误: 直接比较浮点数 */\n    if (a == b) {\n        printf(\"相等\\n\");\n    } else {\n        printf(\"不等\\n\");  /* 实际输出这个 */\n    }\n    \n    /* 查看精度差异 */\n    printf(\"a = %.20f\\n\", (double)a);  /* 0.10000000149011611938 */\n    printf(\"b = %.20f\\n\", b);          /* 0.10000000000000000555 */\n    \n    /* 正确: 使用误差范围 */\n    const double EPSILON = 1e-6;\n    if (fabs(a - b) < EPSILON) {\n        printf(\"近似相等\\n\");\n    }\n    \n    return 0;\n}"
   },
   {
@@ -206,7 +206,7 @@ class TemplateLoader {
     "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 2;\nswitch (x) {\n    case 1: printf(\"A\");\n    case 2: printf(\"B\");\n    case 3: printf(\"C\");\n    default: printf(\"D\");\n}\n</C>",
     "options": ["`B`", "`BCD`", "`BD`", "`ABCD`"],
     "correctAnswer": 1,
-    "explanation": "这是 `switch` 的 **fall-through（贯穿）** 陷阱！由于每个 `case` 后没有 `break`，匹配到 `case 2` 后会继续执行后面所有的 `case`，包括 `default`。输出 `BCD`。**易错点**：很多人以为会自动break。正确做法是在每个 `case` 末尾加 `break;`（除非故意利用贯穿特性）。",
+    "explanation": "这是 `switch` 的 **fall-through（贯穿）** 陷阱！由于每个 `case` 后没有 `break`，匹配到 `case 2` 后会继续执行后面所有的 `case`，包括 `default`。输出 `BCD`。「易错点」：很多人以为会自动break。正确做法是在每个 `case` 末尾加 `break;`（除非故意利用贯穿特性）。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 2;\n    \n    /* 错误: 忘记break导致贯穿 */\n    printf(\"无break: \");\n    switch (x) {\n        case 1: printf(\"A\");\n        case 2: printf(\"B\");  /* 从这里开始执行 */\n        case 3: printf(\"C\");  /* 继续执行 */\n        default: printf(\"D\"); /* 继续执行 */\n    }\n    printf(\"\\n\");  /* 输出: BCD */\n    \n    /* 正确: 每个case后加break */\n    printf(\"有break: \");\n    switch (x) {\n        case 1: printf(\"A\"); break;\n        case 2: printf(\"B\"); break;  /* 执行后跳出 */\n        case 3: printf(\"C\"); break;\n        default: printf(\"D\");\n    }\n    printf(\"\\n\");  /* 输出: B */\n    \n    return 0;\n}"
   },
   {
@@ -246,7 +246,7 @@ class TemplateLoader {
     "question": "以下代码的输出结果是什么？\n\n<C>\nint ch;\nwhile ((ch = getchar()) != EOF) {\n    if (ch == 'q') break;\n    printf(\"%d \", ch);\n}\n/* 输入: ab<回车>q */\n</C>",
     "options": ["`97 98 113`", "`97 98 10 113`", "`97 98 10`", "`97 98`"],
     "correctAnswer": 2,
-    "explanation": "`getchar()` 会读取**所有**字符包括换行符。输入 `ab<回车>` 时，缓冲区内容是 `a`、`b`、`\\n`（ASCII=10）。循环会依次输出：97（'a'）、98（'b'）、10（换行符），然后输入 `q` 时触发 `break` 退出。**易错点**：很多人忘记换行符也会被读取！如果想跳过换行符，需要加判断：`if (ch == '\\n') continue;`。",
+    "explanation": "`getchar()` 会读取「所有」字符包括换行符。输入 `ab<回车>` 时，缓冲区内容是 `a`、`b`、`\\n`（ASCII = 10）。循环会依次输出：97（'a'）、98（'b'）、10（换行符），然后输入 `q` 时触发 `break` 退出。「易错点」：很多人忘记换行符也会被读取！如果想跳过换行符，需要加判断：`if (ch == '\\n') continue;`。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    int ch;\n    \n    printf(\"输入字符（q退出）: \");\n    /* 读取所有字符包括换行符 */\n    while ((ch = getchar()) != EOF) {\n        if (ch == 'q') break;\n        printf(\"%d \", ch);  /* 输入ab<回车>输出: 97 98 10 */\n    }\n    printf(\"\\n\");\n    \n    /* 改进: 跳过换行符 */\n    printf(\"\\n改进版（输入ab<回车>q）: \");\n    while ((ch = getchar()) != EOF) {\n        if (ch == '\\n') continue;  /* 跳过换行符 */\n        if (ch == 'q') break;\n        printf(\"%c \", ch);  /* 只输出字母: a b */\n    }\n    printf(\"\\n\");\n    \n    return 0;\n}"
   },
   {

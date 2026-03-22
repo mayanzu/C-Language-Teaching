@@ -91,7 +91,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 1,
-                explanation: "这是**指针参数修改**的经典陷阱！函数参数是**值传递**，`p`是`ptr`的副本。修改`p=&val`只改变**局部指针p**的指向，不影响`main`中的`ptr`。`ptr`仍指向`a`，输出`5`。**关键误区**：误以为修改指针参数会改变外部指针。**正确做法**：使用二级指针`void update(int **p) { *p = &val; }`或返回指针。**易错点**：`*p=100`才能修改指向的值。",
+                explanation: "这是「指针参数修改」的经典陷阱！函数参数是「值传递」，`p`是`ptr`的副本。修改`p=&val`只改变「局部指针p」的指向，不影响`main`中的`ptr`。`ptr`仍指向`a`，输出`5`。「关键误区」：误以为修改指针参数会改变外部指针。「正确做法」：使用二级指针`void update(int **p) { *p = &val; }`或返回指针。「易错点」：`*p=100`才能修改指向的值。",
                 codeExample: "#include <stdio.h>\n\n/* 错误：只修改了指针副本 */\nvoid update_wrong(int *p) {\n    int val = 100;\n    p = &val;  /* 只改变局部p */\n}\n\n/* 正确1：修改指针指向的值 */\nvoid update_value(int *p) {\n    *p = 100;  /* 修改*p的值 */\n}\n\n/* 正确2：使用二级指针 */\nvoid update_pointer(int **pp) {\n    static int val = 100;\n    *pp = &val;  /* 修改外部指针 */\n}\n\nint main() {\n    int a = 5;\n    int *ptr = &a;\n    \n    update_wrong(ptr);\n    printf(\"wrong: %d\\n\", *ptr);  /* 5 */\n    \n    update_value(ptr);\n    printf(\"value: %d\\n\", *ptr);  /* 100 */\n    \n    update_pointer(&ptr);\n    printf(\"pointer: %d\\n\", *ptr);  /* 100 */\n    \n    return 0;\n}"
             },
             {
@@ -104,7 +104,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 0,
-                explanation: "C语言中，基本数据类型作为参数传递时采用**值传递**方式。函数 `func` 接收的是变量 `a` 的副本，对 `x` 的修改不会影响原变量 `a`。所以输出仍然是 `5`。",
+                explanation: "C语言中，基本数据类型作为参数传递时采用「值传递」方式。函数 `func` 接收的是变量 `a` 的副本，对 `x` 的修改不会影响原变量 `a`。所以输出仍然是 `5`。",
                 codeExample: "#include <stdio.h>\n\nvoid func(int x) {\n    x = x + 10;  // 修改的是副本\n    printf(\"函数内x=%d\\n\", x);  // 15\n}\n\nint main() {\n    int a = 5;\n    func(a);  // 传递a的副本\n    printf(\"main中a=%d\\n\", a);  // 5（不变）\n    return 0;\n}"
             },
             {
@@ -156,7 +156,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 2,
-                explanation: "这是**返回局部变量地址**的致命错误！`num`是栈上的局部变量，函数返回后**栈帧被销毁**，`&num`指向的内存被释放或覆盖。访问`*p`是**未定义行为**，可能输出42（碰巧未覆盖）、随机值、或崩溃。**关键危险**：指针悬空（dangling pointer）。**正确做法**：1) 返回`static int`；2) 使用`malloc`动态分配；3) 传入缓冲区指针。**编译器警告**：现代编译器会警告此错误。",
+                explanation: "这是「返回局部变量地址」的致命错误！`num`是栈上的局部变量，函数返回后「栈帧被销毁」，`&num`指向的内存被释放或覆盖。访问`*p`是「未定义行为」，可能输出42（碰巧未覆盖）、随机值、或崩溃。「关键危险」：指针悬空（dangling pointer）。「正确做法」：1) 返回`static int`；2) 使用`malloc`动态分配；3) 传入缓冲区指针。「编译器警告」：现代编译器会警告此错误。",
                 codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\n/* 危险：返回局部变量地址 */\nint* create_wrong() {\n    int num = 42;\n    return &num;  /* 栈被销毁！ */\n}\n\n/* 正确1：使用static */\nint* create_static() {\n    static int num = 42;  /* 静态存储 */\n    return &num;\n}\n\n/* 正确2：使用malloc */\nint* create_malloc() {\n    int *p = (int*)malloc(sizeof(int));\n    *p = 42;\n    return p;  /* 调用者需free */\n}\n\n/* 正确3：传入缓冲区 */\nvoid create_buffer(int *buf) {\n    *buf = 42;\n}\n\nint main() {\n    /* int *p1 = create_wrong();  危险！ */\n    \n    int *p2 = create_static();\n    printf(\"%d\\n\", *p2);  /* 42 */\n    \n    int *p3 = create_malloc();\n    printf(\"%d\\n\", *p3);  /* 42 */\n    free(p3);\n    \n    int num;\n    create_buffer(&num);\n    printf(\"%d\\n\", num);  /* 42 */\n    \n    return 0;\n}"
             },
             {
@@ -221,7 +221,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 2,
-                explanation: "这是**递归无终止条件**的致命错误！递归函数**缺少基准情張**，会无限调用`factorial(4)\u2192factorial(3)\u2192...\u2192factorial(-\u221e)`，每次调用在栈上分配帧，最终**栈空间耗尽**导致**Stack Overflow**崩溃。**正确写法**：`if (n <= 1) return 1;`在递归前检查。**关键教训**：每个递归必须有明确的终止条件。**调试提示**：现代编译器可能警告“函数缺少return”。",
+                explanation: "这是「递归无终止条件」的致命错误！递归函数「缺少基准情張」，会无限调用`factorial(4)\u2192factorial(3)\u2192...\u2192factorial(-\u221e)`，每次调用在栈上分配帧，最终「栈空间耗尽」导致**Stack Overflow**崩溃。「正确写法」：`if (n <= 1) return 1;`在递归前检查。「关键教训」：每个递归必须有明确的终止条件。「调试提示」：现代编译器可能警告“函数缺少return”。",
                 codeExample: "#include <stdio.h>\n\n/* 错误：缺少终止条件 */\n/* int factorial_wrong(int n) {\n    return n * factorial_wrong(n - 1);  无限递归！\n} */\n\n/* 正确：有终止条件 */\nint factorial(int n) {\n    if (n <= 1) return 1;  /* 基准情張 */\n    return n * factorial(n - 1);\n}\n\n/* 另一种错误：条件错误 */\n/* int factorial_bad(int n) {\n    if (n == 0) return 1;\n    return n * factorial_bad(n - 1);  \n    factorial_bad(-1)会死循环！\n} */\n\nint main() {\n    /* factorial_wrong(5);  崩溃！ */\n    \n    printf(\"%d\\n\", factorial(5));  /* 120 */\n    \n    /* 递归深度限制 */\n    /* factorial(100000);  可能栈溢出 */\n    \n    return 0;\n}"
             },
             {
@@ -286,7 +286,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 1,
-                explanation: "这是**指针交换vs值交换**的经典陷阱！`swap`函数交换的是**局部指针变量a和b**，而非它们**指向的值**。`a=b`只是让局部指针a指向y，不改变x的值。输出`5 10`不变。**正确写法**：`int temp=*a; *a=*b; *b=temp;`交换值。**关键区别**：`a=b`改变指针，`*a=*b`改变指向的值。**易错点**：误以为指针参数能自动交换值。",
+                explanation: "这是「指针交换vs值交换」的经典陷阱！`swap`函数交换的是「局部指针变量a和b」，而非它们「指向的值」。`a=b`只是让局部指针a指向y，不改变x的值。输出`5 10`不变。「正确写法」：`int temp=*a; *a=*b; *b=temp;`交换值。「关键区别」：`a=b`改变指针，`*a=*b`改变指向的值。「易错点」：误以为指针参数能自动交换值。",
                 codeExample: "#include <stdio.h>\n\n/* 错误：只交换了指针 */\nvoid swap_wrong(int *a, int *b) {\n    int *temp = a;\n    a = b;  /* 只改变局部指针 */\n    b = temp;\n}\n\n/* 正确：交换指针指向的值 */\nvoid swap_correct(int *a, int *b) {\n    int temp = *a;  /* 临时变量存值 */\n    *a = *b;        /* 修改*a的值 */\n    *b = temp;      /* 修改*b的值 */\n}\n\nint main() {\n    int x = 5, y = 10;\n    \n    printf(\"交换前: x=%d, y=%d\\n\", x, y);\n    \n    swap_wrong(&x, &y);\n    printf(\"错误方法: x=%d, y=%d\\n\", x, y);  /* 5 10 */\n    \n    swap_correct(&x, &y);\n    printf(\"正确方法: x=%d, y=%d\\n\", x, y);  /* 10 5 */\n    \n    return 0;\n}"
             },
             {
@@ -338,7 +338,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 0,
-                explanation: "参数按照从左到右的顺序传递给函数。`func(1, 2, 3)` 中，a=1, b=2, c=3，按顺序输出。",
+                explanation: "参数按照从左到右的顺序传递给函数。`func(1, 2, 3)` 中，a = 1, b = 2, c = 3，按顺序输出。",
                 codeExample: "#include <stdio.h>\n\nvoid func(int a, int b, int c) {\n    printf(\"a=%d, b=%d, c=%d\\n\", a, b, c);\n}\n\nint main() {\n    func(1, 2, 3);  // 按顺序传递参数\n    func(10, 20, 30);\n    return 0;\n}"
             },
             {
@@ -351,7 +351,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 2,
-                explanation: "这是**字符串字面量修改**与**函数返回指针**的组合陷阱！`\"Hello\"`是**字符串常量**，存储在**只读内存区**。`getString()`返回指向它的指针是合法的，但`s[0]='h'`尝试**修改只读内存**是**未定义行为**，通常导致**段错误崩溃**。**正确做法**：使用`const char*`防止修改，或返回可写缓冲区。**关键知识**：字符串字面量在程序整个生命周期存在，可安全返回。",
+                explanation: "这是「字符串字面量修改」与「函数返回指针」的组合陷阱！`\"Hello\"`是「字符串常量」，存储在「只读内存区」。`getString()`返回指向它的指针是合法的，但`s[0]='h'`尝试「修改只读内存」是「未定义行为」，通常导致「段错误崩溃」。「正确做法」：使用`const char*`防止修改，或返回可写缓冲区。「关键知识」：字符串字面量在程序整个生命周期存在，可安全返回。",
                 codeExample: "#include <stdio.h>\n#include <string.h>\n\n/* 危险：返回字面量后修改 */\nchar* get_wrong() {\n    return \"Hello\";  /* 只读区 */\n}\n\n/* 正确1：使用const */\nconst char* get_const() {\n    return \"Hello\";  /* 编译器防止修改 */\n}\n\n/* 正确2：返回可写缓冲区 */\nchar* get_buffer() {\n    static char buf[] = \"Hello\";  /* 可写 */\n    return buf;\n}\n\n/* 正确3：传入缓冲区 */\nvoid get_copy(char *dest, int size) {\n    strncpy(dest, \"Hello\", size-1);\n    dest[size-1] = '\\0';\n}\n\nint main() {\n    /* char *s1 = get_wrong();\n       s1[0] = 'h';  崩溃！ */\n    \n    const char *s2 = get_const();\n    /* s2[0] = 'h';  编译错误 */\n    printf(\"%s\\n\", s2);\n    \n    char *s3 = get_buffer();\n    s3[0] = 'h';  /* 合法 */\n    printf(\"%s\\n\", s3);\n    \n    char buf[20];\n    get_copy(buf, sizeof(buf));\n    buf[0] = 'h';\n    printf(\"%s\\n\", buf);\n    \n    return 0;\n}"
             },
             {
@@ -416,7 +416,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 2,
-                explanation: "这是**返回局部数组地址**的经典错误！局部数组`arr`在栈上分配，函数返回后**栈帧被销毁**，`arr`的内存被释放。返回的指针`p`指向**已释放的内存**，访问`p[0]`是**未定义行为**，可能输出1(碰巧未覆盖)、随机值、或崩溃。**解决方案**：1) 使用`static`数组；2) `malloc`动态分配；3) 传入缓冲区指针。**关键警告**：编译器通常会警告\"returning address of local variable\"。",
+                explanation: "这是「返回局部数组地址」的经典错误！局部数组`arr`在栈上分配，函数返回后「栈帧被销毁」，`arr`的内存被释放。返回的指针`p`指向「已释放的内存」，访问`p[0]`是「未定义行为」，可能输出1(碰巧未覆盖)、随机值、或崩溃。「解决方案」：1) 使用`static`数组；2) `malloc`动态分配；3) 传入缓冲区指针。「关键警告」：编译器通常会警告「returning address of local variable」。",
                 codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\n/* 错误：返回局部数组地址 */\n/* int* create_wrong() {\n    int arr[5] = {1, 2, 3, 4, 5};\n    return arr;  栈被销毁！\n} */\n\n/* 正确1：使用static */\nint* create_static() {\n    static int arr[5] = {1, 2, 3, 4, 5};\n    return arr;  /* 静态存储区 */\n}\n\n/* 正确2：动态分配 */\nint* create_malloc() {\n    int *arr = (int*)malloc(5 * sizeof(int));\n    int i;\n    for (i = 0; i < 5; i++) arr[i] = i + 1;\n    return arr;  /* 调用者需free */\n}\n\n/* 正确3：传入缓冲区 */\nvoid create_buffer(int *buf, int size) {\n    int i;\n    for (i = 0; i < size; i++) buf[i] = i + 1;\n}\n\nint main() {\n    /* int *p1 = create_wrong();\n       printf(\"%d\\n\", p1[0]);  危险！ */\n    \n    int *p2 = create_static();\n    printf(\"%d\\n\", p2[0]);  /* 1 */\n    \n    int *p3 = create_malloc();\n    printf(\"%d\\n\", p3[0]);  /* 1 */\n    free(p3);\n    \n    int buf[5];\n    create_buffer(buf, 5);\n    printf(\"%d\\n\", buf[0]);  /* 1 */\n    \n    return 0;\n}"
             },
             {
@@ -442,7 +442,7 @@ class TemplateLoader {
                     "编译错误"
                 ],
                 correctAnswer: 0,
-                explanation: "这是**函数指针**的基础应用。`int (*op)(int, int)`声明了一个指向**返回int、接受两个int参数的函数**的指针。`op=add`使op指向add函数，`op(10,5)`调用add返回15。`op=sub`后op指向sub，`op(10,5)`调用sub返回5。输出`15 5`。**关键语法**：`(*op)`中的括号必须，`int *op(int,int)`是返回指针的函数。**应用**：回调函数、策略模式、函数表驱动。",
+                explanation: "这是「函数指针」的基础应用。`int (*op)(int, int)`声明了一个指向「返回int、接受两个int参数的函数」的指针。`op=add`使op指向add函数，`op(10,5)`调用add返回15。`op=sub`后op指向sub，`op(10,5)`调用sub返回5。输出`15 5`。「关键语法」：`(*op)`中的括号必须，`int *op(int,int)`是返回指针的函数。「应用」：回调函数、策略模式、函数表驱动。",
                 codeExample: "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\nint sub(int a, int b) { return a - b; }\nint mul(int a, int b) { return a * b; }\n\nint main() {\n    int i;\n    /* 函数指针声明 */\n    int (*op)(int, int);\n    \n    /* 函数指针数组 */\n    int (*ops[])(int, int) = {add, sub, mul};\n    const char *names[] = {\"+\", \"-\", \"*\"};\n    \n    /* 使用函数指针 */\n    op = add;\n    printf(\"add: %d\\n\", op(10, 5));  /* 15 */\n    \n    op = sub;\n    printf(\"sub: %d\\n\", op(10, 5));  /* 5 */\n    \n    /* 遍历函数表 */\n    for (i = 0; i < 3; i++) {\n        printf(\"10 %s 5 = %d\\n\", names[i], ops[i](10, 5));\n    }\n    /* 输出: 15, 5, 50 */\n    \n    return 0;\n}"
             },
             {
