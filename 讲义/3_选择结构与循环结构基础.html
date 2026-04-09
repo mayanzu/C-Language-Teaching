@@ -39,7 +39,7 @@
                         <ul>
                             <li>选择结构让程序能够做出判断和选择</li>
                             <li>循环结构让程序能够重复执行任务</li>
-                            <li>掌握break和continue语句很重要</li>
+                            <li>掌握break和continue语句很重要（在第四章循环结构综合应用中详细讲解）</li>
                         </ul>
                     </div>
                     
@@ -261,10 +261,13 @@
             <!-- switch语句 -->
             <section id="switch" class="section">
                 <h2 class="section-title">switch语句</h2>
-                
+
                 <div class="subsection">
                     <h3 class="subsection-title">switch基本语法</h3>
                     <div class="subsection-content">
+                        <div class="callout-tip">
+                            <strong>复习提示：</strong>switch语句已在<a href="2_输入输出与选择结构.html#switch">第二章</a>中详细讲解。本节重点介绍switch与if-else的对比以及case合并等进阶用法。
+                        </div>
                         <p>switch语句适用于多分支选择，特别是当分支较多且基于同一个表达式的不同值时。</p>
                         
                         <div class="code-block">
@@ -818,7 +821,7 @@
         i++;
     }
     
-    <span class="c-function">printf</span>(<span class="c-string">"%d! = %I64d\n"</span>, n, factorial);
+    <span class="c-function">printf</span>(<span class="c-string">"%d! = %lld\n"</span>, n, factorial);
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -875,12 +878,14 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
-    <span class="<span class="c-keyword">for</span> (i =n> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">5</span>; i++) {
+
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d次循环\n"</span>, i);
     }
-    
+
     <span class="c-comment">// 计算1到10的和</span>
-    <span class="c-keyword">int</span> s<span class="c-keyword">for</span> (i =n> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++) {
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++) {
         sum += i;
     }
     <span class="c-function">printf</span>(<span class="c-string">"1到10的和: %d\n"</span>, sum);
@@ -904,8 +909,8 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"for循环执行流程:\n"</span>);
-    
-    <span class="<span class="c-keyword">for</span> (i =n> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">3</span>; i++) {
+
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"  初始化: i=1\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"  条件: i(%d) <= 3 为真\n"</span>, i);
         <span class="c-function">printf</span>(<span class="c-string">"  执行循环体: 第%d次\n"</span>, i);
@@ -938,18 +943,18 @@
     <span class="c-keyword">for</span> (; i <= <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"省略初始化: %d\n"</span>, i);
     }
-    
-  <span class="c-keyword">for</span> (j =r</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= <span class="c-number">3</span>; ) {
+
+    <span class="c-keyword">for</span> (j = <span class="c-number">1</span>; j <= <span class="c-number">3</span>; ) {
         <span class="c-function">printf</span>(<span class="c-string">"省略更新: %d\n"</span>, j);
         j++;  <span class="c-comment">// 在循环体内更新</span>
     }
-    
-    <sp<span class="c-keyword">for</span> (k =r</span> (<span class="c-keyword">int</span> k = <span class="c-number">1</span>; ; k++) {
+
+    <span class="c-keyword">for</span> (k = <span class="c-number">1</span>; ; k++) {
         <span class="c-function">printf</span>(<span class="c-string">"死循环: %d\n"</span>, k);
         <span class="c-keyword">if</span> (k >= <span class="c-number">3</span>) <span class="c-keyword">break</span>;  <span class="c-comment">// 必须有跳出条件</span>
     }
-    
-  <span class="c-keyword">for</span> (a =r</span> (<span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">10</span>; a <= <span class="c-number">3</span>; a++, b--) {
+
+    <span class="c-keyword">for</span> (a = <span class="c-number">1</span>, b = <span class="c-number">10</span>; a <= <span class="c-number">3</span>; a++, b--) {
         <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d\n"</span>, a, b);
     }
     
@@ -972,14 +977,16 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i, j, row, col;
     <span class="c-comment">// 打印乘法表</span>
-    <span class="c-function">printf<span class="c-keyword">for</span> (i =ord">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span><span class="c-keyword">for</span> (j =ord">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= <span class="c-number">9</span>; i++) {
+        <span class="c-keyword">for</span> (j = <span class="c-number">1</span>; j <= i; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"%d×%d=%2d "</span>, j, i, i*j);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
-    
+
     <span class="c-comment">// 打印矩形</span>
-    <span class="c-function">printf</s<span class="c-keyword">for</span> (row =d">for</span> (<span class="c-keyword">int</span> row = <span class="c-number">1</span>; ro<span class="c-keyword">for</span> (col =d">for</span> (<span class="c-keyword">int</span> col = <span class="c-number">1</span>; col <= <span class="c-number">5</span>; col++) {
+    <span class="c-keyword">for</span> (row = <span class="c-number">1</span>; row <= <span class="c-number">3</span>; row++) {
+        <span class="c-keyword">for</span> (col = <span class="c-number">1</span>; col <= <span class="c-number">5</span>; col++) {
             <span class="c-function">printf</span>(<span class="c-string">"* "</span>);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -1124,15 +1131,27 @@
                                         <td>已知循环次数</td>
                                         <td>结构清晰，变量作用域有限</td>
                                     </tr>
+                                    <tr>
+                                        <td>while</td>
+                                        <td>不确定循环次数</td>
+                                        <td>先判断后执行，可能0次</td>
+                                    </tr>
+                                    <tr>
+                                        <td>do-while</td>
+                                        <td>至少执行一次</td>
+                                        <td>先执行后判断，至少1次</td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                                    <div class="practice-questions">
-                                        <div class="question-item">
-                                            <p><strong>练习：至少执行一次 vs 可能不执行</strong></p>
-                                            <p>读取用户输入的年龄（整数）。如果输入为负数，<code>while</code>循环不会执行；<code>do-while</code>循环则至少提示一次，直到输入合法年龄（0-150）。</p>
-                                            <details class="answer">
-                                                <summary>查看参考答案</summary>
-                                                <div class="code-block">
-            <pre><code><span class="c-comment">// while 与 do-while 对比示例</span>
+                            <div class="practice-questions">
+                                <div class="question-item">
+                                    <p><strong>练习：至少执行一次 vs 可能不执行</strong></p>
+                                    <p>读取用户输入的年龄（整数）。如果输入为负数，<code>while</code>循环不会执行；<code>do-while</code>循环则至少提示一次，直到输入合法年龄（0-150）。</p>
+                                    <details class="answer">
+                                        <summary>查看参考答案</summary>
+                                        <div class="code-block">
+<pre><code><span class="c-comment">// while 与 do-while 对比示例</span>
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
@@ -1154,21 +1173,10 @@
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
-                                                </div>
-                                            </details>
                                         </div>
-                                    </div>
-                                        <td>while</td>
-                                        <td>不确定循环次数</td>
-                                        <td>先判断后执行，可能0次</td>
-                                    </tr>
-                                    <tr>
-                                        <td>do-while</td>
-                                        <td>至少执行一次</td>
-                                        <td>先执行后判断，至少1次</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </details>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
