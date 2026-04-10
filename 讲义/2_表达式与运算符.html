@@ -1087,20 +1087,20 @@ i++;   <span class="c-comment">// i变为6</span>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i = <span class="c-number">5</span>;
 
-    <span class="c-comment">// ❌ 未定义行为1：同一表达式中对同一变量多次修改</span>
+    <span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 未定义行为1：同一表达式中对同一变量多次修改</span>
     <span class="c-comment">// int j = i++ + ++i;  // i被修改了两次，结果不可预测！</span>
     <span class="c-comment">// 有的编译器算出11，有的算出12，都是"合法"的</span>
 
-    <span class="c-comment">// ✅ 正确做法：分开操作</span>
+    <span class="c-comment">// <svg class="icon-inline icon-check" viewBox="0 0 16 16"><use href="icons.svg#icon-check"/></svg> 正确做法：分开操作</span>
     <span class="c-keyword">int</span> j1 = i++;  <span class="c-comment">// j1 = 5, i = 6</span>
     <span class="c-keyword">int</span> j2 = ++i;  <span class="c-comment">// j2 = 7, i = 7</span>
     <span class="c-keyword">int</span> sum = j1 + j2;
     <span class="c-function">printf</span>(<span class="c-string">"sum = %d\n"</span>, sum);  <span class="c-comment">// 输出: 12</span>
 
-    <span class="c-comment">// ❌ 未定义行为2：多个序列点之间修改同一变量</span>
+    <span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 未定义行为2：多个序列点之间修改同一变量</span>
     <span class="c-comment">// int k = (i = 3) + (i = 5);  // i被赋值两次，未定义！</span>
 
-    <span class="c-comment">// ❌ 未定义行为3：除以零</span>
+    <span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 未定义行为3：除以零</span>
     <span class="c-comment">// int z = 10 / 0;  // 程序直接崩溃！</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;

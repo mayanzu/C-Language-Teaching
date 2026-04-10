@@ -474,6 +474,21 @@ code {
     white-space: nowrap;
 }
 
+/* 行内图标（替代emoji） */
+.icon-inline {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+.icon-inline.icon-x {
+    color: #E74C3C;
+}
+.icon-inline.icon-check {
+    color: #27AE60;
+}
+
 /* 段落内的行内代码 */
 .subsection-content p code,
 p code {

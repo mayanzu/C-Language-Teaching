@@ -660,19 +660,19 @@ Press any key to continue . . .</code></pre>
                     <h4>错误代码示例</h4>
                     <div class="code-block">
                         <div class="code-block-title">缺少分号 — 错误 vs 正确</div>
-                        <pre><code><span class="c-function">printf</span>(<span class="c-string">"Hello"</span>)     <span class="c-comment">// ❌ 错误：缺少分号</span>
-<span class="c-function">printf</span>(<span class="c-string">"Hello"</span>);    <span class="c-comment">// ✅ 正确</span></code></pre>
+                        <pre><code><span class="c-function">printf</span>(<span class="c-string">"Hello"</span>)     <span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 错误：缺少分号</span>
+<span class="c-function">printf</span>(<span class="c-string">"Hello"</span>);    <span class="c-comment">// <svg class="icon-inline icon-check" viewBox="0 0 16 16"><use href="icons.svg#icon-check"/></svg> 正确</span></code></pre>
                     </div>
 
                     <div class="code-block">
                         <div class="code-block-title">引号不匹配 — 错误 vs 正确</div>
-                        <pre><code><span class="c-function">printf</span>(<span class="c-string">"Hello'</span>);    <span class="c-comment">// ❌ 错误：使用了单引号</span>
-<span class="c-function">printf</span>(<span class="c-string">"Hello"</span>);    <span class="c-comment">// ✅ 正确</span></code></pre>
+                        <pre><code><span class="c-function">printf</span>(<span class="c-string">"Hello'</span>);    <span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 错误：使用了单引号</span>
+<span class="c-function">printf</span>(<span class="c-string">"Hello"</span>);    <span class="c-comment">// <svg class="icon-inline icon-check" viewBox="0 0 16 16"><use href="icons.svg#icon-check"/></svg> 正确</span></code></pre>
                     </div>
 
                     <div class="code-block">
                         <div class="code-block-title">缺少头文件 — 错误示例</div>
-                        <pre><code><span class="c-comment">// ❌ 错误：没有包含stdio.h</span>
+                        <pre><code><span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 错误：没有包含stdio.h</span>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"Hello"</span>);    <span class="c-comment">// 编译器不认识printf</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;

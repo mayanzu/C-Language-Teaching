@@ -675,14 +675,14 @@
 
                     <div class="code-block">
                         <div class="code-block-title">内存泄漏示例</div>
-                        <pre><code><span class="c-comment">// ❌ 内存泄漏：忘记释放</span>
+                        <pre><code><span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 内存泄漏：忘记释放</span>
 <span class="c-keyword">void</span> <span class="c-function">leak_example</span>() {
     <span class="c-keyword">int</span> <span class="c-operator">*</span>p = (<span class="c-keyword">int</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
     <span class="c-operator">*</span>p = <span class="c-number">100</span>;
     <span class="c-comment">// 函数结束后，p的值丢失，但内存没释放！</span>
 }
 
-<span class="c-comment">// ✅ 正确做法：用完释放</span>
+<span class="c-comment">// <svg class="icon-inline icon-check" viewBox="0 0 16 16"><use href="icons.svg#icon-check"/></svg> 正确做法：用完释放</span>
 <span class="c-keyword">void</span> <span class="c-function">no_leak</span>() {
     <span class="c-keyword">int</span> <span class="c-operator">*</span>p = (<span class="c-keyword">int</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
     <span class="c-operator">*</span>p = <span class="c-number">100</span>;
@@ -698,22 +698,22 @@
                 <div class="subsection-content">
                     <div class="code-block">
                         <div class="code-block-title">野指针与悬空指针</div>
-                        <pre><code><span class="c-comment">// ❌ 野指针：未初始化的指针</span>
+                        <pre><code><span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 野指针：未初始化的指针</span>
 <span class="c-keyword">int</span> <span class="c-operator">*</span>p1;        <span class="c-comment">// 指向未知地址，极其危险！</span>
 <span class="c-operator">*</span>p1 = <span class="c-number">10</span>;        <span class="c-comment">// 未定义行为，可能崩溃</span>
 
-<span class="c-comment">// ✅ 正确做法：初始化为NULL</span>
+<span class="c-comment">// <svg class="icon-inline icon-check" viewBox="0 0 16 16"><use href="icons.svg#icon-check"/></svg> 正确做法：初始化为NULL</span>
 <span class="c-keyword">int</span> <span class="c-operator">*</span>p2 = <span class="c-keyword">NULL</span>;
 <span class="c-keyword">if</span> (p2 != <span class="c-keyword">NULL</span>) {
     <span class="c-operator">*</span>p2 = <span class="c-number">10</span>;
 }
 
-<span class="c-comment">// ❌ 悬空指针：释放后继续使用</span>
+<span class="c-comment">// <svg class="icon-inline icon-x" viewBox="0 0 16 16"><use href="icons.svg#icon-error"/></svg> 悬空指针：释放后继续使用</span>
 <span class="c-keyword">int</span> <span class="c-operator">*</span>p3 = (<span class="c-keyword">int</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
 <span class="c-function">free</span>(p3);
 <span class="c-operator">*</span>p3 = <span class="c-number">20</span>;     <span class="c-comment">// 释放后使用，未定义行为！</span>
 
-<span class="c-comment">// ✅ 正确做法：释放后置NULL</span>
+<span class="c-comment">// <svg class="icon-inline icon-check" viewBox="0 0 16 16"><use href="icons.svg#icon-check"/></svg> 正确做法：释放后置NULL</span>
 <span class="c-function">free</span>(p3);
 p3 = <span class="c-keyword">NULL</span>;</code></pre>
                     </div>
