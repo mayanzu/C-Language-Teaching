@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>变量与数据类型 - C语言教程</title>
+    <link rel="stylesheet" href="template-styles.css">
+</head>
+<body>
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#variable-basic">变量基础</a></li>
+            <li><a href="#integer">整型</a></li>
+            <li><a href="#float">浮点型</a></li>
+            <li><a href="#char">字符型</a></li>
+            <li><a href="#type-conversion">类型转换</a></li>
+            <li><a href="#constant">常量</a></li>
+            <li><a href="#practice">练习题</a></li>
+            <li><a href="#summary">本章小结</a></li>
+        </ul>
+    </nav>
+
+    <main class="tutorial-content">
+
+        <header class="tutorial-header">
+            <h1>变量与数据类型</h1>
+            <p>理解C语言如何存储和处理不同类型的数据，这是编程的基础</p>
+        </header>
+
+
+        <!-- ============================================================
+             简介
+             ============================================================ -->
+        <section id="intro" class="section">
+            <h2 class="section-title">变量与数据类型基础</h2>
+            <div class="subsection-content">
+                <p>在上一章中，我们学习了计算机的基础知识和第一个C语言程序。现在，我们要深入了解C语言如何存储和处理数据——这就是<strong>变量</strong>和<strong>数据类型</strong>。</p>
+
+                <div class="callout-note">
+                    <strong>新手注意：</strong>
+                    <ul>
+                        <li>变量就像一个带标签的盒子，用来存放数据</li>
+                        <li>数据类型决定了盒子的大小和能存放什么样的数据</li>
+                        <li>使用变量前必须先声明（告诉编译器盒子的类型和名字）</li>
+                    </ul>
+                </div>
+
+                <div class="callout-tip">
+                    <strong>重要提示：</strong>
+                    <p>掌握变量和数据类型是写好C程序的前提，就像认识字才能写文章一样。本章将介绍C语言的基本数据类型和变量的使用方法。</p>
+                </div>
+
+                <h3 class="subsection-title">学习目标与节奏</h3>
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>第1步：理解变量的概念</strong> —— 学会声明和初始化变量</li>
+                        <li><strong>第2步：认识基本数据类型</strong> —— 掌握int、float、double、char</li>
+                        <li><strong>第3步：理解类型转换</strong> —— 学会自动和强制类型转换</li>
+                        <li><strong>第4步：使用常量</strong> —— 掌握const和宏定义常量</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             变量基础
+             ============================================================ -->
+        <section id="variable-basic" class="section">
+            <h2 class="section-title">变量基础</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">什么是变量？</h3>
+                <div class="subsection-content">
+                    <p><strong>变量</strong>是程序中用来存储数据的容器。你可以把它想象成一个带标签的盒子：</p>
+                    <ul>
+                        <li><strong>变量名</strong>就是盒子上的标签，用来找到这个盒子</li>
+                        <li><strong>变量的值</strong>就是盒子里装的东西</li>
+                        <li><strong>变量的类型</strong>决定了盒子的大小和能装什么样的东西</li>
+                    </ul>
+
+                    <div class="callout-tip">
+                        <strong>生活类比：</strong>
+                        <p>想象你要存放不同物品：</p>
+                        <ul>
+                            <li>整数值（如年龄25）→ 用小盒子（<code>int</code>）</li>
+                            <li>小数值（如身高1.75）→ 用精度盒子（<code>float</code>/<code>double</code>）</li>
+                            <li>单个字符（如字母'A'）→ 用迷你盒子（<code>char</code>）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">变量的声明与初始化</h3>
+                <div class="subsection-content">
+                    <p>使用变量前，必须先<strong>声明</strong>它——告诉编译器变量的类型和名字。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">变量声明与初始化</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明变量（只创建盒子，不放入内容）</span>
+    <span class="c-keyword">int</span> age;
+
+    <span class="c-comment">// 声明并初始化（创建盒子并放入内容）</span>
+    <span class="c-keyword">int</span> score = <span class="c-number">95</span>;
+
+    <span class="c-comment">// 同时声明多个同类型变量</span>
+    <span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">2</span>, c = <span class="c-number">3</span>;
+
+    <span class="c-comment">// 先声明，后赋值</span>
+    <span class="c-keyword">float</span> height;
+    height = <span class="c-number">1.75</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);    <span class="c-comment">// 注意：未初始化的变量值不确定！</span>
+    <span class="c-function">printf</span>(<span class="c-string">"成绩: %d\n"</span>, score);
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f\n"</span>, height);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>重要警告：</strong>
+                        <p>未初始化的局部变量包含<strong>垃圾值</strong>（不确定的随机值），使用前一定要初始化！</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">变量的命名规则</h3>
+                <div class="subsection-content">
+                    <p>C语言对变量名有严格的规则：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>规则</th>
+                                    <th>说明</th>
+                                    <th>正确示例</th>
+                                    <th>错误示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>可用字符</td>
+                                    <td>字母、数字、下划线</td>
+                                    <td><code>age</code>、<code>num_1</code></td>
+                                    <td><code>my-age</code>、<code>2nd</code></td>
+                                </tr>
+                                <tr>
+                                    <td>不能数字开头</td>
+                                    <td>第一个字符必须是字母或下划线</td>
+                                    <td><code>_count</code>、<code>num2</code></td>
+                                    <td><code>2num</code></td>
+                                </tr>
+                                <tr>
+                                    <td>不能是关键字</td>
+                                    <td>如int、float、return等</td>
+                                    <td><code>myInt</code></td>
+                                    <td><code>int</code></td>
+                                </tr>
+                                <tr>
+                                    <td>区分大小写</td>
+                                    <td>Age和age是不同的变量</td>
+                                    <td><code>Age</code>、<code>age</code></td>
+                                    <td>—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>命名建议：</strong>
+                        <ul>
+                            <li>变量名要有意义，见名知意（如 <code>student_age</code> 而非 <code>a</code>）</li>
+                            <li>使用下划线风格（<code>snake_case</code>）或小驼峰风格（<code>camelCase</code>）</li>
+                            <li>避免使用单字母变量名（循环变量 <code>i</code>、<code>j</code>、<code>k</code> 除外）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             整型
+             ============================================================ -->
+        <section id="integer" class="section">
+            <h2 class="section-title">整型（Integer）</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">基本整型 int</h3>
+                <div class="subsection-content">
+                    <p><code>int</code> 是C语言中最常用的整数类型，用于存储没有小数部分的数值。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">int 类型示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> age = <span class="c-number">20</span>;          <span class="c-comment">// 年龄</span>
+    <span class="c-keyword">int</span> temperature = <span class="c-number">-5</span>;   <span class="c-comment">// 温度（可以是负数）</span>
+    <span class="c-keyword">int</span> count = <span class="c-number">0</span>;           <span class="c-comment">// 计数器</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"温度: %d\n"</span>, temperature);
+    <span class="c-function">printf</span>(<span class="c-string">"计数: %d\n"</span>, count);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">整型的分类</h3>
+                <div class="subsection-content">
+                    <p>C语言提供了多种整型，它们的主要区别是占用的内存大小和能表示的范围：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>占用字节</th>
+                                    <th>范围</th>
+                                    <th>用途</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>short</code></td>
+                                    <td>2字节</td>
+                                    <td>-32768 ~ 32767</td>
+                                    <td>节省空间的小整数</td>
+                                </tr>
+                                <tr>
+                                    <td><code>int</code></td>
+                                    <td>4字节</td>
+                                    <td>-2147483648 ~ 2147483647</td>
+                                    <td>一般整数（最常用）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>long</code></td>
+                                    <td>4/8字节</td>
+                                    <td>更大范围</td>
+                                    <td>大整数</td>
+                                </tr>
+                                <tr>
+                                    <td><code>long long</code></td>
+                                    <td>8字节</td>
+                                    <td>极大范围</td>
+                                    <td>非常大的整数</td>
+                                </tr>
+                                <tr>
+                                    <td><code>unsigned int</code></td>
+                                    <td>4字节</td>
+                                    <td>0 ~ 4294967295</td>
+                                    <td>非负整数</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>新手注意：</strong>
+                        <ul>
+                            <li>日常编程中使用 <code>int</code> 就足够了</li>
+                            <li><code>unsigned</code> 表示无符号，只能存非负数</li>
+                            <li>可以用 <code>sizeof</code> 运算符查看类型占用的字节数</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">使用sizeof查看类型大小</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"short: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"int: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long long: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long long</span>));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">整数的表示方式</h3>
+                <div class="subsection-content">
+                    <p>C语言中整数可以用不同的进制表示：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>进制</th>
+                                    <th>前缀</th>
+                                    <th>示例</th>
+                                    <th>十进制值</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>十进制</td>
+                                    <td>无</td>
+                                    <td><code>42</code></td>
+                                    <td>42</td>
+                                </tr>
+                                <tr>
+                                    <td>八进制</td>
+                                    <td><code>0</code></td>
+                                    <td><code>052</code></td>
+                                    <td>42</td>
+                                </tr>
+                                <tr>
+                                    <td>十六进制</td>
+                                    <td><code>0x</code>或<code>0X</code></td>
+                                    <td><code>0x2A</code></td>
+                                    <td>42</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">不同进制表示</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> dec = <span class="c-number">42</span>;      <span class="c-comment">// 十进制</span>
+    <span class="c-keyword">int</span> oct = <span class="c-number">052</span>;      <span class="c-comment">// 八进制（前缀0）</span>
+    <span class="c-keyword">int</span> hex = <span class="c-number">0x2A</span>;     <span class="c-comment">// 十六进制（前缀0x）</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"十进制: %d\n"</span>, dec);  <span class="c-comment">// 42</span>
+    <span class="c-function">printf</span>(<span class="c-string">"八进制: %d\n"</span>, oct);  <span class="c-comment">// 42</span>
+    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %d\n"</span>, hex); <span class="c-comment">// 42</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"八进制显示: %o\n"</span>, dec);   <span class="c-comment">// 52</span>
+    <span class="c-function">printf</span>(<span class="c-string">"十六进制显示: %x\n"</span>, dec);  <span class="c-comment">// 2a</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             浮点型
+             ============================================================ -->
+        <section id="float" class="section">
+            <h2 class="section-title">浮点型（Float / Double）</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">什么是浮点型？</h3>
+                <div class="subsection-content">
+                    <p>浮点型用于存储带小数部分的数值。C语言提供了两种浮点类型：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>占用字节</th>
+                                    <th>有效数字</th>
+                                    <th>范围</th>
+                                    <th>用途</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>float</code></td>
+                                    <td>4字节</td>
+                                    <td>6-7位</td>
+                                    <td>±3.4×10³⁸</td>
+                                    <td>单精度，一般小数</td>
+                                </tr>
+                                <tr>
+                                    <td><code>double</code></td>
+                                    <td>8字节</td>
+                                    <td>15-16位</td>
+                                    <td>±1.7×10³⁰⁸</td>
+                                    <td>双精度，更精确的小数</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">浮点型示例</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">浮点型使用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> height = <span class="c-number">1.75f</span>;       <span class="c-comment">// 注意：float类型加f后缀</span>
+    <span class="c-keyword">double</span> pi = <span class="c-number">3.141592653589</span>; <span class="c-comment">// double类型更精确</span>
+    <span class="c-keyword">float</span> temperature = <span class="c-number">36.5f</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f 米\n"</span>, height);      <span class="c-comment">// 保留2位小数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"圆周率: %.10f\n"</span>, pi);         <span class="c-comment">// 保留10位小数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"体温: %.1f 度\n"</span>, temperature); <span class="c-comment">// 保留1位小数</span>
+
+    <span class="c-comment">// 科学计数法</span>
+    <span class="c-keyword">double</span> distance = <span class="c-number">1.5e8</span>;  <span class="c-comment">// 1.5 × 10⁸ = 150000000</span>
+    <span class="c-function">printf</span>(<span class="c-string">"距离: %e\n"</span>, distance);  <span class="c-comment">// 科学计数法显示</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>浮点数精度问题：</strong>
+                        <ul>
+                            <li>浮点数在计算机中是近似存储的，不是精确值</li>
+                            <li><code>0.1 + 0.2</code> 的结果可能不是精确的 <code>0.3</code></li>
+                            <li>需要高精度时使用 <code>double</code> 而非 <code>float</code></li>
+                            <li>不要用 <code>==</code> 直接比较两个浮点数是否相等</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             字符型
+             ============================================================ -->
+        <section id="char" class="section">
+            <h2 class="section-title">字符型（char）</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">什么是字符型？</h3>
+                <div class="subsection-content">
+                    <p><code>char</code> 类型用于存储单个字符。在C语言中，字符本质上是一个小整数，因为计算机用数字来表示字符（ASCII编码）。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">字符型基本使用</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> grade = <span class="c-string">'A'</span>;       <span class="c-comment">// 字符用单引号包围</span>
+    <span class="c-keyword">char</span> digit = <span class="c-string">'5'</span>;       <span class="c-comment">// 字符'5'和数字5不同！</span>
+    <span class="c-keyword">char</span> symbol = <span class="c-string">'+'</span>;      <span class="c-comment">// 符号也是字符</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);    <span class="c-comment">// 以字符形式输出</span>
+    <span class="c-function">printf</span>(<span class="c-string">"ASCII值: %d\n"</span>, grade);  <span class="c-comment">// 以整数形式输出ASCII码</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <h4>ASCII码表（常用部分）</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>字符</th>
+                                    <th>ASCII值</th>
+                                    <th>字符</th>
+                                    <th>ASCII值</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>'0' - '9'</code></td>
+                                    <td>48 - 57</td>
+                                    <td><code>'A' - 'Z'</code></td>
+                                    <td>65 - 90</td>
+                                </tr>
+                                <tr>
+                                    <td><code>'a' - 'z'</code></td>
+                                    <td>97 - 122</td>
+                                    <td><code>' '</code>（空格）</td>
+                                    <td>32</td>
+                                </tr>
+                                <tr>
+                                    <td><code>'\n'</code>（换行）</td>
+                                    <td>10</td>
+                                    <td><code>'\0'</code>（空字符）</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>字符运算：</strong>
+                        <p>因为字符本质是整数，所以可以对字符做算术运算：</p>
+                        <ul>
+                            <li>大写转小写：<code>小写 = 大写 + 32</code>（如 <code>'A' + 32 = 'a'</code>）</li>
+                            <li>字符转数字：<code>数字 = 字符 - '0'</code>（如 <code>'5' - '0' = 5</code>）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             类型转换
+             ============================================================ -->
+        <section id="type-conversion" class="section">
+            <h2 class="section-title">类型转换</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">自动类型转换</h3>
+                <div class="subsection-content">
+                    <p>当不同类型的数据参与运算时，C语言会自动进行类型转换，遵循"小类型→大类型"的原则：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">自动类型转换</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
+    <span class="c-keyword">float</span> b = <span class="c-number">3.0f</span>;
+
+    <span class="c-comment">// int和float运算，int自动转为float</span>
+    <span class="c-keyword">float</span> result = a / b;  <span class="c-comment">// 10.0 / 3.0 = 3.333...</span>
+    <span class="c-function">printf</span>(<span class="c-string">"10 / 3.0 = %.2f\n"</span>, result);
+
+    <span class="c-comment">// 但两个int相除，结果还是int</span>
+    <span class="c-keyword">int</span> int_result = a / <span class="c-number">3</span>;  <span class="c-comment">// 10 / 3 = 3（小数部分被丢弃）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"10 / 3 = %d\n"</span>, int_result);
+
+    <span class="c-comment">// char参与运算时，自动转为int</span>
+    <span class="c-keyword">char</span> ch = <span class="c-string">'A'</span>;
+    <span class="c-keyword">int</span> ch_value = ch + <span class="c-number">1</span>;  <span class="c-comment">// 65 + 1 = 66，即'B'</span>
+    <span class="c-function">printf</span>(<span class="c-string">"'A' + 1 = %c\n"</span>, ch_value);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">强制类型转换</h3>
+                <div class="subsection-content">
+                    <p>当你需要明确地将一种类型转换为另一种类型时，使用<strong>强制类型转换</strong>（类型转换运算符）：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">强制类型转换</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">3</span>;
+
+    <span class="c-comment">// 不转换：整数除法</span>
+    <span class="c-function">printf</span>(<span class="c-string">"整数除法: %d\n"</span>, a / b);  <span class="c-comment">// 输出: 3</span>
+
+    <span class="c-comment">// 强制转换：浮点除法</span>
+    <span class="c-function">printf</span>(<span class="c-string">"浮点除法: %.2f\n"</span>, (<span class="c-keyword">float</span>)a / b);  <span class="c-comment">// 输出: 3.33</span>
+
+    <span class="c-comment">// 也可以转换另一个操作数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"浮点除法: %.2f\n"</span>, a / (<span class="c-keyword">float</span>)b);  <span class="c-comment">// 输出: 3.33</span>
+
+    <span class="c-comment">// double转int：小数部分被截断</span>
+    <span class="c-keyword">double</span> pi = <span class="c-number">3.14159</span>;
+    <span class="c-keyword">int</span> int_pi = (<span class="c-keyword">int</span>)pi;
+    <span class="c-function">printf</span>(<span class="c-string">"pi = %f, (int)pi = %d\n"</span>, pi, int_pi);  <span class="c-comment">// 3.141590, 3</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>类型转换规则：</strong>
+                        <ul>
+                            <li>转换方向：char → short → int → long → float → double</li>
+                            <li>从低精度到高精度：安全，不会丢失数据</li>
+                            <li>从高精度到低精度：可能丢失数据（如 double → int 会截断小数）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             常量
+             ============================================================ -->
+        <section id="constant" class="section">
+            <h2 class="section-title">常量</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">什么是常量？</h3>
+                <div class="subsection-content">
+                    <p><strong>常量</strong>是程序运行过程中值不能改变的数据。与变量不同，常量一旦定义就不能修改。</p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">常量的定义方式</h3>
+                <div class="subsection-content">
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <strong>1. const 关键字</strong>
+                            <ul>
+                                <li>声明时加 <code>const</code> 修饰</li>
+                                <li>有明确的数据类型</li>
+                                <li>可以被调试器检查</li>
+                                <li>推荐使用这种方式</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>2. 宏定义 #define</strong>
+                            <ul>
+                                <li>编译前文本替换</li>
+                                <li>没有类型检查</li>
+                                <li>不占内存空间</li>
+                                <li>常用于全局常量</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">常量定义示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 方式1：宏定义（习惯用大写字母）</span>
+<span class="c-preprocessor">#define</span> PI <span class="c-number">3.14159</span>
+<span class="c-preprocessor">#define</span> MAX_SIZE <span class="c-number">100</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 方式2：const关键字</span>
+    <span class="c-keyword">const</span> <span class="c-keyword">double</span> E = <span class="c-number">2.71828</span>;
+    <span class="c-keyword">const</span> <span class="c-keyword">int</span> DAYS_PER_WEEK = <span class="c-number">7</span>;
+
+    <span class="c-comment">// 使用常量</span>
+    <span class="c-keyword">double</span> area = PI * <span class="c-number">5.0</span> * <span class="c-number">5.0</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"圆面积: %.2f\n"</span>, area);
+    <span class="c-function">printf</span>(<span class="c-string">"自然常数: %f\n"</span>, E);
+    <span class="c-function">printf</span>(<span class="c-string">"每周天数: %d\n"</span>, DAYS_PER_WEEK);
+
+    <span class="c-comment">// DAYS_PER_WEEK = 8;  // 错误！常量不能修改</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">字面量常量</h3>
+                <div class="subsection-content">
+                    <p>程序中直接写出的值也叫<strong>字面量</strong>：</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>示例</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>整型常量</td>
+                                    <td><code>42</code>、<code>-5</code>、<code>0xFF</code></td>
+                                    <td>默认是int类型</td>
+                                </tr>
+                                <tr>
+                                    <td>浮点常量</td>
+                                    <td><code>3.14</code>、<code>1.5e8</code></td>
+                                    <td>默认是double类型</td>
+                                </tr>
+                                <tr>
+                                    <td>字符常量</td>
+                                    <td><code>'A'</code>、<code>'\n'</code></td>
+                                    <td>用单引号包围</td>
+                                </tr>
+                                <tr>
+                                    <td>字符串常量</td>
+                                    <td><code>"Hello"</code></td>
+                                    <td>用双引号包围</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             练习题
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">练习题</h2>
+
+            <div class="practice-questions">
+                <h3 class="subsection-title">就地练习</h3>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 声明不同类型的变量存储你的个人信息（姓名首字母、年龄、身高），并格式化输出。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">个人信息输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> initial = <span class="c-string">'Z'</span>;     <span class="c-comment">// 姓名首字母</span>
+    <span class="c-keyword">int</span> age = <span class="c-number">20</span>;            <span class="c-comment">// 年龄</span>
+    <span class="c-keyword">float</span> height = <span class="c-number">1.75f</span>;    <span class="c-comment">// 身高（米）</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"姓名首字母: %c\n"</span>, initial);
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d岁\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f米\n"</span>, height);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 编写程序，输入一个整数，分别以十进制、八进制、十六进制输出。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">进制转换输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;num);
+
+    <span class="c-function">printf</span>(<span class="c-string">"十进制: %d\n"</span>, num);
+    <span class="c-function">printf</span>(<span class="c-string">"八进制: %o\n"</span>, num);
+    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %x\n"</span>, num);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 编写程序，输入一个华氏温度，输出对应的摄氏温度。公式：<code>c = (f - 32) * 5 / 9</code>。注意：要使用浮点除法得到正确结果。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">温度转换</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> fahrenheit, celsius;
+
+    <span class="c-function">printf</span>(<span class="c-string">"请输入华氏温度: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amp;fahrenheit);
+
+    <span class="c-comment">// 注意：5.0/9.0 确保浮点除法</span>
+    celsius = (fahrenheit - <span class="c-number">32</span>) * <span class="c-number">5.0</span> / <span class="c-number">9.0</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"摄氏温度: %.1f\n"</span>, celsius);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 使用 <code>sizeof</code> 运算符查看你的电脑上各数据类型占用的字节数。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">查看类型大小</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"char:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"short:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"int:    %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"float:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">float</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"double: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="practice-hints">
+                <h3>练习提示</h3>
+                <ul>
+                    <li>记住整数除法和浮点除法的区别，需要小数结果时确保至少一个操作数是浮点型</li>
+                    <li>字符和整数可以互换使用，理解ASCII码是关键</li>
+                    <li>使用变量前一定记得初始化，避免使用垃圾值</li>
+                    <li>常量名用大写字母，变量名用小写字母，养成好习惯</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             本章小结
+             ============================================================ -->
+        <section id="summary" class="section">
+            <h2 class="section-title">本章小结</h2>
+            <div class="subsection-content">
+                <h3>重点回顾</h3>
+                <ul>
+                    <li>变量是存储数据的容器，使用前必须先声明</li>
+                    <li>C语言基本数据类型：int（整数）、float/double（小数）、char（字符）</li>
+                    <li>类型转换分为自动转换（小→大）和强制转换（显式指定）</li>
+                    <li>常量是不可修改的值，可用 <code>const</code> 或 <code>#define</code> 定义</li>
+                    <li>字符本质是整数，通过ASCII编码与数字对应</li>
+                </ul>
+
+                <div class="callout-tip">
+                    <strong>准备好了吗？</strong>
+                    <p>下一章我们将学习<strong>表达式与运算符</strong>——掌握C语言中各种运算的规则，让数据"动起来"。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="tutorial.js"></script>
+</body>
+</html>

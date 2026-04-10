@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组与字符串 - C语言教程</title>
+    <link rel="stylesheet" href="template-styles.css">
+</head>
+<body>
+    <!-- SVG图标引用 -->
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+
+    <!-- 侧边导航栏 -->
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#one-dimensional">一维数组</a></li>
+            <li><a href="#two-dimensional">二维数组</a></li>
+            <li><a href="#string-basics">字符串基础</a></li>
+            <li><a href="#string-functions">字符串函数</a></li>
+            <li><a href="#array-operations">数组常见操作</a></li>
+            <li><a href="#practice">练习题</a></li>
+            <li><a href="#summary">小结</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="tutorial-content">
+        <!-- 页面标题 -->
+        <header class="tutorial-header">
+            <h1>数组与字符串</h1>
+            <p>用一组连续的空间存储和处理多个数据</p>
+        </header>
+
+        <!-- ============================================================
+             简介
+             ============================================================ -->
+        <section id="intro" class="section">
+            <h2 class="section-title">简介</h2>
+            <div class="subsection-content">
+                <p>在前面的章节中，我们使用变量来存储单个数据。但现实生活中，我们经常需要处理<strong>一组数据</strong>：比如一个班级30个学生的成绩、一段文字中的字符序列、一周7天的温度记录……如果为每个数据都声明一个变量，那代码会变得冗长且难以维护。</p>
+
+                <p><strong>数组</strong>就是解决这个问题的利器——它就像一排连续的储物柜，每个柜子大小相同，用编号来区分，可以高效地存储和访问多个同类型数据。</p>
+
+                <div class="callout-note">
+                    <strong>新手注意：</strong>
+                    <ul>
+                        <li>数组的所有元素类型必须相同（全是int，或全是char等）</li>
+                        <li>数组下标<strong>从0开始</strong>，不是从1！这是初学者最容易犯的错</li>
+                        <li>数组大小在声明后不能改变，要提前规划好</li>
+                        <li>字符串本质上就是字符数组，末尾以 <code>\0</code> 结尾</li>
+                    </ul>
+                </div>
+
+                <div class="example-grid">
+                    <div class="example-item">
+                        <strong>生活类比：储物柜</strong>
+                        <ul>
+                            <li>一排储物柜 = 一个数组</li>
+                            <li>每个柜子 = 数组的一个元素</li>
+                            <li>柜子编号 = 数组下标（从0开始）</li>
+                            <li>柜子里放的东西 = 元素的值</li>
+                        </ul>
+                    </div>
+                    <div class="example-item">
+                        <strong>生活类比：火车车厢</strong>
+                        <ul>
+                            <li>一列火车 = 一个数组</li>
+                            <li>每节车厢 = 数组的一个元素</li>
+                            <li>车厢编号 = 数组下标</li>
+                            <li>车厢内乘客/货物 = 元素的值</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             一维数组
+             ============================================================ -->
+        <section id="one-dimensional" class="section">
+            <h2 class="section-title">一维数组</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">声明与初始化</h3>
+                <div class="subsection-content">
+                    <p>一维数组是最基本的数组形式，就像一排连续的储物柜。声明时需要指定<strong>元素类型</strong>和<strong>数组大小</strong>。</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>声明方式</th>
+                                    <th>语法</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>指定大小</td>
+                                    <td><code>int arr[5];</code></td>
+                                    <td>声明5个int元素的数组</td>
+                                </tr>
+                                <tr>
+                                    <td>初始化列表</td>
+                                    <td><code>int arr[5] = {1,2,3,4,5};</code></td>
+                                    <td>声明并赋初值</td>
+                                </tr>
+                                <tr>
+                                    <td>省略大小</td>
+                                    <td><code>int arr[] = {1,2,3};</code></td>
+                                    <td>大小由初始化列表决定（为3）</td>
+                                </tr>
+                                <tr>
+                                    <td>部分初始化</td>
+                                    <td><code>int arr[5] = {1,2};</code></td>
+                                    <td>前2个赋值，其余自动为0</td>
+                                </tr>
+                                <tr>
+                                    <td>全零初始化</td>
+                                    <td><code>int arr[5] = {0};</code></td>
+                                    <td>所有元素初始化为0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">一维数组的基本使用</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明并初始化数组</span>
+    <span class="c-keyword">int</span> scores[<span class="c-number">5</span>] = {<span class="c-number">90</span>, <span class="c-number">85</span>, <span class="c-number">78</span>, <span class="c-number">92</span>, <span class="c-number">88</span>};
+
+    <span class="c-comment">// 访问单个元素（下标从0开始）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"第一个成绩: %d\n"</span>, scores[<span class="c-number">0</span>]);   <span class="c-comment">// 90</span>
+    <span class="c-function">printf</span>(<span class="c-string">"第三个成绩: %d\n"</span>, scores[<span class="c-number">2</span>]);   <span class="c-comment">// 78</span>
+
+    <span class="c-comment">// 修改元素</span>
+    scores[<span class="c-number">2</span>] = <span class="c-number">80</span>;  <span class="c-comment">// 将第三个成绩改为80</span>
+
+    <span class="c-comment">// 遍历数组</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"成绩%d: %d\n"</span>, i + <span class="c-number">1</span>, scores[i]);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">数组下标从0开始</h3>
+                <div class="subsection-content">
+                    <p>这是C语言初学者最需要记住的规则：<strong>数组下标从0开始</strong>，最后一个元素的下标是 <code>数组大小 - 1</code>。</p>
+
+                    <div class="callout-warning">
+                        <strong>常见错误：</strong>
+                        <ul>
+                            <li>访问 <code>arr[5]</code> 时，有效下标是 <code>0~4</code>，<code>arr[5]</code> 是越界访问！</li>
+                            <li>越界访问不会报错，但会导致未定义行为（数据错乱、程序崩溃）</li>
+                            <li>就像储物柜只有0~4号，你非要打开5号柜，里面可能是什么都不知道</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <strong>正确的访问</strong>
+                            <ul>
+                                <li><code>int arr[5];</code></li>
+                                <li>有效下标：0, 1, 2, 3, 4</li>
+                                <li><code>arr[0]</code> → 第1个元素</li>
+                                <li><code>arr[4]</code> → 最后一个元素</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>错误的访问</strong>
+                            <ul>
+                                <li><code>arr[5]</code> → 越界！</li>
+                                <li><code>arr[-1]</code> → 越界！</li>
+                                <li>编译不报错，运行时出问题</li>
+                                <li>这是C语言的"陷阱"之一</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">数组名是首地址</h3>
+                <div class="subsection-content">
+                    <p>在C语言中，<strong>数组名代表数组首元素的内存地址</strong>。这是一个非常重要的概念，后面学习指针时会深入理解。</p>
+
+                    <div class="callout-tip">
+                        <strong>重要提示：</strong>
+                        <p>你可以把数组名想象成"储物柜排的起始位置"。知道起始位置和编号，就能找到任何一个柜子。数组名本身不是变量，不能对它赋值（如 <code>arr = ...</code> 是错误的）。</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">数组名与地址</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[<span class="c-number">3</span>] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>};
+
+    <span class="c-comment">// 数组名就是首元素的地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"arr 的地址: %p\n"</span>, arr);
+    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] 的地址: %p\n"</span>, &arr[<span class="c-number">0</span>]);
+    <span class="c-comment">// 两者输出相同！</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             二维数组
+             ============================================================ -->
+        <section id="two-dimensional" class="section">
+            <h2 class="section-title">二维数组</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">概念与声明</h3>
+                <div class="subsection-content">
+                    <p>如果说一维数组是一排储物柜，那么<strong>二维数组就是一面储物柜墙</strong>——有行有列，像表格一样组织数据。常见场景：学生成绩表（行=学生，列=科目）、棋盘、图像像素等。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">二维数组的声明与使用</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 声明3行4列的二维数组</span>
+    <span class="c-keyword">int</span> matrix[<span class="c-number">3</span>][<span class="c-number">4</span>] = {
+        {<span class="c-number">1</span>,  <span class="c-number">2</span>,  <span class="c-number">3</span>,  <span class="c-number">4</span>},
+        {<span class="c-number">5</span>,  <span class="c-number">6</span>,  <span class="c-number">7</span>,  <span class="c-number">8</span>},
+        {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
+    };
+
+    <span class="c-comment">// 访问元素：matrix[行][列]</span>
+    <span class="c-function">printf</span>(<span class="c-string">"第1行第2列: %d\n"</span>, matrix[<span class="c-number">0</span>][<span class="c-number">1</span>]);  <span class="c-comment">// 2</span>
+    <span class="c-function">printf</span>(<span class="c-string">"第3行第4列: %d\n"</span>, matrix[<span class="c-number">2</span>][<span class="c-number">3</span>]);  <span class="c-comment">// 12</span>
+
+    <span class="c-comment">// 用双重循环遍历</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < <span class="c-number">4</span>; j++) {
+            <span class="c-function">printf</span>(<span class="c-string">"%4d"</span>, matrix[i][j]);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>新手注意：</strong>
+                        <ul>
+                            <li>二维数组在内存中实际是<strong>按行连续存储</strong>的，先存第0行，再存第1行……</li>
+                            <li>初始化时可以省略行数，但<strong>不能省略列数</strong></li>
+                            <li>就像Excel表格：先确定每行有几列，行数可以自动计算</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">实际应用：学生成绩表</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">3个学生3门课的成绩</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 3个学生，每人3门课成绩</span>
+    <span class="c-keyword">float</span> scores[<span class="c-number">3</span>][<span class="c-number">3</span>] = {
+        {<span class="c-number">85.5</span>, <span class="c-number">90.0</span>, <span class="c-number">78.5</span>},  <span class="c-comment">// 学生0</span>
+        {<span class="c-number">92.0</span>, <span class="c-number">88.5</span>, <span class="c-number">95.0</span>},  <span class="c-comment">// 学生1</span>
+        {<span class="c-number">76.0</span>, <span class="c-number">82.5</span>, <span class="c-number">89.0</span>}   <span class="c-comment">// 学生2</span>
+    };
+
+    <span class="c-comment">// 计算每个学生的平均分</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-keyword">float</span> sum = <span class="c-number">0</span>;
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < <span class="c-number">3</span>; j++) {
+            sum += scores[i][j];
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"学生%d的平均分: %.1f\n"</span>, i + <span class="c-number">1</span>, sum / <span class="c-number">3</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             字符串基础
+             ============================================================ -->
+        <section id="string-basics" class="section">
+            <h2 class="section-title">字符串基础</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">字符串的本质</h3>
+                <div class="subsection-content">
+                    <p>C语言中<strong>没有专门的字符串类型</strong>，字符串就是以 <code>\0</code>（空字符）结尾的字符数组。这个 <code>\0</code> 是字符串的"终止符"，告诉程序字符串在哪里结束。</p>
+
+                    <div class="callout-tip">
+                        <strong>关键概念：</strong>
+                        <p>字符串就像一串珍珠，最后一颗珍珠是特殊的标记珠（<code>\0</code>），表示"到此为止"。没有这颗标记珠，程序就不知道字符串在哪结束，会继续往后读取，产生乱码或错误。</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">字符串的两种创建方式</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 方式1：用字符数组逐个初始化（需要手动加\0）</span>
+    <span class="c-keyword">char</span> str1[<span class="c-number">6</span>] = {<span class="c-string">'H'</span>, <span class="c-string">'e'</span>, <span class="c-string">'l'</span>, <span class="c-string">'l'</span>, <span class="c-string">'o'</span>, <span class="c-string">'\0'</span>};
+
+    <span class="c-comment">// 方式2：用字符串常量（自动加\0，推荐！）</span>
+    <span class="c-keyword">char</span> str2[] = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 编译器自动在末尾加\0，大小为6</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"%s\n"</span>, str1);  <span class="c-comment">// Hello</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%s\n"</span>, str2);  <span class="c-comment">// Hello</span>
+
+    <span class="c-comment">// 注意："Hello"占6个字节：H e l l o \0</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str2的大小: %d\n"</span>, <span class="c-keyword">sizeof</span>(str2));  <span class="c-comment">// 6</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">字符串的输入输出</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>函数</th>
+                                    <th>用途</th>
+                                    <th>示例</th>
+                                    <th>注意事项</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>printf("%s", str)</code></td>
+                                    <td>输出字符串</td>
+                                    <td><code>printf("%s", name);</code></td>
+                                    <td>遇到<code>\0</code>停止输出</td>
+                                </tr>
+                                <tr>
+                                    <td><code>scanf("%s", str)</code></td>
+                                    <td>输入字符串</td>
+                                    <td><code>scanf("%s", name);</code></td>
+                                    <td>遇空格结束，不需要加<code>&</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>fgets(str, n, stdin)</code></td>
+                                    <td>安全输入</td>
+                                    <td><code>fgets(name, 100, stdin);</code></td>
+                                    <td>可读空格，限制长度</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>安全警告：</strong>
+                        <ul>
+                            <li><code>scanf("%s", str)</code> 不检查数组边界，输入过长会导致缓冲区溢出</li>
+                            <li>推荐使用 <code>fgets()</code> 来读取字符串，更安全</li>
+                            <li>就像往杯子里倒水：杯子容量有限，倒太多会溢出</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             字符串函数
+             ============================================================ -->
+        <section id="string-functions" class="section">
+            <h2 class="section-title">字符串函数</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">常用字符串函数</h3>
+                <div class="subsection-content">
+                    <p>C语言提供了 <code>&lt;string.h&gt;</code> 头文件中的一系列字符串处理函数，以下是最常用的四个：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>函数</th>
+                                    <th>功能</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>strlen(s)</code></td>
+                                    <td>返回字符串长度（不含<code>\0</code>）</td>
+                                    <td><code>strlen("Hello")</code> → 5</td>
+                                </tr>
+                                <tr>
+                                    <td><code>strcpy(dst, src)</code></td>
+                                    <td>把src复制到dst</td>
+                                    <td><code>strcpy(b, "Hi")</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>strcat(dst, src)</code></td>
+                                    <td>把src拼接到dst末尾</td>
+                                    <td><code>strcat(a, " World")</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>strcmp(s1, s2)</code></td>
+                                    <td>比较两字符串</td>
+                                    <td>相同返回0，s1>s2返回正数</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">函数详解与示例</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">字符串函数使用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> str1[<span class="c-number">50</span>] = <span class="c-string">"Hello"</span>;
+    <span class="c-keyword">char</span> str2[<span class="c-number">50</span>] = <span class="c-string">"World"</span>;
+    <span class="c-keyword">char</span> temp[<span class="c-number">50</span>];
+
+    <span class="c-comment">// strlen: 获取字符串长度</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
+
+    <span class="c-comment">// strcpy: 复制字符串</span>
+    <span class="c-function">strcpy</span>(temp, str1);
+    <span class="c-function">printf</span>(<span class="c-string">"复制后: %s\n"</span>, temp);  <span class="c-comment">// Hello</span>
+
+    <span class="c-comment">// strcat: 拼接字符串</span>
+    <span class="c-function">strcat</span>(str1, <span class="c-string">" "</span>);
+    <span class="c-function">strcat</span>(str1, str2);
+    <span class="c-function">printf</span>(<span class="c-string">"拼接后: %s\n"</span>, str1);  <span class="c-comment">// Hello World</span>
+
+    <span class="c-comment">// strcmp: 比较字符串</span>
+    <span class="c-keyword">if</span> (<span class="c-function">strcmp</span>(<span class="c-string">"abc"</span>, <span class="c-string">"abc"</span>) == <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"两字符串相同\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>常见错误：</strong>
+                        <ul>
+                            <li>字符串比较不能用 <code>==</code>，必须用 <code>strcmp()</code></li>
+                            <li>字符串赋值不能用 <code>=</code>，必须用 <code>strcpy()</code></li>
+                            <li><code>strcat</code> 和 <code>strcpy</code> 的目标数组必须足够大，否则溢出</li>
+                            <li>就像用杯子接水：杯子太小，水会洒出来</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             数组常见操作
+             ============================================================ -->
+        <section id="array-operations" class="section">
+            <h2 class="section-title">数组常见操作</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">冒泡排序</h3>
+                <div class="subsection-content">
+                    <p>排序是最基本的数组操作之一。<strong>冒泡排序</strong>是最容易理解的排序算法——就像水中的气泡，较大的值会逐渐"浮"到数组的末尾。</p>
+
+                    <div class="callout-tip">
+                        <strong>冒泡排序的思想：</strong>
+                        <p>就像排队从矮到高——相邻两人比较，如果前面的比后面的高就交换位置。每一轮都会把当前最大的"冒泡"到末尾，就像最轻的气泡浮到水面一样。</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">冒泡排序实现</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">64</span>, <span class="c-number">34</span>, <span class="c-number">25</span>, <span class="c-number">12</span>, <span class="c-number">22</span>, <span class="c-number">11</span>, <span class="c-number">90</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">7</span>;
+
+    <span class="c-comment">// 冒泡排序：从大到小排？还是从小到大？</span>
+    <span class="c-comment">// 这里是从小到大（升序）</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {          <span class="c-comment">// 外层：控制轮数</span>
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {    <span class="c-comment">// 内层：相邻比较</span>
+            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {         <span class="c-comment">// 前面比后面大？</span>
+                <span class="c-comment">// 交换！借助临时变量</span>
+                <span class="c-keyword">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="c-number">1</span>];
+                arr[j + <span class="c-number">1</span>] = temp;
+            }
+        }
+    }
+
+    <span class="c-comment">// 输出排序结果</span>
+    <span class="c-function">printf</span>(<span class="c-string">"排序后: "</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    }
+    <span class="c-comment">// 输出: 排序后: 11 12 22 25 34 64 90</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">查找</h3>
+                <div class="subsection-content">
+                    <p>查找是在数组中寻找特定值的操作。最简单的方法是<strong>顺序查找</strong>——从头到尾逐个比较。如果数组已经排好序，可以使用更高效的<strong>二分查找</strong>。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">顺序查找示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">3</span>, <span class="c-number">7</span>, <span class="c-number">1</span>, <span class="c-number">9</span>, <span class="c-number">5</span>, <span class="c-number">2</span>, <span class="c-number">8</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">7</span>;
+    <span class="c-keyword">int</span> target = <span class="c-number">9</span>;    <span class="c-comment">// 要找的数</span>
+    <span class="c-keyword">int</span> found = <span class="c-number">-1</span>;   <span class="c-comment">// 记录找到的位置，-1表示没找到</span>
+
+    <span class="c-comment">// 顺序查找：逐个比较</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-keyword">if</span> (arr[i] == target) {
+            found = i;
+            <span class="c-keyword">break</span>;  <span class="c-comment">// 找到就退出循环</span>
+        }
+    }
+
+    <span class="c-keyword">if</span> (found != <span class="c-number">-1</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"找到了！%d 在下标 %d\n"</span>, target, found);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"没找到 %d\n"</span>, target);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <strong>顺序查找</strong>
+                            <ul>
+                                <li>不需要排序，直接搜索</li>
+                                <li>最坏情况要找n次</li>
+                                <li>适合无序数组</li>
+                                <li>就像翻书找内容：一页页翻</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>二分查找</strong>
+                            <ul>
+                                <li>数组必须已排序</li>
+                                <li>每次排除一半，效率高</li>
+                                <li>就像查字典：翻到中间判断</li>
+                                <li>后续课程会详细介绍</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             练习题
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">练习题</h2>
+
+            <div class="practice-questions">
+                <h3 class="subsection-title">就地练习</h3>
+
+                <!-- 题目1 -->
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 声明一个整型数组，存储5个整数，用循环输入5个数，然后逆序输出它们。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">逆序输出数组</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[<span class="c-number">5</span>];
+
+    <span class="c-comment">// 输入5个数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"请输入5个整数:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
+    }
+
+    <span class="c-comment">// 逆序输出</span>
+    <span class="c-function">printf</span>(<span class="c-string">"逆序输出: "</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">4</span>; i >= <span class="c-number">0</span>; i--) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 题目2 -->
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 编写程序，计算一个整型数组中所有元素的和与平均值。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">数组求和与平均值</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">85</span>, <span class="c-number">92</span>, <span class="c-number">78</span>, <span class="c-number">90</span>, <span class="c-number">65</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        sum += arr[i];
+    }
+
+    <span class="c-keyword">double</span> avg = (<span class="c-keyword">double</span>)sum / n;
+
+    <span class="c-function">printf</span>(<span class="c-string">"总和: %d\n"</span>, sum);
+    <span class="c-function">printf</span>(<span class="c-string">"平均值: %.1f\n"</span>, avg);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 题目3 -->
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 使用 <code>strlen</code>、<code>strcpy</code>、<code>strcat</code> 函数：定义两个字符串，将它们拼接后输出长度。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">字符串拼接</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> str1[<span class="c-number">100</span>] = <span class="c-string">"Hello"</span>;
+    <span class="c-keyword">char</span> str2[] = <span class="c-string">" World"</span>;
+
+    <span class="c-comment">// 拼接前</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
+
+    <span class="c-comment">// 拼接</span>
+    <span class="c-function">strcat</span>(str1, str2);
+    <span class="c-function">printf</span>(<span class="c-string">"拼接后: %s\n"</span>, str1);        <span class="c-comment">// Hello World</span>
+    <span class="c-function">printf</span>(<span class="c-string">"拼接后长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 11</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 题目4 -->
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 实现冒泡排序，对一个整型数组进行升序排列，并输出每轮排序后的结果。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">冒泡排序（带过程输出）</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">5</span>, <span class="c-number">3</span>, <span class="c-number">8</span>, <span class="c-number">1</span>, <span class="c-number">2</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {
+                <span class="c-keyword">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="c-number">1</span>];
+                arr[j + <span class="c-number">1</span>] = temp;
+            }
+        }
+        <span class="c-comment">// 输出每轮结果</span>
+        <span class="c-function">printf</span>(<span class="c-string">"第%d轮: "</span>, i + <span class="c-number">1</span>);
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> k = <span class="c-number">0</span>; k < n; k++) {
+            <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[k]);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 题目5 -->
+                <div class="question-item">
+                    <p><strong>练习5：</strong> 找出整型数组中的最大值和最小值，并输出它们各自的下标。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">查找最大值和最小值</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">23</span>, <span class="c-number">67</span>, <span class="c-number">12</span>, <span class="c-number">89</span>, <span class="c-number">45</span>, <span class="c-number">3</span>, <span class="c-number">56</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">7</span>;
+
+    <span class="c-keyword">int</span> max = arr[<span class="c-number">0</span>], min = arr[<span class="c-number">0</span>];
+    <span class="c-keyword">int</span> maxIdx = <span class="c-number">0</span>, minIdx = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i < n; i++) {
+        <span class="c-keyword">if</span> (arr[i] > max) { max = arr[i]; maxIdx = i; }
+        <span class="c-keyword">if</span> (arr[i] < min) { min = arr[i]; minIdx = i; }
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"最大值: %d (下标%d)\n"</span>, max, maxIdx);
+    <span class="c-function">printf</span>(<span class="c-string">"最小值: %d (下标%d)\n"</span>, min, minIdx);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 练习提示 -->
+            <div class="practice-hints">
+                <h3>练习提示</h3>
+                <ul>
+                    <li>数组下标从0开始，循环条件通常是 <code>i < n</code> 而不是 <code>i <= n</code></li>
+                    <li>交换两个变量必须借助第三个临时变量，就像两个人换座位需要站起来</li>
+                    <li>字符串操作记得 <code>#include &lt;string.h&gt;</code></li>
+                    <li>字符数组要预留 <code>\0</code> 的位置，<code>"Hello"</code> 需要6个字节</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             本章小结
+             ============================================================ -->
+        <section id="summary" class="section">
+            <h2 class="section-title">本章小结</h2>
+            <div class="subsection-content">
+                <h3>重点回顾</h3>
+                <ul>
+                    <li><strong>数组</strong>是存储多个同类型数据的连续内存空间，通过下标访问元素</li>
+                    <li><strong>数组下标从0开始</strong>，最后一个元素下标为 <code>大小-1</code>，越界访问会导致未定义行为</li>
+                    <li><strong>数组名是首元素地址</strong>，不能对数组名直接赋值</li>
+                    <li><strong>字符串</strong>是以 <code>\0</code> 结尾的字符数组，字符串常量会自动添加 <code>\0</code></li>
+                    <li>常用字符串函数：<code>strlen</code>（求长度）、<code>strcpy</code>（复制）、<code>strcat</code>（拼接）、<code>strcmp</code>（比较）</li>
+                    <li><strong>冒泡排序</strong>通过相邻元素比较和交换，每轮将最大值"冒泡"到末尾</li>
+                    <li>字符串比较用 <code>strcmp()</code>，不能用 <code>==</code>；字符串赋值用 <code>strcpy()</code>，不能用 <code>=</code></li>
+                </ul>
+
+                <div class="example-grid">
+                    <div class="example-item">
+                        <strong>掌握检查清单</strong>
+                        <ul>
+                            <li>能正确声明和初始化数组</li>
+                            <li>能用循环遍历数组</li>
+                            <li>理解下标从0开始的原因</li>
+                            <li>能使用字符串函数</li>
+                            <li>能实现冒泡排序</li>
+                        </ul>
+                    </div>
+                    <div class="example-item">
+                        <strong>下一步学习</strong>
+                        <ul>
+                            <li>学会把重复代码封装成函数</li>
+                            <li>理解参数传递和返回值</li>
+                            <li>掌握递归的思想</li>
+                            <li>提高代码的复用性和可读性</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="callout-tip">
+                    <strong>准备好了吗？</strong>
+                    <p>下一章我们将学习<strong>函数定义与调用</strong>——把重复的代码封装成可复用的模块，让你的程序更简洁、更易维护！</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 公共脚本 -->
+    <script src="tutorial.js"></script>
+</body>
+</html>

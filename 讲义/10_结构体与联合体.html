@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结构体与联合体 - C语言教程</title>
+    <link rel="stylesheet" href="template-styles.css">
+</head>
+<body>
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#struct-def">结构体定义与使用</a></li>
+            <li><a href="#struct-access">结构体成员访问</a></li>
+            <li><a href="#struct-array">结构体数组</a></li>
+            <li><a href="#struct-pointer">结构体指针</a></li>
+            <li><a href="#struct-func">结构体与函数</a></li>
+            <li><a href="#union">联合体</a></li>
+            <li><a href="#enum">枚举类型</a></li>
+            <li><a href="#typedef">typedef</a></li>
+            <li><a href="#practice">练习题</a></li>
+            <li><a href="#summary">本章小结</a></li>
+        </ul>
+    </nav>
+
+    <main class="tutorial-content">
+
+        <header class="tutorial-header">
+            <h1>结构体与联合体</h1>
+            <p>用自定义类型组织复杂数据，构建实用的数据结构</p>
+        </header>
+
+
+        <!-- ============================================================
+             简介
+             ============================================================ -->
+        <section id="intro" class="section">
+            <h2 class="section-title">为什么要自定义类型？</h2>
+            <div class="subsection-content">
+                <p>到目前为止，我们使用的是C语言内置的基本类型：<code>int</code>、<code>float</code>、<code>char</code> 等。但现实世界中的数据往往是由多个不同类型的信息组合而成的。比如，一个学生的信息包括姓名（字符串）、年龄（整数）、成绩（浮点数）——这些数据需要作为一个整体来处理。</p>
+
+                <p><strong>结构体（struct）</strong>就是C语言提供的"自定义类型"工具，让你可以把多个不同类型的数据打包在一起，形成一个新的类型。</p>
+
+                <div class="callout-note">
+                    <strong>新手注意：</strong>
+                    <ul>
+                        <li>结构体就像一个"信息卡片"，可以包含不同类型的字段</li>
+                        <li>联合体（union）看起来和结构体很像，但它在同一时刻只能存储一个成员的值</li>
+                        <li>枚举（enum）用于定义一组有名字的整数常量</li>
+                    </ul>
+                </div>
+
+                <div class="callout-tip">
+                    <strong>生活类比：</strong>
+                    <p>基本类型像单间，只能放一种东西；结构体像套房，有客厅、卧室、厨房，每个房间可以放不同类型的东西；联合体像变形房间，同一时间只能是客厅或卧室或厨房。</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             结构体定义与使用
+             ============================================================ -->
+        <section id="struct-def" class="section">
+            <h2 class="section-title">结构体定义与使用</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">定义结构体</h3>
+                <div class="subsection-content">
+                    <p>使用 <code>struct</code> 关键字定义结构体类型，在大括号内列出所有成员变量。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">定义学生结构体</div>
+                        <pre><code><span class="c-comment">// 定义结构体类型</span>
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];   <span class="c-comment">// 姓名</span>
+    <span class="c-keyword">int</span> age;           <span class="c-comment">// 年龄</span>
+    <span class="c-keyword">float</span> score;       <span class="c-comment">// 成绩</span>
+};
+
+<span class="c-comment">// 注意：定义结构体类型后，</span>
+<span class="c-comment">// 还需要声明变量才能使用</span>
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu1;    <span class="c-comment">// 声明一个Student类型的变量</span>
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu2;</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>要点：</strong>
+                        <ul>
+                            <li><code>struct Student</code> 是类型名，<code>stu1</code> 是变量名</li>
+                            <li>结构体定义末尾的 <code>;</code> 不能忘记</li>
+                            <li>定义结构体类型不会分配内存，声明变量时才分配</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">结构体的初始化</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">结构体初始化方式</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 方式1：定义时按顺序初始化</span>
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu1 = {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>};
+
+    <span class="c-comment">// 方式2：指定成员初始化（推荐，不怕顺序错）</span>
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu2 = {.name = <span class="c-string">"李四"</span>, .age = <span class="c-number">21</span>, .score = <span class="c-number">92.0</span>};
+
+    <span class="c-comment">// 方式3：先声明再赋值</span>
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu3;
+    <span class="c-function">strcpy</span>(stu3.name, <span class="c-string">"王五"</span>);
+    stu3.age = <span class="c-number">19</span>;
+    stu3.score = <span class="c-number">85.5</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"%s, %d岁, 成绩%.1f\n"</span>, stu1.name, stu1.age, stu1.score);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             结构体成员访问
+             ============================================================ -->
+        <section id="struct-access" class="section">
+            <h2 class="section-title">结构体成员访问</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">点运算符（.）和箭头运算符（->）</h3>
+                <div class="subsection-content">
+                    <p>访问结构体成员有两种方式，取决于你用的是结构体变量还是结构体指针。</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>运算符</th>
+                                    <th>使用场景</th>
+                                    <th>示例</th>
+                                    <th>记忆方法</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>.</code>（点）</td>
+                                    <td>通过结构体<strong>变量</strong>访问</td>
+                                    <td><code>stu.age</code></td>
+                                    <td>变量是"实体"，用实心点</td>
+                                </tr>
+                                <tr>
+                                    <td><code>-></code>（箭头）</td>
+                                    <td>通过结构体<strong>指针</strong>访问</td>
+                                    <td><code>p->age</code></td>
+                                    <td>指针是"方向"，用箭头</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">两种访问方式对比</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Point</span> {
+    <span class="c-keyword">int</span> x;
+    <span class="c-keyword">int</span> y;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> <span class="c-variable">Point</span> p1 = {<span class="c-number">3</span>, <span class="c-number">4</span>};
+    <span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p2 = <span class="c-operator">&</span>p1;
+
+    <span class="c-comment">// 通过变量访问：用 .</span>
+    <span class="c-function">printf</span>(<span class="c-string">"p1.x = %d, p1.y = %d\n"</span>, p1.x, p1.y);
+
+    <span class="c-comment">// 通过指针访问：用 -></span>
+    <span class="c-function">printf</span>(<span class="c-string">"p2->x = %d, p2->y = %d\n"</span>, p2->x, p2->y);
+
+    <span class="c-comment">// p2->x 等价于 (*p2).x</span>
+    <span class="c-function">printf</span>(<span class="c-string">"(*p2).x = %d\n"</span>, (<span class="c-operator">*</span>p2).x);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>等价关系：</strong>
+                        <p><code>p->member</code> 等价于 <code>(*p).member</code>。箭头运算符是简化写法，更直观也更常用。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">结构体嵌套</h3>
+                <div class="subsection-content">
+                    <p>结构体的成员也可以是另一个结构体，这就是<strong>嵌套</strong>。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">结构体嵌套示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Date</span> {
+    <span class="c-keyword">int</span> year;
+    <span class="c-keyword">int</span> month;
+    <span class="c-keyword">int</span> day;
+};
+
+<span class="c-keyword">struct</span> <span class="c-variable">Employee</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">struct</span> <span class="c-variable">Date</span> birthday;   <span class="c-comment">// 嵌套结构体</span>
+    <span class="c-keyword">float</span> salary;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> <span class="c-variable">Employee</span> emp = {
+        .name = <span class="c-string">"张三"</span>,
+        .birthday = {<span class="c-number">2000</span>, <span class="c-number">5</span>, <span class="c-number">15</span>},
+        .salary = <span class="c-number">8000.0</span>
+    };
+
+    <span class="c-comment">// 访问嵌套成员：用多个 .</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%s的生日: %d-%d-%d\n"</span>,
+        emp.name,
+        emp.birthday.year,
+        emp.birthday.month,
+        emp.birthday.day);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             结构体数组
+             ============================================================ -->
+        <section id="struct-array" class="section">
+            <h2 class="section-title">结构体数组</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">定义与使用结构体数组</h3>
+                <div class="subsection-content">
+                    <p>当需要处理多个同类型的结构体数据时，可以使用结构体数组。就像普通数组存储多个 <code>int</code> 一样，结构体数组存储多个结构体变量。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">学生信息管理</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 定义并初始化结构体数组</span>
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> class[] = {
+        {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>},
+        {<span class="c-string">"李四"</span>, <span class="c-number">21</span>, <span class="c-number">92.0</span>},
+        {<span class="c-string">"王五"</span>, <span class="c-number">19</span>, <span class="c-number">78.5</span>},
+        {<span class="c-string">"赵六"</span>, <span class="c-number">20</span>, <span class="c-number">95.0</span>}
+    };
+
+    <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(class) / <span class="c-keyword">sizeof</span>(class[<span class="c-number">0</span>]);
+
+    <span class="c-comment">// 遍历输出所有学生信息</span>
+    <span class="c-function">printf</span>(<span class="c-string">"姓名\t年龄\t成绩\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%s\t%d\t%.1f\n"</span>, class[i].name, class[i].age, class[i].score);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">结构体数组排序</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">按成绩从高到低排序</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> class[] = {
+        {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>},
+        {<span class="c-string">"李四"</span>, <span class="c-number">21</span>, <span class="c-number">92.0</span>},
+        {<span class="c-string">"王五"</span>, <span class="c-number">19</span>, <span class="c-number">78.5</span>},
+        {<span class="c-string">"赵六"</span>, <span class="c-number">20</span>, <span class="c-number">95.0</span>}
+    };
+    <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(class) / <span class="c-keyword">sizeof</span>(class[<span class="c-number">0</span>]);
+
+    <span class="c-comment">// 冒泡排序：按成绩降序</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (class[j].score < class[j + <span class="c-number">1</span>].score) {
+                <span class="c-comment">// 交换整个结构体</span>
+                <span class="c-keyword">struct</span> <span class="c-variable">Student</span> temp = class[j];
+                class[j] = class[j + <span class="c-number">1</span>];
+                class[j + <span class="c-number">1</span>] = temp;
+            }
+        }
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"成绩排名:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"第%d名: %s %.1f分\n"</span>, i + <span class="c-number">1</span>, class[i].name, class[i].score);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>提示：</strong>
+                        <p>结构体变量可以直接赋值（<code>temp = class[j]</code>），C语言会自动复制所有成员。这比逐个成员复制方便多了。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             结构体指针
+             ============================================================ -->
+        <section id="struct-pointer" class="section">
+            <h2 class="section-title">结构体指针</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">结构体指针的基本用法</h3>
+                <div class="subsection-content">
+                    <p>结构体指针就是指向结构体变量的指针。通过结构体指针，我们可以高效地操作结构体数据，避免复制整个结构体的开销。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">结构体指针</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu = {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>};
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>p = <span class="c-operator">&</span>stu;
+
+    <span class="c-comment">// 通过指针访问成员（两种方式等价）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, p->name);      <span class="c-comment">// 推荐用 -></span>
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, (<span class="c-operator">*</span>p).age);    <span class="c-comment">// 等价写法</span>
+    <span class="c-function">printf</span>(<span class="c-string">"成绩: %.1f\n"</span>, p->score);
+
+    <span class="c-comment">// 通过指针修改成员</span>
+    p->age = <span class="c-number">21</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"修改后年龄: %d\n"</span>, stu.age);  <span class="c-comment">// 输出: 21</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">结构体指针与动态内存</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">动态分配结构体</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Student</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 动态分配一个结构体</span>
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>p = (<span class="c-keyword">struct</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> <span class="c-variable">Student</span>));
+
+    <span class="c-keyword">if</span> (p == <span class="c-keyword">NULL</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"内存分配失败！\n"</span>);
+        <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    }
+
+    <span class="c-function">strcpy</span>(p->name, <span class="c-string">"张三"</span>);
+    p->age = <span class="c-number">20</span>;
+    p->score = <span class="c-number">89.5</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"%s, %d岁, %.1f分\n"</span>, p->name, p->age, p->score);
+
+    <span class="c-function">free</span>(p);
+    p = <span class="c-keyword">NULL</span>;
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             结构体与函数
+             ============================================================ -->
+        <section id="struct-func" class="section">
+            <h2 class="section-title">结构体与函数</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">结构体作为函数参数</h3>
+                <div class="subsection-content">
+                    <p>结构体传给函数有三种方式：值传递、指针传递、结构体指针作为返回值。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">三种传递方式对比</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Point</span> {
+    <span class="c-keyword">int</span> x;
+    <span class="c-keyword">int</span> y;
+};
+
+<span class="c-comment">// 方式1：值传递 — 复制整个结构体（效率低）</span>
+<span class="c-keyword">void</span> <span class="c-function">print_point_value</span>(<span class="c-keyword">struct</span> <span class="c-variable">Point</span> p) {
+    <span class="c-function">printf</span>(<span class="c-string">"(%d, %d)\n"</span>, p.x, p.y);
+}
+
+<span class="c-comment">// 方式2：指针传递 — 只传地址（效率高，推荐）</span>
+<span class="c-keyword">void</span> <span class="c-function">print_point_ptr</span>(<span class="c-keyword">const</span> <span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p) {
+    <span class="c-function">printf</span>(<span class="c-string">"(%d, %d)\n"</span>, p->x, p->y);
+}
+
+<span class="c-comment">// 方式3：通过指针修改结构体</span>
+<span class="c-keyword">void</span> <span class="c-function">move_point</span>(<span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p, <span class="c-keyword">int</span> dx, <span class="c-keyword">int</span> dy) {
+    p->x += dx;
+    p->y += dy;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> <span class="c-variable">Point</span> p = {<span class="c-number">3</span>, <span class="c-number">4</span>};
+
+    <span class="c-function">print_point_value</span>(p);    <span class="c-comment">// 值传递</span>
+    <span class="c-function">print_point_ptr</span>(<span class="c-operator">&</span>p);     <span class="c-comment">// 指针传递</span>
+
+    <span class="c-function">move_point</span>(<span class="c-operator">&</span>p, <span class="c-number">10</span>, <span class="c-number">20</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"移动后: (%d, %d)\n"</span>, p.x, p.y);  <span class="c-comment">// 输出: (13, 24)</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>最佳实践：</strong>
+                        <ul>
+                            <li>如果只是读取数据，用 <code>const struct Point *p</code>，既高效又安全</li>
+                            <li>如果需要修改数据，用 <code>struct Point *p</code></li>
+                            <li>尽量避免值传递，结构体可能很大，复制开销高</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             联合体
+             ============================================================ -->
+        <section id="union" class="section">
+            <h2 class="section-title">联合体</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">联合体的概念</h3>
+                <div class="subsection-content">
+                    <p><strong>联合体（union）</strong>的声明方式与结构体类似，但有一个关键区别：联合体的所有成员<strong>共享同一块内存</strong>，同一时刻只能存储一个成员的值。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">联合体基本用法</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">union</span> <span class="c-variable">Data</span> {
+    <span class="c-keyword">int</span> i;
+    <span class="c-keyword">float</span> f;
+    <span class="c-keyword">char</span> str[<span class="c-number">20</span>];
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">union</span> <span class="c-variable">Data</span> data;
+
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(union Data) = %lu\n"</span>, <span class="c-keyword">sizeof</span>(data));
+    <span class="c-comment">// 输出: 20（最大成员 str[20] 的大小）</span>
+
+    <span class="c-comment">// 只能使用一个成员</span>
+    data.i = <span class="c-number">10</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"data.i = %d\n"</span>, data.i);  <span class="c-comment">// 输出: 10</span>
+
+    data.f = <span class="c-number">3.14</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"data.f = %.2f\n"</span>, data.f);  <span class="c-comment">// 输出: 3.14</span>
+    <span class="c-comment">// 此时 data.i 的值已被覆盖！</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>重要：</strong>
+                        <p>联合体中写入一个成员后，其他成员的值会变得不确定。必须确保读取的是最后写入的成员，否则会得到无意义的数据。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">struct 与 union 对比</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>特性</th>
+                                    <th>struct（结构体）</th>
+                                    <th>union（联合体）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>内存分配</td>
+                                    <td>各成员各自占用空间</td>
+                                    <td>所有成员共享空间</td>
+                                </tr>
+                                <tr>
+                                    <td>总大小</td>
+                                    <td>所有成员大小之和（考虑对齐）</td>
+                                    <td>最大成员的大小</td>
+                                </tr>
+                                <tr>
+                                    <td>同时存储</td>
+                                    <td>可以同时存储所有成员</td>
+                                    <td>同一时刻只能存一个成员</td>
+                                </tr>
+                                <tr>
+                                    <td>典型用途</td>
+                                    <td>组合不同类型的数据</td>
+                                    <td>节省内存、类型转换</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             枚举类型
+             ============================================================ -->
+        <section id="enum" class="section">
+            <h2 class="section-title">枚举类型</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">枚举的定义与使用</h3>
+                <div class="subsection-content">
+                    <p><strong>枚举（enum）</strong>用于定义一组有名字的整数常量，让代码更易读。比如用 <code>RED</code> 代替 <code>0</code>，用 <code>GREEN</code> 代替 <code>1</code>。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">枚举类型示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 定义枚举类型</span>
+<span class="c-keyword">enum</span> <span class="c-variable">Color</span> { RED, GREEN, BLUE };          <span class="c-comment">// 值: 0, 1, 2</span>
+<span class="c-keyword">enum</span> <span class="c-variable">Weekday</span> { MON=<span class="c-number">1</span>, TUE, WED, THU, FRI, SAT, SUN };  <span class="c-comment">// 值: 1~7</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">enum</span> <span class="c-variable">Color</span> c = GREEN;
+    <span class="c-function">printf</span>(<span class="c-string">"颜色值: %d\n"</span>, c);  <span class="c-comment">// 输出: 颜色值: 1</span>
+
+    <span class="c-keyword">enum</span> <span class="c-variable">Weekday</span> today = WED;
+    <span class="c-function">printf</span>(<span class="c-string">"星期三 = %d\n"</span>, today);  <span class="c-comment">// 输出: 星期三 = 3</span>
+
+    <span class="c-comment">// 用枚举让代码更易读</span>
+    <span class="c-keyword">if</span> (today == SAT || today == SUN) {
+        <span class="c-function">printf</span>(<span class="c-string">"周末！\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"工作日\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>枚举的要点：</strong>
+                        <ul>
+                            <li>默认从0开始，每个后续值加1</li>
+                            <li>可以指定起始值：<code>MON=1</code>，后续自动递增</li>
+                            <li>枚举值本质是 <code>int</code>，可以参与整数运算</li>
+                            <li>使用枚举代替"魔数"（如 <code>0</code>、<code>1</code>），代码更可读</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             typedef
+             ============================================================ -->
+        <section id="typedef" class="section">
+            <h2 class="section-title">typedef</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">用typedef简化类型名</h3>
+                <div class="subsection-content">
+                    <p><code>typedef</code> 用于给已有的类型起一个新名字（别名），让代码更简洁易读。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">typedef 使用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 给结构体起别名</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+} <span class="c-variable">Student</span>;
+
+<span class="c-comment">// 给枚举起别名</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { RED, GREEN, BLUE } <span class="c-variable">Color</span>;
+
+<span class="c-comment">// 给指针类型起别名</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">int</span> <span class="c-operator">*</span><span class="c-variable">IntPtr</span>;
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 不用再写 struct 关键字！</span>
+    <span class="c-variable">Student</span> stu = {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>};
+    <span class="c-variable">Color</span> c = GREEN;
+    <span class="c-variable">IntPtr</span> p = <span class="c-operator">&</span>stu.age;
+
+    <span class="c-function">printf</span>(<span class="c-string">"%s, %d岁, %.1f分\n"</span>, stu.name, stu.age, stu.score);
+    <span class="c-function">printf</span>(<span class="c-string">"颜色: %d\n"</span>, c);
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, <span class="c-operator">*</span>p);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <strong>typedef 的好处</strong>
+                            <ul>
+                                <li>简化冗长的类型名</li>
+                                <li>提高代码可读性</li>
+                                <li>方便跨平台移植</li>
+                                <li>省去 <code>struct</code> 关键字</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>常见用法</strong>
+                            <ul>
+                                <li><code>typedef struct {...} Name;</code></li>
+                                <li><code>typedef int BOOL;</code></li>
+                                <li><code>typedef void (*FuncPtr)(int);</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             练习题
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">练习题</h2>
+
+            <div class="practice-questions">
+                <h3 class="subsection-title">就地练习</h3>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 定义一个表示"图书"的结构体，包含书名、作者、价格和页数。编写程序输入3本书的信息并输出。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">图书信息管理</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> <span class="c-variable">Book</span> {
+    <span class="c-keyword">char</span> title[<span class="c-number">50</span>];
+    <span class="c-keyword">char</span> author[<span class="c-number">30</span>];
+    <span class="c-keyword">float</span> price;
+    <span class="c-keyword">int</span> pages;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> <span class="c-variable">Book</span> books[<span class="c-number">3</span>];
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"第%d本书:\n"</span>, i + <span class="c-number">1</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"  书名: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, books[i].title);
+        <span class="c-function">printf</span>(<span class="c-string">"  作者: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, books[i].author);
+        <span class="c-function">printf</span>(<span class="c-string">"  价格: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, <span class="c-operator">&</span>books[i].price);
+        <span class="c-function">printf</span>(<span class="c-string">"  页数: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>books[i].pages);
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"\n图书列表:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%s - %s, %.2f元, %d页\n"</span>,
+            books[i].title, books[i].author,
+            books[i].price, books[i].pages);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 编写函数，使用结构体指针作为参数，实现计算一组学生平均成绩的功能。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">计算平均成绩</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">float</span> score;
+} <span class="c-variable">Student</span>;
+
+<span class="c-keyword">float</span> <span class="c-function">average</span>(<span class="c-keyword">const</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>students, <span class="c-keyword">int</span> n) {
+    <span class="c-keyword">float</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        sum += (students + i)->score;
+    }
+    <span class="c-keyword">return</span> sum / n;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-variable">Student</span> class[] = {
+        {<span class="c-string">"张三"</span>, <span class="c-number">89.5</span>},
+        {<span class="c-string">"李四"</span>, <span class="c-number">92.0</span>},
+        {<span class="c-string">"王五"</span>, <span class="c-number">78.5</span>}
+    };
+    <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(class) / <span class="c-keyword">sizeof</span>(class[<span class="c-number">0</span>]);
+
+    <span class="c-function">printf</span>(<span class="c-string">"平均成绩: %.2f\n"</span>, <span class="c-function">average</span>(class, n));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 定义一个枚举表示季节（春、夏、秋、冬），编写函数根据月份返回对应的季节。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">月份判断季节</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { SPRING, SUMMER, AUTUMN, WINTER } <span class="c-variable">Season</span>;
+
+<span class="c-variable">Season</span> <span class="c-function">get_season</span>(<span class="c-keyword">int</span> month) {
+    <span class="c-keyword">if</span> (month >= <span class="c-number">3</span> && month <= <span class="c-number">5</span>)  <span class="c-keyword">return</span> SPRING;
+    <span class="c-keyword">if</span> (month >= <span class="c-number">6</span> && month <= <span class="c-number">8</span>)  <span class="c-keyword">return</span> SUMMER;
+    <span class="c-keyword">if</span> (month >= <span class="c-number">9</span> && month <= <span class="c-number">11</span>) <span class="c-keyword">return</span> AUTUMN;
+    <span class="c-keyword">return</span> WINTER;
+}
+
+<span class="c-keyword">const</span> <span class="c-keyword">char</span> <span class="c-operator">*</span><span class="c-function">season_name</span>(<span class="c-variable">Season</span> s) {
+    <span class="c-keyword">static</span> <span class="c-keyword">const</span> <span class="c-keyword">char</span> <span class="c-operator">*</span>names[] = {<span class="c-string">"春天"</span>, <span class="c-string">"夏天"</span>, <span class="c-string">"秋天"</span>, <span class="c-string">"冬天"</span>};
+    <span class="c-keyword">return</span> names[s];
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> month;
+    <span class="c-function">printf</span>(<span class="c-string">"输入月份(1-12): "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>month);
+
+    <span class="c-variable">Season</span> s = <span class="c-function">get_season</span>(month);
+    <span class="c-function">printf</span>(<span class="c-string">"%d月是%s\n"</span>, month, <span class="c-function">season_name</span>(s));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 使用联合体实现一个"万能数据容器"，可以存储 int、float 或字符串，并用枚举记录当前存储的数据类型。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">万能数据容器</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { TYPE_INT, TYPE_FLOAT, TYPE_STRING } <span class="c-variable">DataType</span>;
+
+<span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
+    <span class="c-variable">DataType</span> type;
+    <span class="c-keyword">union</span> {
+        <span class="c-keyword">int</span> i_val;
+        <span class="c-keyword">float</span> f_val;
+        <span class="c-keyword">char</span> str[<span class="c-number">50</span>];
+    } data;
+} <span class="c-variable">Value</span>;
+
+<span class="c-keyword">void</span> <span class="c-function">print_value</span>(<span class="c-keyword">const</span> <span class="c-variable">Value</span> <span class="c-operator">*</span>v) {
+    <span class="c-keyword">switch</span> (v->type) {
+        <span class="c-keyword">case</span> TYPE_INT:    <span class="c-function">printf</span>(<span class="c-string">"int: %d\n"</span>, v->data.i_val); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> TYPE_FLOAT:  <span class="c-function">printf</span>(<span class="c-string">"float: %.2f\n"</span>, v->data.f_val); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> TYPE_STRING: <span class="c-function">printf</span>(<span class="c-string">"string: %s\n"</span>, v->data.str); <span class="c-keyword">break</span>;
+    }
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-variable">Value</span> v1, v2, v3;
+
+    v1.type = TYPE_INT;
+    v1.data.i_val = <span class="c-number">42</span>;
+
+    v2.type = TYPE_FLOAT;
+    v2.data.f_val = <span class="c-number">3.14</span>;
+
+    v3.type = TYPE_STRING;
+    <span class="c-function">strcpy</span>(v3.data.str, <span class="c-string">"Hello"</span>);
+
+    <span class="c-function">print_value</span>(<span class="c-operator">&</span>v1);
+    <span class="c-function">print_value</span>(<span class="c-operator">&</span>v2);
+    <span class="c-function">print_value</span>(<span class="c-operator">&</span>v3);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="practice-hints">
+                <h3>练习提示</h3>
+                <ul>
+                    <li>结构体变量可以整体赋值，但不能用 <code>==</code> 比较是否相等</li>
+                    <li>结构体中包含字符数组时，不能用 <code>=</code> 赋值字符串，要用 <code>strcpy</code></li>
+                    <li>联合体常与枚举配合使用，用枚举记录当前有效成员</li>
+                    <li><code>typedef</code> 只是别名，不创建新类型</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             本章小结
+             ============================================================ -->
+        <section id="summary" class="section">
+            <h2 class="section-title">本章小结</h2>
+            <div class="subsection-content">
+                <h3>重点回顾</h3>
+                <ul>
+                    <li><strong>结构体定义：</strong>用 <code>struct</code> 将多个不同类型的数据组合在一起</li>
+                    <li><strong>成员访问：</strong>变量用 <code>.</code>，指针用 <code>-></code></li>
+                    <li><strong>结构体数组：</strong>存储多个同类型结构体，可排序</li>
+                    <li><strong>结构体指针：</strong>高效传递，避免复制整个结构体</li>
+                    <li><strong>联合体：</strong>所有成员共享内存，同一时刻只存一个值</li>
+                    <li><strong>枚举：</strong>定义有名字的整数常量，提高代码可读性</li>
+                    <li><strong>typedef：</strong>给类型起别名，简化代码</li>
+                </ul>
+
+                <div class="example-grid">
+                    <div class="example-item">
+                        <strong>访问方式速查</strong>
+                        <ul>
+                            <li>结构体变量：<code>stu.name</code></li>
+                            <li>结构体指针：<code>p->name</code></li>
+                            <li>等价关系：<code>p->name ≡ (*p).name</code></li>
+                        </ul>
+                    </div>
+                    <div class="example-item">
+                        <strong>自定义类型对比</strong>
+                        <ul>
+                            <li>struct：各成员独立存储</li>
+                            <li>union：共享内存，省空间</li>
+                            <li>enum：命名常量，更可读</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="callout-tip">
+                    <strong>准备好了吗？</strong>
+                    <p>下一章我们将学习<strong>位运算与文件操作</strong>——掌握底层位操作和文件读写，实现数据的持久化存储。这是C语言教程的最后一章！</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="tutorial.js"></script>
+</body>
+</html>

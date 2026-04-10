@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>★ 章节标题 ★ - C语言教程</title>
+    <link rel="stylesheet" href="template-styles.css">
+</head>
+<body>
+    <!-- SVG图标引用（如需使用图标，保留此段） -->
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+
+    <!-- ============================================================
+         侧边导航栏
+         - 每个li对应一个section的锚点
+         - 首项默认 .active
+         ============================================================ -->
+    <nav class="tutorial-nav">
+        <ul>
+            <li><a href="#intro" class="active">简介</a></li>
+            <li><a href="#section-1">第一节</a></li>
+            <li><a href="#section-2">第二节</a></li>
+            <li><a href="#practice">练习题</a></li>
+        </ul>
+    </nav>
+
+    <!-- ============================================================
+         主内容区域
+         ============================================================ -->
+    <main class="tutorial-content">
+
+        <!-- ===== 页面标题 ===== -->
+        <header class="tutorial-header">
+            <h1>★ 章节标题 ★</h1>
+            <p>★ 一句话描述本章内容 ★</p>
+        </header>
+
+
+        <!-- ============================================================
+             简介
+             ============================================================ -->
+        <section id="intro" class="section">
+            <h2 class="section-title">★ 章节简介标题 ★</h2>
+            <div class="subsection-content">
+                <p>★ 章节简介段落 ★</p>
+
+                <!-- 新手注意事项 -->
+                <div class="callout-note">
+                    <strong>新手注意：</strong>
+                    <ul>
+                        <li>★ 注意事项1 ★</li>
+                        <li>★ 注意事项2 ★</li>
+                    </ul>
+                </div>
+
+                <!-- 重要提示 -->
+                <div class="callout-tip">
+                    <strong>重要提示：</strong>
+                    <p>★ 提示内容 ★</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             第一节：带子章节的完整示例
+             ============================================================ -->
+        <section id="section-1" class="section">
+            <h2 class="section-title">★ 第一节标题 ★</h2>
+
+            <!-- 子章节 -->
+            <div class="subsection">
+                <h3 class="subsection-title">★ 子章节标题 ★</h3>
+                <div class="subsection-content">
+                    <p>★ 段落内容 ★，例如使用 <code>printf</code> 函数输出，或 <code>int</code> 类型声明。</p>
+
+                    <h4>★ h4小标题 ★</h4>
+                    <ul>
+                        <li><strong>加粗项：</strong>描述内容，引用 <code>代码</code></li>
+                        <li>普通列表项</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 代码块示例 -->
+            <div class="subsection">
+                <h3 class="subsection-title">★ 代码示例 ★</h3>
+                <div class="subsection-content">
+                    <div class="code-block">
+                        <div class="code-block-title">★ 代码标题 ★</div>
+                        <pre><code><span class="c-comment">// ★ 注释说明 ★</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"Hello, World!\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <!-- 提示框示例 -->
+                    <div class="callout-tip">
+                        <strong>提示：</strong>
+                        <p>★ 提示内容 ★</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 表格示例 -->
+            <div class="subsection">
+                <h3 class="subsection-title">★ 表格示例 ★</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>列标题1</th>
+                                <th>列标题2</th>
+                                <th>列标题3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="c-operator">+</span></td>
+                                <td>加法</td>
+                                <td><code>a + b</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="c-operator">-</span></td>
+                                <td>减法</td>
+                                <td><code>a - b</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             第二节：示例网格 + 警告框
+             ============================================================ -->
+        <section id="section-2" class="section">
+            <h2 class="section-title">★ 第二节标题 ★</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">★ 示例网格 ★</h3>
+                <div class="subsection-content">
+                    <p>★ 描述文字 ★</p>
+                </div>
+
+                <!-- 示例网格：3列自适应卡片 -->
+                <div class="example-grid">
+                    <div class="example-item">
+                        <strong>★ 卡片标题1 ★</strong>
+                        <ul>
+                            <li>★ 内容项1 ★</li>
+                            <li>★ 内容项2 ★</li>
+                        </ul>
+                    </div>
+                    <div class="example-item">
+                        <strong>★ 卡片标题2 ★</strong>
+                        <ul>
+                            <li>★ 内容项1 ★</li>
+                            <li>★ 内容项2 ★</li>
+                        </ul>
+                    </div>
+                    <div class="example-item">
+                        <strong>★ 卡片标题3 ★</strong>
+                        <ul>
+                            <li>★ 内容项1 ★</li>
+                            <li>★ 内容项2 ★</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 警告框 -->
+            <div class="subsection">
+                <h3 class="subsection-title">★ 注意事项 ★</h3>
+                <div class="subsection-content">
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>警告：</strong>
+                        <p>★ 警告内容 ★</p>
+                        <ul>
+                            <li>★ 警告项1 ★</li>
+                            <li>★ 警告项2 ★</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             练习题
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">★ 练习题 ★</h2>
+
+            <div class="practice-questions">
+                <h3 class="subsection-title">就地练习</h3>
+
+                <!-- 题目1 -->
+                <div class="question-item">
+                    <p><strong>练习1：</strong> ★ 题目描述 ★</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p><strong>★ 答案 ★</strong></p>
+                            <p>★ 答案说明 ★</p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 题目2 -->
+                <div class="question-item">
+                    <p><strong>练习2：</strong> ★ 题目描述 ★</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">★ 代码标题 ★</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// ★ 参考代码 ★</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 练习提示 -->
+            <div class="practice-hints">
+                <h3>★ 练习提示标题 ★</h3>
+                <ul>
+                    <li>★ 提示1 ★</li>
+                    <li>★ 提示2 ★</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             本章小结
+             ============================================================ -->
+        <section id="summary" class="section">
+            <h2 class="section-title">本章小结</h2>
+            <div class="subsection-content">
+                <h3>重点回顾</h3>
+                <ul>
+                    <li>★ 重点1 ★</li>
+                    <li>★ 重点2 ★</li>
+                </ul>
+
+                <div class="callout-tip">
+                    <strong>准备好了吗？</strong>
+                    <p>★ 下一章预告 ★</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 公共脚本 -->
+    <script src="tutorial.js"></script>
+</body>
+</html>
