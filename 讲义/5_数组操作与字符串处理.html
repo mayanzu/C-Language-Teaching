@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- SVG图标引用 -->
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+    
     <!-- 侧边导航栏 -->
     <nav class="tutorial-nav">
         <ul>
@@ -72,33 +79,33 @@
     <span class="c-keyword">int</span> i;
     <span class="c-comment">// 方式1：只声明不初始化（不推荐，元素值不确定）</span>
     <span class="c-keyword">int</span> a[<span class="c-number">5</span>];  <span class="c-comment">// 定义了5个int元素的数组，但未初始化</span>
-    
+
     <span class="c-comment">// 方式2：部分初始化（推荐，未赋值的元素自动初始化为0）</span>
     <span class="c-keyword">int</span> b[<span class="c-number">5</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>};  <span class="c-comment">// b[0]=1, b[1]=2, b[2]=3, b[3]=0, b[4]=0</span>
-    
+
     <span class="c-comment">// 方式3：完全初始化（推荐，可省略数组大小）</span>
     <span class="c-keyword">int</span> c[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};  <span class="c-comment">// 编译器自动计算大小为5</span>
-    
+
     <span class="c-comment">// 全部初始化为0（常用技巧）</span>
     <span class="c-keyword">int</span> d[<span class="c-number">5</span>] = {<span class="c-number">0</span>};  <span class="c-comment">// 所有元素都初始化为0</span>
-    
+
     <span class="c-comment">// 访问数组元素（下标从0开始）</span>
     b[<span class="c-number">3</span>] = <span class="c-number">10</span>;  <span class="c-comment">// 修改第4个元素（下标3）</span>
     <span class="c-function">printf</span>(<span class="c-string">"b[3] = %d\n"</span>, b[<span class="c-number">3</span>]);  <span class="c-comment">// 输出：b[3] = 10</span>
-    
+
     <span class="c-comment">// 遍历数组</span>
     <span class="c-function">printf</span>(<span class="c-string">"数组c: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, c[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
                         
                         <div class="callout-tip">
-                            <strong>⚠️ 常见错误：</strong>
+                            <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 常见错误：</strong>
                             <ul>
                                 <li>下标越界：访问a[5]时，如果数组只有5个元素（a[0]到a[4]），就会越界</li>
                                 <li>忘记初始化：未初始化的数组元素包含垃圾值</li>
@@ -122,13 +129,13 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> arr[<span class="c-number">10</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>, <span class="c-number">9</span>, <span class="c-number">10</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"偶数位置的元素: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">10</span>; i += <span class="c-number">2</span>) {  <span class="c-comment">// i为0, 2, 4, 6, 8</span>
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 <span class="c-comment">// 输出：偶数位置的元素: 1 3 5 7 9</span></code></pre>
@@ -148,13 +155,13 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">double</span> prices[<span class="c-number">5</span>] = {<span class="c-number">12.5</span>, <span class="c-number">8.9</span>, <span class="c-number">15.0</span>, <span class="c-number">6.8</span>, <span class="c-number">10.2</span>};
     <span class="c-keyword">double</span> total = <span class="c-number">0</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         total += prices[i];
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"总价格: %.2f元\n"</span>, total);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 <span class="c-comment">// 输出：总价格: 53.40元</span></code></pre>
@@ -188,17 +195,17 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[<span class="c-number">5</span>] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组名 arr 的地址: %p\n"</span>, arr);
     <span class="c-function">printf</span>(<span class="c-string">"arr[0] 的地址: %p\n"</span>, &arr[<span class="c-number">0</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"arr[1] 的地址: %p\n"</span>, &arr[<span class="c-number">1</span>]);
-    
+
     <span class="c-comment">// 数组名就是首元素地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"arr == &arr[0]: %s\n"</span>, arr == &arr[<span class="c-number">0</span>] ? <span class="c-string">"true"</span> : <span class="c-string">"false"</span>);
-    
+
     <span class="c-comment">// 指针运算</span>
     <span class="c-function">printf</span>(<span class="c-string">"*(arr + 2) = %d\n"</span>, *(arr + <span class="c-number">2</span>));  <span class="c-comment">// 等价于 arr[2]</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -240,18 +247,18 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[<span class="c-number">5</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
     <span class="c-keyword">double</span> darr[<span class="c-number">3</span>] = {<span class="c-number">1.1</span>, <span class="c-number">2.2</span>, <span class="c-number">3.3</span>};
-    
+
     <span class="c-comment">// 计算数组长度</span>
     <span class="c-keyword">int</span> int_size = (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(arr) / <span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);  <span class="c-comment">// 5</span>
     <span class="c-keyword">int</span> double_size = (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(darr) / <span class="c-keyword">sizeof</span>(darr[<span class="c-number">0</span>]); <span class="c-comment">// 3</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"int数组长度: %d\n"</span>, int_size);
     <span class="c-function">printf</span>(<span class="c-string">"double数组长度: %d\n"</span>, double_size);
-    
-    <span class="c-comment">// 数组占用%u数</span>
-    <span class="c-function">printf</span>(<span class="c-string">"int数组占用字节: %zu\n"</span>, <span class="c-keyword">sizeof</span>(arr));    <span class="c-comment">// 20字节 (5*4)</span>
-    <span class="c-function">printf<%uan>(<span class="c-string">"double数组占用字节: %zu\n"</span>, <span class="c-keyword">sizeof</span>(darr)); <span class="c-comment">// 24字节 (3*8)</span>
-    
+
+    <span class="c-comment">// 数组占用字节数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"int数组占用字节: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(arr));  <span class="c-comment">// 20字节 (5*4)</span>
+    <span class="c-function">printf</span>(<span class="c-string">"double数组占用字节: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(darr)); <span class="c-comment">// 24字节 (3*8)</span>
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -291,7 +298,7 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">double</span> scores[<span class="c-number">5</span>];
     <span class="c-keyword">double</span> sum = <span class="c-number">0</span>, average, max_score, min_score;
-    
+
     <span class="c-comment">// 输入成绩</span>
     <span class="c-function">printf</span>(<span class="c-string">"请输入5个学生的成绩:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
@@ -299,22 +306,22 @@
         <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &scores[i]);
         sum += scores[i];
     }
-    
+
     <span class="c-comment">// 计算平均分</span>
     average = sum / <span class="c-number">5</span>;
-    
+
     <span class="c-comment">// 找出最高分和最低分</span>
     max_score = min_score = scores[<span class="c-number">0</span>];
     <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-keyword">if</span>(scores[i] > max_score) max_score = scores[i];
         <span class="c-keyword">if</span>(scores[i] < min_score) min_score = scores[i];
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n成绩统计:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"平均分: %.2f\n"</span>, average);
     <span class="c-function">printf</span>(<span class="c-string">"最高分: %.2f\n"</span>, max_score);
     <span class="c-function">printf</span>(<span class="c-string">"最低分: %.2f\n"</span>, min_score);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -329,16 +336,16 @@
     <span class="c-keyword">int</span> numbers[] = {<span class="c-number">12</span>, <span class="c-number">45</span>, <span class="c-number">23</span>, <span class="c-number">67</span>, <span class="c-number">89</span>, <span class="c-number">34</span>, <span class="c-number">56</span>};
     <span class="c-keyword">int</span> target, found = <span class="c-number">0</span>, position = -<span class="c-number">1</span>;
     <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(numbers) / <span class="c-keyword">sizeof</span>(numbers[<span class="c-number">0</span>]);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组元素: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, numbers[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入要查找的数字: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &target);
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < size; i++) {
         <span class="c-keyword">if</span>(numbers[i] == target) {
             found = <span class="c-number">1</span>;
@@ -346,13 +353,13 @@
             <span class="c-keyword">break</span>;  <span class="c-comment">// 找到后停止查找</span>
         }
     }
-    
+
     <span class="c-keyword">if</span>(found) {
         <span class="c-function">printf</span>(<span class="c-string">"找到了！位置是第%d个元素（下标%d）\n"</span>, position + <span class="c-number">1</span>, position);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"没有找到该元素\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -370,7 +377,7 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">15</span>, <span class="c-number">22</span>, <span class="c-number">8</span>, <span class="c-number">35</span>, <span class="c-number">42</span>, <span class="c-number">19</span>};
     <span class="c-keyword">int</span> len = <span class="c-keyword">sizeof</span>(arr)/<span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]), sum=<span class="c-number">0</span>, cnt=<span class="c-number">0</span>;
-    
+
     <span class="c-keyword">for</span> (i=<span class="c-number">0</span>; i<len; i++) sum += arr[i];
     <span class="c-keyword">double</span> avg = (<span class="c-keyword">double</span>)sum/len;
     <span class="c-keyword">for</span> (i=<span class="c-number">0</span>; i<len; i++) <span class="c-keyword">if</span> (arr[i] > avg) cnt++;
@@ -407,17 +414,17 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-comment">// 访问二维数组元素</span>
     <span class="c-function">printf</span>(<span class="c-string">"matrix[1][2] = %d\n"</span>, matrix[<span class="c-number">1</span>][<span class="c-number">2</span>]);  <span class="c-comment">// 输出：7</span>
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j < <span class="c-number">4</span>; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, matrix[i][j]);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -523,18 +530,18 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"matrix 的地址: %p\n"</span>, matrix);
     <span class="c-function">printf</span>(<span class="c-string">"matrix[0] 的地址: %p\n"</span>, matrix[<span class="c-number">0</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"matrix[1] 的地址: %p\n"</span>, matrix[<span class="c-number">1</span>]);
-    
+
     <span class="c-comment">// matrix[i] 等价于 &matrix[i][0]</span>
-    <span class="c-function">printf</span>(<span class="c-string">"matrix[1] == &matrix[1][0]: %s\n"</span>, 
+    <span class="c-function">printf</span>(<span class="c-string">"matrix[1] == &matrix[1][0]: %s\n"</span>,
            matrix[<span class="c-number">1</span>] == &matrix[<span class="c-number">1</span>][<span class="c-number">0</span>] ? <span class="c-string">"true"</span> : <span class="c-string">"false"</span>);
-    
+
     <span class="c-comment">// 指针访问方式</span>
     <span class="c-function">printf</span>(<span class="c-string">"*(*(matrix + 1) + 2) = %d\n"</span>, *(*(matrix + <span class="c-number">1</span>) + <span class="c-number">2</span>));  <span class="c-comment">// matrix[1][2]</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -577,7 +584,7 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原矩阵 (3x4):\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j < <span class="c-number">4</span>; j++) {
@@ -585,7 +592,7 @@
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
-    
+
     <span class="c-comment">// 转置矩阵 (3x4 -> 4x3)</span>
     <span class="c-keyword">int</span> transpose[<span class="c-number">4</span>][<span class="c-number">3</span>];
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">4</span>; i++) {
@@ -593,7 +600,7 @@
             transpose[i][j] = matrix[j][i];
         }
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n转置后的矩阵 (4x3):\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">4</span>; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j < <span class="c-number">3</span>; j++) {
@@ -601,7 +608,7 @@
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -615,7 +622,7 @@
     <span class="c-keyword">int</span> i, j;
     <span class="c-keyword">double</span> scores[<span class="c-number">3</span>][<span class="c-number">4</span>];  <span class="c-comment">// 3个学生，4门科目</span>
     <span class="c-keyword">char</span> subjects[<span class="c-number">4</span>][<span class="c-number">20</span>] = {<span class="c-string">"语文"</span>, <span class="c-string">"数学"</span>, <span class="c-string">"英语"</span>, <span class="c-string">"物理"</span>};
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"请输入学生%d的成绩:\n"</span>, i+<span class="c-number">1</span>);
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j < <span class="c-number">4</span>; j++) {
@@ -623,7 +630,7 @@
             <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &scores[i][j]);
         }
     }
-    
+
     <span class="c-comment">// 输出成绩表</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n成绩表:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"%-8s"</span>, <span class="c-string">"学号"</span>);
@@ -640,7 +647,7 @@
         }
         <span class="c-function">printf</span>(<span class="c-string">"%-8.1f\n"</span>, sum / <span class="c-number">4</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -659,8 +666,8 @@
     <span class="c-keyword">int</span> m[<span class="c-number">3</span>][<span class="c-number">3</span>] = {{<span class="c-number">1</span>,<span class="c-number">2</span>,<span class="c-number">3</span>}, {<span class="c-number">4</span>,<span class="c-number">5</span>,<span class="c-number">6</span>}, {<span class="c-number">7</span>,<span class="c-number">8</span>,<span class="c-number">9</span>}};
     <span class="c-keyword">int</span> main_diag=<span class="c-number">0</span>, sub_diag=<span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i=<span class="c-number">0</span>; i<<span class="c-number">3</span>; i++) {
-        main_diag += m[i][i];           <span class="c-comment">// 主对角线</span>
-        sub_diag += m[i][<span class="c-number">2</span>-i];        <span class="c-comment">// 副对角线</span>
+        main_diag += m[i][i];  <span class="c-comment">// 主对角线</span>
+        sub_diag += m[i][<span class="c-number">2</span>-i];  <span class="c-comment">// 副对角线</span>
     }
     <span class="c-function">printf</span>(<span class="c-string">"主对角线和=%d, 副对角线和=%d\n"</span>, main_diag, sub_diag);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -700,35 +707,35 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 方式1：字符串字面量初始化（推荐）</span>
     <span class="c-keyword">char</span> str1[] = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 编译器自动添加'\0'，实际长度为6</span>
-    
+
     <span class="c-comment">// 方式2：指定数组大小</span>
     <span class="c-keyword">char</span> str2[<span class="c-number">10</span>] = <span class="c-string">"World"</span>;  <span class="c-comment">// 数组大小为10，"World"占6个字符（含'\0'）</span>
-    
+
     <span class="c-comment">// 方式3：字符逐个初始化（必须手动添加'\0'）</span>
     <span class="c-keyword">char</span> str3[] = {<span class="c-string">'H'</span>, <span class="c-string">'i'</span>, <span class="c-string">'\0'</span>};  <span class="c-comment">// 忘记'\0'就不是字符串了！</span>
-    
+
     <span class="c-comment">// 错误示例：没有'\0'的字符数组</span>
     <span class="c-keyword">char</span> notStr[] = {<span class="c-string">'A'</span>, <span class="c-string">'B'</span>, <span class="c-string">'C'</span>};  <span class="c-comment">// 不是字符串！用%s输出会出错</span>
-    
+
     <span class="c-comment">// 输出字符串</span>
     <span class="c-function">printf</span>(<span class="c-string">"str1: %s (长度: %u)\n"</span>, str1, <span class="c-function">strlen</span>(str1));
     <span class="c-function">printf</span>(<span class="c-string">"str2: %s (长度: %u)\n"</span>, str2, <span class="c-function">strlen</span>(str2));
     <span class="c-function">printf</span>(<span class="c-string">"str3: %s (长度: %u)\n"</span>, str3, <span class="c-function">strlen</span>(str3));
-    
+
     <span class="c-comment">// 访问单个字符</span>
     <span class="c-function">printf</span>(<span class="c-string">"str1的第一个字符: %c\n"</span>, str1[<span class="c-number">0</span>]);  <span class="c-comment">// 'H'</span>
-    <span class="c-function">printf</span>(<span class="c-string">"str1的结束符: %d\n"</span>, str1[<span class="c-number">5</span>]);    <span class="c-comment">// 0（'\0'的ASCII码）</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"str1的结束符: %d\n"</span>, str1[<span class="c-number">5</span>]);  <span class="c-comment">// 0（'\0'的ASCII码）</span>
+
     <span class="c-comment">// 修改字符串中的字符</span>
     str1[<span class="c-number">0</span>] = <span class="c-string">'h'</span>;
     <span class="c-function">printf</span>(<span class="c-string">"修改后的str1: %s\n"</span>, str1);  <span class="c-comment">// "hello"</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
                         
                         <div class="callout-tip">
-                            <strong>⚠️ 重要提示：</strong>
+                            <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 重要提示：</strong>
                             <ul>
                                 <li><code>strlen()</code>返回的是字符串中有效字符的个数，不包括'\0'</li>
                                 <li><code>sizeof()</code>返回的是数组占用的总字节数，包括'\0'</li>
@@ -750,19 +757,19 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">char</span> str[<span class="c-number">50</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个字符串: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"strlen(str) = %u (有效字符数)\n"</span>, <span class="c-function">strlen</span>(str));
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(str) = %u (数组总大小)\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(str));
-    
+
     <span class="c-comment">// 输出每个字符的ASCII码</span>
     <span class="c-function">printf</span>(<span class="c-string">"字符详细信息:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i <= <span class="c-function">strlen</span>(str); i++) {
         <span class="c-function">printf</span>(<span class="c-string">"str[%d] = '%c' (ASCII: %d)\n"</span>, i, str[i], str[i]);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -781,22 +788,22 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">char</span> str[<span class="c-number">100</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个字符串: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str);
-    
+
     <span class="c-keyword">int</span> len = <span class="c-function">strlen</span>(str);
     <span class="c-function">printf</span>(<span class="c-string">"原字符串: %s\n"</span>, str);
-    
+
     <span class="c-comment">// 交换字符</span>
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>, j = len - <span class="c-number">1</span>; i < j; i++, j--) {
         <span class="c-keyword">char</span> temp = str[i];
         str[i] = str[j];
         str[j] = temp;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"反转后: %s\n"</span>, str);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -831,18 +838,18 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">char</span> str1[] = <span class="c-string">"Hello"</span>;        <span class="c-comment">// 自动确定大小：6字节</span>
-    <span class="c-keyword">char</span> str2[<span class="c-number">10</span>] = <span class="c-string">"Hello"</span>;   <span class="c-comment">// 指定大小：10字节</span>
-    
-    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %u\n"</span>, <span class="c-function">strlen</span>(str1));     <span class="c-comment">// 5 (不含'\0')</span>
+    <span class="c-keyword">char</span> str1[] = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 自动确定大小：6字节</span>
+    <span class="c-keyword">char</span> str2[<span class="c-number">10</span>] = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 指定大小：10字节</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %u\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5 (不含'\0')</span>
     <span class="c-function">printf</span>(<span class="c-string">"str1数组大小: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(str1)); <span class="c-comment">// 6 (含'\0')</span>
-    
-    <span class="c-function">printf</span>(<span class="c-string">"str2长度: %u\n"</span>, <span class="c-function">strlen</span>(str2));     <span class="c-comment">// 5</span>
-    <span class="c-function">printf</span>(<span class="c-string">"str2数组大小: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(str2)); <span class="c-comment">// 10</span>
-    
+
+    <span class="c-function">printf</span>(<span class="c-string">"str2长度: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-function">strlen</span>(str2));  <span class="c-comment">// 5</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str2数组大小: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(str2)); <span class="c-comment">// 10</span>
+
     <span class="c-comment">// 显示str2的剩余空间</span>
-    <span class="c-function">pri%u</span>(<span class="c-string">"str2剩余空间: %zu\n"</span>, <span class="c-keyword">sizeof</span>(str2) - <span class="c-function">strlen</span>(str2) - <span class="c-number">1</span>);
-    
+    <span class="c-function">printf</span>(<span class="c-string">"str2剩余空间: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">sizeof</span>(str2) - <span class="c-function">strlen</span>(str2) - <span class="c-number">1</span>));
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -857,10 +864,10 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">char</span> a[] = <span class="c-string">"Hello"</span>;           <span class="c-comment">// 6字节(含\0)</span>
-    <span class="c-keyword">char</span> b[<span class="c-number">10</span>] = <span class="c-string">"Hi"</span>;        <span class="c-comment">// 10字节</span>
+    <span class="c-keyword">char</span> a[] = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 6字节(含\0)</span>
+    <span class="c-keyword">char</span> b[<span class="c-number">10</span>] = <span class="c-string">"Hi"</span>;  <span class="c-comment">// 10字节</span>
     <span class="c-keyword">char</span> c[] = {<span class="c-string">'C'</span>,<span class="c-string">'"</span><span class="c-string">'</span>,<span class="c-string">' '</span>,<span class="c-string">'L'</span>,<span class="c-string">'a'</span>,<span class="c-string">'n'</span>,<span class="c-string">'g'</span>,<span class="c-string">'"</span><span class="c-string">'</span>,<span class="c-string">'\0'</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"a: strlen=%u, sizeof=%u\n"</span>, <span class="c-function">strlen</span>(a), (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(a));
     <span class="c-function">printf</span>(<span class="c-string">"b: strlen=%u, sizeof=%u\n"</span>, <span class="c-function">strlen</span>(b), (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(b));
     <span class="c-function">printf</span>(<span class="c-string">"c: strlen=%u, sizeof=%u\n"</span>, <span class="c-function">strlen</span>(c), (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(c));
@@ -885,22 +892,22 @@
     <span class="c-keyword">char</span> str1[<span class="c-number">20</span>];
     <span class="c-keyword">char</span> str2[<span class="c-number">20</span>];
     <span class="c-keyword">char</span> str3[<span class="c-number">20</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入字符串1 (scanf): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str1);  <span class="c-comment">// 遇到空格停止</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入字符串2 (fgets): "</span>);
     <span class="c-function">getchar</span>();  <span class="c-comment">// 吸收换行符</span>
     <span class="c-function">fgets</span>(str2, <span class="c-keyword">sizeof</span>(str2), stdin);  <span class="c-comment">// 可以输入带空格的字符串（推荐）</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入字符串3 (fgets): "</span>);
     <span class="c-function">fgets</span>(str3, <span class="c-keyword">sizeof</span>(str3), stdin);  <span class="c-comment">// 更安全的方法</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n输入结果:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"str1: '%s'\n"</span>, str1);
     <span class="c-function">printf</span>(<span class="c-string">"str2: '%s'\n"</span>, str2);
     <span class="c-function">printf</span>(<span class="c-string">"str3: '%s'\n"</span>, str3);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -915,17 +922,17 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">char</span> sentence[<span class="c-number">100</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个句子: "</span>);
     <span class="c-function">fgets</span>(sentence, <span class="c-keyword">sizeof</span>(sentence), stdin);
-    
+
     <span class="c-comment">// 移除换行符</span>
     <span class="c-keyword">if</span> (sentence[<span class="c-function">strlen</span>(sentence) - <span class="c-number">1</span>] == <span class="c-string">'\n'</span>) {
         sentence[<span class="c-function">strlen</span>(sentence) - <span class="c-number">1</span>] = <span class="c-string">'\0'</span>;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"句子长度: %u\n"</span>, <span class="c-function">strlen</span>(sentence));
-    
+
     <span class="c-comment">// 统计字母、数字、空格的数量</span>
     <span class="c-keyword">int</span> letters = <span class="c-number">0</span>, digits = <span class="c-number">0</span>, spaces = <span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; sentence[i] != <span class="c-string">'\0'</span>; i++) {
@@ -933,17 +940,17 @@
         <span class="c-keyword">else</span> <span class="c-keyword">if</span> (<span class="c-function">isdigit</span>(sentence[i])) digits++;
         <span class="c-keyword">else</span> <span class="c-keyword">if</span> (sentence[i] == <span class="c-string">' '</span>) spaces++;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"字母数: %d\n"</span>, letters);
     <span class="c-function">printf</span>(<span class="c-string">"数字数: %d\n"</span>, digits);
     <span class="c-function">printf</span>(<span class="c-string">"空格数: %d\n"</span>, spaces);
-    
+
     <span class="c-comment">// 将句子转换为大写</span>
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; sentence[i] != <span class="c-string">'\0'</span>; i++) {
         sentence[i] = <span class="c-function">toupper</span>(sentence[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"大写: %s\n"</span>, sentence);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -962,7 +969,7 @@
     <span class="c-keyword">char</span> line[<span class="c-number">200</span>];
     <span class="c-function">printf</span>(<span class="c-string">"请输入一行文本: "</span>);
     <span class="c-function">fgets</span>(line, <span class="c-keyword">sizeof</span>(line), stdin);
-    
+
     <span class="c-keyword">int</span> inWord = <span class="c-number">0</span>, count = <span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i =<span class="c-number">0</span>; line[i] != <span class="c-string">'\0'</span>; i++) {
         <span class="c-keyword">if</span> (<span class="c-function">isalnum</span>(line[i])) {
@@ -1001,22 +1008,22 @@
     <span class="c-keyword">char</span> str1[<span class="c-number">20</span>] = <span class="c-string">"Hello"</span>;
     <span class="c-keyword">char</span> str2[<span class="c-number">20</span>] = <span class="c-string">"World"</span>;
     <span class="c-keyword">char</span> str3[<span class="c-number">20</span>];
-    
+
     <span class="c-comment">// 字符串长度</span>
     <span class="c-function">printf</span>(<span class="c-string">"strlen(str1): %u\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
-    
+
     <span class="c-comment">// 字符串复制</span>
     <span class="c-function">strcpy</span>(str3, str1);
     <span class="c-function">printf</span>(<span class="c-string">"str3: %s\n"</span>, str3);  <span class="c-comment">// "Hello"</span>
-    
+
     <span class="c-comment">// 字符串连接</span>
     <span class="c-function">strcat</span>(str1, str2);
     <span class="c-function">printf</span>(<span class="c-string">"str1 + str2: %s\n"</span>, str1);  <span class="c-comment">// "HelloWorld"</span>
-    
+
     <span class="c-comment">// 字符串比较</span>
     <span class="c-keyword">int</span> cmp = <span class="c-function">strcmp</span>(<span class="c-string">"abc"</span>, <span class="c-string">"abd"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"strcmp result: %d\n"</span>, cmp);  <span class="c-comment">// 负数</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1135,38 +1142,38 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> text[<span class="c-number">100</span>] = <span class="c-string">"Hello World, Hello C Programming"</span>;
     <span class="c-keyword">char</span> *pos;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原字符串: %s\n"</span>, text);
-    
+
     <span class="c-comment">// 查找子串</span>
     pos = <span class="c-function">strstr</span>(text, <span class="c-string">"Hello"</span>);
     <span class="c-keyword">if</span> (pos != NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"找到了 'Hello' 在位置: %ld\n"</span>, pos - text);
     }
-    
+
     <span class="c-comment">// 查找字符</span>
     pos = <span class="c-function">strchr</span>(text, <span class="c-string">'W'</span>);
     <span class="c-keyword">if</span> (pos != NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"找到了 'W' 在位置: %ld\n"</span>, pos - text);
     }
-    
+
     <span class="c-comment">// 反向查找字符</span>
     pos = <span class="c-function">strrchr</span>(text, <span class="c-string">'l'</span>);
     <span class="c-keyword">if</span> (pos != NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"最后一个 'l' 在位置: %ld\n"</span>, pos - text);
     }
-    
+
     <span class="c-comment">// 字符串分割示例</span>
     <span class="c-keyword">char</span> sentence[<span class="c-number">100</span>] = <span class="c-string">"apple,banana,orange"</span>;
     <span class="c-keyword">char</span> *token;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n分割字符串 '%s':\n"</span>, sentence);
     token = <span class="c-function">strtok</span>(sentence, <span class="c-string">","</span>);
     <span class="c-keyword">while</span> (token != NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"%s\n"</span>, token);
         token = <span class="c-function">strtok</span>(NULL, <span class="c-string">","</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1181,28 +1188,28 @@
 <span class="c-keyword">int</span> <span class="c-function">checkPasswordStrength</span>(<span class="c-keyword">const</span> <span class="c-keyword">char</span> *password) {
     <span class="c-keyword">int</span> length = <span class="c-function">strlen</span>(password);
     <span class="c-keyword">int</span> has_upper = <span class="c-number">0</span>, has_lower = <span class="c-number">0</span>, has_digit = <span class="c-number">0</span>, has_special = <span class="c-number">0</span>;
-    
+
     <span class="c-keyword">if</span> (length < <span class="c-number">8</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;  <span class="c-comment">// 太短</span>
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < length; i++) {
         <span class="c-keyword">if</span> (<span class="c-function">isupper</span>(password[i])) has_upper = <span class="c-number">1</span>;
         <span class="c-keyword">else</span> <span class="c-keyword">if</span> (<span class="c-function">islower</span>(password[i])) has_lower = <span class="c-number">1</span>;
         <span class="c-keyword">else</span> <span class="c-keyword">if</span> (<span class="c-function">isdigit</span>(password[i])) has_digit = <span class="c-number">1</span>;
         <span class="c-keyword">else</span> has_special = <span class="c-number">1</span>;
     }
-    
+
     <span class="c-keyword">int</span> score = has_upper + has_lower + has_digit + has_special;
     <span class="c-keyword">return</span> score;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> password[<span class="c-number">50</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入密码: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, password);
-    
+
     <span class="c-keyword">int</span> strength = <span class="c-function">checkPasswordStrength</span>(password);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"密码强度: "</span>);
     <span class="c-keyword">switch</span>(strength) {
         <span class="c-keyword">case</span> <span class="c-number">0</span>:
@@ -1219,7 +1226,7 @@
             <span class="c-function">printf</span>(<span class="c-string">"强\n"</span>);
             <span class="c-keyword">break</span>;
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1284,15 +1291,15 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">64</span>, <span class="c-number">34</span>, <span class="c-number">25</span>, <span class="c-number">12</span>, <span class="c-number">22</span>, <span class="c-number">11</span>, <span class="c-number">90</span>};
     <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(arr)/<span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
-    
+
     <span class="c-function">bubbleSort</span>(arr, n);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"排序后数组: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1363,7 +1370,7 @@
     <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i &lt; n; i++) {
         <span class="c-keyword">int</span> key = arr[i];
         <span class="c-keyword">int</span> j = i - <span class="c-number">1</span>;
-        
+
         <span class="c-keyword">while</span>(j >= <span class="c-number">0</span> && arr[j] > key) {
             arr[j + <span class="c-number">1</span>] = arr[j];
             j = j - <span class="c-number">1</span>;
@@ -1384,21 +1391,21 @@
     <span class="c-keyword">int</span> arr2[] = {<span class="c-number">12</span>, <span class="c-number">11</span>, <span class="c-number">13</span>, <span class="c-number">5</span>, <span class="c-number">6</span>};
     <span class="c-keyword">int</span> n1 = <span class="c-keyword">sizeof</span>(arr1)/<span class="c-keyword">sizeof</span>(arr1[<span class="c-number">0</span>]);
     <span class="c-keyword">int</span> n2 = <span class="c-keyword">sizeof</span>(arr2)/<span class="c-keyword">sizeof</span>(arr2[<span class="c-number">0</span>]);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"选择排序:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"原数组: "</span>);
     <span class="c-function">printArray</span>(arr1, n1);
     <span class="c-function">selectionSort</span>(arr1, n1);
     <span class="c-function">printf</span>(<span class="c-string">"排序后: "</span>);
     <span class="c-function">printArray</span>(arr1, n1);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n插入排序:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"原数组: "</span>);
     <span class="c-function">printArray</span>(arr2, n2);
     <span class="c-function">insertionSort</span>(arr2, n2);
     <span class="c-function">printf</span>(<span class="c-string">"排序后: "</span>);
     <span class="c-function">printArray</span>(arr2, n2);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1416,18 +1423,18 @@
 <span class="c-keyword">int</span> <span class="c-function">binarySearch</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> left, <span class="c-keyword">int</span> right, <span class="c-keyword">int</span> target) {
     <span class="c-keyword">while</span> (left <= right) {
         <span class="c-keyword">int</span> mid = left + (right - left) / <span class="c-number">2</span>;
-        
+
         <span class="c-keyword">if</span> (arr[mid] == target) {
             <span class="c-keyword">return</span> mid;  <span class="c-comment">// 找到目标</span>
         }
-        
+
         <span class="c-keyword">if</span> (arr[mid] < target) {
             left = mid + <span class="c-number">1</span>;  <span class="c-comment">// 在右半部分查找</span>
         } <span class="c-keyword">else</span> {
             right = mid - <span class="c-number">1</span>;  <span class="c-comment">// 在左半部分查找</span>
         }
     }
-    
+
     <span class="c-keyword">return</span> -<span class="c-number">1</span>;  <span class="c-comment">// 没有找到</span>
 }
 
@@ -1436,24 +1443,24 @@
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">10</span>, <span class="c-number">40</span>, <span class="c-number">50</span>, <span class="c-number">60</span>, <span class="c-number">70</span>};
     <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(arr)/<span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
     <span class="c-keyword">int</span> target;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组元素: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入要查找的数字: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &target);
-    
+
     <span class="c-keyword">int</span> result = <span class="c-function">binarySearch</span>(arr, <span class="c-number">0</span>, n-<span class="c-number">1</span>, target);
-    
+
     <span class="c-keyword">if</span> (result != -<span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"元素 %d 找到在位置 %d\n"</span>, target, result);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"元素 %d 没有找到\n"</span>, target);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1468,21 +1475,21 @@
     <span class="c-keyword">int</span> sum = <span class="c-number">0</span>, max_val = INT_MIN, min_val = INT_MAX;
     <span class="c-keyword">int</span> even_count = <span class="c-number">0</span>, odd_count = <span class="c-number">0</span>;
     <span class="c-keyword">int</span> positive_count = <span class="c-number">0</span>, negative_count = <span class="c-number">0</span>, zero_count = <span class="c-number">0</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; n; i++) {
         sum += arr[i];
-        
+
         <span class="c-keyword">if</span>(arr[i] > max_val) max_val = arr[i];
         <span class="c-keyword">if</span>(arr[i] < min_val) min_val = arr[i];
-        
+
         <span class="c-keyword">if</span>(arr[i] % <span class="c-number">2</span> == <span class="c-number">0</span>) even_count++;
         <span class="c-keyword">else</span> odd_count++;
-        
+
         <span class="c-keyword">if</span>(arr[i] > <span class="c-number">0</span>) positive_count++;
         <span class="c-keyword">else</span> <span class="c-keyword">if</span>(arr[i] < <span class="c-number">0</span>) negative_count++;
         <span class="c-keyword">else</span> zero_count++;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组统计结果:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"总和: %d\n"</span>, sum);
     <span class="c-function">printf</span>(<span class="c-string">"平均值: %.2f\n"</span>, (<span class="c-keyword">double</span>)sum / n);
@@ -1499,15 +1506,15 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">12</span>, -<span class="c-number">5</span>, <span class="c-number">0</span>, <span class="c-number">8</span>, -<span class="c-number">3</span>, <span class="c-number">15</span>, <span class="c-number">7</span>, <span class="c-number">0</span>, -<span class="c-number">9</span>, <span class="c-number">22</span>};
     <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(arr)/<span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始数组: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n\n"</span>);
-    
+
     <span class="c-function">analyzeArray</span>(arr, n);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>

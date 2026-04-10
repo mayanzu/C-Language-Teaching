@@ -86,23 +86,23 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 简单文本输出 - 不需要格式说明符</span>
     <span class="c-function">printf</span>(<span class="c-string">"Hello, World!\n"</span>);
-    
+
     <span class="c-comment">// 格式化输出整数</span>
     <span class="c-keyword">int</span> age = <span class="c-number">20</span>;
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);  <span class="c-comment">// %d是整数的格式说明符</span>
-    
+
     <span class="c-comment">// 格式化输出浮点数</span>
     <span class="c-keyword">float</span> height = <span class="c-number">1.75</span>;
     <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f 米\n"</span>, height);  <span class="c-comment">// %.2f保留2位小数</span>
-    
+
     <span class="c-comment">// 格式化输出字符</span>
     <span class="c-keyword">char</span> grade = <span class="c-string">'A'</span>;
     <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);  <span class="c-comment">// %c是字符的格式说明符</span>
-    
+
     <span class="c-comment">// 一次输出多个变量</span>
     <span class="c-keyword">int</span> score = <span class="c-number">95</span>;
     <span class="c-function">printf</span>(<span class="c-string">"学生年龄%d岁，成绩%d分，等级%c\n"</span>, age, score, grade);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -131,11 +131,11 @@
     <span class="c-keyword">char</span> name[] = <span class="c-string">"小明"</span>;
     <span class="c-keyword">int</span> age = <span class="c-number">18</span>;
     <span class="c-keyword">int</span> luckyNumber = <span class="c-number">7</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"我叫%s\n"</span>, name);
     <span class="c-function">printf</span>(<span class="c-string">"我今年%d岁\n"</span>, age);
     <span class="c-function">printf</span>(<span class="c-string">"我喜欢的数字是%d\n"</span>, luckyNumber);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -154,10 +154,10 @@
     <span class="c-keyword">float</span> length = <span class="c-number">5.5</span>;
     <span class="c-keyword">float</span> width = <span class="c-number">3.2</span>;
     <span class="c-keyword">float</span> area = length * width;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"矩形长%.1f米，宽%.1f米\n"</span>, length, width);
     <span class="c-function">printf</span>(<span class="c-string">"面积为%.1f平方米\n"</span>, area);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -228,19 +228,19 @@
     <span class="c-keyword">float</span> score = <span class="c-number">95.5</span>;
     <span class="c-keyword">char</span> grade = <span class="c-string">'A'</span>;
     <span class="c-keyword">char</span> name[<span class="c-number">20</span>] = <span class="c-string">"小明"</span>;
-    
+
     <span class="c-comment">// 基本格式输出</span>
     <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, name);
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d 岁\n"</span>, age);
     <span class="c-function">printf</span>(<span class="c-string">"成绩: %.1f 分\n"</span>, score);
     <span class="c-function">printf</span>(<span class="c-string">"等级: %c 级\n"</span>, grade);
-    
+
     <span class="c-comment">// 多个变量一起输出</span>
     <span class="c-function">printf</span>(<span class="c-string">"%s今年%d岁，成绩%.1f分，等级%c\n"</span>, name, age, score, grade);
-    
+
     <span class="c-comment">// 输出百分号</span>
     <span class="c-function">printf</span>(<span class="c-string">"完成度: 100%%\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -258,18 +258,18 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num1 = <span class="c-number">42</span>, num2 = <span class="c-number">123</span>;
-    
+
     <span class="c-comment">// 宽度控制 - 右对齐</span>
-    <span class="c-function">printf</span>(<span class="c-string">"右对齐: '%5d'\n"</span>, num1);    <span class="c-comment">// '   42'</span>
-    <span class="c-function">printf</span>(<span class="c-string">"右对齐: '%5d'\n"</span>, num2);    <span class="c-comment">// '  123'</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"右对齐: '%5d'\n"</span>, num1);  <span class="c-comment">// '   42'</span>
+    <span class="c-function">printf</span>(<span class="c-string">"右对齐: '%5d'\n"</span>, num2);  <span class="c-comment">// '  123'</span>
+
     <span class="c-comment">// 左对齐</span>
-    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num1);   <span class="c-comment">// '42   '</span>
-    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num2);   <span class="c-comment">// '123  '</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num1);  <span class="c-comment">// '42   '</span>
+    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num2);  <span class="c-comment">// '123  '</span>
+
     <span class="c-comment">// 前导零</span>
-    <span class="c-function">printf</span>(<span class="c-string">"前导零: '%05d'\n"</span>, num1);   <span class="c-comment">// '00042'</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"前导零: '%05d'\n"</span>, num1);  <span class="c-comment">// '00042'</span>
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -282,17 +282,17 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">double</span> pi = <span class="c-number">3.141592653589793</span>;
     <span class="c-keyword">double</span> money = <span class="c-number">123.456789</span>;
-    
+
     <span class="c-comment">// 默认精度</span>
-    <span class="c-function">printf</span>(<span class="c-string">"默认: %f\n"</span>, pi);         <span class="c-comment">// 3.141593</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"默认: %f\n"</span>, pi);  <span class="c-comment">// 3.141593</span>
+
     <span class="c-comment">// 指定小数位数</span>
-    <span class="c-function">printf</span>(<span class="c-string">"2位小数: %.2f\n"</span>, pi);    <span class="c-comment">// 3.14</span>
-    <span class="c-function">printf</span>(<span class="c-string">"4位小数: %.4f\n"</span>, pi);    <span class="c-comment">// 3.1416</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"2位小数: %.2f\n"</span>, pi);  <span class="c-comment">// 3.14</span>
+    <span class="c-function">printf</span>(<span class="c-string">"4位小数: %.4f\n"</span>, pi);  <span class="c-comment">// 3.1416</span>
+
     <span class="c-comment">// 货币格式</span>
     <span class="c-function">printf</span>(<span class="c-string">"金额: %.2f 元\n"</span>, money); <span class="c-comment">// 123.46</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -353,14 +353,14 @@
     <span class="c-function">printf</span>(<span class="c-string">"姓名\t年龄\t成绩\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"小明\t18\t95.5\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"小红\t19\t98.0\n"</span>);
-    
+
     <span class="c-comment">// 引号</span>
     <span class="c-function">printf</span>(<span class="c-string">"他说: \"学习C语言很有趣!\"\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"字符'A'的ASCII码是65\n"</span>);
-    
+
     <span class="c-comment">// 路径分隔符</span>
     <span class="c-function">printf</span>(<span class="c-string">"文件路径: C:\\Program Files\\Code\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -379,23 +379,23 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num = <span class="c-number">42</span>;
-    
+
     <span class="c-comment">// 宽度控制</span>
-    <span class="c-function">printf</span>(<span class="c-string">"宽度5: '%5d'\n"</span>, num);    <span class="c-comment">// '   42'</span>
-    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num);   <span class="c-comment">// '42   '</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"宽度5: '%5d'\n"</span>, num);  <span class="c-comment">// '   42'</span>
+    <span class="c-function">printf</span>(<span class="c-string">"左对齐: '%-5d'\n"</span>, num);  <span class="c-comment">// '42   '</span>
+
     <span class="c-comment">// 精度控制</span>
     <span class="c-keyword">double</span> pi = <span class="c-number">3.1415926535</span>;
-    <span class="c-function">printf</span>(<span class="c-string">"默认: %f\n"</span>, pi);         <span class="c-comment">// 3.141593</span>
-    <span class="c-function">printf</span>(<span class="c-string">"2位小数: %.2f\n"</span>, pi);    <span class="c-comment">// 3.14</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"默认: %f\n"</span>, pi);  <span class="c-comment">// 3.141593</span>
+    <span class="c-function">printf</span>(<span class="c-string">"2位小数: %.2f\n"</span>, pi);  <span class="c-comment">// 3.14</span>
+
     <span class="c-comment">// 前导零</span>
-    <span class="c-function">printf</span>(<span class="c-string">"前导零: %05d\n"</span>, num);    <span class="c-comment">// 00042</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"前导零: %05d\n"</span>, num);  <span class="c-comment">// 00042</span>
+
     <span class="c-comment">// 十六进制</span>
-    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %x\n"</span>, num);     <span class="c-comment">// 2a</span>
-    <span class="c-function">printf</span>(<span class="c-string">"带前缀: %#x\n"</span>, num);     <span class="c-comment">// 0x2a</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %x\n"</span>, num);  <span class="c-comment">// 2a</span>
+    <span class="c-function">printf</span>(<span class="c-string">"带前缀: %#x\n"</span>, num);  <span class="c-comment">// 0x2a</span>
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -443,25 +443,25 @@
     <span class="c-keyword">float</span> height;
     <span class="c-keyword">char</span> grade;
     <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入身高: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &height);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入等级: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &grade);  <span class="c-comment">// 注意前面的空格</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入姓名: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);  <span class="c-comment">// 字符串不需要&</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n输入信息:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);
     <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f\n"</span>, height);
     <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);
     <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, name);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -480,19 +480,19 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num;
-    
+
     <span class="c-comment">// 错误：缺少&</span>
     <span class="c-comment">// scanf("%d", num);  // 编译错误！</span>
-    
+
     <span class="c-comment">// 正确：使用&</span>
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
     <span class="c-function">printf</span>(<span class="c-string">"输入的数字是: %d\n"</span>, num);
-    
+
     <span class="c-comment">// 字符串数组名本身就是地址，不需要&</span>
     <span class="c-keyword">char</span> str[<span class="c-number">100</span>];
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str);  <span class="c-comment">// 正确</span>
     <span class="c-comment">// scanf("%s", &str);  // 错误！</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -520,17 +520,17 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num;
     <span class="c-keyword">char</span> str[<span class="c-number">10</span>];
-    
+
     <span class="c-comment">// 限制整数位数</span>
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个最多2位的数字: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%2d"</span>, &num);  <span class="c-comment">// 最多读2位数字</span>
     <span class="c-function">printf</span>(<span class="c-string">"读取的数字: %d\n"</span>, num);
-    
+
     <span class="c-comment">// 限制字符串长度</span>
     <span class="c-function">printf</span>(<span class="c-string">"请输入名字(最多9个字符): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%9s"</span>, str);  <span class="c-comment">// 最多读9个字符（预留1个给\0）</span>
     <span class="c-function">printf</span>(<span class="c-string">"名字: %s\n"</span>, str);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -541,7 +541,7 @@
                         <p><strong>解决方法：</strong>在%c前加空格：<code>scanf(" %c", &ch);</code></p>
                         
                         <p><strong>问题2：scanf不能读取带空格的字符串</strong></p>
-                        <p>scanf遇到空格就停止读取，要读取整行需要使用gets()或fgets()函数。</p>
+                        <p>scanf遇到空格就会停止读取；如果要读取一整行，通常使用 <code>fgets()</code>。<code>gets()</code> 已被废弃，不建议使用。</p>
                     </div>
                 </div>
                 
@@ -560,21 +560,21 @@
     <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
     <span class="c-keyword">int</span> age;
     <span class="c-keyword">float</span> height;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入姓名: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入身高(米): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &height);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n您的信息:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, name);
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d岁\n"</span>, age);
     <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f米\n"</span>, height);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -593,14 +593,14 @@
     <span class="c-keyword">float</span> radius;
     <span class="c-keyword">float</span> area;
     <span class="c-keyword">const</span> <span class="c-keyword">float</span> PI = <span class="c-number">3.14159</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入圆的半径: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &radius);
-    
+
     area = PI * radius * radius;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"半径为%.2f的圆，面积为%.2f\n"</span>, radius, area);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -630,16 +630,16 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> age;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
-    
+
     <span class="c-keyword">if</span> (age >= <span class="c-number">18</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"您已成年，可以观看此内容。\n"</span>);
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"程序结束。\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -653,16 +653,16 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
-    
+
     <span class="c-keyword">if</span> (num % <span class="c-number">2</span> == <span class="c-number">0</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"%d是偶数\n"</span>, num);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"%d是奇数\n"</span>, num);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -676,10 +676,10 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> score;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入成绩: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &score);
-    
+
     <span class="c-comment">// 从上到下依次检查条件</span>
     <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"优秀！继续保持！\n"</span>);
@@ -690,7 +690,7 @@
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"不及格，需要加油！\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -723,10 +723,10 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> age;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
-    
+
     <span class="c-keyword">if</span> (age < <span class="c-number">0</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"年龄无效！\n"</span>);
     } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (age < <span class="c-number">12</span>) {
@@ -740,7 +740,7 @@
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"您是老年\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -757,17 +757,17 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">float</span> height, weight, bmi;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入身高(米): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &height);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入体重(公斤): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &weight);
-    
+
     bmi = weight / (height * height);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"您的BMI值为: %.2f\n"</span>, bmi);
-    
+
     <span class="c-keyword">if</span> (bmi < <span class="c-number">18.5</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"偏瘦，建议增加营养\n"</span>);
     } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (bmi < <span class="c-number">24</span>) {
@@ -777,7 +777,7 @@
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"肥胖，建议减肥\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -831,13 +831,13 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> age;
     <span class="c-keyword">char</span> gender;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入性别(M/F): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &gender);
-    
+
     <span class="c-keyword">if</span> (age >= <span class="c-number">18</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"您已成年"</span>);
         <span class="c-keyword">if</span> (gender == <span class="c-string">'M'</span> || gender == <span class="c-string">'m'</span>) {
@@ -855,7 +855,7 @@
             <span class="c-function">printf</span>(<span class="c-string">"，还是幼儿园宝宝！\n"</span>);
         }
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -875,18 +875,18 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> score = <span class="c-number">85</span>;
     <span class="c-keyword">int</span> attendance = <span class="c-number">95</span>;
-    
+
     <span class="c-comment">// 使用括号明确优先级</span>
     <span class="c-keyword">if</span> ((score >= <span class="c-number">60</span> && attendance >= <span class="c-number">80</span>) || score >= <span class="c-number">90</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"及格或优秀！\n"</span>);
     }
-    
+
     <span class="c-comment">// 逻辑运算符的短路特性</span>
     <span class="c-keyword">int</span> x = <span class="c-number">0</span>;
     <span class="c-keyword">if</span> (x != <span class="c-number">0</span> && <span class="c-number">10</span> / x > <span class="c-number">1</span>) {  <span class="c-comment">// 不会除零错误</span>
         <span class="c-function">printf</span>(<span class="c-string">"不会执行到这里\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -911,22 +911,22 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
-    
+
     <span class="c-comment">// 1. 判断范围</span>
     <span class="c-keyword">if</span> (num >= <span class="c-number">1</span> && num <= <span class="c-number">100</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"在1-100范围内\n"</span>);
     }
-    
+
     <span class="c-comment">// 2. 判断是否为偶数</span>
     <span class="c-keyword">if</span> (num % <span class="c-number">2</span> == <span class="c-number">0</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"是偶数\n"</span>);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"是奇数\n"</span>);
     }
-    
+
     <span class="c-comment">// 3. 判断正负零</span>
     <span class="c-keyword">if</span> (num > <span class="c-number">0</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"正数\n"</span>);
@@ -935,7 +935,7 @@
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"零\n"</span>);
     }
-    
+
     <span class="c-comment">// 4. 多条件判断</span>
     <span class="c-keyword">char</span> grade;
     <span class="c-keyword">if</span> (num >= <span class="c-number">90</span>) grade = <span class="c-string">'A'</span>;
@@ -943,9 +943,9 @@
     <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">70</span>) grade = <span class="c-string">'C'</span>;
     <span class="c-keyword">else</span> <span class="c-keyword">if</span> (num >= <span class="c-number">60</span>) grade = <span class="c-string">'D'</span>;
     <span class="c-keyword">else</span> grade = <span class="c-string">'F'</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -983,11 +983,11 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
-    
+
     <span class="c-comment">// 三元运算符：条件 ? 值1 : 值2</span>
     <span class="c-keyword">int</span> max = (a > b) ? a : b;
     <span class="c-function">printf</span>(<span class="c-string">"较大值: %d\n"</span>, max);
-    
+
     <span class="c-comment">// 等价的if-else（更冗长）</span>
     <span class="c-keyword">int</span> max2;
     <span class="c-keyword">if</span> (a > b) {
@@ -996,19 +996,19 @@
         max2 = b;
     }
     <span class="c-function">printf</span>(<span class="c-string">"较大值2: %d\n"</span>, max2);
-    
+
     <span class="c-comment">// 在printf中直接使用</span>
     <span class="c-function">printf</span>(<span class="c-string">"结果: %s\n"</span>, (a > b) ? <span class="c-string">"a较大"</span> : <span class="c-string">"b较大"</span>);
-    
+
     <span class="c-comment">// 判断奇偶数</span>
     <span class="c-keyword">int</span> num = <span class="c-number">7</span>;
     <span class="c-function">printf</span>(<span class="c-string">"%d是%s\n"</span>, num, (num % <span class="c-number">2</span> == <span class="c-number">0</span>) ? <span class="c-string">"偶数"</span> : <span class="c-string">"奇数"</span>);
-    
+
     <span class="c-comment">// 计算绝对值</span>
     <span class="c-keyword">int</span> x = <span class="c-number">-5</span>;
     <span class="c-keyword">int</span> abs_x = (x < <span class="c-number">0</span>) ? -x : x;
     <span class="c-function">printf</span>(<span class="c-string">"%d的绝对值是%d\n"</span>, x, abs_x);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1029,21 +1029,21 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> score = <span class="c-number">85</span>;
-    
+
     <span class="c-comment">// 嵌套的三元运算符</span>
-    <span class="c-keyword">char</span> grade = (score >= <span class="c-number">90</span>) ? <span class="c-string">'A'</span> : 
-                  (score >= <span class="c-number">80</span>) ? <span class="c-string">'B'</span> : 
+    <span class="c-keyword">char</span> grade = (score >= <span class="c-number">90</span>) ? <span class="c-string">'A'</span> :
+                  (score >= <span class="c-number">80</span>) ? <span class="c-string">'B'</span> :
                   (score >= <span class="c-number">60</span>) ? <span class="c-string">'C'</span> : <span class="c-string">'D'</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"成绩%d，等级%c\n"</span>, score, grade);
-    
+
     <span class="c-comment">// 对比：用if-else更清晰</span>
     <span class="c-keyword">char</span> grade2;
     <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) grade2 = <span class="c-string">'A'</span>;
     <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">80</span>) grade2 = <span class="c-string">'B'</span>;
     <span class="c-keyword">else</span> <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) grade2 = <span class="c-string">'C'</span>;
     <span class="c-keyword">else</span> grade2 = <span class="c-string">'D'</span>;
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1063,13 +1063,13 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a, b;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入两个整数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d %d"</span>, &a, &b);
-    
+
     <span class="c-keyword">int</span> min = (a < b) ? a : b;
     <span class="c-function">printf</span>(<span class="c-string">"较小值是: %d\n"</span>, min);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -1086,15 +1086,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
-    
+
     <span class="c-comment">// 嵌套三元运算符</span>
     <span class="c-keyword">int</span> result = (num > <span class="c-number">100</span>) ? <span class="c-number">100</span> : (num < <span class="c-number">0</span>) ? <span class="c-number">0</span> : num;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"限制后的值: %d\n"</span>, result);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>

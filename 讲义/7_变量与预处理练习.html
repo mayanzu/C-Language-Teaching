@@ -68,14 +68,14 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> local_var = <span class="c-number">400</span>;  <span class="c-comment">// main的局部变量</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"main: global=%d, local=%d\n"</span>, global_var, local_var);
-    
+
     <span class="c-function">func1</span>();
     <span class="c-function">func2</span>();
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"main: global=%d (unchanged)\n"</span>, global_var);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -96,7 +96,7 @@
 <span class="c-keyword">void</span> <span class="c-function">test</span>() {
     <span class="c-keyword">int</span> count = <span class="c-number">200</span>;  <span class="c-comment">// 局部，隐藏全局</span>
     <span class="c-function">printf</span>(<span class="c-string">"局部count: %d\n"</span>, count);
-    
+
     <span class="c-comment">// 访问全局变量需要在函数外部，或使用extern指针</span>
 }
 
@@ -136,15 +136,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"初始计数器: %d\n"</span>, global_counter);
-    
+
     <span class="c-function">increment_counter</span>();
     <span class="c-function">increment_counter</span>();
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"调用两次后: %d\n"</span>, global_counter);
-    
+
     <span class="c-keyword">double</span> area = <span class="c-function">calculate_circle_area</span>(<span class="c-number">5.0</span>);
     <span class="c-function">printf</span>(<span class="c-string">"半径5的圆面积: %.2f\n"</span>, area);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -159,12 +159,12 @@
 <span class="c-keyword">void</span> <span class="c-function">function_scope_demo</span>() {
     <span class="c-keyword">int</span> func_var = <span class="c-number">42</span>;  <span class="c-comment">// 函数作用域变量</span>
     <span class="c-function">printf</span>(<span class="c-string">"函数内: func_var = %d\n"</span>, func_var);
-    
+
     {  <span class="c-comment">// 块作用域开始</span>
         <span class="c-keyword">int</span> block_var = <span class="c-number">100</span>;  <span class="c-comment">// 块作用域变量</span>
         <span class="c-function">printf</span>(<span class="c-string">"块内: func_var = %d, block_var = %d\n"</span>, func_var, block_var);
     }  <span class="c-comment">// 块作用域结束，block_var被销毁</span>
-    
+
     <span class="c-comment">// printf("%d", block_var); // 错误：block_var不在作用域内</span>
 }
 
@@ -188,24 +188,24 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> outer_var = <span class="c-number">10</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"外层: outer_var = %d\n"</span>, outer_var);
-    
+
     {  <span class="c-comment">// 第一个块</span>
         <span class="c-keyword">int</span> inner_var = <span class="c-number">20</span>;
         <span class="c-function">printf</span>(<span class="c-string">"第一块: outer_var = %d, inner_var = %d\n"</span>, outer_var, inner_var);
-        
+
         {  <span class="c-comment">// 嵌套块</span>
             <span class="c-keyword">int</span> inner_most = <span class="c-number">30</span>;
-            <span class="c-function">printf</span>(<span class="c-string">"嵌套块: outer_var = %d, inner_var = %d, inner_most = %d\n"</span>, 
+            <span class="c-function">printf</span>(<span class="c-string">"嵌套块: outer_var = %d, inner_var = %d, inner_most = %d\n"</span>,
                    outer_var, inner_var, inner_most);
         }  <span class="c-comment">// inner_most 被销毁</span>
-        
+
         <span class="c-function">printf</span>(<span class="c-string">"回到第一块: outer_var = %d, inner_var = %d\n"</span>, outer_var, inner_var);
     }  <span class="c-comment">// inner_var 被销毁</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"回到外层: outer_var = %d\n"</span>, outer_var);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -231,7 +231,7 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"=== %s 系统 ===\n"</span>, system_name);
     <span class="c-function">printf</span>(<span class="c-string">"当前用户数: %d\n\n"</span>, total_users);
-    
+
     <span class="c-keyword">int</span> choice;
     <span class="c-keyword">do</span> {
         <span class="c-function">printf</span>(<span class="c-string">"1. 用户管理\n"</span>);
@@ -239,7 +239,7 @@
         <span class="c-function">printf</span>(<span class="c-string">"0. 退出\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"请选择: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &choice);
-        
+
         <span class="c-keyword">switch</span>(choice) {
             <span class="c-keyword">case</span> <span class="c-number">1</span>:
                 <span class="c-function">user_management</span>();
@@ -255,7 +255,7 @@
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     } <span class="c-keyword">while</span>(choice != <span class="c-number">0</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 
@@ -269,14 +269,14 @@
 <span class="c-keyword">void</span> <span class="c-function">user_management</span>() {
     <span class="c-keyword">static</span> <span class="c-keyword">int</span> operations_count = <span class="c-number">0</span>;  <span class="c-comment">// 静态局部变量</span>
     operations_count++;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"用户管理模块 (第%d次操作)\n"</span>, operations_count);
     <span class="c-function">printf</span>(<span class="c-string">"当前用户数: %d\n"</span>, total_users);
-    
+
     <span class="c-keyword">int</span> new_users;
     <span class="c-function">printf</span>(<span class="c-string">"输入新增用户数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &new_users);
-    
+
     total_users += new_users;  <span class="c-comment">// 修改全局变量</span>
     <span class="c-function">printf</span>(<span class="c-string">"更新后用户数: %d\n"</span>, total_users);
 }
@@ -286,11 +286,11 @@
 
 <span class="c-keyword">void</span> <span class="c-function">data_processing</span>() {
     <span class="c-keyword">int</span> local_data = <span class="c-number">100</span>;  <span class="c-comment">// 函数局部变量</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数据处理模块\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"局部数据: %d\n"</span>, local_data);
     <span class="c-function">printf</span>(<span class="c-string">"全局用户数: %d\n"</span>, total_users);  <span class="c-comment">// 访问全局变量</span>
-    
+
     {  <span class="c-comment">// 块作用域</span>
         <span class="c-keyword">int</span> temp_result = local_data * <span class="c-number">2</span>;
         <span class="c-function">printf</span>(<span class="c-string">"临时计算结果: %d\n"</span>, temp_result);
@@ -377,12 +377,12 @@
     <span class="c-function">counter</span>();  <span class="c-comment">// 输出: 1</span>
     <span class="c-function">counter</span>();  <span class="c-comment">// 输出: 2</span>
     <span class="c-function">counter</span>();  <span class="c-comment">// 输出: 3</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n普通变量测试（每次都是1）:\n"</span>);
     <span class="c-function">regular_counter</span>();  <span class="c-comment">// 输出: 1</span>
     <span class="c-function">regular_counter</span>();  <span class="c-comment">// 输出: 1</span>
     <span class="c-function">regular_counter</span>();  <span class="c-comment">// 输出: 1</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -421,15 +421,15 @@
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">trackCalls</span>();
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 <span class="c-comment">// 输出：
-// 这是第1次调用
-// 这是第2次调用
-// 这是第3次调用
-// 这是第4次调用
-// 这是第5次调用</span></code></pre>
+                        // 这是第1次调用
+                        // 这是第2次调用
+                        // 这是第3次调用
+                        // 这是第4次调用
+                        // 这是第5次调用</span></code></pre>
                                 </div>
                             </details>
                         </div>
@@ -453,7 +453,7 @@
     <span class="c-function">printf</span>(<span class="c-string">"累计和: %d\n"</span>, <span class="c-function">accumulateSum</span>(<span class="c-number">20</span>));  <span class="c-comment">// 30</span>
     <span class="c-function">printf</span>(<span class="c-string">"累计和: %d\n"</span>, <span class="c-function">accumulateSum</span>(<span class="c-number">15</span>));  <span class="c-comment">// 45</span>
     <span class="c-function">printf</span>(<span class="c-string">"累计和: %d\n"</span>, <span class="c-function">accumulateSum</span>(-<span class="c-number">5</span>));  <span class="c-comment">// 40</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -486,10 +486,10 @@
 <span class="c-keyword">double</span> <span class="c-function">running_average</span>(<span class="c-keyword">double</span> new_value) {
     <span class="c-keyword">static</span> <span class="c-keyword">double</span> sum = <span class="c-number">0.0</span>;
     <span class="c-keyword">static</span> <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
-    
+
     sum += new_value;
     count++;
-    
+
     <span class="c-keyword">return</span> sum / count;
 }
 
@@ -510,7 +510,7 @@
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"添加 %.1f，平均值: %.2f\n"</span>, values[i], <span class="c-function">running_average</span>(values[i]));
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -557,10 +557,10 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">increment_global</span>();
     <span class="c-function">print_counters</span>();
-    
+
     <span class="c-comment">// 无法调用静态函数</span>
     <span class="c-comment">// increment_static_global(); // 错误！</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -593,12 +593,12 @@
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">public_function</span>();   <span class="c-comment">// 可以调用</span>
-    <span class="c-function">use_helper</span>();       <span class="c-comment">// 可以调用</span>
-    
+    <span class="c-function">public_function</span>();  <span class="c-comment">// 可以调用</span>
+    <span class="c-function">use_helper</span>();  <span class="c-comment">// 可以调用</span>
+
     <span class="c-comment">// private_function(); // 错误：无法在main中直接调用静态函数</span>
     <span class="c-comment">// helper_add(1, 2);   // 错误：无法在main中直接调用静态函数</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -670,13 +670,13 @@
         <span class="c-keyword">double</span> avg = <span class="c-function">calculate_average</span>(values[i]);
         <span class="c-function">printf</span>(<span class="c-string">"添加 %.1f，当前平均值: %.2f\n"</span>, values[i], avg);
     }
-    
+
     <span class="c-function">print_statistics</span>();
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n重置计算器:\n"</span>);
     <span class="c-function">reset_calculator</span>();
     <span class="c-function">print_statistics</span>();
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -741,20 +741,20 @@
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-comment">// 形式1：简单宏定义（对象宏） - 定义常量</span>
-<span class="c-keyword">#define</span> PI <span class="c-number">3.141592653589793</span>          <span class="c-comment">// 数学常量</span>
-<span class="c-keyword">#define</span> MAX_BUFFER_SIZE <span class="c-number">1024</span>        <span class="c-comment">// 配置参数</span>
+<span class="c-keyword">#define</span> PI <span class="c-number">3.141592653589793</span>  <span class="c-comment">// 数学常量</span>
+<span class="c-keyword">#define</span> MAX_BUFFER_SIZE <span class="c-number">1024</span>  <span class="c-comment">// 配置参数</span>
 <span class="c-keyword">#define</span> PROGRAM_NAME <span class="c-string">"C语言学习程序"</span>  <span class="c-comment">// 字符串常量</span>
-<span class="c-keyword">#define</span> TRUE <span class="c-number">1</span>                       <span class="c-comment">// 布尔值</span>
+<span class="c-keyword">#define</span> TRUE <span class="c-number">1</span>  <span class="c-comment">// 布尔值</span>
 <span class="c-keyword">#define</span> FALSE <span class="c-number">0</span>
 
 <span class="c-comment">// 形式2：函数宏定义（带参数的宏）</span>
 <span class="c-comment">// 注意：参数周围必须加括号，避免运算优先级问题</span>
-<span class="c-keyword">#define</span> SQUARE(x) ((x) * (x))              <span class="c-comment">// 平方</span>
-<span class="c-keyword">#define</span> CUBE(x) ((x) * (x) * (x))          <span class="c-comment">// 立方</span>
+<span class="c-keyword">#define</span> SQUARE(x) ((x) * (x))  <span class="c-comment">// 平方</span>
+<span class="c-keyword">#define</span> CUBE(x) ((x) * (x) * (x))  <span class="c-comment">// 立方</span>
 <span class="c-keyword">#define</span> MAX(a, b) ((a) > (b) ? (a) : (b))  <span class="c-comment">// 取最大值</span>
 <span class="c-keyword">#define</span> MIN(a, b) ((a) < (b) ? (a) : (b))  <span class="c-comment">// 取最小值</span>
-<span class="c-keyword">#define</span> ABS(x) ((x) >= <span class="c-number">0</span> ? (x) : -(x))     <span class="c-comment">// 绝对值</span>
-<span class="c-keyword">#define</span> IS_EVEN(x) ((x) % <span class="c-number">2</span> == <span class="c-number">0</span>)       <span class="c-comment">// 判断偶数</span>
+<span class="c-keyword">#define</span> ABS(x) ((x) >= <span class="c-number">0</span> ? (x) : -(x))  <span class="c-comment">// 绝对值</span>
+<span class="c-keyword">#define</span> IS_EVEN(x) ((x) % <span class="c-number">2</span> == <span class="c-number">0</span>)  <span class="c-comment">// 判断偶数</span>
 
 <span class="c-comment">// 多行宏定义（使用反斜杠\连接）</span>
 <span class="c-keyword">#define</span> SWAP(a, b) do { \
@@ -768,7 +768,7 @@
     <span class="c-function">printf</span>(<span class="c-string">"程序名称: %s\n"</span>, PROGRAM_NAME);
     <span class="c-function">printf</span>(<span class="c-string">"PI = %.10f\n"</span>, PI);
     <span class="c-function">printf</span>(<span class="c-string">"最大缓冲区大小: %d\n"</span>, MAX_BUFFER_SIZE);
-    
+
     <span class="c-keyword">int</span> x = <span class="c-number">5</span>, y = <span class="c-number">10</span>;
     <span class="c-function">printf</span>(<span class="c-string">"\n数值运算:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"SQUARE(%d) = %d\n"</span>, x, SQUARE(x));
@@ -776,15 +776,15 @@
     <span class="c-function">printf</span>(<span class="c-string">"MAX(%d, %d) = %d\n"</span>, x, y, MAX(x, y));
     <span class="c-function">printf</span>(<span class="c-string">"MIN(%d, %d) = %d\n"</span>, x, y, MIN(x, y));
     <span class="c-function">printf</span>(<span class="c-string">"ABS(%d) = %d\n"</span>, -x, ABS(-x));
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n逻辑判断:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"%d 是偶数: %s\n"</span>, x, IS_EVEN(x) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"%d 是偶数: %s\n"</span>, y, IS_EVEN(y) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n交换前: x = %d, y = %d\n"</span>, x, y);
     SWAP(x, y);
     <span class="c-function">printf</span>(<span class="c-string">"交换后: x = %d, y = %d\n"</span>, x, y);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -810,15 +810,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">2</span>, b = <span class="c-number">3</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"错误的宏:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"BAD_SQUARE(a + b) = %d\n"</span>, BAD_SQUARE(a + b));  <span class="c-comment">// 2+3*2+3 = 11</span>
     <span class="c-function">printf</span>(<span class="c-string">"BAD_MAX(a, b) * 2 = %d\n"</span>, BAD_MAX(a, b) * <span class="c-number">2</span>);  <span class="c-comment">// a&gt;b?a:b*2 = 6</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n正确的宏:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"GOOD_SQUARE(a + b) = %d\n"</span>, GOOD_SQUARE(a + b));  <span class="c-comment">// ((2+3)*(2+3)) = 25</span>
     <span class="c-function">printf</span>(<span class="c-string">"GOOD_MAX(a, b) * 2 = %d\n"</span>, GOOD_MAX(a, b) * <span class="c-number">2</span>);  <span class="c-comment">// ((2&gt;3?2:3))*2 = 6</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -835,22 +835,22 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">5</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x = %d\n"</span>, x);
     <span class="c-function">printf</span>(<span class="c-string">"SQUARE(x) = %d\n"</span>, SQUARE(x));  <span class="c-comment">// ((x)*(x)) = 25</span>
     <span class="c-function">printf</span>(<span class="c-string">"x 现在是: %d\n"</span>, x);  <span class="c-comment">// x 仍然是 5</span>
-    
+
     x = <span class="c-number">5</span>;  <span class="c-comment">// 重新赋值</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n重新赋值 x = %d\n"</span>, x);
     <span class="c-function">printf</span>(<span class="c-string">"SQUARE(INCREMENT(x)) = %d\n"</span>, SQUARE(INCREMENT(x)));  <span class="c-comment">// ((x++)*(x++))</span>
     <span class="c-function">printf</span>(<span class="c-string">"x 现在是: %d\n"</span>, x);  <span class="c-comment">// x 变成了 7！</span>
-    
+
     <span class="c-comment">// 正确的做法：使用函数而不是宏</span>
     x = <span class="c-number">5</span>;
     <span class="c-function">printf</span>(<span class="c-string">"\n使用函数:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"square(x) = %d\n"</span>, square(x));  <span class="c-comment">// 调用函数</span>
     <span class="c-function">printf</span>(<span class="c-string">"x 仍然是: %d\n"</span>, x);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 
@@ -887,12 +887,12 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> numbers[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
-    
+
     PRINT_ARRAY(numbers, <span class="c-number">5</span>);
-    
+
     <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">20</span>;
     DEBUG_PRINT(<span class="c-string">"x = %d, y = %d"</span>, x, y);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -928,15 +928,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"运行平台: %s\n"</span>, PLATFORM);
-    
+
     <span class="c-keyword">int</span> x = <span class="c-number">42</span>;
     DEBUG_LOG(<span class="c-string">"程序开始执行"</span>);
     DEBUG_VALUE(x);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"正常输出: x = %d\n"</span>, x);
-    
+
     DEBUG_LOG(<span class="c-string">"程序执行完毕"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -978,17 +978,17 @@
     <span class="c-comment">// 数组操作</span>
     <span class="c-keyword">int</span> numbers[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
     <span class="c-function">printf</span>(<span class="c-string">"数组大小: %u\n"</span>, ARRAY_SIZE(numbers));
-    
+
     <span class="c-comment">// 数学计算</span>
     <span class="c-keyword">double</span> angle_deg = <span class="c-number">90.0</span>;
     <span class="c-keyword">double</span> angle_rad = DEG_TO_RAD(angle_deg);
     <span class="c-function">printf</span>(<span class="c-string">"%.1f 度 = %.4f 弧度\n"</span>, angle_deg, angle_rad);
-    
+
     <span class="c-comment">// 字符串操作</span>
     <span class="c-keyword">char</span> str1[] = <span class="c-string">"Hello"</span>;
     <span class="c-keyword">char</span> str2[] = <span class="c-string">"Hello"</span>;
     <span class="c-function">printf</span>(<span class="c-string">"字符串相等: %s\n"</span>, STR_EQUAL(str1, str2) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-comment">// 内存管理</span>
     <span class="c-keyword">int</span> *dynamic_array = (<span class="c-keyword">int</span>*)malloc(<span class="c-number">10</span> * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
     <span class="c-keyword">if</span> (dynamic_array) {
@@ -996,14 +996,14 @@
         SAFE_FREE(dynamic_array);
         <span class="c-function">printf</span>(<span class="c-string">"内存已安全释放\n"</span>);
     }
-    
+
     <span class="c-comment">// 循环宏使用</span>
     <span class="c-function">printf</span>(<span class="c-string">"遍历数组: "</span>);
     FOR_EACH(<span class="c-keyword">int</span>, num, numbers, ARRAY_SIZE(numbers)) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, *num);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1028,13 +1028,13 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">double</span> radius;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入圆的半径: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &radius);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"圆的面积: %.2f\n"</span>, CIRCLE_AREA(radius));
     <span class="c-function">printf</span>(<span class="c-string">"圆的周长: %.2f\n"</span>, CIRCLE_PERIMETER(radius));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -1054,13 +1054,13 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">25</span>, z = <span class="c-number">15</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"三个数: %d, %d, %d\n"</span>, x, y, z);
     <span class="c-function">printf</span>(<span class="c-string">"最大值: %d\n"</span>, MAX3(x, y, z));
-    
+
     <span class="c-comment">// 测试表达式作为参数</span>
     <span class="c-function">printf</span>(<span class="c-string">"MAX3(5+3, 12-2, 7*2) = %d\n"</span>, MAX3(<span class="c-number">5</span>+<span class="c-number">3</span>, <span class="c-number">12</span>-<span class="c-number">2</span>, <span class="c-number">7</span>*<span class="c-number">2</span>));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -1081,13 +1081,13 @@
                         <pre><code><span class="c-comment">// 文件包含指令</span>
 
 <span class="c-comment">// 1. 系统头文件包含（使用尖括号）</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>      <span class="c-comment">// 标准输入输出</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>     <span class="c-comment">// 标准库函数</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>     <span class="c-comment">// 字符串处理</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;math.h&gt;</span>       <span class="c-comment">// 数学函数</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>  <span class="c-comment">// 标准输入输出</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>  <span class="c-comment">// 标准库函数</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>  <span class="c-comment">// 字符串处理</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;math.h&gt;</span>  <span class="c-comment">// 数学函数</span>
 
 <span class="c-comment">// 2. 用户自定义头文件包含（使用双引号）</span>
-<span class="c-keyword">#include</span> <span class="c-string">"myheader.h"</span>   <span class="c-comment">// 当前目录</span>
+<span class="c-keyword">#include</span> <span class="c-string">"myheader.h"</span>  <span class="c-comment">// 当前目录</span>
 <span class="c-keyword">#include</span> <span class="c-string">"utils/math.h"</span> <span class="c-comment">// 子目录</span>
 <span class="c-keyword">#include</span> <span class="c-string">"../common.h"</span>  <span class="c-comment">// 父目录</span>
 
@@ -1299,7 +1299,7 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"PackedStruct 大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> PackedStruct));
     <span class="c-function">printf</span>(<span class="c-string">"NormalStruct 大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> NormalStruct));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1394,16 +1394,16 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"跨平台程序运行中...\n"</span>);
-    
+
     <span class="c-comment">// 跨平台延时</span>
     <span class="c-function">printf</span>(<span class="c-string">"等待 1 秒...\n"</span>);
     SLEEP_MS(<span class="c-number">1000</span>);
-    
+
     <span class="c-comment">// 跨平台清屏</span>
     CLEAR_SCREEN;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"屏幕已清空！\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>

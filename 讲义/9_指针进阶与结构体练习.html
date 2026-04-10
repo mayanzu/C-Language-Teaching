@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- SVG图标引用 -->
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+    
     <!-- 侧边导航栏 -->
     <nav class="tutorial-nav">
         <ul>
@@ -172,31 +179,31 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 步骤1：声明普通变量</span>
     <span class="c-keyword">int</span> value = <span class="c-number">42</span>;
-    
+
     <span class="c-comment">// 步骤2：声明一级指针并指向value</span>
     <span class="c-keyword">int</span> *ptr = &amp;value;
-    
+
     <span class="c-comment">// 步骤3：声明二级指针并指向一级指针</span>
     <span class="c-keyword">int</span> **ptr_to_ptr = &amp;ptr;
-    
+
     <span class="c-comment">// 通过不同方式访问value的值</span>
     <span class="c-function">printf</span>(<span class="c-string">"直接访问: value = %d\n"</span>, value);
     <span class="c-function">printf</span>(<span class="c-string">"一级指针: *ptr = %d\n"</span>, *ptr);
     <span class="c-function">printf</span>(<span class="c-string">"二级指针: **ptr_to_ptr = %d\n\n"</span>, **ptr_to_ptr);
-    
+
     <span class="c-comment">// 通过二级指针修改value的值</span>
     **ptr_to_ptr = <span class="c-number">100</span>;  <span class="c-comment">// 等价于 *ptr = 100; 也等价于 value = 100;</span>
     <span class="c-function">printf</span>(<span class="c-string">"修改后 value = %d\n\n"</span>, value);
-    
+
     <span class="c-comment">// 修改一级指针的指向</span>
     <span class="c-keyword">int</span> another_value = <span class="c-number">200</span>;
     *ptr_to_ptr = &amp;another_value;  <span class="c-comment">// 让ptr指向another_value</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"修改指向后:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  value = %d (未变)\n"</span>, value);
     <span class="c-function">printf</span>(<span class="c-string">"  *ptr = %d (指向another_value)\n"</span>, *ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  **ptr_to_ptr = %d\n"</span>, **ptr_to_ptr);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -210,7 +217,7 @@
                         <p>虽然三级指针在实际开发中很少使用，但理解它有助于深入掌握指针的本质。</p>
                         
                         <div class="callout-warning">
-                            <strong>⚠️ 实际开发建议：</strong>
+                            <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 实际开发建议：</strong>
                             <p>三级及以上的指针会让代码难以理解和维护，应尽量避免使用。如果确实需要，考虑用结构体封装来简化设计。</p>
                         </div>
                     </div>
@@ -222,21 +229,21 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 建立指针链</span>
     <span class="c-keyword">int</span> value = <span class="c-number">10</span>;
-    <span class="c-keyword">int</span> *ptr1 = &amp;value;         <span class="c-comment">// 一级指针指向value</span>
-    <span class="c-keyword">int</span> **ptr2 = &amp;ptr1;        <span class="c-comment">// 二级指针指向ptr1</span>
-    <span class="c-keyword">int</span> ***ptr3 = &amp;ptr2;       <span class="c-comment">// 三级指针指向ptr2</span>
-    
+    <span class="c-keyword">int</span> *ptr1 = &amp;value;  <span class="c-comment">// 一级指针指向value</span>
+    <span class="c-keyword">int</span> **ptr2 = &amp;ptr1;  <span class="c-comment">// 二级指针指向ptr1</span>
+    <span class="c-keyword">int</span> ***ptr3 = &amp;ptr2;  <span class="c-comment">// 三级指针指向ptr2</span>
+
     <span class="c-comment">// 通过不同级别的指针访问value</span>
     <span class="c-function">printf</span>(<span class="c-string">"通过不同级别的指针访问:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  value = %d\n"</span>, value);
     <span class="c-function">printf</span>(<span class="c-string">"  *ptr1 = %d\n"</span>, *ptr1);
     <span class="c-function">printf</span>(<span class="c-string">"  **ptr2 = %d\n"</span>, **ptr2);
     <span class="c-function">printf</span>(<span class="c-string">"  ***ptr3 = %d\n\n"</span>, ***ptr3);
-    
+
     <span class="c-comment">// 通过三级指针修改值</span>
     ***ptr3 = <span class="c-number">999</span>;  <span class="c-comment">// 修改value的值</span>
     <span class="c-function">printf</span>(<span class="c-string">"修改后 value = %d\n\n"</span>, value);
-    
+
     <span class="c-comment">// 显示各级指针的地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"指针地址链:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  &amp;value = %p (value的地址)\n"</span>, (void*)&amp;value);
@@ -245,7 +252,7 @@
     <span class="c-function">printf</span>(<span class="c-string">"  ptr2   = %p (ptr2的值，等于&amp;ptr1)\n"</span>, (void*)ptr2);
     <span class="c-function">printf</span>(<span class="c-string">"  &amp;ptr2  = %p (ptr2的地址)\n"</span>, (void*)&amp;ptr2);
     <span class="c-function">printf</span>(<span class="c-string">"  ptr3   = %p (ptr3的值，等于&amp;ptr2)\n"</span>, (void*)ptr3);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -277,32 +284,32 @@
     <span class="c-comment">// 声明两个普通变量</span>
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
     <span class="c-keyword">int</span> b = <span class="c-number">20</span>;
-    
+
     <span class="c-comment">// p是一级指针，指向a</span>
     <span class="c-keyword">int</span> *p = &amp;a;
-    
+
     <span class="c-comment">// pp是二级指针，指向p</span>
     <span class="c-keyword">int</span> **pp = &amp;p;
-    
+
     <span class="c-comment">// 通过二级指针修改a的值</span>
     <span class="c-function">printf</span>(<span class="c-string">"==== 初始值 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, *p = %d, **pp = %d\n\n"</span>, a, *p, **pp);
-    
+
     **pp = <span class="c-number">100</span>;  <span class="c-comment">// 等价于 *p = 100; 也等价于 a = 100;</span>
     <span class="c-function">printf</span>(<span class="c-string">"==== 修改后 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, *p = %d, **pp = %d\n\n"</span>, a, *p, **pp);
-    
+
     <span class="c-comment">// 通过二级指针修改一级指针的指向</span>
     *pp = &amp;b;  <span class="c-comment">// *pp 就是 p，所以这一行相当于 p = &b;</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"==== p指向改为b后 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, b = %d, *p = %d\n\n"</span>, a, b, *p);
-    
+
     <span class="c-comment">// 现在再次通过**pp修改，会改变b</span>
     **pp = <span class="c-number">300</span>;
     <span class="c-function">printf</span>(<span class="c-string">"==== 再次修改后 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, b = %d, *p = %d\n"</span>, a, b, *p);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -332,18 +339,18 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> *p = NULL;  <span class="c-comment">// 初始化为NULL</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"调用前: p = %p\n"</span>, (void*)p);
-    
+
     <span class="c-comment">// 传递p的地址（二级指针），函数内可以修改p本身</span>
     allocate_memory(&amp;p, <span class="c-number">42</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"调用后: p = %p, *p = %d\n"</span>, (void*)p, *p);
-    
+
     <span class="c-comment">// 释放内存</span>
     free(p);
     p = NULL;
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -372,17 +379,17 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> *array = NULL;
     <span class="c-keyword">int</span> size = <span class="c-number">5</span>;
-    
+
     create_array(&amp;array, size);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组元素:\n"</span>);
     <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"array[%d] = %d\n"</span>, i, array[i]);
     }
-    
+
     free(array);
     array = NULL;
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -423,12 +430,12 @@
 
                         <h4>不支持的指针运算</h4>
                         <div class="callout-warning">
-                            <p>⚠️ <strong>以下操作是非法的：</strong></p>
+                            <p><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> <strong>以下操作是非法的：</strong></p>
                             <ul>
-                                <li>❌ 指针 + 指针：<code>ptr1 + ptr2</code></li>
-                                <li>❌ 指针 × 整数：<code>ptr * 2</code></li>
-                                <li>❌ 指针 ÷ 整数：<code>ptr / 2</code></li>
-                                <li>❌ 不同类型指针运算：<code>int_ptr - char_ptr</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 指针 + 指针：<code>ptr1 + ptr2</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 指针 × 整数：<code>ptr * 2</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 指针 ÷ 整数：<code>ptr / 2</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 不同类型指针运算：<code>int_ptr - char_ptr</code></li>
                             </ul>
                         </div>
 
@@ -474,25 +481,25 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>, <span class="c-number">60</span>};
     <span class="c-keyword">int</span> *ptr = arr;  <span class="c-comment">// ptr指向数组首元素</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始指针: %p\n"</span>, (void*)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"当前值: %d\n\n"</span>, *ptr);
-    
+
     <span class="c-comment">// 指针加法 - 向后移动</span>
     ptr = ptr + <span class="c-number">2</span>;  <span class="c-comment">// 移动到第三个元素（索引2）</span>
     <span class="c-function">printf</span>(<span class="c-string">"ptr + 2: %p\n"</span>, (void*)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"当前值: %d\n\n"</span>, *ptr);
-    
+
     <span class="c-comment">// 指针减法 - 向前移动</span>
     ptr = ptr - <span class="c-number">1</span>;  <span class="c-comment">// 回到第二个元素（索引1）</span>
     <span class="c-function">printf</span>(<span class="c-string">"ptr - 1: %p\n"</span>, (void*)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"当前值: %d\n\n"</span>, *ptr);
-    
+
     <span class="c-comment">// 指针之间的距离</span>
     <span class="c-keyword">int</span> *ptr1 = &amp;arr[<span class="c-number">1</span>];
     <span class="c-keyword">int</span> *ptr2 = &amp;arr[<span class="c-number">4</span>];
     <span class="c-function">printf</span>(<span class="c-string">"两个指针之间的元素个数: ptr2 - ptr1 = %d\n\n"</span>, (<span class="c-keyword">int</span>)(ptr2 - ptr1));
-    
+
     <span class="c-comment">// 自增自减操作</span>
     ptr = arr;
     <span class="c-function">printf</span>(<span class="c-string">"自增操作:\n"</span>);
@@ -501,7 +508,7 @@
     <span class="c-function">printf</span>(<span class="c-string">"  ptr++ 后: %d\n"</span>, *ptr);
     ptr--;  <span class="c-comment">// 回到前一个元素</span>
     <span class="c-function">printf</span>(<span class="c-string">"  ptr-- 后: %d\n"</span>, *ptr);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -522,38 +529,38 @@
     <span class="c-keyword">int</span> int_arr[<span class="c-number">3</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>};
     <span class="c-keyword">double</span> double_arr[<span class="c-number">3</span>] = {<span class="c-number">1.1</span>, <span class="c-number">2.2</span>, <span class="c-number">3.3</span>};
     <span class="c-keyword">char</span> char_arr[<span class="c-number">3</span>] = {<span class="c-string">'A'</span>, <span class="c-string">'B'</span>, <span class="c-string">'C'</span>};
-    
+
     <span class="c-keyword">int</span> *int_ptr = int_arr;
     <span class="c-keyword">double</span> *double_ptr = double_arr;
     <span class="c-keyword">char</span> *char_ptr = char_arr;
-    
+
     <span class="c-comment">// int指针的步长</span>
     <span class="c-function">printf</span>(<span class="c-string">"int指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)int_ptr);
     int_ptr++;  <span class="c-comment">// 移动sizeof(int)个字节</span>
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)int_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n\n"</span>, (<span class="c-keyword">int</span>)((char*)int_ptr - (char*)int_arr));
-    
+
     <span class="c-comment">// double指针的步长</span>
     <span class="c-function">printf</span>(<span class="c-string">"double指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)double_ptr);
     double_ptr++;  <span class="c-comment">// 移动sizeof(double)个字节</span>
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)double_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n\n"</span>, (<span class="c-keyword">int</span>)((char*)double_ptr - (char*)double_arr));
-    
+
     <span class="c-comment">// char指针的步长</span>
     <span class="c-function">printf</span>(<span class="c-string">"char指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)char_ptr);
     char_ptr++;  <span class="c-comment">// 移动sizeof(char)个字节</span>
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)char_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n\n"</span>, (<span class="c-keyword">int</span>)((char*)char_ptr - (char*)char_arr));
-    
+
     <span class="c-comment">// 显示各类型的大小</span>
     <span class="c-function">printf</span>(<span class="c-string">"数据类型大小:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  sizeof(int) = %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
     <span class="c-function">printf</span>(<span class="c-string">"  sizeof(double) = %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
     <span class="c-function">printf</span>(<span class="c-string">"  sizeof(char) = %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -574,13 +581,13 @@
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">100</span>, <span class="c-number">200</span>, <span class="c-number">300</span>, <span class="c-number">400</span>, <span class="c-number">500</span>};
     <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(arr) / <span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
     <span class="c-keyword">int</span> *p = arr;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"使用指针自增遍历:\n"</span>);
     <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"地址: %p, 值: %d\n"</span>, (void*)p, *p);
         p++;  <span class="c-comment">// 指针自增，移动到下一个元素</span>
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -614,7 +621,7 @@
 <span class="c-keyword">void</span> <span class="c-function">my_strcpy</span>(<span class="c-keyword">char</span> *dest, <span class="c-keyword">const</span> <span class="c-keyword">char</span> *src) {
     <span class="c-keyword">while</span>((*dest = *src) != <span class="c-string">'\0'</span>) {
         dest++;  <span class="c-comment">// 目标指针前进</span>
-        src++;   <span class="c-comment">// 源指针前进</span>
+        src++;  <span class="c-comment">// 源指针前进</span>
     }
 }
 
@@ -622,13 +629,13 @@
 <span class="c-keyword">void</span> <span class="c-function">reverse_string</span>(<span class="c-keyword">char</span> *str) {
     <span class="c-keyword">char</span> *end = str;
     <span class="c-keyword">char</span> temp;
-    
+
     <span class="c-comment">// 找到字符串末尾</span>
     <span class="c-keyword">while</span>(*end != <span class="c-string">'\0'</span>) {
         end++;
     }
     end--;  <span class="c-comment">// 指向最后一个字符</span>
-    
+
     <span class="c-comment">// 交换字符</span>
     <span class="c-keyword">while</span>(str &lt; end) {
         temp = *str;
@@ -642,16 +649,16 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> text[] = <span class="c-string">"Hello"</span>;
     <span class="c-keyword">char</span> copy[<span class="c-number">50</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始字符串: %s\n"</span>, text);
     <span class="c-function">printf</span>(<span class="c-string">"字符串长度: %d\n\n"</span>, my_strlen(text));
-    
+
     my_strcpy(copy, text);
     <span class="c-function">printf</span>(<span class="c-string">"复制后: %s\n\n"</span>, copy);
-    
+
     reverse_string(copy);
     <span class="c-function">printf</span>(<span class="c-string">"反转后: %s\n"</span>, copy);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -672,7 +679,7 @@
     <span class="c-keyword">while</span>(*dest != <span class="c-string">'\0'</span>) {
         dest++;
     }
-    
+
     <span class="c-comment">// 复制src到dest末尾</span>
     <span class="c-keyword">while</span>((*dest = *src) != <span class="c-string">'\0'</span>) {
         dest++;
@@ -683,11 +690,11 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> str1[<span class="c-number">50</span>] = <span class="c-string">"Hello, "</span>;
     <span class="c-keyword">char</span> str2[] = <span class="c-string">"World!"</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"拼接前: %s\n"</span>, str1);
     my_strcat(str1, str2);
     <span class="c-function">printf</span>(<span class="c-string">"拼接后: %s\n"</span>, str1);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -740,7 +747,7 @@
 
                         <h4>指针数组 vs 数组指针</h4>
                         <div class="callout-warning">
-                            <p><strong>⚠️ 易混淆概念：</strong></p>
+                            <p><strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 易混淆概念：</strong></p>
                             <ul>
                                 <li><code>int *ptr_arr[5]</code> - <strong>指针数组</strong>：数组的元素是指针</li>
                                 <li><code>int (*arr_ptr)[5]</code> - <strong>数组指针</strong>：指向数组的指针</li>
@@ -751,15 +758,15 @@
                         <h4>常见应用场景</h4>
                         <div class="callout-tip">
                             <p><strong>1. 字符串数组</strong></p>
-                            <pre><code>char *fruits[] = {"Apple", "Banana", "Cherry"};</code></pre>
+                            <pre><code>    char *fruits[] = {"Apple", "Banana", "Cherry"};</code></pre>
                             <p>每个元素是指向字符串的指针。</p>
                             
                             <p><strong>2. 命令行参数</strong></p>
-                            <pre><code>int main(int argc, char *argv[])</code></pre>
+                            <pre><code>    int main(int argc, char *argv[])</code></pre>
                             <p>argv就是一个字符串指针数组。</p>
                             
                             <p><strong>3. 函数指针数组</strong></p>
-                            <pre><code>int (*func_arr[3])(int, int) = {add, sub, mul};</code></pre>
+                            <pre><code>    int (*func_arr[3])(int, int) = {add, sub, mul};</code></pre>
                             <p>存储多个函数指针，实现函数表。</p>
                         </div>
 
@@ -805,23 +812,23 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>, c = <span class="c-number">30</span>;
-    
+
     <span class="c-comment">// 指针数组：包含3个int指针</span>
     <span class="c-keyword">int</span> *ptr_array[<span class="c-number">3</span>] = {&amp;a, &amp;b, &amp;c};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"整数指针数组:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"ptr_array[%d] = %d\n"</span>, i, *ptr_array[i]);
     }
-    
+
     <span class="c-comment">// 字符串指针数组</span>
     <span class="c-keyword">char</span> *str_array[] = {<span class="c-string">"Hello"</span>, <span class="c-string">"World"</span>, <span class="c-string">"C"</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n字符串指针数组:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"str_array[%d] = %s\n"</span>, i, str_array[i]);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -870,26 +877,26 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">100</span>, y = <span class="c-number">200</span>, z = <span class="c-number">300</span>;
-    
+
     <span class="c-comment">// 指针数组：存储的是地址</span>
     <span class="c-keyword">int</span> *ptr_arr[<span class="c-number">3</span>] = {&amp;x, &amp;y, &amp;z};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"变量地址:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"&amp;x = %p, x = %d\n"</span>, (void*)&amp;x, x);
     <span class="c-function">printf</span>(<span class="c-string">"&amp;y = %p, y = %d\n"</span>, (void*)&amp;y, y);
     <span class="c-function">printf</span>(<span class="c-string">"&amp;z = %p, z = %d\n"</span>, (void*)&amp;z, z);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n指针数组内容:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"ptr_arr[0] = %p, *ptr_arr[0] = %d\n"</span>, (void*)ptr_arr[<span class="c-number">0</span>], *ptr_arr[<span class="c-number">0</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"ptr_arr[1] = %p, *ptr_arr[1] = %d\n"</span>, (void*)ptr_arr[<span class="c-number">1</span>], *ptr_arr[<span class="c-number">1</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"ptr_arr[2] = %p, *ptr_arr[2] = %d\n"</span>, (void*)ptr_arr[<span class="c-number">2</span>], *ptr_arr[<span class="c-number">2</span>]);
-    
+
     <span class="c-comment">// 指针数组的大小</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n内存大小:\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(ptr_arr) = %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(ptr%ur));
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(int*) = %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>*));
-    <span class="c-function">p%utf</span>(<span class="c-string">"数组元素个数: %zu\n"</span>, <span class="c-keyword">sizeof</span>(ptr_arr) / <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>*));
-    
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(ptr_arr) = %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(ptr_arr));
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(int*) = %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>*));
+    <span class="c-function">printf</span>(<span class="c-string">"数组元素个数: %u\n"</span>, (<span class="c-keyword">unsigned int</span>)(<span class="c-keyword">sizeof</span>(ptr_arr) / <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>*)));
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -905,15 +912,15 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> size = <span class="c-number">5</span>;
-    
+
     <span class="c-comment">// 动态分配指针数组</span>
     <span class="c-keyword">int</span> **dynamic_ptr_array = (<span class="c-keyword">int</span>**)malloc(size * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>*));
-    
+
     <span class="c-keyword">if</span> (dynamic_ptr_array == NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"内存分配失败\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     <span class="c-comment">// 为每个指针分配内存</span>
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < size; i++) {
         dynamic_ptr_array[i] = (<span class="c-keyword">int</span>*)malloc(<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
@@ -923,20 +930,20 @@
         }
         *dynamic_ptr_array[i] = (i + <span class="c-number">1</span>) * <span class="c-number">10</span>;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"动态分配的指针数组:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"dynamic_ptr_array[%d] = %d\n"</span>, i, *dynamic_ptr_array[i]);
     }
-    
+
     <span class="c-comment">// 释放内存</span>
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < size; i++) {
         free(dynamic_ptr_array[i]);
     }
     free(dynamic_ptr_array);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"内存已释放\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -953,22 +960,23 @@
 <span class="c-comment">// main函数的标准写法：int main(int argc, char *argv[])</span>
 <span class="c-comment">// argc: 参数个数，argv: 参数字符串数组</span>
 <span class="c-keyword">int</span> <span class="c-function">main</span>(<span class="c-keyword">int</span> argc, <span class="c-keyword">char</span> *argv[]) {
+    <span class="c-keyword">int</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"命令行参数:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"参数个数: %d\n"</span>, argc);
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; argc; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"argv[%d] = %s\n"</span>, i, argv[i]);
     }
-    
+
     <span class="c-comment">// argv[0] 通常是程序名</span>
     <span class="c-comment">// argv[1] 及以后是命令行参数</span>
-    
+
     <span class="c-keyword">if</span> (argc &gt; <span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"\n第一个参数: %s\n"</span>, argv[<span class="c-number">1</span>]);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"\n没有提供额外参数\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -986,7 +994,7 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
-    <span class="c-keyword">char</span> *weeks[] = {<span class="c-string">"星期一"</span>, <span class="c-string">"星期二"</span>, <span class="c-string">"星期三"</span>, 
+    <span class="c-keyword">char</span> *weeks[] = {<span class="c-string">"星期一"</span>, <span class="c-string">"星期二"</span>, <span class="c-string">"星期三"</span>,
                         <span class="c-string">"星期四"</span>, <span class="c-string">"星期五"</span>, <span class="c-string">"星期六"</span>, <span class="c-string">"星期日"</span>};
 
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -1046,25 +1054,29 @@
 
                         <h4>数组指针 vs 指针数组</h4>
                         <div class="callout-warning">
-                            <p><strong>⚠️ 易混淆概念对比：</strong></p>
-                            <table style="width:100%; border-collapse: collapse;">
-                                <tr style="background-color: #f0f0f0;">
-                                    <th style="border: 1px solid #ddd; padding: 8px;">概念</th>
-                                    <th style="border: 1px solid #ddd; padding: 8px;">声明</th>
-                                    <th style="border: 1px solid #ddd; padding: 8px;">含义</th>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">数组指针</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;"><code>int (*p)[5]</code></td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">指向数组的指针（先*后[]）</td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">指针数组</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;"><code>int *p[5]</code></td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">数组的元素是指针（先[]后*）</td>
-                                </tr>
+                            <p><strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 易混淆概念对比：</strong></p>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>概念</th>
+                                        <th>声明</th>
+                                        <th>含义</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>数组指针</td>
+                                        <td><code>int (*p)[5]</code></td>
+                                        <td>指向数组的指针（先*后[]）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>指针数组</td>
+                                        <td><code>int *p[5]</code></td>
+                                        <td>数组的元素是指针（先[]后*）</td>
+                                    </tr>
+                                </tbody>
                             </table>
-                            <p style="margin-top: 10px;">记忆方法：括号优先级最高，<code>(*p)</code> 说明p先是指针，<code>p[]</code> 说明p先是数组。</p>
+                            <p class="table-note">记忆方法：括号优先级最高，<code>(*p)</code> 说明p先是指针，<code>p[]</code> 说明p先是数组。</p>
                         </div>
 
                         <h4>数组指针的步长特性</h4>
@@ -1103,10 +1115,10 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-comment">// 数组指针：指向包含4个int的数组</span>
     <span class="c-keyword">int</span> (*array_ptr)[<span class="c-number">4</span>] = arr;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j &lt; <span class="c-number">4</span>; j++) {
@@ -1114,12 +1126,12 @@
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
-    
+
     <span class="c-comment">// 也可以这样访问</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n另一种访问方式:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"arr[1][2] = %d\n"</span>, arr[<span class="c-number">1</span>][<span class="c-number">2</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"(*array_ptr)[1][2] = %d\n"</span>, (*array_ptr)[<span class="c-number">1</span>][<span class="c-number">2</span>]);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1142,27 +1154,27 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-keyword">int</span> (*array_ptr)[<span class="c-number">4</span>] = arr;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始数组指针: %p\n"</span>, (void*)array_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"array_ptr + 1: %p\n"</span>, (void*)(array_ptr + <span class="c-number">1</span>));
     <span class="c-function">printf</span>(<span class="c-string">"步长: %d 字节\n"</span>, (char*)(array_ptr + <span class="c-number">1</span>) - (char*)array_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"每个数组的大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]));
-    
+
     <span class="c-comment">// 访问不同行</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n访问各行首元素:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d行第一个元素: %d\n"</span>, i, *(*(array_ptr + i)));
     }
-    
+
     <span class="c-comment">// 数组指针和普通指针的区别</span>
     <span class="c-keyword">int</span> *normal_ptr = arr[<span class="c-number">0</span>];  <span class="c-comment">// 指向int</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n普通指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"normal_ptr: %p\n"</span>, (void*)normal_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"normal_ptr + 1: %p\n"</span>, (void*)(normal_ptr + <span class="c-number">1</span>));
     <span class="c-function">printf</span>(<span class="c-string">"步长: %d 字节\n"</span>, (char*)(normal_ptr + <span class="c-number">1</span>) - (char*)normal_ptr);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1176,6 +1188,7 @@
 
 <span class="c-comment">// 使用数组指针作为参数</span>
 <span class="c-keyword">void</span> <span class="c-function">print_matrix</span>(<span class="c-keyword">int</span> (*matrix)[<span class="c-number">4</span>], <span class="c-keyword">int</span> rows) {
+    <span class="c-keyword">int</span> i, j;
     <span class="c-function">printf</span>(<span class="c-string">"矩阵内容:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; rows; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j &lt; <span class="c-number">4</span>; j++) {
@@ -1187,6 +1200,7 @@
 
 <span class="c-comment">// 计算矩阵每行之和</span>
 <span class="c-keyword">void</span> <span class="c-function">row_sums</span>(<span class="c-keyword">int</span> (*matrix)[<span class="c-number">4</span>], <span class="c-keyword">int</span> rows, <span class="c-keyword">int</span> *sums) {
+    <span class="c-keyword">int</span> i, j;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; rows; i++) {
         sums[i] = <span class="c-number">0</span>;
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j &lt; <span class="c-number">4</span>; j++) {
@@ -1202,17 +1216,17 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     print_matrix(matrix, <span class="c-number">3</span>);
-    
+
     <span class="c-keyword">int</span> sums[<span class="c-number">3</span>];
     row_sums(matrix, <span class="c-number">3</span>, sums);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n各行和:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d行: %d\n"</span>, i + <span class="c-number">1</span>, sums[i]);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1231,18 +1245,24 @@
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">diagonal_sum</span>(<span class="c-keyword">int</span> (*arr)[<span class="c-number">3</span>], <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> main_sum = <span class="c-number">0</span>, sub_sum = <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (i =<span class="c-number">0</span>; i&lt;size; i++) {
-        main_sum += arr[i][i];              <span class="c-comment">// 主对角线</span>
-        sub_sum += arr[i][size<span class="c-number">-1</span>-i];      <span class="c-comment">// 副对角线</span>
+    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; size; i++) {
+        main_sum += arr[i][i]; <span class="c-comment">// 主对角线</span>
+        sub_sum += arr[i][size - <span class="c-number">1</span> - i]; <span class="c-comment">// 副对角线</span>
     }
     <span class="c-keyword">return</span> main_sum + sub_sum;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> matrix[<span class="c-number">3</span>][<span class="c-number">3</span>] = {{<span class="c-number">1</span>,<span class="c-number">2</span>,<span class="c-number">3</span>}, {<span class="c-number">4</span>,<span class="c-number">5</span>,<span class="c-number">6</span>}, {<span class="c-number">7</span>,<span class="c-number">8</span>,<span class="c-number">9</span>}};
+    <span class="c-keyword">int</span> sum;
+    <span class="c-keyword">int</span> matrix[<span class="c-number">3</span>][<span class="c-number">3</span>] = {
+        {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>},
+        {<span class="c-number">4</span>, <span class="c-number">5</span>, <span class="c-number">6</span>},
+        {<span class="c-number">7</span>, <span class="c-number">8</span>, <span class="c-number">9</span>}
+    };
 
-    <span class="c-keyword">int</span> sum = diagonal_sum(matrix, <span class="c-number">3</span>);
+    sum = diagonal_sum(matrix, <span class="c-number">3</span>);
     <span class="c-function">printf</span>(<span class="c-string">"对角线元素之和: %d\n"</span>, sum);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1261,16 +1281,17 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i, j;
+    <span class="c-keyword">int</span> value = <span class="c-number">1</span>;
     <span class="c-keyword">int</span> rows = <span class="c-number">3</span>, cols = <span class="c-number">4</span>;
-    
+
     <span class="c-comment">// 方法1: 数组指针方式</span>
     <span class="c-keyword">int</span> (*dynamic_matrix)[<span class="c-number">4</span>] = (<span class="c-keyword">int</span>(*)[<span class="c-number">4</span>])malloc(rows * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>[<span class="c-number">4</span>]));
-    
+
     <span class="c-keyword">if</span> (dynamic_matrix == NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"内存分配失败\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     <span class="c-comment">// 初始化动态二维数组</span>
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; rows; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j &lt; cols; j++) {
@@ -1285,10 +1306,10 @@
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
     }
-    
+
     free(dynamic_matrix);
     <span class="c-function">printf</span>(<span class="c-string">"内存已释放\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1382,23 +1403,23 @@
                         <h4>函数指针的使用方式</h4>
                         <div class="callout-tip">
                             <p><strong>1. 赋值</strong></p>
-                            <pre><code>int (*ptr)(int, int);
-ptr = add;           // 函数名就是地址
-ptr = &add;          // 也可以显式取地址，效果相同</code></pre>
+                            <pre><code>    int (*ptr)(int, int);
+    ptr = add;     // 函数名就是地址
+    ptr = &add;    // 也可以显式取地址，效果相同</code></pre>
                             
                             <p><strong>2. 调用</strong></p>
-                            <pre><code>int result = ptr(3, 5);      // 直接通过指针调用
-int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre>
+                            <pre><code>    int result = ptr(3, 5);       // 直接通过指针调用
+    int result = (*ptr)(3, 5);    // 显式解引用调用，效果相同</code></pre>
                             
                             <p><strong>3. 作为参数传递</strong></p>
-                            <pre><code>void sort(int arr[], int n, int (*cmp)(int, int)) {
+                            <pre><code>    void sort(int arr[], int n, int (*cmp)(int, int)) {
     // 使用cmp比较函数
-}</code></pre>
+    }</code></pre>
                         </div>
 
                         <h4>函数指针 vs 普通指针</h4>
                         <div class="callout-warning">
-                            <p><strong>⚠️ 重要区别：</strong></p>
+                            <p><strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 重要区别：</strong></p>
                             <ul>
                                 <li><strong>普通指针</strong>：指向数据（变量），可以修改指向的数据</li>
                                 <li><strong>函数指针</strong>：指向代码（函数），通过它调用函数执行代码</li>
@@ -1455,25 +1476,25 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
     <span class="c-keyword">int</span> i;
     <span class="c-comment">// 函数指针声明</span>
     <span class="c-keyword">int</span> (*func_ptr)(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>);
-    
+
     <span class="c-comment">// 指向不同函数</span>
     func_ptr = add;
     <span class="c-function">printf</span>(<span class="c-string">"3 + 5 = %d\n"</span>, func_ptr(<span class="c-number">3</span>, <span class="c-number">5</span>));
-    
+
     func_ptr = multiply;
     <span class="c-function">printf</span>(<span class="c-string">"3 * 5 = %d\n"</span>, func_ptr(<span class="c-number">3</span>, <span class="c-number">5</span>));
-    
+
     func_ptr = subtract;
     <span class="c-function">printf</span>(<span class="c-string">"10 - 3 = %d\n"</span>, func_ptr(<span class="c-number">10</span>, <span class="c-number">3</span>));
-    
+
     <span class="c-comment">// 函数指针数组</span>
     <span class="c-keyword">int</span> (*func_array[<span class="c-number">3</span>])(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>) = {add, multiply, subtract};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n函数指针数组调用:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"func_array[%d](4, 2) = %d\n"</span>, i, func_array[i](<span class="c-number">4</span>, <span class="c-number">2</span>));
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1536,10 +1557,10 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
 
 <span class="c-comment">// 冒泡排序函数，接受比较函数作为参数</span>
 <span class="c-keyword">void</span> <span class="c-function">bubble_sort</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> size, CompareFunc compare) {
+    <span class="c-keyword">int</span> i, j;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; size - <span class="c-number">1</span>; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j &lt; size - i - <span class="c-number">1</span>; j++) {
             <span class="c-keyword">if</span> (compare(arr[j], arr[j + <span class="c-number">1</span>]) &gt; <span class="c-number">0</span>) {
-                <span class="c-comment">// 交换</span>
                 <span class="c-keyword">int</span> temp = arr[j];
                 arr[j] = arr[j + <span class="c-number">1</span>];
                 arr[j + <span class="c-number">1</span>] = temp;
@@ -1549,6 +1570,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
 }
 
 <span class="c-keyword">void</span> <span class="c-function">print_array</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> size) {
+    <span class="c-keyword">int</span> i;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
@@ -1556,22 +1578,23 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> size;
     <span class="c-keyword">int</span> numbers[] = {<span class="c-number">64</span>, <span class="c-number">34</span>, <span class="c-number">25</span>, <span class="c-number">12</span>, <span class="c-number">22</span>, <span class="c-number">11</span>, <span class="c-number">90</span>};
-    <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(numbers) / <span class="c-keyword">sizeof</span>(numbers[<span class="c-number">0</span>]);
-    
+    size = <span class="c-keyword">sizeof</span>(numbers) / <span class="c-keyword">sizeof</span>(numbers[<span class="c-number">0</span>]);
+
     <span class="c-function">printf</span>(<span class="c-string">"原始数组: "</span>);
     print_array(numbers, size);
-    
+
     <span class="c-comment">// 升序排序</span>
     bubble_sort(numbers, size, ascending);
     <span class="c-function">printf</span>(<span class="c-string">"升序排序: "</span>);
     print_array(numbers, size);
-    
+
     <span class="c-comment">// 降序排序</span>
     bubble_sort(numbers, size, descending);
     <span class="c-function">printf</span>(<span class="c-string">"降序排序: "</span>);
     print_array(numbers, size);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1610,7 +1633,7 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
             <span class="c-function">printf</span>(<span class="c-string">"%d %c %d = %d\n"</span>, a, operations[i], b, operation(a, b));
         }
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1628,30 +1651,30 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
 <span class="c-keyword">double</span> <span class="c-function">add</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a + b; }
 <span class="c-keyword">double</span> <span class="c-function">subtract</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a - b; }
 <span class="c-keyword">double</span> <span class="c-function">multiply</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a * b; }
-<span class="c-keyword">double</span> <span class="c-function">divide</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { 
-    <span class="c-keyword">return</span> b != <span class="c-number">0.0</span> ? a / b : <span class="c-number">0.0</span>; 
+<span class="c-keyword">double</span> <span class="c-function">divide</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
+    <span class="c-keyword">return</span> b != <span class="c-number">0.0</span> ? a / b : <span class="c-number">0.0</span>;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">double</span> (*operations[<span class="c-number">4</span>])(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>) = {add, subtract, multiply, divide};
     <span class="c-keyword">char</span> operators[<span class="c-number">4</span>] = {<span class="c-string">'+'</span>, <span class="c-string">'-'</span>, <span class="c-string">'*'</span>, <span class="c-string">'/'</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"简单计算器\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"============\n"</span>);
-    
+
     <span class="c-keyword">double</span> num1, num2;
     <span class="c-keyword">char</span> op;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"输入第一个数字: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amp;num1);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"输入运算符 (+, -, *, /): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &amp;op);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"输入第二个数字: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amp;num2);
-    
+
     <span class="c-comment">// 查找对应的运算</span>
     <span class="c-keyword">int</span> op_index = -<span class="c-number">1</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">4</span>; i++) {
@@ -1660,14 +1683,14 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
             <span class="c-keyword">break</span>;
         }
     }
-    
+
     <span class="c-keyword">if</span> (op_index != -<span class="c-number">1</span>) {
         <span class="c-keyword">double</span> result = operations[op_index](num1, num2);
         <span class="c-function">printf</span>(<span class="c-string">"%.2f %c %.2f = %.2f\n"</span>, num1, op, num2, result);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"无效的运算符\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1741,33 +1764,33 @@ int result = (*ptr)(3, 5);   // 显式解引用调用，效果相同</code></pre
                         <h4>定义语法</h4>
                         <div class="callout-tip">
                             <p><strong>基本语法：</strong></p>
-                            <pre><code>struct 结构体名 {
+                            <pre><code>    struct 结构体名 {
     成员类型1 成员名1;
     成员类型2 成员名2;
     ...
-};</code></pre>
+    };</code></pre>
                             <p>例如，定义一个学生结构体：</p>
-                            <pre><code>struct Student {
+                            <pre><code>    struct Student {
     char name[50];    // 姓名
     int age;          // 年龄
     float score;      // 成绩
-};</code></pre>
+    };</code></pre>
                         </div>
 
                         <h4>为什么需要结构体？</h4>
                         <div class="callout-tip">
                             <p><strong>对比思考：</strong></p>
                             <p>不使用结构体时：</p>
-                            <pre><code>char student1_name[50];
-int student1_age;
-float student1_score;
+                            <pre><code>    char student1_name[50];
+    int student1_age;
+    float student1_score;
 
-char student2_name[50];
-int student2_age;
-float student2_score;  // 很混乱！</code></pre>
+    char student2_name[50];
+    int student2_age;
+    float student2_score;    // 很混乱！</code></pre>
                             <p>使用结构体后：</p>
-                            <pre><code>struct Student student1;
-struct Student student2;  // 清晰明了！</code></pre>
+                            <pre><code>    struct Student student1;
+    struct Student student2;    // 清晰明了！</code></pre>
                         </div>
 
                         <h4>访问结构体成员</h4>
@@ -1787,19 +1810,19 @@ struct Student student2;  // 清晰明了！</code></pre>
                             <pre><code>// 方式1：定义时初始化
 struct Student s1 = {"张三", 20, 95.5};
 
-// 方式2：逐个赋值（需要#include &lt;string.h&gt;）
+                        // 方式2：逐个赋值（需要#include &lt;string.h&gt;）
 struct Student s2;
 <span class="c-function">strcpy</span>(s2.name, "李四");
 s2.age = 19;
 s2.score = 88.0;
 
-// 方式3：指定成员初始化（C99）
+                        // 方式3：指定成员初始化（C99）
 struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
                         </div>
 
                         <h4>结构体的内存布局</h4>
                         <div class="callout-warning">
-                            <p><strong>⚠️ 内存对齐：</strong></p>
+                            <p><strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 内存对齐：</strong></p>
                             <p>结构体成员在内存中可能不是紧密排列的，编译器会为了提高访问效率而进行内存对齐：</p>
                             <ul>
                                 <li>结构体的大小 ≥ 所有成员大小之和</li>
@@ -1855,24 +1878,24 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
     <span class="c-comment">// 结构体变量定义和初始化</span>
     <span class="c-keyword">struct</span> Student s1 = {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">95.5</span>};
     <span class="c-keyword">struct</span> Student s2;
-    
+
     <span class="c-comment">// 访问结构体成员</span>
     <span class="c-function">printf</span>(<span class="c-string">"学生1: %s, 年龄%d, 成绩%.1f\n"</span>, s1.name, s1.age, s1.score);
-    
+
     <span class="c-comment">// 修改结构体成员</span>
     <span class="c-function">strcpy</span>(s2.name, <span class="c-string">"李四"</span>);
     s2.age = <span class="c-number">19</span>;
     s2.score = <span class="c-number">88.0</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"学生2: %s, 年龄%d, 成绩%.1f\n"</span>, s2.name, s2.age, s2.score);
-    
+
     <span class="c-comment">// 结构体指针</span>
     <span class="c-keyword">struct</span> Student *ptr = &amp;s1;
     <span class="c-function">printf</span>(<span class="c-string">"\n通过指针访问:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, ptr-&gt;name);
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, ptr-&gt;age);
     <span class="c-function">printf</span>(<span class="c-string">"成绩: %.1f\n"</span>, ptr-&gt;score);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1938,20 +1961,20 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
         {<span class="c-string">"李四"</span>, <span class="c-number">19</span>, <span class="c-number">88.0</span>},
         {<span class="c-string">"王五"</span>, <span class="c-number">21</span>, <span class="c-number">92.3</span>}
     };
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"学生信息:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"学生%d: %s, 年龄%d, 成绩%.1f\n"</span>, 
+        <span class="c-function">printf</span>(<span class="c-string">"学生%d: %s, 年龄%d, 成绩%.1f\n"</span>,
                i + <span class="c-number">1</span>, class[i].name, class[i].age, class[i].score);
     }
-    
+
     <span class="c-comment">// 计算平均分</span>
     <span class="c-keyword">float</span> total = <span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         total += class[i].score;
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n班级平均分: %.2f\n"</span>, total / <span class="c-number">3</span>);
-    
+
     <span class="c-comment">// 查找最高分</span>
     <span class="c-keyword">int</span> max_index = <span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i < <span class="c-number">3</span>; i++) {
@@ -1959,9 +1982,9 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
             max_index = i;
         }
     }
-    <span class="c-function">printf</span>(<span class="c-string">"最高分学生: %s (%.1f分)\n"</span>, 
+    <span class="c-function">printf</span>(<span class="c-string">"最高分学生: %s (%.1f分)\n"</span>,
            class[max_index].name, class[max_index].score);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1996,24 +2019,24 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
         <span class="c-number">8500.50</span>,
         {<span class="c-number">2020</span>, <span class="c-number">3</span>, <span class="c-number">15</span>}  <span class="c-comment">// 嵌套初始化</span>
     };
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"员工信息:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, emp.name);
     <span class="c-function">printf</span>(<span class="c-string">"工号: %d\n"</span>, emp.id);
     <span class="c-function">printf</span>(<span class="c-string">"薪资: %.2f\n"</span>, emp.salary);
-    <span class="c-function">printf</span>(<span class="c-string">"入职日期: %d年%d月%d日\n"</span>, 
+    <span class="c-function">printf</span>(<span class="c-string">"入职日期: %d年%d月%d日\n"</span>,
            emp.hire_date.year, emp.hire_date.month, emp.hire_date.day);
-    
+
     <span class="c-comment">// 修改嵌套结构体成员</span>
     emp.hire_date.year = <span class="c-number">2021</span>;
     <span class="c-function">printf</span>(<span class="c-string">"\n修改后的入职年份: %d年\n"</span>, emp.hire_date.year);
-    
+
     <span class="c-comment">// 结构体指针访问嵌套成员</span>
     <span class="c-keyword">struct</span> Employee *ptr = &amp;emp;
     <span class="c-function">printf</span>(<span class="c-string">"\n通过指针访问:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"薪资: %.2f\n"</span>, ptr-&gt;salary);
     <span class="c-function">printf</span>(<span class="c-string">"入职月份: %d月\n"</span>, ptr-&gt;hire_date.month);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -2038,28 +2061,37 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
 };
 
 <span class="c-keyword">float</span> <span class="c-function">avg</span>(<span class="c-keyword">struct</span> Student arr[], <span class="c-keyword">int</span> n) {
-    <span class="c-keyword">float</span> sum=<span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (i =<span class="c-number">0</span>; i&lt;n; i++) sum += arr[i].score;
-    <span class="c-keyword">return</span> sum/n;
+    <span class="c-keyword">int</span> i;
+    <span class="c-keyword">float</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; n; i++) {
+        sum += arr[i].score;
+    }
+    <span class="c-keyword">return</span> sum / n;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">find_top</span>(<span class="c-keyword">struct</span> Student arr[], <span class="c-keyword">int</span> n) {
-    <span class="c-keyword">int</span> idx=<span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (i =<span class="c-number">1</span>; i&lt;n; i++) {
-        <span class="c-keyword">if</span>(arr[i].score &gt; arr[idx].score) idx=i;
+    <span class="c-keyword">int</span> i;
+    <span class="c-keyword">int</span> idx = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i &lt; n; i++) {
+        <span class="c-keyword">if</span> (arr[i].score &gt; arr[idx].score) {
+            idx = i;
+        }
     }
     <span class="c-keyword">return</span> idx;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">struct</span> Student students[] = {
-        {<span class="c-string">"张三"</span>, <span class="c-number">85.5</span>}, {<span class="c-string">"李四"</span>, <span class="c-number">92.0</span>}, {<span class="c-string">"王五"</span>, <span class="c-number">78.5</span>}
-    };
     <span class="c-keyword">int</span> n = <span class="c-number">3</span>;
+    <span class="c-keyword">int</span> top;
+    <span class="c-keyword">struct</span> Student students[] = {
+        {<span class="c-string">"张三"</span>, <span class="c-number">85.5</span>},
+        {<span class="c-string">"李四"</span>, <span class="c-number">92.0</span>},
+        {<span class="c-string">"王五"</span>, <span class="c-number">78.5</span>}
+    };
 
     <span class="c-function">printf</span>(<span class="c-string">"平均分: %.2f\n"</span>, avg(students, n));
 
-    <span class="c-keyword">int</span> top = find_top(students, n);
+    top = find_top(students, n);
     <span class="c-function">printf</span>(<span class="c-string">"最高分: %s, %.2f\n"</span>, students[top].name, students[top].score);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -2095,22 +2127,22 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
 
 <span class="c-comment">// 方式3: 传引用（C语言不支持，C++支持）</span>
 <span class="c-comment">// void print_student_ref(struct Student &s) { // C++语法</span>
-<span class="c-comment">//     printf("传引用方式: %s\n", s.name);</span>
+<span class="c-comment">// printf("传引用方式: %s\n", s.name);</span>
 <span class="c-comment">// }</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">struct</span> Student s1 = {<span class="c-string">"小明"</span>, <span class="c-number">18</span>, <span class="c-number">85.5</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始数据: %s, 成绩%.1f\n"</span>, s1.name, s1.score);
-    
+
     <span class="c-comment">// 传值调用</span>
     print_student(s1);
-    
+
     <span class="c-comment">// 传指针调用</span>
     update_score(&amp;s1, <span class="c-number">90.0</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"修改后成绩: %.1f\n"</span>, s1.score);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -2134,6 +2166,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
 
 <span class="c-comment">// 计算平均分</span>
 <span class="c-keyword">void</span> <span class="c-function">calculate_average</span>(<span class="c-keyword">struct</span> Student *s) {
+    <span class="c-keyword">int</span> i;
     <span class="c-keyword">float</span> sum = <span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
         sum += s-&gt;scores[i];
@@ -2151,6 +2184,7 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
 
 <span class="c-comment">// 查找最高平均分学生</span>
 <span class="c-keyword">int</span> <span class="c-function">find_top_student</span>(<span class="c-keyword">struct</span> Student students[], <span class="c-keyword">int</span> count) {
+    <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> top_index = <span class="c-number">0</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i &lt; count; i++) {
         <span class="c-keyword">if</span> (students[i].average &gt; students[top_index].average) {
@@ -2162,30 +2196,30 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
+    <span class="c-keyword">int</span> student_count = <span class="c-number">3</span>;
+    <span class="c-keyword">int</span> top_index;
     <span class="c-keyword">struct</span> Student students[<span class="c-number">3</span>] = {
         {<span class="c-string">"张三"</span>, <span class="c-number">1001</span>, {<span class="c-number">85.5</span>, <span class="c-number">90.0</span>, <span class="c-number">88.5</span>}},
         {<span class="c-string">"李四"</span>, <span class="c-number">1002</span>, {<span class="c-number">92.0</span>, <span class="c-number">87.5</span>, <span class="c-number">95.0</span>}},
         {<span class="c-string">"王五"</span>, <span class="c-number">1003</span>, {<span class="c-number">78.5</span>, <span class="c-number">82.0</span>, <span class="c-number">85.5</span>}}
     };
-    
-    <span class="c-keyword">int</span> student_count = <span class="c-number">3</span>;
-    
+
     <span class="c-comment">// 计算每个学生的平均分</span>
-    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < student_count; i++) {
+    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; student_count; i++) {
         calculate_average(&amp;students[i]);
     }
 
     <span class="c-function">printf</span>(<span class="c-string">"学生成绩单:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"----------------------------------------------\n"</span>);
-    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < student_count; i++) {
+    <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; student_count; i++) {
         print_student(students[i]);
     }
-    
+
     <span class="c-comment">// 找出成绩最好的学生</span>
-    <span class="c-keyword">int</span> top_index = find_top_student(students, student_count);
-    <span class="c-function">printf</span>(<span class="c-string">"成绩最好的学生: %s (平均分%.2f)\n"</span>, 
+    top_index = find_top_student(students, student_count);
+    <span class="c-function">printf</span>(<span class="c-string">"成绩最好的学生: %s (平均分%.2f)\n"</span>,
            students[top_index].name, students[top_index].average);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -2260,85 +2294,89 @@ struct Student s3 = {.name = "王五", .score = 92.0, .age = 21};</code></pre>
 
                         <h4>typedef vs #define</h4>
                         <div class="callout-warning">
-                            <p><strong>⚠️ 重要区别：</strong></p>
-                            <table style="width:100%; border-collapse: collapse;">
-                                <tr style="background-color: #f0f0f0;">
-                                    <th style="border: 1px solid #ddd; padding: 8px;">特性</th>
-                                    <th style="border: 1px solid #ddd; padding: 8px;">typedef</th>
-                                    <th style="border: 1px solid #ddd; padding: 8px;">#define</th>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">处理阶段</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">编译器处理</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">预处理器替换</td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">类型检查</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">有类型检查</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">无类型检查</td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">作用域</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">遵循作用域规则</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">全局替换</td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">指针声明</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">正确处理</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">可能出错</td>
-                                </tr>
+                            <p><strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 重要区别：</strong></p>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>特性</th>
+                                        <th>typedef</th>
+                                        <th>#define</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>处理阶段</td>
+                                        <td>编译器处理</td>
+                                        <td>预处理器替换</td>
+                                    </tr>
+                                    <tr>
+                                        <td>类型检查</td>
+                                        <td>有类型检查</td>
+                                        <td>无类型检查</td>
+                                    </tr>
+                                    <tr>
+                                        <td>作用域</td>
+                                        <td>遵循作用域规则</td>
+                                        <td>全局替换</td>
+                                    </tr>
+                                    <tr>
+                                        <td>指针声明</td>
+                                        <td>正确处理</td>
+                                        <td>可能出错</td>
+                                    </tr>
+                                </tbody>
                             </table>
-                            <p style="margin-top: 10px;"><strong>示例对比：</strong></p>
-                            <pre><code>typedef char* String;
-String s1, s2;  // 两个都是char*
+                            <p class="table-note"><strong>示例对比：</strong></p>
+                            <pre><code>    typedef char* String;
+    String s1, s2;    // 两个都是char*
 
-#define String char*
-String s1, s2;  // s1是char*，s2是char！</code></pre>
+    #define String char*
+    String s1, s2;    // s1是char*，s2是char！</code></pre>
                         </div>
 
                         <h4>typedef的常见用法</h4>
                         <div class="callout-tip">
                             <p><strong>1. 基本类型别名</strong></p>
-                            <pre><code>typedef unsigned char byte;
-typedef unsigned int uint;</code></pre>
+                            <pre><code>    typedef unsigned char byte;
+    typedef unsigned int uint;</code></pre>
                             
                             <p><strong>2. 结构体别名</strong></p>
-                            <pre><code>typedef struct Student {
+                            <pre><code>    typedef struct Student {
     char name[50];
     int age;
-} Student;  // 可以直接用Student，不用写struct Student</code></pre>
+    } Student;    // 可以直接用Student，不用写struct Student</code></pre>
                             
                             <p><strong>3. 指针类型别名</strong></p>
-                            <pre><code>typedef int* IntPtr;
-typedef struct Student* StudentPtr;</code></pre>
+                            <pre><code>    typedef int* IntPtr;
+    typedef struct Student* StudentPtr;</code></pre>
                             
                             <p><strong>4. 数组类型别名</strong></p>
-                            <pre><code>typedef int Array10[10];  // 10个int的数组类型</code></pre>
+                            <pre><code>    typedef int Array10[10];    // 10个int的数组类型</code></pre>
                             
                             <p><strong>5. 函数指针别名</strong></p>
-                            <pre><code>typedef int (*MathFunc)(int, int);  // 简化函数指针声明</code></pre>
+                            <pre><code>    typedef int (*MathFunc)(int, int);    // 简化函数指针声明</code></pre>
                         </div>
 
                         <h4>typedef的高级技巧</h4>
                         <div class="callout-tip">
                             <p><strong>技巧1：简化复杂声明</strong></p>
-                            <pre><code>// 不用typedef（难读）
-int (*func_array[10])(int, int);
+                            <pre><code>    // 不用typedef（难读）
+    int (*func_array[10])(int, int);
 
-// 使用typedef（清晰）
-typedef int (*FuncPtr)(int, int);
-FuncPtr func_array[10];</code></pre>
+    // 使用typedef（清晰）
+    typedef int (*FuncPtr)(int, int);
+    FuncPtr func_array[10];</code></pre>
                             
                             <p><strong>技巧2：跨平台类型定义</strong></p>
-                            <pre><code>#ifdef _WIN32
+                            <pre><code>    #ifdef _WIN32
     typedef __int64 int64_t;
-#else
+    #else
     typedef long long int64_t;
-#endif</code></pre>
+    #endif</code></pre>
                             
                             <p><strong>技巧3：函数类型别名</strong></p>
-                            <pre><code>typedef void (*EventHandler)(void* sender, void* args);
-EventHandler onClick, onKeyPress;</code></pre>
+                            <pre><code>    typedef void (*EventHandler)(void* sender, void* args);
+    EventHandler onClick, onKeyPress;</code></pre>
                         </div>
 
                         <div class="callout-note">
@@ -2383,21 +2421,21 @@ EventHandler onClick, onKeyPress;</code></pre>
     Integer num = <span class="c-number">42</span>;
     ULong big_num = <span class="c-number">1234567890UL</span>;
     String text = <span class="c-string">"Hello World"</span>;
-    
+
     Point p = {<span class="c-number">10</span>, <span class="c-number">20</span>};
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"num: %d\n"</span>, num);
     <span class="c-function">printf</span>(<span class="c-string">"big_num: %lu\n"</span>, big_num);
     <span class="c-function">printf</span>(<span class="c-string">"text: %s\n"</span>, text);
     <span class="c-function">printf</span>(<span class="c-string">"point: (%d, %d)\n"</span>, p.x, p.y);
-    
+
     <span class="c-comment">// 函数指针别名</span>
     MathFunc func = add;
     <span class="c-function">printf</span>(<span class="c-string">"add(3, 4) = %d\n"</span>, func(<span class="c-number">3</span>, <span class="c-number">4</span>));
-    
+
     func = multiply;
     <span class="c-function">printf</span>(<span class="c-string">"multiply(3, 4) = %d\n"</span>, func(<span class="c-number">3</span>, <span class="c-number">4</span>));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -2414,9 +2452,9 @@ EventHandler onClick, onKeyPress;</code></pre>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-comment">// 复杂指针类型别名</span>
-<span class="c-keyword">typedef</span> <span class="c-keyword">int</span> (*ArrayPtr)[<span class="c-number">10</span>];           <span class="c-comment">// 指向包含10个int的数组的指针</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">int</span> (*ArrayPtr)[<span class="c-number">10</span>];  <span class="c-comment">// 指向包含10个int的数组的指针</span>
 <span class="c-keyword">typedef</span> <span class="c-keyword">int</span> *(*FuncPtr)(<span class="c-keyword">int</span>*, <span class="c-keyword">int</span>);  <span class="c-comment">// 返回int*的函数指针</span>
-<span class="c-keyword">typedef</span> <span class="c-keyword">void</span> (*Callback)(<span class="c-keyword">void</span>*);       <span class="c-comment">// 回调函数类型</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">void</span> (*Callback)(<span class="c-keyword">void</span>*);  <span class="c-comment">// 回调函数类型</span>
 
 <span class="c-comment">// 结构体指针别名</span>
 <span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
@@ -2434,16 +2472,16 @@ EventHandler onClick, onKeyPress;</code></pre>
     <span class="c-comment">// 使用结构体别名</span>
     Student s1 = {<span class="c-string">"小明"</span>, <span class="c-number">18</span>, <span class="c-number">95.5</span>};
     StudentPtr sp = &amp;s1;
-    
+
     print_student(sp);
-    
+
     <span class="c-comment">// 使用数组指针别名</span>
     <span class="c-keyword">int</span> arr[<span class="c-number">10</span>] = {<span class="c-number">1</span>,<span class="c-number">2</span>,<span class="c-number">3</span>,<span class="c-number">4</span>,<span class="c-number">5</span>,<span class="c-number">6</span>,<span class="c-number">7</span>,<span class="c-number">8</span>,<span class="c-number">9</span>,<span class="c-number">10</span>};
     ArrayPtr ap = &amp;arr;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组第一个元素: %d\n"</span>, (*ap)[<span class="c-number">0</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"数组第五个元素: %d\n"</span>, (*ap)[<span class="c-number">4</span>]);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -2456,26 +2494,26 @@ EventHandler onClick, onKeyPress;</code></pre>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-comment">// 常量指针类型</span>
-<span class="c-keyword">typedef</span> <span class="c-keyword">const</span> <span class="c-keyword">char</span>* StringConst;     <span class="c-comment">// 指向常量的指针</span>
+<span class="c-keyword">typedef</span> <span class="c-keyword">const</span> <span class="c-keyword">char</span>* StringConst;  <span class="c-comment">// 指向常量的指针</span>
 <span class="c-keyword">typedef</span> <span class="c-keyword">char</span>* <span class="c-keyword">const</span> StringPtrConst;  <span class="c-comment">// 常量指针</span>
 <span class="c-keyword">typedef</span> <span class="c-keyword">const</span> <span class="c-keyword">char</span>* <span class="c-keyword">const</span> StringFullConst; <span class="c-comment">// 完全常量</span>
 
 <span class="c-keyword">void</span> <span class="c-function">demo_const_typedef</span>() {
     <span class="c-keyword">char</span> str[] = <span class="c-string">"Hello"</span>;
     <span class="c-keyword">const</span> <span class="c-keyword">char</span> const_str[] = <span class="c-string">"World"</span>;
-    
+
     <span class="c-comment">// StringConst: 可以修改指针，但不能修改指向的内容</span>
-    StringConst s1 = str;        <span class="c-comment">// 正确</span>
+    StringConst s1 = str;  <span class="c-comment">// 正确</span>
     StringConst s2 = const_str;  <span class="c-comment">// 正确</span>
     <span class="c-comment">// *s1 = 'X';  // 错误：不能修改内容</span>
-    s1 = const_str;              <span class="c-comment">// 正确：可以修改指针</span>
-    
+    s1 = const_str;  <span class="c-comment">// 正确：可以修改指针</span>
+
     <span class="c-comment">// StringPtrConst: 不能修改指针，但可以修改内容</span>
-    StringPtrConst s3 = str;     <span class="c-comment">// 正确</span>
+    StringPtrConst s3 = str;  <span class="c-comment">// 正确</span>
     <span class="c-comment">// StringPtrConst s4 = const_str;  // 错误：不能指向常量</span>
-    *s3 = <span class="c-string">'X'</span>;              <span class="c-comment">// 正确：可以修改内容</span>
+    *s3 = <span class="c-string">'X'</span>;  <span class="c-comment">// 正确：可以修改内容</span>
     <span class="c-comment">// s3 = const_str;  // 错误：不能修改指针</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"str: %s\n"</span>, str);
     <span class="c-function">printf</span>(<span class="c-string">"s1指向: %s\n"</span>, s1);
     <span class="c-function">printf</span>(<span class="c-string">"s3指向: %s\n"</span>, s3);
@@ -2496,10 +2534,10 @@ EventHandler onClick, onKeyPress;</code></pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     demo_const_typedef();
-    
+
     Person p = {<span class="c-number">1001</span>, <span class="c-string">"张三"</span>};
     print_person(&amp;p);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -2549,7 +2587,7 @@ LinkedList* <span class="c-function">list_create</span>(Comparator cmp) {
 Bool <span class="c-function">list_insert</span>(LinkedList* list, <span class="c-keyword">void</span>* data) {
     NodePtr new_node = (NodePtr)malloc(<span class="c-keyword">sizeof</span>(Node));
     <span class="c-keyword">if</span> (!new_node) <span class="c-keyword">return</span> FALSE;
-    
+
     new_node-&gt;data = data;
     new_node-&gt;next = list-&gt;head;
     list-&gt;head = new_node;
@@ -2579,7 +2617,7 @@ Bool <span class="c-function">list_insert</span>(LinkedList* list, <span class="
     <span class="c-keyword">int</span> i;
     <span class="c-comment">// 创建链表</span>
     LinkedList* list = list_create(int_compare);
-    
+
     <span class="c-comment">// 插入数据</span>
     <span class="c-keyword">int</span> values[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">5</span>};
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-number">4</span>; i++) {
@@ -2587,15 +2625,15 @@ Bool <span class="c-function">list_insert</span>(LinkedList* list, <span class="
         *val = values[i];
         list_insert(list, val);
     }
-    
+
     <span class="c-comment">// 打印链表</span>
     <span class="c-function">printf</span>(<span class="c-string">"链表内容: "</span>);
     list_print(list, print_int);
     <span class="c-function">printf</span>(<span class="c-string">"\n链表大小: %u\n"</span>, list-&gt;size);
-    
+
     <span class="c-comment">// 清理内存（简化版，实际应用中需要完整清理）</span>
     free(list);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>

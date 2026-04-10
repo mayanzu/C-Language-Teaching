@@ -63,10 +63,10 @@
     <span class="c-keyword">int</span> a = <span class="c-number">5</span>;
     <span class="c-keyword">int</span> b = <span class="c-number">3</span>;
     <span class="c-keyword">int</span> result;
-    
+
     <span class="c-comment">// 复杂表达式</span>
     result = (a + b) * <span class="c-number">2</span> - a / b + a % b;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"结果: %d\n"</span>, result);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -241,13 +241,13 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">3</span>;
     <span class="c-keyword">float</span> c = <span class="c-number">10.0</span>, d = <span class="c-number">3.0</span>;
-    
+
     <span class="c-comment">// 整数除法：结果向下取整</span>
     <span class="c-function">printf</span>(<span class="c-string">"整数除法: %d / %d = %d\n"</span>, a, b, a / b);  <span class="c-comment">// 输出: 整数除法: 10 / 3 = 3</span>
-    
+
     <span class="c-comment">// 浮点数除法：保留小数部分</span>
     <span class="c-function">printf</span>(<span class="c-string">"浮点除法: %.1f / %.1f = %.1f\n"</span>, c, d, c / d);  <span class="c-comment">// 输出: 浮点除法: 10.0 / 3.0 = 3.3</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -348,19 +348,19 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">2</span>, c = <span class="c-number">3</span>;
-    
+
     <span class="c-comment">// !的优先级最高，然后是&&，最后是||</span>
     <span class="c-comment">// !a || b && !c 等价于 (!a) || (b && (!c))</span>
     <span class="c-keyword">int</span> result = !a || b && !c;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"result = %d\n"</span>, result);  <span class="c-comment">// 输出: result = 0</span>
-    
+
     <span class="c-comment">// 详细分析:</span>
     <span class="c-comment">// !a = !1 = 0</span>
     <span class="c-comment">// !c = !3 = 0</span>
     <span class="c-comment">// b && !c = 2 && 0 = 0</span>
     <span class="c-comment">// 0 || 0 = 0</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -439,15 +439,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">2</span>, y = <span class="c-number">3</span>;
-    
+
     <span class="c-comment">// x *= y + 5 等价于 x = x * (y + 5)，而不是 (x * y) + 5</span>
     x *= y + <span class="c-number">5</span>;
     <span class="c-function">printf</span>(<span class="c-string">"x = %d\n"</span>, x);  <span class="c-comment">// 输出: x = 16</span>
-    
+
     <span class="c-comment">// 分析:</span>
     <span class="c-comment">// y + 5 = 3 + 5 = 8</span>
     <span class="c-comment">// x * 8 = 2 * 8 = 16</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -462,17 +462,17 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a, b, c;
-    
+
     <span class="c-comment">// 连续赋值从右到左执行</span>
     a = b = c = <span class="c-number">5</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d, c=%d\n"</span>, a, b, c);  <span class="c-comment">// 输出: a=5, b=5, c=5</span>
-    
+
     <span class="c-comment">// 分析过程:</span>
     <span class="c-comment">// c = 5       // c = 5, 返回值 5</span>
     <span class="c-comment">// b = 5       // b = 5, 返回值 5</span>
     <span class="c-comment">// a = 5       // a = 5, 返回值 5</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -545,18 +545,18 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">5</span>, y, z;
-    
+
     <span class="c-comment">// 前缀自增</span>
     y = ++x;  <span class="c-comment">// 先增加x为6，然后赋值给y</span>
     <span class="c-function">printf</span>(<span class="c-string">"y = %d, x = %d\n"</span>, y, x);  <span class="c-comment">// 输出: y = 6, x = 6</span>
-    
+
     <span class="c-comment">// 重置x</span>
     x = <span class="c-number">5</span>;
-    
+
     <span class="c-comment">// 后缀自增</span>
     z = x++;  <span class="c-comment">// 先将x的值5赋值给z，然后增加x为6</span>
     <span class="c-function">printf</span>(<span class="c-string">"z = %d, x = %d\n"</span>, z, x);  <span class="c-comment">// 输出: z = 5, x = 6</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -572,17 +572,17 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> p = <span class="c-number">5</span>;
     <span class="c-keyword">int</span> result;
-    
+
     <span class="c-comment">// 逻辑与运算中自增的使用</span>
     result = p &gt; <span class="c-number">0</span> && p++ &gt; <span class="c-number">5</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"p=%d, result=%d\n"</span>, p, result);  <span class="c-comment">// 输出: p=6, result=0</span>
-    
+
     <span class="c-comment">// 分析:</span>
     <span class="c-comment">// p &gt; 0 为真 (5 &gt; 0)</span>
     <span class="c-comment">// p++ &gt; 5: 先比较 5 &gt; 5 为假，然后p变为6</span>
     <span class="c-comment">// 1 && 0 = 0</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -618,21 +618,21 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">0</span>;
     <span class="c-keyword">int</span> result;
-    
+
     <span class="c-comment">// 基本用法</span>
     result = (a &gt; b) ? a + <span class="c-number">1</span> : b - <span class="c-number">1</span>;
     <span class="c-function">printf</span>(<span class="c-string">"result = %d\n"</span>, result);  <span class="c-comment">// 输出: result = 2</span>
-    
+
     <span class="c-comment">// 在赋值中的应用</span>
     <span class="c-keyword">int</span> x = <span class="c-number">5</span>;
     x = (x &gt; <span class="c-number">3</span>) ? <span class="c-number">10</span> : <span class="c-number">20</span>;
     <span class="c-function">printf</span>(<span class="c-string">"x = %d\n"</span>, x);  <span class="c-comment">// 输出: x = 10</span>
-    
+
     <span class="c-comment">// 嵌套使用</span>
     <span class="c-keyword">int</span> y = <span class="c-number">15</span>;
     y = (y &lt; <span class="c-number">1</span>) ? <span class="c-number">1</span> : (y &gt; <span class="c-number">10</span>) ? <span class="c-number">10</span> : y;
     <span class="c-function">printf</span>(<span class="c-string">"y = %d\n"</span>, y);  <span class="c-comment">// 输出: y = 10</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -710,29 +710,29 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> n = <span class="c-number">0xAA</span>;  <span class="c-comment">// 十六进制: 0xAA = 10101010 (二进制)</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> data = <span class="c-number">5</span>;   <span class="c-comment">// 二进制: 101</span>
-    
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> data = <span class="c-number">5</span>;  <span class="c-comment">// 二进制: 101</span>
+
     <span class="c-comment">// 左移运算</span>
     <span class="c-function">printf</span>(<span class="c-string">"n &lt;&lt; 4 = 0x%X\n"</span>, n &lt;&lt; <span class="c-number">4</span>);  <span class="c-comment">// 输出: n &lt;&lt; 4 = 0xAA0</span>
     <span class="c-comment">// 分析: 10101010 &lt;&lt; 4 = 101010100000 = 0xAA0</span>
-    
+
     <span class="c-comment">// 右移运算</span>
     <span class="c-keyword">int</span> num = <span class="c-number">0x8A</span>;  <span class="c-comment">// 十六进制: 0x8A = 10001010 (二进制) = 138 (十进制)</span>
     <span class="c-function">printf</span>(<span class="c-string">"num &gt;&gt; 3 = %d\n"</span>, num &gt;&gt; <span class="c-number">3</span>);  <span class="c-comment">// 输出: num &gt;&gt; 3 = 17</span>
     <span class="c-comment">// 分析: 138 &gt;&gt; 3 = 17</span>
-    
+
     <span class="c-comment">// 按位与：检查最低位</span>
     <span class="c-keyword">if</span> (data & <span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"data的最低位是1\n"</span>);  <span class="c-comment">// 输出: data的最低位是1</span>
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"data的最低位是0\n"</span>);
     }
-    
+
     <span class="c-comment">// 复杂位运算</span>
     <span class="c-keyword">int</span> result = <span class="c-number">1</span> & <span class="c-number">2</span> | <span class="c-number">4</span>;
     <span class="c-function">printf</span>(<span class="c-string">"1 &amp; 2 | 4 = %d\n"</span>, result);  <span class="c-comment">// 输出: 1 &amp; 2 | 4 = 4</span>
     <span class="c-comment">// 分析: (1 &amp; 2) | 4 = 0 | 4 = 4</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -854,24 +854,24 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">2</span>, c = <span class="c-number">3</span>;
-    
+
     <span class="c-comment">// 复杂表达式的优先级分析</span>
     <span class="c-keyword">int</span> result1 = a + b * (a - b);
     <span class="c-function">printf</span>(<span class="c-string">"a + b * (a - b) = %d\n"</span>, result1);  <span class="c-comment">// 输出: a + b * (a - b) = -1</span>
-    
+
     <span class="c-comment">// 运算符优先级：* &gt; +，先算 b * (a-b)</span>
     <span class="c-comment">// a - b = 1 - 2 = -1</span>
     <span class="c-comment">// b * (-1) = 2 * (-1) = -2</span>
     <span class="c-comment">// a + (-2) = 1 + (-2) = -1</span>
-    
+
     <span class="c-keyword">int</span> result2 = a % b * <span class="c-number">2</span> + <span class="c-number">1</span>;
     <span class="c-function">printf</span>(<span class="c-string">"a %% b * 2 + 1 = %d\n"</span>, result2);  <span class="c-comment">// 输出: a % b * 2 + 1 = 1</span>
-    
+
     <span class="c-comment">// 运算符优先级：* % &gt; +，从左到右结合</span>
     <span class="c-comment">// a % b = 6 % 2 = 0</span>
     <span class="c-comment">// 0 * 2 = 0</span>
     <span class="c-comment">// 0 + 1 = 1</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -895,21 +895,21 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i = <span class="c-number">5</span>;
     <span class="c-keyword">double</span> result;
-    
+
     <span class="c-comment">// 整数提升：int提升为double</span>
     result = (<span class="c-keyword">double</span>)i / <span class="c-number">2</span>;
     <span class="c-function">printf</span>(<span class="c-string">"(double)i / 2 = %.1f\n"</span>, result);  <span class="c-comment">// 输出: (double)i / 2 = 2.5</span>
-    
+
     <span class="c-comment">// 混合类型运算：自动提升</span>
     result = <span class="c-number">5</span> / <span class="c-number">2.0</span>;
     <span class="c-function">printf</span>(<span class="c-string">"5 / 2.0 = %.1f\n"</span>, result);  <span class="c-comment">// 输出: 5 / 2.0 = 2.5</span>
-    
+
     <span class="c-comment">// 强制转换与自动转换</span>
     result = (<span class="c-keyword">int</span>)<span class="c-number">3.14</span> + <span class="c-number">1.8</span>;
     <span class="c-function">printf</span>(<span class="c-string">"(int)3.14 + 1.8 = %.1f\n"</span>, result);  <span class="c-comment">// 输出: (int)3.14 + 1.8 = 4.8</span>
-    
+
     <span class="c-comment">// 分析: (int)3.14 = 3，然后 3 + 1.8 提升为 double = 4.8</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -926,11 +926,11 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(5 / 2) = %u\n"</span>, <span class="c-function">sizeof</span>(<span class="c-number">5</span> / <span class="c-number">2</span>));  <span class="c-comment">// 输出: sizeof(5 / 2) = 4</span>
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(5.0 / 2) = %u\n"</span>, <span class="c-function">sizeof</span>(<span class="c-number">5.0</span> / <span class="c-number">2</span>));  <span class="c-comment">// 输出: sizeof(5.0 / 2) = 8</span>
-    
+
     <span class="c-comment">// 分析:</span>
     <span class="c-comment">// 5 / 2 是整数除法，结果为int类型，sizeof(int) = 4</span>
     <span class="c-comment">// 5.0 / 2 中5.0是double，结果为double类型，sizeof(double) = 8</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -965,19 +965,19 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">0</span>;
-    
+
     <span class="c-comment">// 逻辑或的短路求值</span>
     <span class="c-keyword">int</span> result1 = (<span class="c-number">1</span> &gt; <span class="c-number">0</span>) || (<span class="c-number">0</span> / x);
     <span class="c-function">printf</span>(<span class="c-string">"(1 &gt; 0) || (0 / x) = %d\n"</span>, result1);  <span class="c-comment">// 输出: (1 &gt; 0) || (0 / x) = 1</span>
-    
+
     <span class="c-comment">// 分析: 第一个条件为真，不再计算第二个条件，避免除零错误</span>
-    
+
     <span class="c-keyword">int</span> i = <span class="c-number">8</span>;
     <span class="c-keyword">int</span> result2 = i &gt; <span class="c-number">10</span> || ++i;
     <span class="c-function">printf</span>(<span class="c-string">"i &gt; 10 || ++i: i=%d, result=%d\n"</span>, i, result2);  <span class="c-comment">// 输出: i &gt; 10 || ++i: i=9, result=1</span>
-    
+
     <span class="c-comment">// 分析: i &gt; 10 为假，继续计算 ++i，i 变为 9</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1008,16 +1008,16 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i = <span class="c-number">5</span>;
-    
+
     <span class="c-comment">// 错误：对同一变量多次修改没有序列点</span>
     <span class="c-comment">// int j = i++ + ++i;  // 这条语句是未定义行为！</span>
-    
+
     <span class="c-comment">// 正确做法：分开操作</span>
     <span class="c-keyword">int</span> j1 = i++;
     i++;
     <span class="c-keyword">int</span> j2 = j1 + i;
     <span class="c-function">printf</span>(<span class="c-string">"正确做法: i=%d, j=%d\n"</span>, i, j2);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>

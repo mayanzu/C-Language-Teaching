@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- SVG图标引用 -->
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+    
     <!-- 侧边导航栏 -->
     <nav class="tutorial-nav">
         <ul>
@@ -56,19 +63,19 @@
                     <div class="callout-tip">
                         <p><strong>位运算部分</strong></p>
                         <ul>
-                            <li>✅ 掌握6种位运算符（&, |, ^, ~, <<, >>）的原理和用法</li>
-                            <li>✅ 理解二进制运算的本质，能够手算二进制运算结果</li>
-                            <li>✅ 学习位运算在权限控制、数据压缩等场景的应用</li>
-                            <li>✅ 掌握常用的位操作技巧（设置位、清除位、检查位等）</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 掌握6种位运算符（&, |, ^, ~, <<, >>）的原理和用法</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 理解二进制运算的本质，能够手算二进制运算结果</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 学习位运算在权限控制、数据压缩等场景的应用</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 掌握常用的位操作技巧（设置位、清除位、检查位等）</li>
                         </ul>
                         
                         <p><strong>文件操作部分</strong></p>
                         <ul>
-                            <li>✅ 理解文件、文件流、文件指针等基本概念</li>
-                            <li>✅ 掌握文件的打开、读写、关闭操作</li>
-                            <li>✅ 熟悉各种文件打开模式（r, w, a, r+, w+, a+等）</li>
-                            <li>✅ 学习文本文件和二进制文件的区别和应用</li>
-                            <li>✅ 掌握文件错误处理和文件指针定位</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 理解文件、文件流、文件指针等基本概念</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 掌握文件的打开、读写、关闭操作</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 熟悉各种文件打开模式（r, w, a, r+, w+, a+等）</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 学习文本文件和二进制文件的区别和应用</li>
+                            <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 掌握文件错误处理和文件指针定位</li>
                         </ul>
                     </div>
                     
@@ -84,7 +91,7 @@
                     </div>
 
                     <div class="callout-warning">
-                        <strong>⚠️ 常见错误提示：</strong>
+                        <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 常见错误提示：</strong>
                         <ul>
                             <li>位运算的优先级较低，使用时要加括号：<code>if ((x & mask) != 0)</code></li>
                             <li>不要混淆位运算符（&, |）和逻辑运算符（&&, ||）</li>
@@ -209,68 +216,71 @@
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> a = <span class="c-number">5</span>;   <span class="c-comment">// 二进制: 0101</span>
-    <span class="c-keyword">int</span> b = <span class="c-number">3</span>;   <span class="c-comment">// 二进制: 0011</span>
-    
+    <span class="c-keyword">int</span> a = <span class="c-number">5</span>;
+    <span class="c-keyword">int</span> b = <span class="c-number">3</span>;
+    <span class="c-keyword">int</span> and_result;
+    <span class="c-keyword">int</span> or_result;
+    <span class="c-keyword">int</span> xor_result;
+    <span class="c-keyword">int</span> not_result;
+    <span class="c-keyword">int</span> num = <span class="c-number">17</span>;
+    <span class="c-keyword">int</span> x = <span class="c-number">10</span>;
+    <span class="c-keyword">int</span> y = <span class="c-number">20</span>;
+    <span class="c-keyword">int</span> n = -<span class="c-number">5</span>;
+    <span class="c-keyword">int</span> mask;
+    <span class="c-keyword">int</span> abs_n;
+
     <span class="c-function">printf</span>(<span class="c-string">"=== 位运算基础演示 ===\n\n"</span>);
-    
+
     <span class="c-comment">// 显示原始数据</span>
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, 二进制: "</span>, a);
     print_binary(a, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"b = %d, 二进制: "</span>, b);
     print_binary(b, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"\n\n"</span>);
-    
-    <span class="c-comment">// 按位与：对应位都是1时结果为1</span>
-    <span class="c-keyword">int</span> and_result = a &amp; b;
+
+    and_result = a &amp; b;
     <span class="c-function">printf</span>(<span class="c-string">"a & b = %d, 二进制: "</span>, and_result);
     print_binary(and_result, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (按位与：都为1则为1)\n"</span>);
-    
-    <span class="c-comment">// 按位或：对应位有一个是1时结果为1</span>
-    <span class="c-keyword">int</span> or_result = a | b;
+
+    or_result = a | b;
     <span class="c-function">printf</span>(<span class="c-string">"a | b = %d, 二进制: "</span>, or_result);
     print_binary(or_result, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (按位或：有1则为1)\n"</span>);
-    
-    <span class="c-comment">// 按位异或：对应位不同时结果为1</span>
-    <span class="c-keyword">int</span> xor_result = a ^ b;
+
+    xor_result = a ^ b;
     <span class="c-function">printf</span>(<span class="c-string">"a ^ b = %d, 二进制: "</span>, xor_result);
     print_binary(xor_result, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (按位异或：不同为1)\n"</span>);
-    
-    <span class="c-comment">// 按位取反：所有位取反</span>
-    <span class="c-keyword">int</span> not_result = ~a;
+
+    not_result = ~a;
     <span class="c-function">printf</span>(<span class="c-string">"~a   = %d, 二进制: "</span>, not_result);
     print_binary((<span class="c-keyword">unsigned int</span>)not_result, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (按位取反：0变1，1变0)\n"</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 位运算的实用应用 ===\n\n"</span>);
-    
+
     <span class="c-comment">// 应用1：判断奇偶性</span>
-    <span class="c-keyword">int</span> num = <span class="c-number">17</span>;
-    <span class="c-keyword">if</span> (num &amp; <span class="c-number">1</span>) {  <span class="c-comment">// 检查最低位是否为1</span>
+    <span class="c-keyword">if</span> (num &amp; <span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"%d 是奇数（最低位为1）\n"</span>, num);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"%d 是偶数（最低位为0）\n"</span>, num);
     }
-    
+
     <span class="c-comment">// 应用2：不使用临时变量交换两个数</span>
-    <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">20</span>;
     <span class="c-function">printf</span>(<span class="c-string">"\n交换前: x=%d, y=%d\n"</span>, x, y);
-    x ^= y;  <span class="c-comment">// x = x ^ y</span>
-    y ^= x;  <span class="c-comment">// y = y ^ (x^y) = x</span>
-    x ^= y;  <span class="c-comment">// x = (x^y) ^ x = y</span>
+    x ^= y;
+    y ^= x;
+    x ^= y;
     <span class="c-function">printf</span>(<span class="c-string">"交换后: x=%d, y=%d（使用异或交换）\n"</span>, x, y);
-    
+
     <span class="c-comment">// 应用3：获取绝对值（对于负数）</span>
-    <span class="c-keyword">int</span> n = -<span class="c-number">5</span>;
-    <span class="c-keyword">int</span> mask = n &gt;&gt; <span class="c-number">31</span>;  <span class="c-comment">// 负数右移31位后为-1(全1)，正数为0</span>
-    <span class="c-keyword">int</span> abs_n = (n ^ mask) - mask;  <span class="c-comment">// 利用异或和减法获取绝对值</span>
+    mask = n &gt;&gt; <span class="c-number">31</span>;
+    abs_n = (n ^ mask) - mask;
     <span class="c-function">printf</span>(<span class="c-string">"\n%d 的绝对值是 %d（位运算实现）\n"</span>, n, abs_n);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -359,7 +369,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
     <span class="c-keyword">while</span> (n) {
         count += n &amp; <span class="c-number">1</span>;  <span class="c-comment">// 检查最低位</span>
-        n &gt;&gt;= <span class="c-number">1</span>;      <span class="c-comment">// 右移一位</span>
+        n &gt;&gt;= <span class="c-number">1</span>;  <span class="c-comment">// 右移一位</span>
     }
     <span class="c-keyword">return</span> count;
 }
@@ -371,7 +381,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     <span class="c-comment">// 例如：n=12(1100), n-1=11(1011), n&(n-1)=8(1000)</span>
     <span class="c-keyword">while</span> (n) {
         n &amp;= n - <span class="c-number">1</span>;  <span class="c-comment">// 清除最低位的1</span>
-        count++;     <span class="c-comment">// 计数器加1</span>
+        count++;  <span class="c-comment">// 计数器加1</span>
     }
     <span class="c-keyword">return</span> count;
 }
@@ -379,9 +389,9 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">unsigned int</span> num = <span class="c-number">29</span>;  <span class="c-comment">// 二进制: 11101</span>
 
-    <span class="c-function">printf</span>(<span class="c-string">"数字 %u 的二进制表示中有 %d 个1（方法1）\n"</span>, 
+    <span class="c-function">printf</span>(<span class="c-string">"数字 %u 的二进制表示中有 %d 个1（方法1）\n"</span>,
            num, count_ones_v1(num));
-    <span class="c-function">printf</span>(<span class="c-string">"数字 %u 的二进制表示中有 %d 个1（方法2）\n"</span>, 
+    <span class="c-function">printf</span>(<span class="c-string">"数字 %u 的二进制表示中有 %d 个1（方法2）\n"</span>,
            num, count_ones_v2(num));
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -402,8 +412,8 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-comment">// 定义权限常量</span>
-<span class="c-keyword">const</span> <span class="c-keyword">int</span> READ_PERMISSION = <span class="c-number">1</span> &lt;&lt; <span class="c-number">0</span>;    <span class="c-comment">// 0001 - 读取权限</span>
-<span class="c-keyword">const</span> <span class="c-keyword">int</span> WRITE_PERMISSION = <span class="c-number">1</span> &lt;&lt; <span class="c-number">1</span>;   <span class="c-comment">// 0010 - 写入权限</span>
+<span class="c-keyword">const</span> <span class="c-keyword">int</span> READ_PERMISSION = <span class="c-number">1</span> &lt;&lt; <span class="c-number">0</span>;  <span class="c-comment">// 0001 - 读取权限</span>
+<span class="c-keyword">const</span> <span class="c-keyword">int</span> WRITE_PERMISSION = <span class="c-number">1</span> &lt;&lt; <span class="c-number">1</span>;  <span class="c-comment">// 0010 - 写入权限</span>
 <span class="c-keyword">const</span> <span class="c-keyword">int</span> EXECUTE_PERMISSION = <span class="c-number">1</span> &lt;&lt; <span class="c-number">2</span>; <span class="c-comment">// 0100 - 执行权限</span>
 <span class="c-keyword">const</span> <span class="c-keyword">int</span> DELETE_PERMISSION = <span class="c-number">1</span> &lt;&lt; <span class="c-number">3</span>;  <span class="c-comment">// 1000 - 删除权限</span>
 
@@ -425,29 +435,29 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> admin_permissions = <span class="c-number">0</span>;  <span class="c-comment">// 初始无权限</span>
-    
+
     <span class="c-comment">// 给管理员添加所有权限</span>
     admin_permissions = add_permission(admin_permissions, READ_PERMISSION);
     admin_permissions = add_permission(admin_permissions, WRITE_PERMISSION);
     admin_permissions = add_permission(admin_permissions, EXECUTE_PERMISSION);
     admin_permissions = add_permission(admin_permissions, DELETE_PERMISSION);
-    
+
     <span class="c-comment">// 显示权限的二进制表示</span>
     <span class="c-function">printf</span>(<span class="c-string">"管理员权限: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">3</span>; i &gt;= <span class="c-number">0</span>; i--) {
         <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, (admin_permissions &gt;&gt; i) &amp; <span class="c-number">1</span>);
     }
     <span class="c-function">printf</span>(<span class="c-string">" (二进制)\n"</span>);
-    
+
     <span class="c-comment">// 检查权限</span>
     <span class="c-function">printf</span>(<span class="c-string">"有读取权限: %s\n"</span>, has_permission(admin_permissions, READ_PERMISSION) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"有写入权限: %s\n"</span>, has_permission(admin_permissions, WRITE_PERMISSION) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-comment">// 移除写入权限</span>
     admin_permissions = remove_permission(admin_permissions, WRITE_PERMISSION);
     <span class="c-function">printf</span>(<span class="c-string">"\n移除写入权限后:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"有写入权限: %s\n"</span>, has_permission(admin_permissions, WRITE_PERMISSION) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -483,7 +493,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     r = (r * <span class="c-number">31</span>) / <span class="c-number">255</span>;
     g = (g * <span class="c-number">31</span>) / <span class="c-number">255</span>;
     b = (b * <span class="c-number">31</span>) / <span class="c-number">255</span>;
-    
+
     <span class="c-comment">// 打包到16位: RRRRRGGGGGGBBBBB</span>
     <span class="c-keyword">return</span> (r &lt;&lt; <span class="c-number">11</span>) | (g &lt;&lt; <span class="c-number">6</span>) | (b &lt;&lt; <span class="c-number">1</span>);
 }
@@ -496,26 +506,27 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
-    <span class="c-comment">// 布尔值压缩示例</span>
+    <span class="c-keyword">int</span> b1, b2, b3, b4;
+    <span class="c-keyword">int</span> r, g, b;
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> compressed = compress_bools(<span class="c-number">1</span>, <span class="c-number">0</span>, <span class="c-number">1</span>, <span class="c-number">1</span>);
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">short</span> color = compress_color(<span class="c-number">255</span>, <span class="c-number">128</span>, <span class="c-number">64</span>);
+
+    <span class="c-comment">// 布尔值压缩示例</span>
     <span class="c-function">printf</span>(<span class="c-string">"压缩后的字节(二进制): "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">7</span>; i &gt;= <span class="c-number">0</span>; i--) {
         <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, (compressed &gt;&gt; i) &amp; <span class="c-number">1</span>);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
-    <span class="c-keyword">int</span> b1, b2, b3, b4;
+
     extract_bools(compressed, &amp;b1, &amp;b2, &amp;b3, &amp;b4);
     <span class="c-function">printf</span>(<span class="c-string">"解压后的布尔值: %d, %d, %d, %d\n"</span>, b1, b2, b3, b4);
-    
+
     <span class="c-comment">// 颜色压缩示例</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">short</span> color = compress_color(<span class="c-number">255</span>, <span class="c-number">128</span>, <span class="c-number">64</span>);
     <span class="c-function">printf</span>(<span class="c-string">"\n压缩后的颜色: 0x%04X\n"</span>, color);
-    
-    <span class="c-keyword">int</span> r, g, b;
+
     extract_color(color, &amp;r, &amp;g, &amp;b);
     <span class="c-function">printf</span>(<span class="c-string">"解压后的颜色: R=%d, G=%d, B=%d\n"</span>, r, g, b);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -577,7 +588,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                     </div>
 
                     <div class="callout-warning">
-                        <strong>⚠️ 移位运算注意事项：</strong>
+                        <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 移位运算注意事项：</strong>
                         <ul>
                             <li>移位的位数不能为负数</li>
                             <li>移位的位数超过数据类型的位数，结果未定义</li>
@@ -684,55 +695,55 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> x = <span class="c-number">8</span>;  <span class="c-comment">// 二进制: 0000 1000</span>
-    
+    <span class="c-keyword">int</span> x = <span class="c-number">8</span>;
+    <span class="c-keyword">int</span> y = -<span class="c-number">8</span>;
+
     <span class="c-function">printf</span>(<span class="c-string">"=== 移位运算演示 ===\n\n"</span>);
-    
+
     <span class="c-comment">// 显示原始值</span>
     <span class="c-function">printf</span>(<span class="c-string">"原始值 x = %d, 二进制: "</span>, x);
     print_binary(x, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"\n\n"</span>);
-    
+
     <span class="c-comment">// 左移运算</span>
     <span class="c-function">printf</span>(<span class="c-string">"--- 左移运算 ---\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"x << 1 = %d, 二进制: "</span>, x &lt;&lt; <span class="c-number">1</span>);
     print_binary(x &lt;&lt; <span class="c-number">1</span>, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (相当于 %d * 2 = %d)\n"</span>, x, x * <span class="c-number">2</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x << 2 = %d, 二进制: "</span>, x &lt;&lt; <span class="c-number">2</span>);
     print_binary(x &lt;&lt; <span class="c-number">2</span>, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (相当于 %d * 4 = %d)\n"</span>, x, x * <span class="c-number">4</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x << 3 = %d, 二进制: "</span>, x &lt;&lt; <span class="c-number">3</span>);
     print_binary(x &lt;&lt; <span class="c-number">3</span>, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (相当于 %d * 8 = %d)\n\n"</span>, x, x * <span class="c-number">8</span>);
-    
+
     <span class="c-comment">// 右移运算</span>
     <span class="c-function">printf</span>(<span class="c-string">"--- 右移运算 ---\n"</span>);
-    x = <span class="c-number">32</span>;  <span class="c-comment">// 重新赋值</span>
+    x = <span class="c-number">32</span>;
     <span class="c-function">printf</span>(<span class="c-string">"新值 x = %d, 二进制: "</span>, x);
     print_binary(x, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"\n\n"</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x >> 1 = %d, 二进制: "</span>, x &gt;&gt; <span class="c-number">1</span>);
     print_binary(x &gt;&gt; <span class="c-number">1</span>, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (相当于 %d / 2 = %d)\n"</span>, x, x / <span class="c-number">2</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x >> 2 = %d, 二进制: "</span>, x &gt;&gt; <span class="c-number">2</span>);
     print_binary(x &gt;&gt; <span class="c-number">2</span>, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (相当于 %d / 4 = %d)\n"</span>, x, x / <span class="c-number">4</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x >> 3 = %d, 二进制: "</span>, x &gt;&gt; <span class="c-number">3</span>);
     print_binary(x &gt;&gt; <span class="c-number">3</span>, <span class="c-number">8</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  (相当于 %d / 8 = %d)\n\n"</span>, x, x / <span class="c-number">8</span>);
-    
+
     <span class="c-comment">// 负数的右移</span>
     <span class="c-function">printf</span>(<span class="c-string">"--- 负数右移（算术右移）---\n"</span>);
-    <span class="c-keyword">int</span> y = -<span class="c-number">8</span>;
     <span class="c-function">printf</span>(<span class="c-string">"y = %d\n"</span>, y);
     <span class="c-function">printf</span>(<span class="c-string">"y >> 1 = %d  (保持符号位)\n"</span>, y &gt;&gt; <span class="c-number">1</span>);
     <span class="c-function">printf</span>(<span class="c-string">"y >> 2 = %d  (保持符号位)\n"</span>, y &gt;&gt; <span class="c-number">2</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -766,7 +777,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     <span class="c-keyword">for</span> (power = <span class="c-number">0</span>; power &lt;= <span class="c-number">3</span>; power++) {
         <span class="c-keyword">int</span> shift_result = mul_by_power2(x, power);
         <span class="c-keyword">int</span> mul_result = x * (<span class="c-number">1</span> &lt;&lt; power);
-        <span class="c-function">printf</span>(<span class="c-string">"%d << %d = %d, %d * %d = %d, 相等: %s\n"</span>, 
+        <span class="c-function">printf</span>(<span class="c-string">"%d << %d = %d, %d * %d = %d, 相等: %s\n"</span>,
                x, power, shift_result, x, (<span class="c-number">1</span>&lt;&lt;power), mul_result,
                shift_result == mul_result ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
     }
@@ -775,7 +786,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     <span class="c-keyword">for</span> (power = <span class="c-number">0</span>; power &lt;= <span class="c-number">3</span>; power++) {
         <span class="c-keyword">int</span> shift_result = div_by_power2(x, power);
         <span class="c-keyword">int</span> div_result = x / (<span class="c-number">1</span> &lt;&lt; power);
-        <span class="c-function">printf</span>(<span class="c-string">"%d >> %d = %d, %d / %d = %d, 相等: %s\n"</span>, 
+        <span class="c-function">printf</span>(<span class="c-string">"%d >> %d = %d, %d / %d = %d, 相等: %s\n"</span>,
                x, power, shift_result, x, (<span class="c-number">1</span>&lt;&lt;power), div_result,
                shift_result == div_result ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
     }
@@ -819,24 +830,25 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
-    <span class="c-function">printf</span>(<span class="c-string">"=== 移位运算应用 ===\n"</span>);
-    
     <span class="c-keyword">int</span> x = <span class="c-number">100</span>;
+    <span class="c-keyword">int</span> val;
+    <span class="c-keyword">int</span> test_values[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">6</span>, <span class="c-number">8</span>, <span class="c-number">16</span>};
+
+    <span class="c-function">printf</span>(<span class="c-string">"=== 移位运算应用 ===\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"%d * 8 = %d (使用移位: %d)\n"</span>, x, x * <span class="c-number">8</span>, fast_multiply_by_power_of_2(x, <span class="c-number">3</span>));
     <span class="c-function">printf</span>(<span class="c-string">"%d / 4 = %d (使用移位: %d)\n"</span>, x, x / <span class="c-number">4</span>, fast_divide_by_power_of_2(x, <span class="c-number">2</span>));
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n2的幂次:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt;= <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"2^%d = %d\n"</span>, i, power_of_2(i));
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n检查是否为2的幂:\n"</span>);
-    <span class="c-keyword">int</span> test_values[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">6</span>, <span class="c-number">8</span>, <span class="c-number">16</span>};
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-keyword">sizeof</span>(test_values)/<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>); i++) {
-        <span class="c-keyword">int</span> val = test_values[i];
+        val = test_values[i];
         <span class="c-function">printf</span>(<span class="c-string">"%d 是2的幂: %s\n"</span>, val, is_power_of_2(val) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -852,8 +864,8 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 <span class="c-keyword">void</span> <span class="c-function">extract_rgb</span>(<span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> color, <span class="c-keyword">int</span>* r, <span class="c-keyword">int</span>* g, <span class="c-keyword">int</span>* b) {
     <span class="c-comment">// 假设颜色格式: 0xAARRGGBB</span>
     *r = (color &gt;&gt; <span class="c-number">16</span>) &amp; <span class="c-number">0xFF</span>;  <span class="c-comment">// 提取R分量</span>
-    *g = (color &gt;&gt; <span class="c-number">8</span>) &amp; <span class="c-number">0xFF</span>;   <span class="c-comment">// 提取G分量</span>
-    *b = color &amp; <span class="c-number">0xFF</span>;           <span class="c-comment">// 提取B分量</span>
+    *g = (color &gt;&gt; <span class="c-number">8</span>) &amp; <span class="c-number">0xFF</span>;  <span class="c-comment">// 提取G分量</span>
+    *b = color &amp; <span class="c-number">0xFF</span>;  <span class="c-comment">// 提取B分量</span>
 }
 
 <span class="c-comment">// 创建32位颜色值</span>
@@ -863,18 +875,18 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"=== 颜色处理示例 ===\n"</span>);
-    
+
     <span class="c-comment">// 测试颜色提取</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> color = <span class="c-number">0xFF3366AA</span>;  <span class="c-comment">// 蓝色</span>
     <span class="c-keyword">int</span> r, g, b;
     extract_rgb(color, &amp;r, &amp;g, &amp;b);
     <span class="c-function">printf</span>(<span class="c-string">"颜色 0x%08X 的RGB分量: R=%d, G=%d, B=%d\n"</span>, color, r, g, b);
-    
+
     <span class="c-comment">// 测试颜色创建</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> red = make_color(<span class="c-number">255</span>, <span class="c-number">0</span>, <span class="c-number">0</span>, <span class="c-number">255</span>);
     <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> blue = make_color(<span class="c-number">0</span>, <span class="c-number">0</span>, <span class="c-number">255</span>, <span class="c-number">255</span>);
     <span class="c-function">printf</span>(<span class="c-string">"红色: 0x%08X, 蓝色: 0x%08X\n"</span>, red, blue);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -916,16 +928,16 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">5</span>;  <span class="c-comment">// 二进制: 0101</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x = %d (0101)\n"</span>, x);
     <span class="c-function">printf</span>(<span class="c-string">"第0位: %d\n"</span>, <span class="c-function">check_bit</span>(x, <span class="c-number">0</span>));  <span class="c-comment">// 1</span>
     <span class="c-function">printf</span>(<span class="c-string">"第1位: %d\n"</span>, <span class="c-function">check_bit</span>(x, <span class="c-number">1</span>));  <span class="c-comment">// 0</span>
     <span class="c-function">printf</span>(<span class="c-string">"第2位: %d\n"</span>, <span class="c-function">check_bit</span>(x, <span class="c-number">2</span>));  <span class="c-comment">// 1</span>
-    
-    <span class="c-function">printf</span>(<span class="c-string">"\n设置第1位: %d (0111)\n"</span>, <span class="c-function">set_bit</span>(x, <span class="c-number">1</span>));    <span class="c-comment">// 7</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"\n设置第1位: %d (0111)\n"</span>, <span class="c-function">set_bit</span>(x, <span class="c-number">1</span>));  <span class="c-comment">// 7</span>
     <span class="c-function">printf</span>(<span class="c-string">"清除第0位: %d (0100)\n"</span>, <span class="c-function">clear_bit</span>(x, <span class="c-number">0</span>));  <span class="c-comment">// 4</span>
     <span class="c-function">printf</span>(<span class="c-string">"翻转第1位: %d (0111)\n"</span>, <span class="c-function">toggle_bit</span>(x, <span class="c-number">1</span>)); <span class="c-comment">// 7</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -942,10 +954,10 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-comment">// 定义位掩码常量</span>
-<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_VISIBLE = <span class="c-number">1</span> &lt;&lt; <span class="c-number">0</span>;      <span class="c-comment">// 0001</span>
-<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_ENABLED = <span class="c-number">1</span> &lt;&lt; <span class="c-number">1</span>;      <span class="c-comment">// 0010</span>
-<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_SELECTED = <span class="c-number">1</span> &lt;&lt; <span class="c-number">2</span>;     <span class="c-comment">// 0100</span>
-<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_MODIFIED = <span class="c-number">1</span> &lt;&lt; <span class="c-number">3</span>;     <span class="c-comment">// 1000</span>
+<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_VISIBLE = <span class="c-number">1</span> &lt;&lt; <span class="c-number">0</span>;  <span class="c-comment">// 0001</span>
+<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_ENABLED = <span class="c-number">1</span> &lt;&lt; <span class="c-number">1</span>;  <span class="c-comment">// 0010</span>
+<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_SELECTED = <span class="c-number">1</span> &lt;&lt; <span class="c-number">2</span>;  <span class="c-comment">// 0100</span>
+<span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> FLAG_MODIFIED = <span class="c-number">1</span> &lt;&lt; <span class="c-number">3</span>;  <span class="c-comment">// 1000</span>
 
 <span class="c-comment">// 组合掩码</span>
 <span class="c-keyword">const</span> <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> ALL_FLAGS = FLAG_VISIBLE | FLAG_ENABLED | FLAG_SELECTED | FLAG_MODIFIED;
@@ -961,40 +973,40 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 
 <span class="c-comment">// 位字段结构体（节省空间）</span>
 <span class="c-keyword">struct</span> {
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> visible : <span class="c-number">1</span>;    <span class="c-comment">// 1位</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> enabled : <span class="c-number">1</span>;    <span class="c-comment">// 1位</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> selected : <span class="c-number">1</span>;   <span class="c-comment">// 1位</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> modified : <span class="c-number">1</span>;   <span class="c-comment">// 1位</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> priority : <span class="c-number">4</span>;    <span class="c-comment">// 4位 (0-15)</span>
-    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> reserved : <span class="c-number">8</span>;    <span class="c-comment">// 8位保留</span>
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> visible : <span class="c-number">1</span>;  <span class="c-comment">// 1位</span>
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> enabled : <span class="c-number">1</span>;  <span class="c-comment">// 1位</span>
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> selected : <span class="c-number">1</span>;  <span class="c-comment">// 1位</span>
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> modified : <span class="c-number">1</span>;  <span class="c-comment">// 1位</span>
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> priority : <span class="c-number">4</span>;  <span class="c-comment">// 4位 (0-15)</span>
+    <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> reserved : <span class="c-number">8</span>;  <span class="c-comment">// 8位保留</span>
 } control_flags;
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"=== 位掩码和位字段示例 ===\n"</span>);
-    
+
     <span class="c-comment">// 使用位掩码</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">int</span> state = <span class="c-number">0</span>;
-    state |= FLAG_VISIBLE;     <span class="c-comment">// 设置可见</span>
-    state |= FLAG_ENABLED;     <span class="c-comment">// 设置启用</span>
-    
+    state |= FLAG_VISIBLE;  <span class="c-comment">// 设置可见</span>
+    state |= FLAG_ENABLED;  <span class="c-comment">// 设置启用</span>
+
     <span class="c-function">printf</span>(<span class="c-string">"状态: 0x%X\n"</span>, state);
     <span class="c-function">printf</span>(<span class="c-string">"可见: %s\n"</span>, has_any_flag(state, FLAG_VISIBLE) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"已修改: %s\n"</span>, has_any_flag(state, FLAG_MODIFIED) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-comment">// 使用位字段</span>
     control_flags.visible = <span class="c-number">1</span>;
     control_flags.enabled = <span class="c-number">1</span>;
     control_flags.selected = <span class="c-number">0</span>;
     control_flags.modified = <span class="c-number">1</span>;
     control_flags.priority = <span class="c-number">5</span>;  <span class="c-comment">// 优先级0-15</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n位字段状态:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"可见: %d, 启用: %d, 选中: %d, 修改: %d\n"</span>,
-           control_flags.visible, control_flags.enabled, 
+           control_flags.visible, control_flags.enabled,
            control_flags.selected, control_flags.modified);
     <span class="c-function">printf</span>(<span class="c-string">"优先级: %d\n"</span>, control_flags.priority);
     <span class="c-function">printf</span>(<span class="c-string">"结构体大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(control_flags));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1045,47 +1057,47 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> d2 = (data &gt;&gt; <span class="c-number">1</span>) &amp; <span class="c-number">1</span>;  <span class="c-comment">// 数据位2</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> d3 = (data &gt;&gt; <span class="c-number">2</span>) &amp; <span class="c-number">1</span>;  <span class="c-comment">// 数据位3</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> d4 = (data &gt;&gt; <span class="c-number">3</span>) &amp; <span class="c-number">1</span>;  <span class="c-comment">// 数据位4</span>
-    
+
     <span class="c-comment">// 计算校验位</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> p1 = d1 ^ d2 ^ d4;  <span class="c-comment">// 校验位1</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> p2 = d1 ^ d3 ^ d4;  <span class="c-comment">// 校验位2</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> p4 = d2 ^ d3 ^ d4;  <span class="c-comment">// 校验位4</span>
-    
+
     <span class="c-comment">// 组合成7位汉明码: p1 p2 d1 p4 d2 d3 d4</span>
-    <span class="c-keyword">return</span> (p1 &lt;&lt; <span class="c-number">6</span>) | (p2 &lt;&lt; <span class="c-number">5</span>) | (d1 &lt;&lt; <span class="c-number">4</span>) | 
+    <span class="c-keyword">return</span> (p1 &lt;&lt; <span class="c-number">6</span>) | (p2 &lt;&lt; <span class="c-number">5</span>) | (d1 &lt;&lt; <span class="c-number">4</span>) |
            (p4 &lt;&lt; <span class="c-number">3</span>) | (d2 &lt;&lt; <span class="c-number">2</span>) | (d3 &lt;&lt; <span class="c-number">1</span>) | d4;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">size_t</span> i;
     <span class="c-function">printf</span>(<span class="c-string">"=== 校验和与加密示例 ===\n"</span>);
-    
+
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> data[] = {<span class="c-string">'H'</span>, <span class="c-string">'e'</span>, <span class="c-string">'l'</span>, <span class="c-string">'l'</span>, <span class="c-string">'o'</span>};
     <span class="c-keyword">size_t</span> len = <span class="c-keyword">sizeof</span>(data) / <span class="c-keyword">sizeof</span>(data[<span class="c-number">0</span>]);
-    
+
     <span class="c-comment">// 计算校验和</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> checksum = simple_checksum(data, len);
     <span class="c-function">printf</span>(<span class="c-string">"数据: %.*s\n"</span>, (<span class="c-keyword">int</span>)len, data);
     <span class="c-function">printf</span>(<span class="c-string">"简单校验和: 0x%02X\n"</span>, checksum);
-    
+
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> crc = crc8(data, len);
     <span class="c-function">printf</span>(<span class="c-string">"CRC-8: 0x%02X\n"</span>, crc);
-    
+
     <span class="c-comment">// 异或加密</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n原始数据: %.*s\n"</span>, (<span class="c-keyword">int</span>)len, data);
     xor_encrypt(data, len, <span class="c-number">0x5A</span>);
     <span class="c-function">printf</span>(<span class="c-string">"加密后(hex): "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; len; i++) <span class="c-function">printf</span>(<span class="c-string">"%02X "</span>, data[i]);
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     xor_encrypt(data, len, <span class="c-number">0x5A</span>);  <span class="c-comment">// 解密（再次异或）</span>
     <span class="c-function">printf</span>(<span class="c-string">"解密后: %.*s\n"</span>, (<span class="c-keyword">int</span>)len, data);
-    
+
     <span class="c-comment">// 汉明码示例</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> original = <span class="c-number">0x0A</span>;  <span class="c-comment">// 1010</span>
     <span class="c-keyword">unsigned</span> <span class="c-keyword">char</span> hamming = add_parity_bit(original);
     <span class="c-function">printf</span>(<span class="c-string">"\n原始数据: 0x%X, 汉明码: 0x%X\n"</span>, original, hamming);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1120,8 +1132,8 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> nums[] = {<span class="c-number">8</span>, <span class="c-number">10</span>, <span class="c-number">16</span>, <span class="c-number">7</span>};
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-number">4</span>; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d 是2的幂次: %s, 二进制中1的个数: %d\n"</span>, 
-            nums[i], 
+        <span class="c-function">printf</span>(<span class="c-string">"%d 是2的幂次: %s, 二进制中1的个数: %d\n"</span>,
+            nums[i],
             is_power_of_2(nums[i]) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>,
             count_bits(nums[i]));
     }
@@ -1148,22 +1160,22 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 打开文件</span>
     FILE *fp = <span class="c-function">fopen</span>(<span class="c-string">"example.txt"</span>, <span class="c-string">"w"</span>);
-    
+
     <span class="c-comment">// 检查是否打开成功</span>
     <span class="c-keyword">if</span> (fp == NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"文件打开失败\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"文件打开成功\n"</span>);
-    
+
     <span class="c-comment">// 使用文件...</span>
     <span class="c-function">fprintf</span>(fp, <span class="c-string">"Hello, World!\n"</span>);
-    
+
     <span class="c-comment">// 关闭文件</span>
     <span class="c-function">fclose</span>(fp);
     <span class="c-function">printf</span>(<span class="c-string">"文件已关闭\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1270,7 +1282,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 <span class="c-keyword">void</span> <span class="c-function">demo_file_modes</span>() {
     <span class="c-comment">// 演示不同的文件打开模式</span>
     FILE *fp;
-    
+
     <span class="c-comment">// 1. 写入模式 - 创建或覆盖文件</span>
     <span class="c-function">printf</span>(<span class="c-string">"=== 写入模式 (w) ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"demo.txt"</span>, <span class="c-string">"w"</span>);
@@ -1279,7 +1291,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
         <span class="c-function">fclose</span>(fp);
         <span class="c-function">printf</span>(<span class="c-string">"文件创建并写入成功\n"</span>);
     }
-    
+
     <span class="c-comment">// 2. 追加模式 - 在文件末尾添加内容</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 追加模式 (a) ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"demo.txt"</span>, <span class="c-string">"a"</span>);
@@ -1288,7 +1300,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
         <span class="c-function">fclose</span>(fp);
         <span class="c-function">printf</span>(<span class="c-string">"内容追加成功\n"</span>);
     }
-    
+
     <span class="c-comment">// 3. 读取模式 - 读取文件内容</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 读取模式 (r) ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"demo.txt"</span>, <span class="c-string">"r"</span>);
@@ -1300,7 +1312,7 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
         }
         <span class="c-function">fclose</span>(fp);
     }
-    
+
     <span class="c-comment">// 4. 读写模式 - 既能读又能写</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 读写模式 (r+) ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"demo.txt"</span>, <span class="c-string">"r+"</span>);
@@ -1311,13 +1323,13 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
         <span class="c-keyword">while</span> ((ch = <span class="c-function">fgetc</span>(fp)) != EOF) {
             <span class="c-function">putchar</span>(ch);
         }
-        
+
         <span class="c-comment">// 在文件末尾添加新内容</span>
         <span class="c-function">fprintf</span>(fp, <span class="c-string">"第三行内容\n"</span>);
         <span class="c-function">fclose</span>(fp);
         <span class="c-function">printf</span>(<span class="c-string">"\n读写操作完成\n"</span>);
     }
-    
+
     <span class="c-comment">// 5. 二进制模式演示</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 二进制模式 (wb) ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"binary.dat"</span>, <span class="c-string">"wb"</span>);
@@ -1331,11 +1343,11 @@ n & (n-1):  0000 0000  (与运算后，清除了最右边的1)</pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     demo_file_modes();
-    
+
     <span class="c-comment">// 清理文件</span>
     <span class="c-function">remove</span>(<span class="c-string">"demo.txt"</span>);
     <span class="c-function">remove</span>(<span class="c-string">"binary.dat"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1376,12 +1388,12 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">long</span> <span class="c-function">get_file_size</span>(<span class="c-keyword">const</span> <span class="c-keyword">char</span>* filename) {
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"rb"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> -<span class="c-number">1</span>;
-    
+
     <span class="c-keyword">if</span> (<span class="c-function">fseek</span>(fp, <span class="c-number">0</span>, SEEK_END) != <span class="c-number">0</span>) {
         <span class="c-function">fclose</span>(fp);
         <span class="c-keyword">return</span> -<span class="c-number">1</span>;
     }
-    
+
     <span class="c-keyword">long</span> size = <span class="c-function">ftell</span>(fp);
     <span class="c-function">fclose</span>(fp);
     <span class="c-keyword">return</span> size;
@@ -1390,27 +1402,27 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-comment">// 演示文件状态检查</span>
 <span class="c-keyword">void</span> <span class="c-function">demo_file_status</span>() {
     <span class="c-keyword">const</span> <span class="c-keyword">char</span>* test_file = <span class="c-string">"test_status.txt"</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"=== 文件状态检查 ===\n"</span>);
-    
+
     <span class="c-comment">// 检查文件是否存在</span>
-    <span class="c-function">printf</span>(<span class="c-string">"文件 '%s' 存在: %s\n"</span>, test_file, 
+    <span class="c-function">printf</span>(<span class="c-string">"文件 '%s' 存在: %s\n"</span>, test_file,
            file_exists(test_file) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-comment">// 创建测试文件</span>
     FILE* fp = safe_fopen(test_file, <span class="c-string">"w"</span>);
     <span class="c-keyword">if</span> (fp) {
         <span class="c-function">fprintf</span>(fp, <span class="c-string">"这是一个测试文件\n"</span>);
         <span class="c-function">fprintf</span>(fp, <span class="c-string">"包含两行内容\n"</span>);
         <span class="c-function">fclose</span>(fp);
-        
+
         <span class="c-comment">// 再次检查文件状态</span>
-        <span class="c-function">printf</span>(<span class="c-string">"创建文件后，文件存在: %s\n"</span>, 
+        <span class="c-function">printf</span>(<span class="c-string">"创建文件后，文件存在: %s\n"</span>,
                file_exists(test_file) ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-        
+
         <span class="c-keyword">long</span> size = get_file_size(test_file);
         <span class="c-function">printf</span>(<span class="c-string">"文件大小: %ld 字节\n"</span>, size);
-        
+
         <span class="c-comment">// 清理测试文件</span>
         <span class="c-keyword">if</span> (<span class="c-function">remove</span>(test_file) == <span class="c-number">0</span>) {
             <span class="c-function">printf</span>(<span class="c-string">"测试文件已删除\n"</span>);
@@ -1421,39 +1433,39 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-comment">// 演示文件指针操作</span>
 <span class="c-keyword">void</span> <span class="c-function">demo_file_pointer</span>() {
     <span class="c-keyword">const</span> <span class="c-keyword">char</span>* test_file = <span class="c-string">"pointer_demo.txt"</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 文件指针操作 ===\n"</span>);
-    
+
     <span class="c-comment">// 创建测试文件</span>
     FILE* fp = safe_fopen(test_file, <span class="c-string">"w+"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span>;
-    
+
     <span class="c-comment">// 写入数据</span>
     <span class="c-keyword">const</span> <span class="c-keyword">char</span>* data = <span class="c-string">"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>;
     <span class="c-function">fwrite</span>(data, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>), <span class="c-function">strlen</span>(data), fp);
-    
+
     <span class="c-comment">// 显示当前位置</span>
     <span class="c-function">printf</span>(<span class="c-string">"写入后位置: %ld\n"</span>, <span class="c-function">ftell</span>(fp));
-    
+
     <span class="c-comment">// 移动到第10个字符位置</span>
     <span class="c-function">fseek</span>(fp, <span class="c-number">10</span>, SEEK_SET);
     <span class="c-function">printf</span>(<span class="c-string">"移动到位置10后: %ld\n"</span>, <span class="c-function">ftell</span>(fp));
-    
+
     <span class="c-comment">// 从当前位置读取5个字符</span>
     <span class="c-keyword">char</span> buffer[<span class="c-number">6</span>] = {<span class="c-number">0</span>};
     <span class="c-keyword">size_t</span> read = <span class="c-function">fread</span>(buffer, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>), <span class="c-number">5</span>, fp);
     <span class="c-function">printf</span>(<span class="c-string">"读取了 %u 个字符: '%s'\n"</span>, read, buffer);
-    
+
     <span class="c-comment">// 移动到文件末尾</span>
     <span class="c-function">fseek</span>(fp, <span class="c-number">0</span>, SEEK_END);
     <span class="c-function">printf</span>(<span class="c-string">"移动到文件末尾: %ld\n"</span>, <span class="c-function">ftell</span>(fp));
-    
+
     <span class="c-comment">// 从末尾向前移动5个字符</span>
     <span class="c-function">fseek</span>(fp, -<span class="c-number">5</span>, SEEK_END);
     read = <span class="c-function">fread</span>(buffer, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>), <span class="c-number">5</span>, fp);
     buffer[read] = <span class="c-string">'\0'</span>;
     <span class="c-function">printf</span>(<span class="c-string">"从末尾读取5个字符: '%s'\n"</span>, buffer);
-    
+
     <span class="c-function">fclose</span>(fp);
     <span class="c-function">remove</span>(test_file);
 }
@@ -1461,7 +1473,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     demo_file_status();
     demo_file_pointer();
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1498,7 +1510,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-keyword">double</span> pi;
     <span class="c-keyword">char</span> str[<span class="c-number">20</span>];
     <span class="c-keyword">char</span> line[<span class="c-number">100</span>];
-    
+
     <span class="c-comment">// 1. 使用fprintf写入格式化数据</span>
     <span class="c-function">printf</span>(<span class="c-string">"=== 格式化写入 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"data.txt"</span>, <span class="c-string">"w"</span>);
@@ -1509,7 +1521,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">fclose</span>(fp);
         <span class="c-function">printf</span>(<span class="c-string">"数据已写入文件\n"</span>);
     }
-    
+
     <span class="c-comment">// 2. 使用fscanf读取格式化数据</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 格式化读取 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"data.txt"</span>, <span class="c-string">"r"</span>);
@@ -1520,7 +1532,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         }
         <span class="c-function">fclose</span>(fp);
     }
-    
+
     <span class="c-comment">// 3. 使用fgets逐行读取</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 逐行读取 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"data.txt"</span>, <span class="c-string">"r"</span>);
@@ -1531,7 +1543,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         }
         <span class="c-function">fclose</span>(fp);
     }
-    
+
     <span class="c-comment">// 4. 使用fputs逐行写入</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 使用fputs写入 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"lines.txt"</span>, <span class="c-string">"w"</span>);
@@ -1542,7 +1554,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">fclose</span>(fp);
         <span class="c-function">printf</span>(<span class="c-string">"行数据写入完成\n"</span>);
     }
-    
+
     <span class="c-comment">// 5. 使用fgetc和fputc逐字符操作</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 字符级操作 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"lines.txt"</span>, <span class="c-string">"r"</span>);
@@ -1557,11 +1569,11 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"\n总共读取 %d 个字符\n"</span>, char_count);
         <span class="c-function">fclose</span>(fp);
     }
-    
+
     <span class="c-comment">// 清理测试文件</span>
     <span class="c-function">remove</span>(<span class="c-string">"data.txt"</span>);
     <span class="c-function">remove</span>(<span class="c-string">"lines.txt"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1584,7 +1596,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
                         <p>二进制文件以字节形式存储数据，不进行格式转换，适合存储结构体、数组等复杂数据。</p>
                         
                         <div class="callout-warning">
-                            <strong>⚠️ 二进制文件注意事项：</strong>
+                            <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 二进制文件注意事项：</strong>
                             <ul>
                                 <li>必须使用 "b" 模式打开（rb, wb, ab等）</li>
                                 <li>使用 fread/fwrite 进行读写操作</li>
@@ -1613,12 +1625,12 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     Student read_students[<span class="c-number">3</span>];
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">size_t</span> count;
-    
+
     <span class="c-comment">// 准备测试数据</span>
     students[<span class="c-number">0</span>].id = <span class="c-number">1001</span>; <span class="c-function">strcpy</span>(students[<span class="c-number">0</span>].name, <span class="c-string">"张三"</span>); students[<span class="c-number">0</span>].score = <span class="c-number">85.5</span>;
     students[<span class="c-number">1</span>].id = <span class="c-number">1002</span>; <span class="c-function">strcpy</span>(students[<span class="c-number">1</span>].name, <span class="c-string">"李四"</span>); students[<span class="c-number">1</span>].score = <span class="c-number">92.0</span>;
     students[<span class="c-number">2</span>].id = <span class="c-number">1003</span>; <span class="c-function">strcpy</span>(students[<span class="c-number">2</span>].name, <span class="c-string">"王五"</span>); students[<span class="c-number">2</span>].score = <span class="c-number">78.0</span>;
-    
+
     <span class="c-comment">// 1. 写入二进制文件</span>
     <span class="c-function">printf</span>(<span class="c-string">"=== 写入二进制文件 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"wb"</span>);
@@ -1626,12 +1638,12 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"文件打开失败\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     <span class="c-comment">// fwrite(数据地址, 每个元素大小, 元素个数, 文件指针)</span>
     count = <span class="c-function">fwrite</span>(students, <span class="c-keyword">sizeof</span>(Student), <span class="c-number">3</span>, fp);
     <span class="c-function">printf</span>(<span class="c-string">"成功写入 %u 个学生记录\n"</span>, count);
     <span class="c-function">fclose</span>(fp);
-    
+
     <span class="c-comment">// 2. 从二进制文件读取</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 读取二进制文件 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"rb"</span>);
@@ -1639,23 +1651,23 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"文件打开失败\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     <span class="c-comment">// fread(数据地址, 每个元素大小, 元素个数, 文件指针)</span>
     count = <span class="c-function">fread</span>(read_students, <span class="c-keyword">sizeof</span>(Student), <span class="c-number">3</span>, fp);
     <span class="c-function">printf</span>(<span class="c-string">"成功读取 %u 个学生记录\n"</span>, count);
-    
+
     <span class="c-comment">// 显示读取的数据</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n学号\t姓名\t成绩\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"-----------------------------\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d\t%s\t%.1f\n"</span>, 
-               read_students[i].id, 
-               read_students[i].name, 
+        <span class="c-function">printf</span>(<span class="c-string">"%d\t%s\t%.1f\n"</span>,
+               read_students[i].id,
+               read_students[i].name,
                read_students[i].score);
     }
-    
+
     <span class="c-function">fclose</span>(fp);
-    
+
     <span class="c-comment">// 3. 追加新数据</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 追加新记录 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"ab"</span>);
@@ -1664,30 +1676,30 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         new_student.id = <span class="c-number">1004</span>;
         <span class="c-function">strcpy</span>(new_student.name, <span class="c-string">"赵六"</span>);
         new_student.score = <span class="c-number">88.5</span>;
-        
+
         <span class="c-function">fwrite</span>(&amp;new_student, <span class="c-keyword">sizeof</span>(Student), <span class="c-number">1</span>, fp);
         <span class="c-function">printf</span>(<span class="c-string">"新记录追加成功\n"</span>);
         <span class="c-function">fclose</span>(fp);
     }
-    
+
     <span class="c-comment">// 4. 验证追加结果</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 验证追加结果 ===\n"</span>);
     fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"rb"</span>);
     <span class="c-keyword">if</span> (fp != NULL) {
         Student temp;
         <span class="c-keyword">int</span> record_count = <span class="c-number">0</span>;
-        
+
         <span class="c-keyword">while</span> (<span class="c-function">fread</span>(&amp;temp, <span class="c-keyword">sizeof</span>(Student), <span class="c-number">1</span>, fp) == <span class="c-number">1</span>) {
             record_count++;
         }
-        
+
         <span class="c-function">printf</span>(<span class="c-string">"文件中共有 %d 条记录\n"</span>, record_count);
         <span class="c-function">fclose</span>(fp);
     }
-    
+
     <span class="c-comment">// 清理测试文件</span>
     <span class="c-function">remove</span>(<span class="c-string">"students.dat"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1762,10 +1774,10 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"错误: 无法创建文件\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">0</span>;
     }
-    
+
     <span class="c-keyword">size_t</span> written = <span class="c-function">fwrite</span>(students, <span class="c-keyword">sizeof</span>(Student), count, fp);
     <span class="c-function">fclose</span>(fp);
-    
+
     <span class="c-keyword">return</span> written == count;
 }
 
@@ -1775,13 +1787,13 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-keyword">if</span> (!fp) {
         <span class="c-keyword">return</span> <span class="c-number">0</span>;  <span class="c-comment">// 文件不存在</span>
     }
-    
+
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
     <span class="c-keyword">while</span> (<span class="c-function">fread</span>(&amp;students[count], <span class="c-keyword">sizeof</span>(Student), <span class="c-number">1</span>, fp) == <span class="c-number">1</span>) {
         count++;
         <span class="c-keyword">if</span> (count &gt;= MAX_STUDENTS) <span class="c-keyword">break</span>;
     }
-    
+
     <span class="c-function">fclose</span>(fp);
     <span class="c-keyword">return</span> count;
 }
@@ -1792,7 +1804,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"错误: 已达到最大学生数\n"</span>);
         <span class="c-keyword">return</span>;
     }
-    
+
     Student new_student;
     <span class="c-function">printf</span>(<span class="c-string">"\n输入学号: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;new_student.id);
@@ -1800,28 +1812,28 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, new_student.name);
     <span class="c-function">printf</span>(<span class="c-string">"输入成绩: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, &amp;new_student.score);
-    
+
     students[*count] = new_student;
     (*count)++;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"学生添加成功!\n"</span>);
 }
 
 <span class="c-comment">// 显示所有学生</span>
 <span class="c-keyword">void</span> <span class="c-function">display_students</span>(Student students[], <span class="c-keyword">int</span> count) {
     <span class="c-keyword">int</span> i;
-    
+
     <span class="c-keyword">if</span> (count == <span class="c-number">0</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"\n暂无学生记录\n"</span>);
         <span class="c-keyword">return</span>;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n学号\t姓名\t\t成绩\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"=====================================\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; count; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d\t%-10s\t%.1f\n"</span>, 
-               students[i].id, 
-               students[i].name, 
+        <span class="c-function">printf</span>(<span class="c-string">"%d\t%-10s\t%.1f\n"</span>,
+               students[i].id,
+               students[i].name,
                students[i].score);
     }
 }
@@ -1830,13 +1842,13 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">float</span> <span class="c-function">calculate_average</span>(Student students[], <span class="c-keyword">int</span> count) {
     <span class="c-keyword">float</span> sum = <span class="c-number">0.0</span>;
     <span class="c-keyword">int</span> i;
-    
+
     <span class="c-keyword">if</span> (count == <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0.0</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; count; i++) {
         sum += students[i].score;
     }
-    
+
     <span class="c-keyword">return</span> sum / count;
 }
 
@@ -1844,11 +1856,11 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     Student students[MAX_STUDENTS];
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
     <span class="c-keyword">int</span> choice;
-    
+
     <span class="c-comment">// 启动时加载数据</span>
     count = load_students(students);
     <span class="c-function">printf</span>(<span class="c-string">"已加载 %d 条学生记录\n"</span>, count);
-    
+
     <span class="c-keyword">while</span> (<span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"\n=== 学生成绩管理系统 ===\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"1. 添加学生\n"</span>);
@@ -1856,9 +1868,9 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"3. 显示平均分\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"4. 保存并退出\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"请选择: "</span>);
-        
+
         <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;choice);
-        
+
         <span class="c-keyword">switch</span> (choice) {
             <span class="c-keyword">case</span> <span class="c-number">1</span>:
                 add_student(students, &amp;count);
@@ -1881,7 +1893,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
                 <span class="c-function">printf</span>(<span class="c-string">"无效选择\n"</span>);
         }
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1912,7 +1924,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-keyword">char</span> name[<span class="c-number">50</span>];
     <span class="c-keyword">float</span> score, sum = <span class="c-number">0.0</span>;
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
-    
+
     <span class="c-comment">// 创建测试数据</span>
     fp_in = <span class="c-function">fopen</span>(<span class="c-string">"input.txt"</span>, <span class="c-string">"w"</span>);
     <span class="c-keyword">if</span> (fp_in) {
@@ -1921,21 +1933,21 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">fprintf</span>(fp_in, <span class="c-string">"王五 78.0\n"</span>);
         <span class="c-function">fclose</span>(fp_in);
     }
-    
+
     <span class="c-comment">// 读取并计算</span>
     fp_in = <span class="c-function">fopen</span>(<span class="c-string">"input.txt"</span>, <span class="c-string">"r"</span>);
     <span class="c-keyword">if</span> (!fp_in) {
         <span class="c-function">printf</span>(<span class="c-string">"无法打开输入文件\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     <span class="c-keyword">while</span> (<span class="c-function">fscanf</span>(fp_in, <span class="c-string">"%s %f"</span>, name, &amp;score) == <span class="c-number">2</span>) {
         sum += score;
         count++;
         <span class="c-function">printf</span>(<span class="c-string">"%s: %.1f\n"</span>, name, score);
     }
     <span class="c-function">fclose</span>(fp_in);
-    
+
     <span class="c-comment">// 写入结果</span>
     fp_out = <span class="c-function">fopen</span>(<span class="c-string">"output.txt"</span>, <span class="c-string">"w"</span>);
     <span class="c-keyword">if</span> (fp_out) {
@@ -1946,7 +1958,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         <span class="c-function">printf</span>(<span class="c-string">"\n统计结果已写入 output.txt\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"平均分: %.2f\n"</span>, sum / count);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1967,38 +1979,38 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-keyword">int</span> read_data[<span class="c-number">5</span>];
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">size_t</span> count;
-    
+
     <span class="c-comment">// 写入二进制文件</span>
     fp = <span class="c-function">fopen</span>(<span class="c-string">"array.dat"</span>, <span class="c-string">"wb"</span>);
     <span class="c-keyword">if</span> (!fp) {
         <span class="c-function">printf</span>(<span class="c-string">"无法创建文件\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     count = <span class="c-function">fwrite</span>(write_data, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>), <span class="c-number">5</span>, fp);
     <span class="c-function">printf</span>(<span class="c-string">"写入了 %u 个整数\n"</span>, count);
     <span class="c-function">fclose</span>(fp);
-    
+
     <span class="c-comment">// 读取二进制文件</span>
     fp = <span class="c-function">fopen</span>(<span class="c-string">"array.dat"</span>, <span class="c-string">"rb"</span>);
     <span class="c-keyword">if</span> (!fp) {
         <span class="c-function">printf</span>(<span class="c-string">"无法打开文件\n"</span>);
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
-    
+
     count = <span class="c-function">fread</span>(read_data, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>), <span class="c-number">5</span>, fp);
     <span class="c-function">printf</span>(<span class="c-string">"读取了 %u 个整数\n"</span>, count);
     <span class="c-function">fclose</span>(fp);
-    
+
     <span class="c-comment">// 显示数据</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n读取的数组: "</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, read_data[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-function">remove</span>(<span class="c-string">"array.dat"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -2047,7 +2059,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">void</span> <span class="c-function">save_students_text</span>(<span class="c-keyword">const</span> Student* students, <span class="c-keyword">int</span> count, <span class="c-keyword">const</span> <span class="c-keyword">char</span>* filename) {
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"w"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; count; i++) {
         <span class="c-function">fprintf</span>(fp, <span class="c-string">"%d %s %.2f\n"</span>, students[i].id, students[i].name, students[i].score);
     }
@@ -2058,7 +2070,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">void</span> <span class="c-function">save_students_binary</span>(<span class="c-keyword">const</span> Student* students, <span class="c-keyword">int</span> count, <span class="c-keyword">const</span> <span class="c-keyword">char</span>* filename) {
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"wb"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span>;
-    
+
     <span class="c-function">fwrite</span>(students, <span class="c-keyword">sizeof</span>(Student), count, fp);
     <span class="c-function">fclose</span>(fp);
 }
@@ -2067,9 +2079,9 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">int</span> <span class="c-function">load_students_text</span>(Student* students, <span class="c-keyword">int</span> max_count, <span class="c-keyword">const</span> <span class="c-keyword">char</span>* filename) {
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"r"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    
+
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
-    <span class="c-keyword">while</span> (count &lt; max_count &amp;&amp; 
+    <span class="c-keyword">while</span> (count &lt; max_count &amp;&amp;
            <span class="c-function">fscanf</span>(fp, <span class="c-string">"%d %49s %f"</span>, &amp;students[count].id, students[count].name, &amp;students[count].score) == <span class="c-number">3</span>) {
         count++;
     }
@@ -2081,7 +2093,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">int</span> <span class="c-function">load_students_binary</span>(Student* students, <span class="c-keyword">int</span> max_count, <span class="c-keyword">const</span> <span class="c-keyword">char</span>* filename) {
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"rb"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    
+
     <span class="c-keyword">size_t</span> read = <span class="c-function">fread</span>(students, <span class="c-keyword">sizeof</span>(Student), max_count, fp);
     <span class="c-function">fclose</span>(fp);
     <span class="c-keyword">return</span> (int)read;
@@ -2091,7 +2103,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">void</span> <span class="c-function">display_students</span>(<span class="c-keyword">const</span> Student* students, <span class="c-keyword">int</span> count) {
     <span class="c-function">printf</span>(<span class="c-string">"学生信息:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; count; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"ID: %d, 姓名: %s, 成绩: %.2f\n"</span>, 
+        <span class="c-function">printf</span>(<span class="c-string">"ID: %d, 姓名: %s, 成绩: %.2f\n"</span>,
                students[i].id, students[i].name, students[i].score);
     }
 }
@@ -2103,40 +2115,40 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         {<span class="c-number">2</span>, <span class="c-string">"李四"</span>, <span class="c-number">92.0</span>},
         {<span class="c-number">3</span>, <span class="c-string">"王五"</span>, <span class="c-number">78.8</span>}
     };
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"=== 文本文件操作 ===\n"</span>);
     save_students_text(students, <span class="c-number">3</span>, <span class="c-string">"students_text.txt"</span>);
-    
+
     Student loaded_text[<span class="c-number">10</span>];
     <span class="c-keyword">int</span> count_text = load_students_text(loaded_text, <span class="c-number">10</span>, <span class="c-string">"students_text.txt"</span>);
     display_students(loaded_text, count_text);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n=== 二进制文件操作 ===\n"</span>);
     save_students_binary(students, <span class="c-number">3</span>, <span class="c-string">"students_binary.dat"</span>);
-    
+
     Student loaded_binary[<span class="c-number">10</span>];
     <span class="c-keyword">int</span> count_binary = load_students_binary(loaded_binary, <span class="c-number">10</span>, <span class="c-string">"students_binary.dat"</span>);
     display_students(loaded_binary, count_binary);
-    
+
     <span class="c-comment">// 比较文件大小</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n文件大小比较:\n"</span>);
     FILE* fp_text = <span class="c-function">fopen</span>(<span class="c-string">"students_text.txt"</span>, <span class="c-string">"rb"</span>);
     FILE* fp_binary = <span class="c-function">fopen</span>(<span class="c-string">"students_binary.dat"</span>, <span class="c-string">"rb"</span>);
-    
+
     <span class="c-keyword">if</span> (fp_text &amp;&amp; fp_binary) {
         <span class="c-function">fseek</span>(fp_text, <span class="c-number">0</span>, SEEK_END);
         <span class="c-function">fseek</span>(fp_binary, <span class="c-number">0</span>, SEEK_END);
         <span class="c-function">printf</span>(<span class="c-string">"文本文件大小: %ld 字节\n"</span>, <span class="c-function">ftell</span>(fp_text));
         <span class="c-function">printf</span>(<span class="c-string">"二进制文件大小: %ld 字节\n"</span>, <span class="c-function">ftell</span>(fp_binary));
     }
-    
+
     <span class="c-keyword">if</span> (fp_text) <span class="c-function">fclose</span>(fp_text);
     <span class="c-keyword">if</span> (fp_binary) <span class="c-function">fclose</span>(fp_binary);
-    
+
     <span class="c-comment">// 清理文件</span>
     <span class="c-function">remove</span>(<span class="c-string">"students_text.txt"</span>);
     <span class="c-function">remove</span>(<span class="c-string">"students_binary.dat"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -2155,19 +2167,19 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">int</span> <span class="c-function">copy_file</span>(<span class="c-keyword">const</span> <span class="c-keyword">char</span>* source, <span class="c-keyword">const</span> <span class="c-keyword">char</span>* destination) {
     FILE* src = <span class="c-function">fopen</span>(source, <span class="c-string">"rb"</span>);
     <span class="c-keyword">if</span> (!src) <span class="c-keyword">return</span> -<span class="c-number">1</span>;
-    
+
     FILE* dest = <span class="c-function">fopen</span>(destination, <span class="c-string">"wb"</span>);
     <span class="c-keyword">if</span> (!dest) {
         <span class="c-function">fclose</span>(src);
         <span class="c-keyword">return</span> -<span class="c-number">1</span>;
     }
-    
+
     <span class="c-keyword">char</span> buffer[<span class="c-number">4096</span>];
     <span class="c-keyword">size_t</span> bytes;
     <span class="c-keyword">while</span> ((bytes = <span class="c-function">fread</span>(buffer, <span class="c-number">1</span>, <span class="c-keyword">sizeof</span>(buffer), src)) &gt; <span class="c-number">0</span>) {
         <span class="c-function">fwrite</span>(buffer, <span class="c-number">1</span>, bytes, dest);
     }
-    
+
     <span class="c-function">fclose</span>(src);
     <span class="c-function">fclose</span>(dest);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -2177,16 +2189,16 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">int</span> <span class="c-function">count_lines</span>(<span class="c-keyword">const</span> <span class="c-keyword">char</span>* filename) {
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"r"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> -<span class="c-number">1</span>;
-    
+
     <span class="c-keyword">int</span> lines = <span class="c-number">0</span>;
     <span class="c-keyword">char</span> ch;
     <span class="c-keyword">while</span> ((ch = <span class="c-function">fgetc</span>(fp)) != EOF) {
         <span class="c-keyword">if</span> (ch == <span class="c-string">'\n'</span>) lines++;
     }
-    
+
     <span class="c-comment">// 处理最后一行（如果没有换行符）</span>
     <span class="c-keyword">if</span> (lines == <span class="c-number">0</span> &amp;&amp; <span class="c-function">ftell</span>(fp) &gt; <span class="c-number">0</span>) lines = <span class="c-number">1</span>;
-    
+
     <span class="c-function">fclose</span>(fp);
     <span class="c-keyword">return</span> lines;
 }
@@ -2196,21 +2208,21 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-comment">// 读取整个文件</span>
     FILE* fp = <span class="c-function">fopen</span>(filename, <span class="c-string">"r"</span>);
     <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> -<span class="c-number">1</span>;
-    
+
     <span class="c-function">fseek</span>(fp, <span class="c-number">0</span>, SEEK_END);
     <span class="c-keyword">long</span> file_size = <span class="c-function">ftell</span>(fp);
     <span class="c-function">fseek</span>(fp, <span class="c-number">0</span>, SEEK_SET);
-    
+
     <span class="c-keyword">char</span>* content = (<span class="c-keyword">char</span>*)<span class="c-function">malloc</span>(file_size + <span class="c-number">1</span>);
     <span class="c-keyword">if</span> (!content) {
         <span class="c-function">fclose</span>(fp);
         <span class="c-keyword">return</span> -<span class="c-number">1</span>;
     }
-    
+
     <span class="c-function">fread</span>(content, <span class="c-number">1</span>, file_size, fp);
     content[file_size] = <span class="c-string">'\0'</span>;
     <span class="c-function">fclose</span>(fp);
-    
+
     <span class="c-comment">// 查找并替换</span>
     <span class="c-keyword">char</span>* pos = content;
     <span class="c-keyword">int</span> replacements = <span class="c-number">0</span>;
@@ -2220,7 +2232,7 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
         replacements++;
         pos += <span class="c-function">strlen</span>(old_text);
     }
-    
+
     <span class="c-function">free</span>(content);
     <span class="c-keyword">return</span> replacements;
 }
@@ -2229,20 +2241,20 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
 <span class="c-keyword">int</span> <span class="c-function">merge_files</span>(<span class="c-keyword">const</span> <span class="c-keyword">char</span>* output_file, <span class="c-keyword">const</span> <span class="c-keyword">char</span>** input_files, <span class="c-keyword">int</span> file_count) {
     FILE* out = <span class="c-function">fopen</span>(output_file, <span class="c-string">"wb"</span>);
     <span class="c-keyword">if</span> (!out) <span class="c-keyword">return</span> -<span class="c-number">1</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; file_count; i++) {
         FILE* in = <span class="c-function">fopen</span>(input_files[i], <span class="c-string">"rb"</span>);
         <span class="c-keyword">if</span> (!in) <span class="c-keyword">continue</span>;
-        
+
         <span class="c-keyword">char</span> buffer[<span class="c-number">4096</span>];
         <span class="c-keyword">size_t</span> bytes;
         <span class="c-keyword">while</span> ((bytes = <span class="c-function">fread</span>(buffer, <span class="c-number">1</span>, <span class="c-keyword">sizeof</span>(buffer), in)) &gt; <span class="c-number">0</span>) {
             <span class="c-function">fwrite</span>(buffer, <span class="c-number">1</span>, bytes, out);
         }
-        
+
         <span class="c-function">fclose</span>(in);
     }
-    
+
     <span class="c-function">fclose</span>(out);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
@@ -2252,29 +2264,29 @@ FILE* <span class="c-function">safe_fopen</span>(<span class="c-keyword">const</
     <span class="c-comment">// 创建测试文件</span>
     FILE* fp1 = <span class="c-function">fopen</span>(<span class="c-string">"file1.txt"</span>, <span class="c-string">"w"</span>);
     FILE* fp2 = <span class="c-function">fopen</span>(<span class="c-string">"file2.txt"</span>, <span class="c-string">"w"</span>);
-    
+
     <span class="c-keyword">if</span> (fp1 &amp;&amp; fp2) {
         <span class="c-function">fprintf</span>(fp1, <span class="c-string">"这是第一个文件的内容\n"</span>);
         <span class="c-function">fprintf</span>(fp1, <span class="c-string">"包含两行\n"</span>);
-        
+
         <span class="c-function">fprintf</span>(fp2, <span class="c-string">"这是第二个文件的内容\n"</span>);
         <span class="c-function">fprintf</span>(fp2, <span class="c-string">"也包含两行\n"</span>);
     }
-    
+
     <span class="c-keyword">if</span> (fp1) <span class="c-function">fclose</span>(fp1);
     <span class="c-keyword">if</span> (fp2) <span class="c-function">fclose</span>(fp2);
-    
+
     <span class="c-comment">// 复制文件</span>
     <span class="c-function">printf</span>(<span class="c-string">"复制文件: %s\n"</span>, copy_file(<span class="c-string">"file1.txt"</span>, <span class="c-string">"file1_copy.txt"</span>) == <span class="c-number">0</span> ? <span class="c-string">"成功"</span> : <span class="c-string">"失败"</span>);
-    
+
     <span class="c-comment">// 统计行数</span>
     <span class="c-keyword">int</span> lines = count_lines(<span class="c-string">"file1.txt"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"file1.txt 有 %d 行\n"</span>, lines);
-    
+
     <span class="c-comment">// 合并文件</span>
     <span class="c-keyword">const</span> <span class="c-keyword">char</span>* files_to_merge[] = {<span class="c-string">"file1.txt"</span>, <span class="c-string">"file2.txt"</span>};
     <span class="c-function">printf</span>(<span class="c-string">"合并文件: %s\n"</span>, merge_files(<span class="c-string">"merged.txt"</span>, files_to_merge, <span class="c-number">2</span>) == <span class="c-number">0</span> ? <span class="c-string">"成功"</span> : <span class="c-string">"失败"</span>);
-    
+
     <span class="c-comment">// 清理文件</span>
     <span class="c-function">remove</span>(<span class="c-string">"file1.txt"</span>);
     <span class="c-function">remove</span>(<span class="c-string">"file2.txt"</span>);

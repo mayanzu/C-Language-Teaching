@@ -71,18 +71,18 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个1-10之间的数字: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
-    
+
     <span class="c-comment">// 输入不合法就一直循环</span>
     <span class="c-keyword">while</span> (num < <span class="c-number">1</span> || num > <span class="c-number">10</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"输入无效，请重新输入: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"输入正确: %d\n"</span>, num);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -109,27 +109,27 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num, count = <span class="c-number">0</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
-    
+
     <span class="c-keyword">int</span> original = num;
-    
+
     <span class="c-comment">// 特殊处理0</span>
     <span class="c-keyword">if</span> (num == <span class="c-number">0</span>) {
         count = <span class="c-number">1</span>;
     } <span class="c-keyword">else</span> {
         <span class="c-comment">// 处理负数</span>
         <span class="c-keyword">if</span> (num < <span class="c-number">0</span>) num = -num;
-        
+
         <span class="c-keyword">while</span> (num > <span class="c-number">0</span>) {
             num /= <span class="c-number">10</span>;
             count++;
         }
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"%d 有 %d 位数字\n"</span>, original, count);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -188,21 +188,21 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a, b, remainder;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入两个正整数: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d %d"</span>, &a, &b);
-    
+
     <span class="c-keyword">int</span> m = a, n = b;
-    
+
     <span class="c-comment">// 辗转相除法</span>
     <span class="c-keyword">while</span> (b != <span class="c-number">0</span>) {
         remainder = a % b;
         a = b;
         b = remainder;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"%d 和 %d 的最大公约数是 %d\n"</span>, m, n, a);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -251,14 +251,14 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> count = <span class="c-number">1</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"开始while循环\n"</span>);
     <span class="c-keyword">while</span> (count <= <span class="c-number">3</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d次循环\n"</span>, count);
         count++;
     }
     <span class="c-function">printf</span>(<span class="c-string">"循环结束\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -300,14 +300,14 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
     <span class="c-keyword">int</span> i = <span class="c-number">1</span>;
-    
+
     <span class="c-keyword">while</span> (i <= <span class="c-number">100</span>) {
         sum += i;  <span class="c-comment">// sum = sum + i</span>
         i++;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"1到100的和是: %d\n"</span>, sum);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -323,18 +323,18 @@
     <span class="c-keyword">int</span> secret = <span class="c-number">0</span>;
     <span class="c-keyword">int</span> guess = <span class="c-number">0</span>;
     <span class="c-keyword">int</span> attempts = <span class="c-number">0</span>;
-    
+
     <span class="c-comment">// 生成随机数</span>
     srand(time(NULL));
     secret = rand() % <span class="c-number">100</span> + <span class="c-number">1</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"我已经想好了一个1-100之间的数字，你来猜吧！\n"</span>);
-    
+
     <span class="c-keyword">while</span> (<span class="c-number">1</span>) {  <span class="c-comment">// 无限循环，直到猜对为止</span>
         <span class="c-function">printf</span>(<span class="c-string">"请输入你的猜测: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &guess);
         attempts++;
-        
+
         <span class="c-keyword">if</span> (guess == secret) {
             <span class="c-function">printf</span>(<span class="c-string">"恭喜你猜对了！用了%d次尝试。\n"</span>, attempts);
             <span class="c-keyword">break</span>;  <span class="c-comment">// 猜对后跳出循环</span>
@@ -344,7 +344,7 @@
             <span class="c-function">printf</span>(<span class="c-string">"太大了，请再试试。\n"</span>);
         }
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -395,7 +395,7 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> choice;
-    
+
     <span class="c-keyword">do</span> {
         <span class="c-function">printf</span>(<span class="c-string">"\n菜单:\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"1. 开始游戏\n"</span>);
@@ -403,16 +403,16 @@
         <span class="c-function">printf</span>(<span class="c-string">"0. 退出\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"请选择: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &choice);
-        
+
         <span class="c-keyword">if</span> (choice == <span class="c-number">1</span>) {
             <span class="c-function">printf</span>(<span class="c-string">"游戏开始!\n"</span>);
         } <span class="c-keyword">else</span> <span class="c-keyword">if</span> (choice == <span class="c-number">2</span>) {
             <span class="c-function">printf</span>(<span class="c-string">"进入设置\n"</span>);
         }
     } <span class="c-keyword">while</span> (choice != <span class="c-number">0</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"再见!\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -482,15 +482,15 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> count = <span class="c-number">1</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"开始do-while循环\n"</span>);
     <span class="c-keyword">do</span> {
         <span class="c-function">printf</span>(<span class="c-string">"第%d次循环\n"</span>, count);
         count++;
     } <span class="c-keyword">while</span> (count <= <span class="c-number">3</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"循环结束\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -532,25 +532,25 @@
     <span class="c-keyword">char</span> password[<span class="c-number">20</span>];
     <span class="c-keyword">int</span> attempts = <span class="c-number">0</span>;
     <span class="c-keyword">const</span> <span class="c-keyword">int</span> max_attempts = <span class="c-number">3</span>;
-    
+
     <span class="c-keyword">do</span> {
         <span class="c-function">printf</span>(<span class="c-string">"请输入密码: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, password);
         attempts++;
-        
+
         <span class="c-keyword">if</span> (strcmp(password, <span class="c-string">"123456"</span>) == <span class="c-number">0</span>) {
             <span class="c-function">printf</span>(<span class="c-string">"密码正确，欢迎登录！\n"</span>);
             <span class="c-keyword">break</span>;
         } <span class="c-keyword">else</span> {
             <span class="c-function">printf</span>(<span class="c-string">"密码错误，还剩%d次机会\n"</span>, max_attempts - attempts);
         }
-        
+
         <span class="c-keyword">if</span> (attempts >= max_attempts) {
             <span class="c-function">printf</span>(<span class="c-string">"尝试次数过多，账户锁定！\n"</span>);
             <span class="c-keyword">break</span>;
         }
     } <span class="c-keyword">while</span> (<span class="c-number">1</span>);  <span class="c-comment">// 无限循环，由break控制退出</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -563,18 +563,18 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">double</span> num1, num2, result;
     <span class="c-keyword">char</span> operator;
-    
+
     <span class="c-keyword">do</span> {
         <span class="c-function">printf</span>(<span class="c-string">"\n=== 简单计算器 ===\n"</span>);
         <span class="c-function">printf</span>(<span class="c-string">"请输入第一个数字: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &num1);
-        
+
         <span class="c-function">printf</span>(<span class="c-string">"请输入运算符 (+, -, *, /): "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &operator);
-        
+
         <span class="c-function">printf</span>(<span class="c-string">"请输入第二个数字: "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &num2);
-        
+
         <span class="c-keyword">switch</span> (operator) {
             <span class="c-keyword">case</span> <span class="c-string">'+'</span>:
                 result = num1 + num2;
@@ -599,14 +599,14 @@
             <span class="c-keyword">default</span>:
                 <span class="c-function">printf</span>(<span class="c-string">"错误：无效的运算符！\n"</span>);
         }
-        
+
         <span class="c-function">printf</span>(<span class="c-string">"是否继续计算？(y/n): "</span>);
         <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &operator);
-        
+
     } <span class="c-keyword">while</span> (operator == <span class="c-string">'y'</span> || operator == <span class="c-string">'Y'</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"谢谢使用计算器！\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -874,12 +874,12 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i, j;
     <span class="c-keyword">int</span> n;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"请输入菱形行数(奇数): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &n);
-    
+
     <span class="c-keyword">int</span> mid = n / <span class="c-number">2</span> + <span class="c-number">1</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= mid; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">1</span>; j <= mid - i; j++) {
             <span class="c-function">printf</span>(<span class="c-string">" "</span>);
@@ -925,14 +925,14 @@
             sum += temp % <span class="c-number">10</span>;
             temp /= <span class="c-number">10</span>;
         }
-        
+
         <span class="c-comment">// 判断是否为完全平方数</span>
         <span class="c-keyword">int</span> sqrtSum = (<span class="c-keyword">int</span>)sqrt(sum);
         <span class="c-keyword">if</span> (sqrtSum * sqrtSum == sum) {
             <span class="c-function">printf</span>(<span class="c-string">"%d (各位数字之和=%d=%d²)\n"</span>, num, sum, sqrtSum);
         }
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                 </div>
@@ -956,7 +956,7 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-keyword">for</span> (j = <span class="c-number">0</span>; j < <span class="c-number">4</span>; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, matrix[i][j]);
@@ -972,7 +972,7 @@
         }
     }
     <span class="c-function">printf</span>(<span class="c-string">"数组元素总和: %d\n"</span>, sum);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1096,7 +1096,7 @@
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, i);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }
 <span class="c-comment">// 输出：1 2 4 5 7 8 10（跳过了3, 6, 9）</span></code></pre>
@@ -1112,16 +1112,16 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
-    
+
     <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= <span class="c-number">100</span>; i++) {
         <span class="c-keyword">if</span> (i % <span class="c-number">5</span> == <span class="c-number">0</span>) {
             <span class="c-keyword">continue</span>;  <span class="c-comment">// 跳过5的倍数</span>
         }
         sum += i;
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"所有非5的倍数的和: %d\n"</span>, sum);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1206,7 +1206,7 @@
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, i);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);  <span class="c-comment">// 输出：1 2 4 5</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1311,7 +1311,7 @@
     <span class="c-keyword">int</span> i;
     <span class="c-keyword">int</span> scores[] = {<span class="c-number">85</span>, <span class="c-number">92</span>, <span class="c-number">78</span>, <span class="c-number">65</span>, <span class="c-number">88</span>, <span class="c-number">94</span>};
     <span class="c-keyword">int</span> pass_count = <span class="c-number">0</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"及格的学生:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">6</span>; i++) {
         <span class="c-keyword">if</span> (scores[i] < <span class="c-number">80</span>) {
@@ -1322,7 +1322,7 @@
     }
 
     <span class="c-function">printf</span>(<span class="c-string">"及格人数: %d\n"</span>, pass_count);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>
@@ -1339,7 +1339,7 @@
         {<span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">7</span>, <span class="c-number">8</span>},
         {<span class="c-number">9</span>, <span class="c-number">10</span>, <span class="c-number">11</span>, <span class="c-number">12</span>}
     };
-    
+
     <span class="c-keyword">int</span> target = <span class="c-number">7</span>;
     <span class="c-keyword">int</span> found_row = -<span class="c-number">1</span>, found_col = -<span class="c-number">1</span>;
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
@@ -1354,13 +1354,13 @@
             <span class="c-keyword">break</span>;  <span class="c-comment">// 跳出外层循环</span>
         }
     }
-    
+
     <span class="c-keyword">if</span> (found_row != -<span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"找到了%d，在第%d行第%d列\n"</span>, target, found_row + <span class="c-number">1</span>, found_col + <span class="c-number">1</span>);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"没有找到目标元素\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                         </div>

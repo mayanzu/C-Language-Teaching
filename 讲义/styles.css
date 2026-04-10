@@ -44,6 +44,18 @@
 
    ============================================ */
 
+/* ===== SVG图标样式 ===== */
+.icon {
+    vertical-align: middle;
+    margin-right: 4px;
+    display: inline-block;
+}
+
+.svg-sprite {
+    display: none;
+}
+
+
 /* ===== 2K/大屏优化 ===== */
 @media screen and (min-width: 1440px) {
     :root {
@@ -330,6 +342,23 @@ body {
     line-height: 1.4;
 }
 
+.subsection-content h3:not(.subsection-title) {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-text-primary);
+    margin: var(--spacing-lg) 0 var(--spacing-sm);
+    line-height: 1.45;
+}
+
+.subsection-content h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: var(--spacing-md) 0 var(--spacing-sm);
+    line-height: 1.5;
+}
+
 /* Content Typography */
 .subsection-content,
 .subsection-content p {
@@ -339,6 +368,7 @@ body {
     margin-bottom: var(--spacing-md);
     text-indent: 0; /* 统一段落缩进 */
 }
+
 
 /* ============================================
    List Standardization - 列表统一规范
@@ -445,6 +475,54 @@ code {
    Code Block Component - Apple Style
    ============================================ */
 
+/* 普通 pre/code 标签样式（与 .code-block 保持一致）*/
+pre {
+    background: #FFFFFF;
+    border: 1px solid var(--color-code-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: var(--spacing-md) 0;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s ease;
+    font-family: var(--font-mono);
+}
+
+pre:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+pre code {
+    display: block;
+    margin: 0;
+    padding: var(--spacing-lg);
+    background: #FFFFFF;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    letter-spacing: 0.3px;
+}
+
+pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-tertiary);
+}
+
 .code-block {
     background: var(--color-code-bg);
     border: 1px solid var(--color-code-border);
@@ -511,15 +589,16 @@ code {
 }
 
 .copy-button::before {
-    content: '📋';
-    font-size: 14px;
+    content: '复制';
+    font-size: 12px;
 }
 
 .copy-button.copied::before {
-    content: '✓';
+    content: '已复制';
+    font-size: 12px;
 }
 
-/* Code Content */
+/* Code Content - 确保 .code-block 里的样式覆盖普通 pre */
 .code-block pre {
     margin: 0;
     padding: var(--spacing-lg);
@@ -530,6 +609,13 @@ code {
     line-height: 1.8;
     color: var(--color-text-primary);
     letter-spacing: 0.3px;
+    transform: none;
+    box-shadow: none;
+}
+
+.code-block pre:hover {
+    box-shadow: none;
+    transform: none;
 }
 
 .code-block pre::-webkit-scrollbar {
@@ -623,58 +709,7 @@ code {
     display: block;
 }
 
-/* Code Block Title - Apple Style */
-.code-block-title {
-    background: linear-gradient(to bottom, #FAFAFA, #F5F5F7);
-    color: var(--color-text-secondary);
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin: 0;
-    border-bottom: 1px solid var(--color-code-border);
-    font-size: 13px;
-    font-weight: 600;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
 
-.code-block-title::before {
-    content: '●●●';
-    font-size: 10px;
-    color: #D1D1D6;
-    letter-spacing: 2px;
-    margin-right: var(--spacing-sm);
-}
-
-/* Copy Button - Apple Style */
-.copy-button {
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: var(--font-system);
-    font-weight: 500;
-}
-
-.copy-button:hover {
-    background: var(--color-code-bg);
-    border-color: var(--color-accent-blue);
-    color: var(--color-accent-blue);
-}
-
-.copy-button:active {
-    transform: scale(0.96);
-}
-
-.copy-button.copied {
-    background: var(--color-accent-blue);
-    border-color: var(--color-accent-blue);
-    color: white;
-}
 
 
 
@@ -686,7 +721,8 @@ code {
 .callout,
 .callout-tip,
 .callout-warning,
-.callout-note {
+.callout-note,
+.callout-success {
     background: var(--color-info-bg);
     border-left: 3px solid var(--color-info-border);
     border-radius: var(--radius-sm);
@@ -694,6 +730,7 @@ code {
     margin: var(--spacing-md) 0;
     position: relative;
 }
+
 
 /* 提示框 - 一般提示说明 */
 .callout-tip {
@@ -966,9 +1003,99 @@ td code {
     font-size: 18px;
 }
 
+.practice-questions {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-2xl) 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.practice-questions > .subsection-title,
+.practice-questions > h3 {
+    margin-top: 0;
+}
+
+.question-item {
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.question-item:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.question-item:last-of-type {
+    padding-bottom: 0;
+}
+
+.question-item p:last-child,
+.question-item ul:last-child,
+.question-item ol:last-child {
+    margin-bottom: 0;
+}
+
+.question-item details {
+    margin-top: var(--spacing-md);
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-code-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+}
+
+.question-item summary {
+    color: var(--color-accent-blue);
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+}
+
+.question-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.question-item summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: var(--spacing-sm);
+    transition: transform 0.2s ease;
+}
+
+.question-item details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.table-note {
+    margin-top: var(--spacing-sm);
+    color: var(--color-text-secondary);
+    font-size: 15px;
+}
+
+.comparison-table {
+    width: 100%;
+}
+
+.array-pointer-details,
+.file-modes,
+.mode-table,
+.pointer-step {
+    margin: var(--spacing-lg) 0;
+}
+
+.pointer-step {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
 /* ============================================
    Responsive Design
    ============================================ */
+
 
 @media (max-width: 1024px) {
     .tutorial-nav {

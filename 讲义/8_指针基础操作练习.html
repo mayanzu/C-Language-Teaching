@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- SVG图标引用 -->
+    <svg class="svg-sprite" aria-hidden="true">
+        <use href="icons.svg#icon-warning"></use>
+        <use href="icons.svg#icon-check"></use>
+        <use href="icons.svg#icon-error"></use>
+    </svg>
+    
     <!-- 侧边导航栏 -->
     <nav class="tutorial-nav">
         <ul>
@@ -119,7 +126,7 @@
                         </div>
 
                         <div class="callout-warning">
-                            <strong>⚠️ 重要提醒：</strong>
+                            <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 重要提醒：</strong>
                             <ul>
                                 <li>星号(*) 是指针声明的标志，表示这是一个指针变量</li>
                                 <li><code>int *p;</code> 中的 <code>int</code> 表示p指向的数据类型是int，不是p本身的类型</li>
@@ -161,30 +168,30 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 步骤1：声明一个普通的整型变量</span>
     <span class="c-keyword">int</span> a = <span class="c-number">42</span>;
-    
+
     <span class="c-comment">// 步骤2：声明一个指向int类型的指针变量</span>
     <span class="c-comment">// *表示p是一个指针，int表示它指向int类型的数据</span>
     <span class="c-keyword">int</span> *p;
-    
+
     <span class="c-comment">// 步骤3：使用&运算符获取变量a的地址，并赋给指针p</span>
     p = &amp;a;
-    
+
     <span class="c-comment">// 打印变量a的值（直接访问）</span>
     <span class="c-function">printf</span>(<span class="c-string">"变量a的值: %d\n"</span>, a);
-    
+
     <span class="c-comment">// 打印变量a的内存地址（用%p格式打印地址）</span>
     <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (void*)&amp;a);
-    
+
     <span class="c-comment">// 打印指针p中存储的地址值（应该与&a相同）</span>
     <span class="c-function">printf</span>(<span class="c-string">"指针p的值: %p\n"</span>, (void*)p);
-    
+
     <span class="c-comment">// 使用*运算符解引用：通过指针p访问它指向的值</span>
     <span class="c-function">printf</span>(<span class="c-string">"通过指针p访问的值: %d\n"</span>, *p);
-    
+
     <span class="c-comment">// 通过指针修改变量a的值</span>
     *p = <span class="c-number">100</span>;  <span class="c-comment">// 这相当于 a = 100;</span>
     <span class="c-function">printf</span>(<span class="c-string">"修改后a的值: %d\n"</span>, a);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -213,7 +220,7 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 声明一个普通变量</span>
     <span class="c-keyword">int</span> a = <span class="c-number">42</span>;
-    
+
     <span class="c-comment">// 步骤1：声明指针并初始化为NULL（非常重要！）</span>
     <span class="c-comment">// NULL表示空指针，不指向任何有效地址</span>
     <span class="c-keyword">int</span> *p = NULL;
@@ -226,7 +233,7 @@
     <span class="c-comment">// 步骤3：让指针指向一个有效的变量</span>
     p = &amp;a;
     <span class="c-function">printf</span>(<span class="c-string">"\na的地址: %p, a的值: %d\n"</span>, (void*)&amp;a, a);
-    
+
     <span class="c-comment">// 步骤44：现在可以安全地使用指针了</span>
     <span class="c-function">printf</span>(<span class="c-string">"p指向的地址: %p\n"</span>, (void*)p);
     <span class="c-function">printf</span>(<span class="c-string">"p指向的值: %d\n"</span>, *p);
@@ -264,14 +271,14 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 声明三种不同类型的变量</span>
-    <span class="c-keyword">int</span> x = <span class="c-number">10</span>;           <span class="c-comment">// 整型变量</span>
-    <span class="c-keyword">double</span> y = <span class="c-number">3.14</span>;      <span class="c-comment">// 双精度浮点型</span>
-    <span class="c-keyword">char</span> c = <span class="c-string">'A'</span>;         <span class="c-comment">// 字符型</span>
+    <span class="c-keyword">int</span> x = <span class="c-number">10</span>;  <span class="c-comment">// 整型变量</span>
+    <span class="c-keyword">double</span> y = <span class="c-number">3.14</span>;  <span class="c-comment">// 双精度浮点型</span>
+    <span class="c-keyword">char</span> c = <span class="c-string">'A'</span>;  <span class="c-comment">// 字符型</span>
 
     <span class="c-comment">// 声明相应类型的指针，并用&获取变量的地址</span>
-    <span class="c-keyword">int</span> *px = &amp;x;        <span class="c-comment">// px指向x</span>
-    <span class="c-keyword">double</span> *py = &amp;y;   <span class="c-comment">// py指向y</span>
-    <span class="c-keyword">char</span> *pc = &amp;c;      <span class="c-comment">// pc指向c</span>
+    <span class="c-keyword">int</span> *px = &amp;x;  <span class="c-comment">// px指向x</span>
+    <span class="c-keyword">double</span> *py = &amp;y;  <span class="c-comment">// py指向y</span>
+    <span class="c-keyword">char</span> *pc = &amp;c;  <span class="c-comment">// pc指向c</span>
 
     <span class="c-comment">// 打印三个变量的地址（地址各不相同）</span>
     <span class="c-function">printf</span>(<span class="c-string">"x的地址: %p\n"</span>, (void*)&amp;x);
@@ -279,9 +286,9 @@
     <span class="c-function">printf</span>(<span class="c-string">"c的地址: %p\n\n"</span>, (void*)&amp;c);
 
     <span class="c-comment">// 通过指针访问各自指向的值</span>
-    <span class="c-function">printf</span>(<span class="c-string">"*px = %d\n"</span>, *px);     <span class="c-comment">// 输出 10</span>
+    <span class="c-function">printf</span>(<span class="c-string">"*px = %d\n"</span>, *px);  <span class="c-comment">// 输出 10</span>
     <span class="c-function">printf</span>(<span class="c-string">"*py = %.2f\n"</span>, *py); <span class="c-comment">// 输出 3.14</span>
-    <span class="c-function">printf</span>(<span class="c-string">"*pc = %c\n"</span>, *pc);     <span class="c-comment">// 输出 A</span>
+    <span class="c-function">printf</span>(<span class="c-string">"*pc = %c\n"</span>, *pc);  <span class="c-comment">// 输出 A</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -357,27 +364,27 @@
     <span class="c-keyword">float</span> float_var = <span class="c-number">3.14f</span>;
     <span class="c-keyword">double</span> double_var = <span class="c-number">2.71828</span>;
     <span class="c-keyword">char</span> char_var = <span class="c-string">'A'</span>;
-    
+
     <span class="c-comment">// 声明对应类型的指针</span>
     <span class="c-keyword">int</span> *int_ptr = &amp;int_var;
     <span class="c-keyword">float</span> *float_ptr = &amp;float_var;
     <span class="c-keyword">double</span> *double_ptr = &amp;double_var;
     <span class="c-keyword">char</span> *char_ptr = &amp;char_var;
-    
+
     <span class="c-comment">// 打印每个指针的大小（会发现它们大小相同）</span>
     <span class="c-function">printf</span>(<span class="c-string">"=== 指针大小测试 ===\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"int*    大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(int_ptr));
     <span class="c-function">printf</span>(<span class="c-string">"float*  大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(float_ptr));
     <span class="c-function">printf</span>(<span class="c-string">"double* 大小: %u 字节\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(double_ptr));
     <span class="c-function">printf</span>(<span class="c-string">"char*   大小: %u 字节\n\n"</span>, (<span class="c-keyword">unsigned int</span>)<span class="c-keyword">sizeof</span>(char_ptr));
-    
+
     <span class="c-comment">// 通过指针访问各自指向的值</span>
     <span class="c-function">printf</span>(<span class="c-string">"=== 通过指针访问值 ===\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"*int_ptr    = %d\n"</span>, *int_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"*float_ptr  = %.2f\n"</span>, *float_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"*double_ptr = %.5f\n"</span>, *double_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"*char_ptr   = %c\n"</span>, *char_ptr);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -408,34 +415,34 @@
     <span class="c-comment">// 声明两个普通变量</span>
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
     <span class="c-keyword">int</span> b = <span class="c-number">20</span>;
-    
+
     <span class="c-comment">// p是一级指针，指向a</span>
     <span class="c-keyword">int</span> *p = &amp;a;
-    
+
     <span class="c-comment">// pp是二级指针，指向p</span>
     <span class="c-keyword">int</span> **pp = &amp;p;
-    
+
     <span class="c-comment">// 通过二级指针修改a的值</span>
     <span class="c-comment">// **pp 等价于 *p，也等价于 a</span>
     <span class="c-function">printf</span>(<span class="c-string">"==== 初始值 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, *p = %d, **pp = %d\n\n"</span>, a, *p, **pp);
-    
+
     **pp = <span class="c-number">100</span>;  <span class="c-comment">// 修改a的值为100</span>
     <span class="c-function">printf</span>(<span class="c-string">"==== 修改后 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, *p = %d, **pp = %d\n\n"</span>, a, *p, **pp);
-    
+
     <span class="c-comment">// 通过二级指针修改一级指针的指向</span>
     <span class="c-comment">// *pp 就是 p，所以这一行相当于 p = &b;</span>
     *pp = &amp;b;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"==== p指向变为b后 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, b = %d, *p = %d\n\n"</span>, a, b, *p);
-    
+
     <span class="c-comment">// 现在再次通过**pp修改，会改变b</span>
     **pp = <span class="c-number">300</span>;
     <span class="c-function">printf</span>(<span class="c-string">"==== 再次修改后 ====\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d, b = %d, *p = %d\n"</span>, a, b, *p);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                                     </div>
@@ -471,28 +478,28 @@
     <span class="c-keyword">int</span> int_var = <span class="c-number">42</span>;
     <span class="c-keyword">float</span> float_var = <span class="c-number">3.14f</span>;
     <span class="c-keyword">char</span> char_var = <span class="c-string">'A'</span>;
-    
+
     <span class="c-comment">// 声明一个void指针（通用指针）</span>
     <span class="c-keyword">void</span> *void_ptr;
-    
+
     <span class="c-comment">// void指针可以指向int类型</span>
     void_ptr = &amp;int_var;
     <span class="c-comment">// 使用时必须先转换为int*，然后才能解引用</span>
     <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向int: %d\n"</span>, *(int*)void_ptr);
-    
+
     <span class="c-comment">// void指针也可以指向float类型</span>
     void_ptr = &amp;float_var;
     <span class="c-comment">// 转换为float*再解引用</span>
     <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向float: %.2f\n"</span>, *(float*)void_ptr);
-    
+
     <span class="c-comment">// void指针还可以指向char类型</span>
     void_ptr = &amp;char_var;
     <span class="c-comment">// 转换为char*再解引用</span>
     <span class="c-function">printf</span>(<span class="c-string">"void_ptr指向char: %c\n"</span>, *(char*)void_ptr);
-    
+
     <span class="c-comment">// 注意：不能直接解引用void指针！下面这行会报错：</span>
     <span class="c-comment">// *void_ptr;  // 错误！必须先转换类型</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -522,24 +529,24 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 步骤1：声明指针并初始化为NULL（良好习惯）</span>
     <span class="c-keyword">int</span> *ptr = NULL;
-    
+
     <span class="c-comment">// 步骤2：使用前检查指针是否为NULL</span>
     <span class="c-keyword">if</span> (ptr == NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"指针是NULL，不能使用\n"</span>);
     }
-    
+
     <span class="c-comment">// 步骤3：让指针指向一个有效的变量</span>
     <span class="c-keyword">int</span> value = <span class="c-number">100</span>;
     ptr = &amp;value;
-    
+
     <span class="c-comment">// 步骤4：再次检查，现在可以安全使用了</span>
     <span class="c-keyword">if</span> (ptr != NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"指针有效，值为: %d\n"</span>, *ptr);
     }
-    
+
     <span class="c-comment">// 步骤5：不再使用时设回 NULL（好习惯）</span>
     ptr = NULL;
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -589,22 +596,22 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> *uninitialized_ptr;  <span class="c-comment">// 危险！未初始化</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"未初始化指针的值: %p\n"</span>, (void*)uninitialized_ptr);
-    
+
     <span class="c-comment">// 以下操作会导致未定义行为</span>
     <span class="c-comment">// *uninitialized_ptr = 42;  // 可能崩溃或修改随机内存</span>
     <span class="c-comment">// printf("%d\n", *uninitialized_ptr);  // 可能输出垃圾值</span>
-    
+
     <span class="c-comment">// 正确的做法：初始化为NULL或有效地址</span>
     uninitialized_ptr = NULL;  <span class="c-comment">// 现在安全了</span>
-    
+
     <span class="c-keyword">if</span> (uninitialized_ptr != NULL) {
         <span class="c-function">printf</span>(<span class="c-string">"指针已初始化，可以安全使用\n"</span>);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"指针为NULL\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -619,25 +626,25 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> *dangling_ptr;
-    
+
     <span class="c-comment">// 动态分配内存</span>
     dangling_ptr = (<span class="c-keyword">int</span>*)malloc(<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
     <span class="c-keyword">if</span> (dangling_ptr != NULL) {
         *dangling_ptr = <span class="c-number">42</span>;
         <span class="c-function">printf</span>(<span class="c-string">"分配的内存值: %d\n"</span>, *dangling_ptr);
-        
+
         <span class="c-comment">// 释放内存，但指针仍然指向原来的位置</span>
         free(dangling_ptr);
         <span class="c-function">printf</span>(<span class="c-string">"内存已释放\n"</span>);
-        
+
         <span class="c-comment">// 现在dangling_ptr是悬空指针</span>
         <span class="c-comment">// *dangling_ptr = 100;  // 危险！未定义行为</span>
-        
+
         <span class="c-comment">// 正确的做法：释放后立即置为NULL</span>
         dangling_ptr = NULL;
         <span class="c-function">printf</span>(<span class="c-string">"指针已置为NULL，避免悬空指针\n"</span>);
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -651,26 +658,26 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> *wild_ptr;  <span class="c-comment">// 未初始化的指针，包含随机值</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"野指针的值: %p\n"</span>, (void*)wild_ptr);
-    
+
     <span class="c-comment">// 野指针指向未知内存区域，使用非常危险</span>
     <span class="c-comment">// *wild_ptr = 42;  // 可能导致程序崩溃或数据损坏</span>
-    
+
     <span class="c-comment">// 避免野指针的正确做法</span>
     <span class="c-keyword">int</span> *safe_ptr = NULL;  <span class="c-comment">// 初始化为NULL</span>
-    
+
     <span class="c-keyword">int</span> value = <span class="c-number">100</span>;
     safe_ptr = &amp;value;  <span class="c-comment">// 指向有效变量</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"安全指针指向的值: %d\n"</span>, *safe_ptr);
-    
+
     <span class="c-comment">// 函数返回局部变量的地址也是危险的</span>
     <span class="c-comment">// int* dangerous_function() {</span>
-    <span class="c-comment">//     int local_var = 42;</span>
-    <span class="c-comment">//     return &local_var;  // 危险！返回局部变量地址</span>
+    <span class="c-comment">// int local_var = 42;</span>
+    <span class="c-comment">// return &local_var;  // 危险！返回局部变量地址</span>
     <span class="c-comment">// }</span>
-    
+
     <span class="keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -761,19 +768,19 @@
     <span class="c-keyword">int</span> x = <span class="c-number">10</span>;
     <span class="c-keyword">double</span> y = <span class="c-number">3.14</span>;
     <span class="c-keyword">char</span> c = <span class="c-string">'A'</span>;
-    
+
     <span class="c-comment">// 获取各种类型变量的地址</span>
     <span class="c-keyword">int</span> *px = &amp;x;
     <span class="c-keyword">double</span> *py = &amp;y;
     <span class="c-keyword">char</span> *pc = &amp;c;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"x = %d, 地址 = %p\n"</span>, x, (void*)&amp;x);
     <span class="c-function">printf</span>(<span class="c-string">"y = %f, 地址 = %p\n"</span>, y, (void*)&amp;y);
     <span class="c-function">printf</span>(<span class="c-string">"c = %c, 地址 = %p\n"</span>, c, (void*)&amp;c);
-    
+
     <span class="c-comment">// 通过指针访问</span>
     <span class="c-function">printf</span>(<span class="c-string">"通过指针访问: x=%d, y=%f, c=%c\n"</span>, *px, *py, *pc);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -794,21 +801,21 @@
     <span class="c-comment">// int *p1 = &42;        // 错误！</span>
     <span class="c-comment">// double *p2 = &3.14;   // 错误！</span>
     <span class="c-comment">// char *p3 = &'A';      // 错误！</span>
-    
+
     <span class="c-comment">// 字符串常量可以取地址（返回char*）</span>
     <span class="c-keyword">const</span> <span class="c-keyword">char</span> *str_ptr = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 正确，字符串常量有地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"字符串地址: %p\n"</span>, (void*)str_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"字符串内容: %s\n"</span>, str_ptr);
-    
+
     <span class="c-comment">// 表达式结果不能取地址</span>
     <span class="c-keyword">int</span> a = <span class="c-number">5</span>, b = <span class="c-number">10</span>;
     <span class="c-comment">// int *p4 = &(a + b);   // 错误！表达式结果没有地址</span>
     <span class="c-comment">// int *p5 = &(a++);     // 错误！</span>
-    
+
     <span class="c-comment">// 但是变量可以</span>
     <span class="c-keyword">int</span> *valid_ptr = &amp;a;
     <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (void*)valid_ptr);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -822,20 +829,20 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[<span class="c-number">5</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
-    
+
     <span class="c-comment">// 数组名本身就是地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"数组名arr的值: %p\n"</span>, (void*)arr);
     <span class="c-function">printf</span>(<span class="c-string">"&amp;arr[0]的值: %p\n"</span>, (void*)&amp;arr[<span class="c-number">0</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"arr 和 &amp;arr[0] 相等: %s\n"</span>, arr == &amp;arr[<span class="c-number">0</span>] ? <span class="c-string">"是"</span> : <span class="c-string">"否"</span>);
-    
+
     <span class="c-comment">// 数组的地址和数组首元素的地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"数组地址 &amp;arr: %p\n"</span>, (void*)&amp;arr);
     <span class="c-function">printf</span>(<span class="c-string">"首元素地址 &amp;arr[0]: %p\n"</span>, (void*)&amp;arr[<span class="c-number">0</span>]);
     <span class="c-function">printf</span>(<span class="c-string">"数组名 arr: %p\n"</span>, (void*)arr);
-    
+
     <span class="c-comment">// 注意：&amp;arr 和 arr 的类型不同</span>
     <span class="c-comment">// arr 是 int*，&amp;arr 是 int(*)[5]</span>
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -862,10 +869,10 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">20</span>;
     <span class="c-function">printf</span>(<span class="c-string">"交换前: x = %d, y = %d\n"</span>, x, y);
-    
+
     <span class="c-function">swap</span>(&amp;x, &amp;y);
     <span class="c-function">printf</span>(<span class="c-string">"交换后: x = %d, y = %d\n"</span>, x, y);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -895,13 +902,13 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
-    
+
     <span class="c-function">modify_value</span>(a);
     <span class="c-function">printf</span>(<span class="c-string">"函数外: a = %d\n\n"</span>, a);
-    
+
     <span class="c-function">modify_by_pointer</span>(&amp;b);
     <span class="c-function">printf</span>(<span class="c-string">"函数外: b = %d\n"</span>, b);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -938,21 +945,21 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始值: a = %d, b = %d\n"</span>, a, b);
-    
+
     <span class="c-comment">// 值传递</span>
     <span class="c-function">modify_value</span>(a);
     <span class="c-function">printf</span>(<span class="c-string">"值传递后: a = %d\n"</span>, a);
-    
+
     <span class="c-comment">// 地址传递</span>
     <span class="c-function">modify_by_address</span>(&amp;a);
     <span class="c-function">printf</span>(<span class="c-string">"地址传递后: a = %d\n"</span>, a);
-    
+
     <span class="c-comment">// 交换</span>
     <span class="c-function">swap</span>(&amp;a, &amp;b);
     <span class="c-function">printf</span>(<span class="c-string">"交换后: a = %d, b = %d\n"</span>, a, b);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -982,7 +989,7 @@
 
                         <h4>* 运算符的双重身份</h4>
                         <div class="callout-warning">
-                            <strong>⚠️ 注意区分：</strong>
+                            <strong><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> 注意区分：</strong>
                             <p><strong>1. 声明时的 *</strong>（声明符号）</p>
                             <pre>int *p;  // 这里的*表示p是一个指针</pre>
                             
@@ -1056,23 +1063,23 @@ if (p != NULL) {
     <span class="c-keyword">int</span> a = <span class="c-number">50</span>;
     <span class="c-comment">// 声明指针并指向a</span>
     <span class="c-keyword">int</span> *p = &amp;a;
-    
+
     <span class="c-comment">// 比较直接访问和通过指针访问</span>
     <span class="c-function">printf</span>(<span class="c-string">"直接访问a: %d\n"</span>, a);
     <span class="c-function">printf</span>(<span class="c-string">"通过指针*p访问: %d\n\n"</span>, *p);
-    
+
     <span class="c-comment">// 通过解引用修改变量的值</span>
     *p = <span class="c-number">100</span>;  <span class="c-comment">// 等价于 a = 100;</span>
     <span class="c-function">printf</span>(<span class="c-string">"修改后a = %d, *p = %d\n\n"</span>, a, *p);
-    
+
     <span class="c-comment">// 二级指针：指向指针的指针</span>
     <span class="c-keyword">int</span> **pp = &amp;p;  <span class="c-comment">// pp存储p的地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"通过二级指针**pp访问: %d\n\n"</span>, **pp);
-    
+
     <span class="c-comment">// 通过二级指针修改值</span>
     **pp = <span class="c-number">200</span>;  <span class="c-comment">// 等价于 *p = 200; 也等价于 a = 200;</span>
     <span class="c-function">printf</span>(<span class="c-string">"最终a的值: %d\n"</span>, a);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1185,26 +1192,26 @@ value = *(p + i);  // 通过指针运算访问</pre>
     <span class="c-keyword">int</span> arr[<span class="c-number">5</span>] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
     <span class="c-keyword">int</span> *p = arr;  <span class="c-comment">// 数组名就是指向第一个元素的指针</span>
     <span class="c-keyword">int</span> i;  <span class="c-comment">// VC2010要求变量声明在块开头</span>
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"数组访问:\n"</span>);
     <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"arr[%d] = %d\n"</span>, i, arr[i]);
     }
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n指针访问:\n"</span>);
     <span class="c-keyword">for</span>(i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"*(p+%d) = %d\n"</span>, i, *(p + i));
     }
-    
+
     <span class="c-comment">// 指针算术</span>
     <span class="c-function">printf</span>(<span class="c-string">"\n指针算术:\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"p[0] = %d\n"</span>, p[<span class="c-number">0</span>]);    <span class="c-comment">// 等价于 *p</span>
-    <span class="c-function">printf</span>(<span class="c-string">"p[2] = %d\n"</span>, p[<span class="c-number">2</span>]);    <span class="c-comment">// 等价于 *(p+2)</span>
-    
+    <span class="c-function">printf</span>(<span class="c-string">"p[0] = %d\n"</span>, p[<span class="c-number">0</span>]);  <span class="c-comment">// 等价于 *p</span>
+    <span class="c-function">printf</span>(<span class="c-string">"p[2] = %d\n"</span>, p[<span class="c-number">2</span>]);  <span class="c-comment">// 等价于 *(p+2)</span>
+
     <span class="c-comment">// 修改数组元素</span>
     *(p + <span class="c-number">3</span>) = <span class="c-number">999</span>;
     <span class="c-function">printf</span>(<span class="c-string">"\n修改后 arr[3] = %d\n"</span>, arr[<span class="c-number">3</span>]);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                 </div>
@@ -1239,12 +1246,12 @@ value = *(p + i);  // 通过指针运算访问</pre>
 
                         <h4>不支持的指针运算</h4>
                         <div class="callout-warning">
-                            <p>⚠️ <strong>以下操作是非法的：</strong></p>
+                            <p><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> <strong>以下操作是非法的：</strong></p>
                             <ul>
-                                <li>❌ 指针 + 指针：<code>ptr1 + ptr2</code></li>
-                                <li>❌ 指针 × 整数：<code>ptr * 2</code></li>
-                                <li>❌ 指针 ÷ 整数：<code>ptr / 2</code></li>
-                                <li>❌ 不同类型指针运算：<code>int_ptr - char_ptr</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 指针 + 指针：<code>ptr1 + ptr2</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 指针 × 整数：<code>ptr * 2</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 指针 ÷ 整数：<code>ptr / 2</code></li>
+                                <li><svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 不同类型指针运算：<code>int_ptr - char_ptr</code></li>
                             </ul>
                         </div>
 
@@ -1287,25 +1294,25 @@ value = *(p + i);  // 通过指针运算访问</pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>, <span class="c-number">60</span>};
     <span class="c-keyword">int</span> *ptr = arr;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始指针: %p\n"</span>, (void*)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"当前值: %d\n"</span>, *ptr);
-    
+
     <span class="c-comment">// 指针加法</span>
     ptr = ptr + <span class="c-number">2</span>;  <span class="c-comment">// 移动到第三个元素</span>
     <span class="c-function">printf</span>(<span class="c-string">"\nptr + 2: %p\n"</span>, (void*)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"当前值: %d\n"</span>, *ptr);
-    
+
     <span class="c-comment">// 指针减法</span>
     ptr = ptr - <span class="c-number">1</span>;  <span class="c-comment">// 回到第二个元素</span>
     <span class="c-function">printf</span>(<span class="c-string">"\nptr - 1: %p\n"</span>, (void*)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"当前值: %d\n"</span>, *ptr);
-    
+
     <span class="c-comment">// 指针之间的距离</span>
     <span class="c-keyword">int</span> *ptr1 = &amp;arr[<span class="c-number">1</span>];
     <span class="c-keyword">int</span> *ptr2 = &amp;arr[<span class="c-number">4</span>];
     <span class="c-function">printf</span>(<span class="c-string">"\nptr2 - ptr1 = %d\n"</span>, (<span class="c-keyword">int</span>)(ptr2 - ptr1));  <span class="c-comment">// 距离为3</span>
-    
+
     <span class="c-comment">// 自增自减</span>
     ptr = arr;
     <span class="c-function">printf</span>(<span class="c-string">"\n自增操作:\n"</span>);
@@ -1314,7 +1321,7 @@ value = *(p + i);  // 通过指针运算访问</pre>
     <span class="c-function">printf</span>(<span class="c-string">"ptr++ 后: %d\n"</span>, *ptr);
     ptr--;
     <span class="c-function">printf</span>(<span class="c-string">"ptr-- 后: %d\n"</span>, *ptr);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1330,34 +1337,34 @@ value = *(p + i);  // 通过指针运算访问</pre>
     <span class="c-keyword">int</span> int_arr[<span class="c-number">3</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>};
     <span class="c-keyword">double</span> double_arr[<span class="c-number">3</span>] = {<span class="c-number">1.1</span>, <span class="c-number">2.2</span>, <span class="c-number">3.3</span>};
     <span class="c-keyword">char</span> char_arr[<span class="c-number">3</span>] = {<span class="c-string">'A'</span>, <span class="c-string">'B'</span>, <span class="c-string">'C'</span>};
-    
+
     <span class="c-keyword">int</span> *int_ptr = int_arr;
     <span class="c-keyword">double</span> *double_ptr = double_arr;
     <span class="c-keyword">char</span> *char_ptr = char_arr;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"int指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)int_ptr);
     int_ptr++;
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)int_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n"</span>, (<span class="c-keyword">int</span>)((char*)int_ptr - (char*)int_arr));
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\ndouble指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)double_ptr);
     double_ptr++;
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)double_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n"</span>, (<span class="c-keyword">int</span>)((char*)double_ptr - (char*)double_arr));
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\nchar指针:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"  起始地址: %p\n"</span>, (void*)char_ptr);
     char_ptr++;
     <span class="c-function">printf</span>(<span class="c-string">"  +1 后地址: %p\n"</span>, (void*)char_ptr);
     <span class="c-function">printf</span>(<span class="c-string">"  步长: %d 字节\n"</span>, (<span class="c-keyword">int</span>)((char*)char_ptr - (char*)char_arr));
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"\n数据类型大小:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(int) = %lu\n"</span>, (<span class="c-keyword">unsigned long</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(double) = %lu\n"</span>, (<span class="c-keyword">unsigned long</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(char) = %lu\n"</span>, (<span class="c-keyword">unsigned long</span>)<span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1385,18 +1392,19 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         <h4>为什么需要传递数组大小？</h4>
                         <p>因为数组退化为指针后，函数内部无法通过<code>sizeof</code>获取数组的真实大小。</p>
                         <div class="callout-warning">
-                            <p>⚠️ <strong>常见错误：</strong></p>
-                            <pre><code>void print_array(int arr[]) {
-    int size = sizeof(arr) / sizeof(arr[0]);  // ❌ 错误！
+                            <p><svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg> <strong>常见错误：</strong></p>
+                            <pre><code>    void print_array(int arr[]) {
+    int size = sizeof(arr) / sizeof(arr[0]);    // <svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 错误！
     // arr是指针，sizeof(arr)得到的是指针的大小(4或8字节)
     // 而不是整个数组的大小
-}</code></pre>
+    }</code></pre>
                             <p><strong>正确做法：</strong>必须额外传递数组大小参数</p>
-                            <pre><code>void print_array(int arr[], int size) {  // ✅ 正确
-    for(int i = 0; i < size; i++) {
+                            <pre><code>    void print_array(int arr[], int size) {    // <svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 正确
+    int i;
+    for (i = 0; i < size; i++) {
         printf("%d ", arr[i]);
     }
-}</code></pre>
+    }</code></pre>
                         </div>
 
                         <h4>数组参数传递的特点</h4>
@@ -1410,10 +1418,10 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         <h4>const保护数组参数</h4>
                         <div class="callout-tip">
                             <p>如果函数不应该修改数组，使用<code>const</code>关键字保护：</p>
-                            <pre><code>void print_array(const int arr[], int size) {
-    // arr[0] = 100;  // ❌ 编译错误！const保护
-    printf("%d", arr[0]);  // ✅ 只读访问允许
-}</code></pre>
+                            <pre><code>    void print_array(const int arr[], int size) {
+    // arr[0] = 100;  // <svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 编译错误！const保护
+    printf("%d", arr[0]);    // <svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 只读访问允许
+    }</code></pre>
                             <p><strong>好处：</strong>1) 明确函数意图 2) 防止意外修改 3) 编译器可以优化</p>
                         </div>
 
@@ -1428,13 +1436,13 @@ value = *(p + i);  // 通过指针运算访问</pre>
                         <h4>多维数组作为参数</h4>
                         <div class="callout-tip">
                             <p>多维数组传递时，除了第一维可以省略，其他维度必须指定：</p>
-                            <pre><code>void print_2d(int arr[][3], int rows) {  // ✅ 正确
+                            <pre><code>    void print_2d(int arr[][3], int rows) {    // <svg class="icon" width="16" height="16"><use href="icons.svg#icon-check"></use></svg> 正确
     // 第一维可以省略，第二维必须指定
-}
+    }
 
-void print_2d(int arr[][], int rows) {  // ❌ 错误
+    void print_2d(int arr[][], int rows) {     // <svg class="icon" width="16" height="16"><use href="icons.svg#icon-error"></use></svg> 错误
     // 缺少列数信息
-}</code></pre>
+    }</code></pre>
                         </div>
 
                         <h4>实际应用建议</h4>
@@ -1496,11 +1504,11 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> numbers[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
     <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(numbers) / <span class="c-keyword">sizeof</span>(numbers[<span class="c-number">0</span>]);
-    
+
     <span class="c-function">print_array1</span>(numbers, size);
     <span class="c-function">print_array2</span>(numbers, size);
     <span class="c-function">print_array3</span>(numbers);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1535,13 +1543,13 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
 <span class="c-keyword">void</span> <span class="c-function">reverse_string</span>(<span class="c-keyword">char</span> *str) {
     <span class="c-keyword">char</span> *end = str;
     <span class="c-keyword">char</span> temp;
-    
+
     <span class="c-comment">// 找到字符串末尾</span>
     <span class="c-keyword">while</span>(*end != <span class="c-string">'\0'</span>) {
         end++;
     }
     end--;  <span class="c-comment">// 指向最后一个字符</span>
-    
+
     <span class="c-comment">// 交换字符</span>
     <span class="c-keyword">while</span>(str &lt; end) {
         temp = *str;
@@ -1555,16 +1563,16 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> text[] = <span class="c-string">"Hello, World!"</span>;
     <span class="c-keyword">char</span> copy[<span class="c-number">50</span>];
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"原始字符串: %s\n"</span>, text);
     <span class="c-function">printf</span>(<span class="c-string">"字符串长度: %d\n"</span>, my_strlen(text));
-    
+
     my_strcpy(copy, text);
     <span class="c-function">printf</span>(<span class="c-string">"复制后的字符串: %s\n"</span>, copy);
-    
+
     reverse_string(copy);
     <span class="c-function">printf</span>(<span class="c-string">"反转后的字符串: %s\n"</span>, copy);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1626,18 +1634,18 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
     DynamicArray arr;
     <span class="c-keyword">int</span> i;
     init_array(&amp;arr, <span class="c-number">2</span>);
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"添加元素:\n"</span>);
     <span class="c-keyword">for</span>(i = <span class="c-number">1</span>; i &lt;= <span class="c-number">8</span>; i++) {
         add_element(&amp;arr, i * <span class="c-number">10</span>);
         <span class="c-function">printf</span>(<span class="c-string">"添加 %d 后，容量: %d\n"</span>, i * <span class="c-number">10</span>, arr.capacity);
     }
-    
+
     print_array(&amp;arr);
-    
+
     free_array(&amp;arr);
     <span class="c-function">printf</span>(<span class="c-string">"内存已释放\n"</span>);
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1693,13 +1701,13 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
     <span class="c-keyword">int</span> size = <span class="c-keyword">sizeof</span>(arr) / <span class="c-keyword">sizeof</span>(arr[<span class="c-number">0</span>]);
     <span class="c-keyword">int</span> *p = arr;
     <span class="c-keyword">int</span> i;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"使用指针自增遍历:\n"</span>);
     <span class="c-keyword">for</span> (i = <span class="c-number">0</span>; i &lt; size; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"地址: %p, 值: %d\n"</span>, (void*)p, *p);
         p++;  <span class="c-comment">// 指针自增</span>
     }
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
@@ -1728,10 +1736,10 @@ void print_2d(int arr[][], int rows) {  // ❌ 错误
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> text[] = <span class="c-string">"Hello, Pointer!"</span>;
-    
+
     <span class="c-function">printf</span>(<span class="c-string">"字符串: %s\n"</span>, text);
     <span class="c-function">printf</span>(<span class="c-string">"长度: %d\n"</span>, my_strlen(text));
-    
+
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
