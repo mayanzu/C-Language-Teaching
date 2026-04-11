@@ -24,6 +24,8 @@
             <li><a href="#string-functions">字符串函数</a></li>
             <li><a href="#array-operations">数组常见操作</a></li>
             <li><a href="#common-errors">常见错误与调试</a></li>
+            <li><a href="#array-algorithms">数组排序与查找</a></li>
+            <li><a href="#practice">综合练习</a></li>
             <li><a href="#summary">小结</a></li>
         </ul>
     </nav>
@@ -973,6 +975,313 @@
         </section>
 
         <!-- ============================================================
+             数组排序与查找
+             ============================================================ -->
+        <section id="array-algorithms" class="section">
+            <h2 class="section-title">数组排序与查找</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">冒泡排序</h3>
+                <div class="subsection-content">
+                    <p><strong>冒泡排序</strong>是最简单的排序算法，通过相邻元素的比较和交换，将最大的元素"冒泡"到末尾。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">冒泡排序实现</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">64</span>, <span class="c-number">25</span>, <span class="c-number">12</span>, <span class="c-number">22</span>, <span class="c-number">11</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+
+    <span class="c-comment">// 冒泡排序：外层控制轮数，内层控制比较</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {
+                <span class="c-comment">// 交换相邻元素</span>
+                <span class="c-keyword">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="c-number">1</span>];
+                arr[j + <span class="c-number">1</span>] = temp;
+            }
+        }
+    }
+
+    <span class="c-comment">// 输出排序结果</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>冒泡排序要点：</strong>
+                        <ul>
+                            <li>外层循环 <code>n-1</code> 轮</li>
+                            <li>内层循环每轮少比较一次（因为末尾已有序）</li>
+                            <li>如果某轮没有发生交换，说明已经有序，可以提前退出（优化）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">选择排序</h3>
+                <div class="subsection-content">
+                    <p><strong>选择排序</strong>每轮从未排序部分找到最小元素，放到已排序部分的末尾。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">选择排序实现</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">64</span>, <span class="c-number">25</span>, <span class="c-number">12</span>, <span class="c-number">22</span>, <span class="c-number">11</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">int</span> min_idx = i;
+        <span class="c-comment">// 找未排序部分的最小值下标</span>
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = i + <span class="c-number">1</span>; j < n; j++) {
+            <span class="c-keyword">if</span> (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        <span class="c-comment">// 将最小值交换到前面</span>
+        <span class="c-keyword">if</span> (min_idx != i) {
+            <span class="c-keyword">int</span> temp = arr[i];
+            arr[i] = arr[min_idx];
+            arr[min_idx] = temp;
+        }
+    }
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">线性查找与二分查找</h3>
+                <div class="subsection-content">
+                    <h4>线性查找</h4>
+                    <p>从头到尾逐个比较，适用于任何数组：</p>
+                    <div class="code-block">
+                        <div class="code-block-title">线性查找</div>
+                        <pre><code><span class="c-comment">// 在数组中查找目标值，返回下标（找不到返回-1）</span>
+<span class="c-keyword">int</span> <span class="c-function">search</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n, <span class="c-keyword">int</span> target) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-keyword">if</span> (arr[i] == target) <span class="c-keyword">return</span> i;
+    }
+    <span class="c-keyword">return</span> -<span class="c-number">1</span>;
+}</code></pre>
+                    </div>
+
+                    <h4>二分查找</h4>
+                    <p>要求数组<strong>已排序</strong>，每次排除一半，效率远高于线性查找：</p>
+                    <div class="code-block">
+                        <div class="code-block-title">二分查找</div>
+                        <pre><code><span class="c-comment">// 在已排序数组中查找，返回下标（找不到返回-1）</span>
+<span class="c-keyword">int</span> <span class="c-function">binarySearch</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n, <span class="c-keyword">int</span> target) {
+    <span class="c-keyword">int</span> left = <span class="c-number">0</span>, right = n - <span class="c-number">1</span>;
+    <span class="c-keyword">while</span> (left <= right) {
+        <span class="c-keyword">int</span> mid = (left + right) / <span class="c-number">2</span>;
+        <span class="c-keyword">if</span> (arr[mid] == target) <span class="c-keyword">return</span> mid;
+        <span class="c-keyword">else if</span> (arr[mid] < target) left = mid + <span class="c-number">1</span>;
+        <span class="c-keyword">else</span> right = mid - <span class="c-number">1</span>;
+    }
+    <span class="c-keyword">return</span> -<span class="c-number">1</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>查找效率对比：</strong>
+                        <ul>
+                            <li>线性查找：1000个数据最多比较1000次</li>
+                            <li>二分查找：1000个数据最多比较10次（2¹⁰ = 1024）</li>
+                            <li>但二分查找要求数组必须先排好序</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 排序与查找</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 手动模拟冒泡排序对数组 [5, 3, 8, 1, 2] 的排序过程，写出每一轮结束后的数组状态。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <pre><code>初始: [5, 3, 8, 1, 2]
+第1轮: [3, 5, 1, 2, 8]  (8冒泡到末尾)
+第2轮: [3, 1, 2, 5, 8]  (5冒泡到倒数第二)
+第3轮: [1, 2, 3, 5, 8]  (3冒泡到正确位置)
+第4轮: [1, 2, 3, 5, 8]  (已有序，无交换)</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 在已排序数组 [2, 5, 8, 12, 16, 23, 38, 56, 72, 91] 中用二分查找找23，写出每一步的left、mid、right值。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <pre><code>初始: left=0, right=9, mid=4 → arr[4]=16 < 23 → left=5
+第2步: left=5, right=9, mid=7 → arr[7]=56 > 23 → right=6
+第3步: left=5, right=6, mid=5 → arr[5]=23 == 23 → 找到！下标=5</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             综合练习
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">综合练习</h2>
+
+            <div class="practice-box">
+                <div class="practice-box-title">本章综合练习</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 写一个程序，输入10个整数，找出最大值和最小值及其下标。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[<span class="c-number">10</span>];
+    <span class="c-function">printf</span>(<span class="c-string">"输入10个整数: "</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">10</span>; i++) <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
+
+    <span class="c-keyword">int</span> max_idx = <span class="c-number">0</span>, min_idx = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i < <span class="c-number">10</span>; i++) {
+        <span class="c-keyword">if</span> (arr[i] > arr[max_idx]) max_idx = i;
+        <span class="c-keyword">if</span> (arr[i] < arr[min_idx]) min_idx = i;
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"最大值: arr[%d]=%d\n"</span>, max_idx, arr[max_idx]);
+    <span class="c-function">printf</span>(<span class="c-string">"最小值: arr[%d]=%d\n"</span>, min_idx, arr[min_idx]);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 写一个程序，将数组中的元素逆序存放（不使用额外数组）。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+
+    <span class="c-comment">// 首尾交换</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n / <span class="c-number">2</span>; i++) {
+        <span class="c-keyword">int</span> temp = arr[i];
+        arr[i] = arr[n - <span class="c-number">1</span> - i];
+        arr[n - <span class="c-number">1</span> - i] = temp;
+    }
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    <span class="c-comment">// 输出: 5 4 3 2 1</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 写一个程序，统计一个字符串中字母、数字和其他字符的个数。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;ctype.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> str[] = <span class="c-string">"Hello World 2024!"</span>;
+    <span class="c-keyword">int</span> letters = <span class="c-number">0</span>, digits = <span class="c-number">0</span>, others = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; str[i] != <span class="c-string">'\0'</span>; i++) {
+        <span class="c-keyword">if</span> (<span class="c-function">isalpha</span>(str[i])) letters++;
+        <span class="c-keyword">else if</span> (<span class="c-function">isdigit</span>(str[i])) digits++;
+        <span class="c-keyword">else</span> others++;
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"字母: %d, 数字: %d, 其他: %d\n"</span>, letters, digits, others);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 选择题：以下代码的输出是什么？</p>
+                    <pre><code>char str[] = "ABC";
+printf("%d\n", sizeof(str));</code></pre>
+                    <ul>
+                        <li>A. 2</li>
+                        <li>B. 3</li>
+                        <li>C. 4</li>
+                        <li>D. 不确定</li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>选C。<code>"ABC"</code> 包含 'A'、'B'、'C' 和自动添加的 '\0'，共4个字节。<code>sizeof</code> 计算数组占用的总字节数。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习5：</strong> 写一个程序，输入一个字符串，判断它是否是回文串（正读和反读相同，如"abcba"）。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> str[<span class="c-number">100</span>];
+    <span class="c-function">printf</span>(<span class="c-string">"输入字符串: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str);
+
+    <span class="c-keyword">int</span> len = <span class="c-function">strlen</span>(str);
+    <span class="c-keyword">int</span> is_palindrome = <span class="c-number">1</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < len / <span class="c-number">2</span>; i++) {
+        <span class="c-keyword">if</span> (str[i] != str[len - <span class="c-number">1</span> - i]) {
+            is_palindrome = <span class="c-number">0</span>;
+            <span class="c-keyword">break</span>;
+        }
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"%s回文串\n"</span>, is_palindrome ? <span class="c-string">"是"</span> : <span class="c-string">"不是"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
              本章小结
              ============================================================ -->
         <section id="summary" class="section">
@@ -989,6 +1298,8 @@
                     <li><strong>冒泡排序</strong>通过相邻元素比较和交换，每轮将最大值"冒泡"到末尾</li>
                     <li>字符串比较用 <code>strcmp()</code>，不能用 <code>==</code>；字符串赋值用 <code>strcpy()</code>，不能用 <code>=</code></li>
                     <li>局部数组未初始化时值为垃圾值，必须手动初始化后再使用</li>
+                    <li><strong>冒泡排序和选择排序</strong>是两种基础排序算法，时间复杂度均为O(n²)</li>
+                    <li><strong>线性查找</strong>适用于任何数组，<strong>二分查找</strong>仅适用于已排序数组但效率更高</li>
                 </ul>
 
                 <div class="example-grid">

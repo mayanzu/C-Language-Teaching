@@ -25,6 +25,8 @@
             <li><a href="#conditional">条件编译</a></li>
             <li><a href="#storage-class">存储类说明符</a></li>
             <li><a href="#advanced-macro">宏的高级用法</a></li>
+            <li><a href="#multi-file">多文件编程基础</a></li>
+            <li><a href="#practice">综合练习</a></li>
             <li><a href="#summary">小结</a></li>
         </ul>
     </nav>
@@ -1144,6 +1146,241 @@
             </div>
 
         <!-- ============================================================
+             多文件编程基础
+             ============================================================ -->
+        <section id="multi-file" class="section">
+            <h2 class="section-title">多文件编程基础</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">为什么要分文件？</h3>
+                <div class="subsection-content">
+                    <p>当程序变大时，把所有代码放在一个文件里会变得难以管理。C语言支持将代码拆分到多个文件中：</p>
+                    <ul>
+                        <li><strong>便于管理：</strong>每个文件负责一个模块，结构清晰</li>
+                        <li><strong>便于复用：</strong>通用功能可以跨项目复用</li>
+                        <li><strong>便于协作：</strong>多人同时开发不同模块</li>
+                        <li><strong>编译加速：</strong>修改一个文件只需重新编译该文件</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">头文件与源文件</h3>
+                <div class="subsection-content">
+                    <p>典型的C项目结构是将<strong>声明</strong>放在头文件(<code>.h</code>)，<strong>实现</strong>放在源文件(<code>.c</code>)：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">math_utils.h（头文件 - 声明）</div>
+                        <pre><code><span class="c-preprocessor">#ifndef MATH_UTILS_H</span>
+<span class="c-preprocessor">#define MATH_UTILS_H</span>
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);
+<span class="c-keyword">int</span> <span class="c-function">min</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);
+<span class="c-keyword">double</span> <span class="c-function">average</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b);
+
+<span class="c-preprocessor">#endif</span></code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">math_utils.c（源文件 - 实现）</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">"math_utils.h"</span>
+
+<span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a > b ? a : b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">min</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> a < b ? a : b;
+}
+
+<span class="c-keyword">double</span> <span class="c-function">average</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">return</span> (a + b) / <span class="c-number">2.0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">main.c（主程序 - 使用）</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">"math_utils.h"</span>  <span class="c-comment">// 包含自定义头文件</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"max(3,5) = %d\n"</span>, <span class="c-function">max</span>(<span class="c-number">3</span>, <span class="c-number">5</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"avg(3,5) = %.1f\n"</span>, <span class="c-function">average</span>(<span class="c-number">3</span>, <span class="c-number">5</span>));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>头文件保护（Include Guard）：</strong>
+                        <p>使用 <code>#ifndef</code> / <code>#define</code> / <code>#endif</code> 防止头文件被重复包含，这是必须遵守的规范。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">#include 的两种形式</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>形式</th>
+                                    <th>搜索路径</th>
+                                    <th>用途</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>#include &lt;file.h&gt;</code></td><td>系统目录</td><td>包含标准库头文件</td><td><code>#include &lt;stdio.h&gt;</code></td></tr>
+                                <tr><td><code>#include "file.h"</code></td><td>当前目录优先</td><td>包含自定义头文件</td><td><code>#include "mylib.h"</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 多文件编程</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 创建一个头文件 <code>array_utils.h</code>，声明以下函数：求数组最大值、求数组平均值、数组排序。然后创建对应的源文件实现这些函数。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <div class="code-block-title">array_utils.h</div>
+                                <pre><code><span class="c-preprocessor">#ifndef ARRAY_UTILS_H</span>
+<span class="c-preprocessor">#define ARRAY_UTILS_H</span>
+
+<span class="c-keyword">int</span> <span class="c-function">arrayMax</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n);
+<span class="c-keyword">double</span> <span class="c-function">arrayAvg</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n);
+<span class="c-keyword">void</span> <span class="c-function">bubbleSort</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n);
+
+<span class="c-preprocessor">#endif</span></code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 解释为什么头文件需要使用 <code>#ifndef</code> 保护？如果不使用会怎样？</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>如果不使用头文件保护，当同一个头文件被多次包含时（比如A.h和B.h都包含了C.h，而main.c同时包含了A.h和B.h），会导致重复声明错误。<code>#ifndef</code> 保护确保头文件内容只被编译一次。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             综合练习
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">综合练习</h2>
+
+            <div class="practice-box">
+                <div class="practice-box-title">本章综合练习</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 写一个程序，使用静态变量记录一个函数被调用的次数。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">countCalls</span>() {
+    <span class="c-keyword">static</span> <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
+    count++;
+    <span class="c-function">printf</span>(<span class="c-string">"此函数已被调用 %d 次\n"</span>, count);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">countCalls</span>();  <span class="c-comment">// 第1次</span>
+    <span class="c-function">countCalls</span>();  <span class="c-comment">// 第2次</span>
+    <span class="c-function">countCalls</span>();  <span class="c-comment">// 第3次</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 定义一个宏 <code>MAX3(a,b,c)</code>，求三个数中的最大值。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-preprocessor">#define MAX(a, b) ((a) > (b) ? (a) : (b))</span>
+<span class="c-preprocessor">#define MAX3(a, b, c) MAX(MAX(a, b), (c))</span></code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 选择题：以下代码输出什么？</p>
+                    <pre><code>int x = 10;
+void func() {
+    int x = 20;
+    printf("%d ", x);
+}
+int main() {
+    func();
+    printf("%d\n", x);
+    return 0;
+}</code></pre>
+                    <ul>
+                        <li>A. 10 10</li>
+                        <li>B. 20 20</li>
+                        <li>C. 20 10</li>
+                        <li>D. 10 20</li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>选C。func中的局部变量x=20隐藏了全局变量x=10，所以func内输出20；main中直接使用全局变量x，输出10。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 使用条件编译写一个程序，定义 <code>DEBUG</code> 宏时输出调试信息，否则只输出结果。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-preprocessor">#define DEBUG</span>  <span class="c-comment">// 注释掉这行就不输出调试信息</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">3</span>, <span class="c-number">1</span>, <span class="c-number">4</span>, <span class="c-number">1</span>, <span class="c-number">5</span>};
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+        sum += arr[i];
+<span class="c-preprocessor">#ifdef DEBUG</span>
+        <span class="c-function">printf</span>(<span class="c-string">"调试: i=%d, arr[i]=%d, sum=%d\n"</span>, i, arr[i], sum);
+<span class="c-preprocessor">#endif</span>
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"总和: %d\n"</span>, sum);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
              本章小结
              ============================================================ -->
         <section id="summary" class="section">
@@ -1159,6 +1396,8 @@
                     <li><strong>#define</strong>：宏定义，文本替换，适合定义常量</li>
                     <li><strong>#include</strong>：文件包含，将其他文件内容复制到当前位置</li>
                     <li><strong>条件编译</strong>：<code>#if</code>/<code>#ifdef</code>/<code>#ifndef</code> 根据条件选择编译哪些代码</li>
+                    <li><strong>多文件编程</strong>：将声明放.h、实现放.c，使用头文件保护防止重复包含</li>
+                    <li><strong>#include</strong>：尖括号搜系统目录，双引号搜当前目录优先</li>
                     <li><strong>存储类</strong>：<code>auto</code>（默认栈变量）、<code>static</code>（持久化）、<code>extern</code>（跨文件）、<code>register</code>（建议寄存器）</li>
                     <li><strong>宏陷阱</strong>：参数和整体都要加括号，避免 <code>++</code>/<code>--</code>，复杂逻辑用函数</li>
                     <li><strong>预定义宏</strong>：<code>__FILE__</code>、<code>__LINE__</code>、<code>__DATE__</code>、<code>__TIME__</code> 等辅助调试</li>

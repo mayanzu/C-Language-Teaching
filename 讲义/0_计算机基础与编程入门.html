@@ -960,8 +960,735 @@ Press any key to continue . . .</code></pre>
 
 
         <!-- ============================================================
-             本章小结
+             操作系统基础
              ============================================================ -->
+        <section id="os-basics" class="section">
+            <h2 class="section-title">操作系统基础</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">什么是操作系统？</h3>
+                <div class="subsection-content">
+                    <p><strong>操作系统（Operating System, OS）</strong>是管理计算机硬件与软件资源的系统软件，它是用户与计算机硬件之间的桥梁。没有操作系统，我们几乎无法使用计算机。</p>
+
+                    <h4>操作系统的核心功能</h4>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <strong>处理器管理</strong>
+                            <ul>
+                                <li>分配CPU时间给各个程序</li>
+                                <li>管理进程的创建与销毁</li>
+                                <li>实现多任务调度</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>存储管理</strong>
+                            <ul>
+                                <li>管理内存的分配与回收</li>
+                                <li>实现虚拟内存机制</li>
+                                <li>隔离不同程序的内存空间</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>文件管理</strong>
+                            <ul>
+                                <li>组织和管理磁盘上的文件</li>
+                                <li>提供文件的创建、读写、删除</li>
+                                <li>管理目录（文件夹）结构</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>设备管理</strong>
+                            <ul>
+                                <li>管理输入输出设备</li>
+                                <li>提供统一的设备访问接口</li>
+                                <li>处理设备中断与驱动</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>形象比喻：</strong>
+                        <p>如果计算机是一家公司，操作系统就是公司的"大管家"——它决定谁先用会议室（CPU）、谁用哪个办公桌（内存）、文件柜怎么整理（文件系统），以及各部门怎么协调工作（设备管理）。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">进程与程序</h3>
+                <div class="subsection-content">
+                    <p><strong>程序</strong>是静态的代码文件，存储在磁盘上；<strong>进程</strong>是程序运行时的动态实例，存在于内存中。</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>对比项</th>
+                                    <th>程序</th>
+                                    <th>进程</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>本质</td><td>静态的代码文件</td><td>动态的执行实例</td></tr>
+                                <tr><td>存储位置</td><td>磁盘（硬盘）</td><td>内存（RAM）</td></tr>
+                                <tr><td>生命周期</td><td>永久存在（除非删除）</td><td>临时存在（运行时创建）</td></tr>
+                                <tr><td>数量关系</td><td>一个程序</td><td>可产生多个进程</td></tr>
+                                <tr><td>类比</td><td>菜谱（写在纸上）</td><td>按菜谱做菜的过程</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>进程的状态</h4>
+                    <p>一个进程从创建到结束，会经历以下状态：</p>
+                    <ul>
+                        <li><strong>就绪（Ready）：</strong>进程已准备好，等待CPU分配时间</li>
+                        <li><strong>运行（Running）：</strong>进程正在CPU上执行</li>
+                        <li><strong>等待（Waiting）：</strong>进程等待某个事件（如输入输出完成）</li>
+                        <li><strong>结束（Terminated）：</strong>进程执行完毕或被终止</li>
+                    </ul>
+
+                    <div class="callout-tip">
+                        <strong>生活中的例子：</strong>
+                        <p>你双击打开一个程序（如浏览器），操作系统就创建了一个进程。你同时打开5个浏览器窗口，可能就有5个进程在运行。在Windows中，按 <code>Ctrl+Shift+Esc</code> 可以打开任务管理器查看所有正在运行的进程。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">文件系统基础</h3>
+                <div class="subsection-content">
+                    <p><strong>文件系统</strong>是操作系统用于组织和管理磁盘上数据的方式。它就像一个巨大的文件柜，有清晰的目录结构和检索方式。</p>
+
+                    <h4>文件与目录</h4>
+                    <ul>
+                        <li><strong>文件（File）：</strong>存储数据的基本单位，有文件名和扩展名（如 <code>hello.c</code>、<code>program.exe</code>）</li>
+                        <li><strong>目录/文件夹（Directory）：</strong>用于组织文件的容器，可以嵌套形成树状结构</li>
+                        <li><strong>路径（Path）：</strong>描述文件在目录树中位置的字符串</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-block-title">路径示例</div>
+                        <pre><code><span class="c-comment">/* 绝对路径：从根目录开始的完整路径 */</span>
+C:\Users\Student\Projects\hello.c
+
+<span class="c-comment">/* 相对路径：从当前目录开始的路径 */</span>
+Projects\hello.c
+.\hello.c    <span class="c-comment">// 当前目录</span>
+..\hello.c   <span class="c-comment">// 上一级目录</span></code></pre>
+                    </div>
+
+                    <h4>常见文件扩展名</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>扩展名</th>
+                                    <th>类型</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>.c</code></td><td>C源代码</td><td>C语言源程序文件</td></tr>
+                                <tr><td><code>.h</code></td><td>头文件</td><td>C语言头声明文件</td></tr>
+                                <tr><td><code>.obj</code></td><td>目标文件</td><td>编译后生成的中间文件</td></tr>
+                                <tr><td><code>.exe</code></td><td>可执行文件</td><td>链接后生成的可运行程序</td></tr>
+                                <tr><td><code>.txt</code></td><td>文本文件</td><td>纯文本内容</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 操作系统基础</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 打开Windows任务管理器（Ctrl+Shift+Esc），观察当前有哪些进程在运行，记录3个你认识的进程名称及其作用。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li><strong>explorer.exe：</strong>Windows资源管理器，管理桌面和任务栏</li>
+                                <li><strong>svchost.exe：</strong>系统服务宿主进程，运行各种Windows服务</li>
+                                <li><strong>csrss.exe：</strong>客户端/服务器运行时子系统，管理图形界面</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 解释"程序"和"进程"的区别，并用生活中的例子做类比。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>程序是静态的代码文件（存储在磁盘上），进程是程序运行时的动态实例（存在于内存中）。类比：程序就像写在纸上的菜谱，进程就像厨师按菜谱做菜的过程。同一份菜谱（程序）可以有多个厨师同时在用（多个进程）。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 写出C语言开发过程中涉及的文件类型（从源代码到可执行文件），并说明每种文件的扩展名和作用。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ol>
+                                <li><strong>.c 文件（源代码）：</strong>程序员编写的C语言代码</li>
+                                <li><strong>.h 文件（头文件）：</strong>声明函数和宏的辅助文件</li>
+                                <li><strong>.obj 文件（目标文件）：</strong>编译器将.c文件编译后生成的中间文件</li>
+                                <li><strong>.exe 文件（可执行文件）：</strong>链接器将.obj文件与库链接后生成的可运行程序</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             编码规范入门
+             ============================================================ -->
+        <section id="coding-style" class="section">
+            <h2 class="section-title">编码规范入门</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">为什么需要编码规范？</h3>
+                <div class="subsection-content">
+                    <p>编码规范是一组编写代码的规则和约定。良好的编码规范可以让代码：</p>
+                    <ul>
+                        <li><strong>更易读：</strong>自己和他人都能快速理解代码含义</li>
+                        <li><strong>更易维护：</strong>修改和扩展时不容易出错</li>
+                        <li><strong>更专业：</strong>遵循行业标准的代码显得更加专业</li>
+                        <li><strong>更少Bug：</strong>规范的代码结构有助于减少错误</li>
+                    </ul>
+
+                    <div class="callout-note">
+                        <strong>记住：</strong>
+                        <p>代码是写给人看的，顺便让机器执行。一个好的程序，可读性往往比简洁性更重要。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">命名规范</h3>
+                <div class="subsection-content">
+                    <h4>变量命名</h4>
+                    <ul>
+                        <li>使用有意义的英文名，不要用 <code>a</code>、<code>b</code>、<code>x1</code> 这种无意义的名字</li>
+                        <li>使用小写字母，多个单词用下划线连接（snake_case风格）</li>
+                        <li>名称应该能描述变量的用途</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-block-title">命名对比</div>
+                        <pre><code><span class="c-comment">// 不好的命名</span>
+<span class="c-keyword">int</span> a;           <span class="c-comment">// 含义不明</span>
+<span class="c-keyword">int</span> x1;          <span class="c-comment">// 不知用途</span>
+<span class="c-keyword">int</span> StudentAge;  <span class="c-comment">// 风格不一致</span>
+
+<span class="c-comment">// 好的命名</span>
+<span class="c-keyword">int</span> age;         <span class="c-comment">// 清晰：年龄</span>
+<span class="c-keyword">int</span> student_age; <span class="c-comment">// 清晰：学生年龄</span>
+<span class="c-keyword">int</span> max_score;   <span class="c-comment">// 清晰：最高分数</span></code></pre>
+                    </div>
+
+                    <h4>常量命名</h4>
+                    <ul>
+                        <li>常量名使用全大写字母，单词间用下划线连接</li>
+                    </ul>
+                    <div class="code-block">
+                        <div class="code-block-title">常量命名</div>
+                        <pre><code><span class="c-preprocessor">#define MAX_SIZE 100</span>
+<span class="c-preprocessor">#define PI 3.14159</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">代码格式规范</h3>
+                <div class="subsection-content">
+                    <h4>缩进与对齐</h4>
+                    <p>使用一致的缩进（推荐4个空格），让代码层次清晰：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">缩进示例</div>
+                        <pre><code><span class="c-comment">// 好的缩进</span>
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score = <span class="c-number">85</span>;
+    <span class="c-keyword">if</span> (score >= <span class="c-number">60</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"及格\n"</span>);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 不好的缩进（难以阅读）</span>
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+<span class="c-keyword">int</span> score=<span class="c-number">85</span>;
+<span class="c-keyword">if</span>(score>=<span class="c-number">60</span>){
+<span class="c-function">printf</span>(<span class="c-string">"及格\n"</span>);}
+<span class="c-keyword">return</span> <span class="c-number">0</span>;}</code></pre>
+                    </div>
+
+                    <h4>注释规范</h4>
+                    <p>注释是给程序员看的说明文字，编译器会忽略注释。好的注释能帮助理解代码：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">注释示例</div>
+                        <pre><code><span class="c-comment">// 这是单行注释，用双斜杠开头</span>
+
+<span class="c-comment">/*
+   这是多行注释
+   可以写多行说明
+   适合较长的解释
+*/</span>
+
+<span class="c-keyword">int</span> radius = <span class="c-number">5</span>;        <span class="c-comment">// 圆的半径（单位：厘米）</span>
+<span class="c-keyword">double</span> area = <span class="c-number">3.14</span> * radius * radius;  <span class="c-comment">// 计算圆的面积</span></code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>注释注意事项：</strong>
+                        <ul>
+                            <li>不要写无意义的注释，如 <code>i++; // i加1</code></li>
+                            <li>注释应该解释"为什么"而不是"做了什么"</li>
+                            <li>修改代码时记得同步更新注释</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 编码规范</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 以下变量名哪些是好的命名？哪些不好？为什么？</p>
+                    <ul>
+                        <li><code>a</code></li>
+                        <li><code>student_count</code></li>
+                        <li><code>MAX_LENGTH</code></li>
+                        <li><code>x1</code></li>
+                        <li><code>total_price</code></li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li><code>a</code> — 不好，含义不明</li>
+                                <li><code>student_count</code> — 好，语义清晰，snake_case风格</li>
+                                <li><code>MAX_LENGTH</code> — 好，常量命名规范（全大写+下划线）</li>
+                                <li><code>x1</code> — 不好，含义不明</li>
+                                <li><code>total_price</code> — 好，语义清晰，snake_case风格</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 将以下格式混乱的代码重新整理，添加适当的缩进和注释：</p>
+                    <pre><code>int main(){int a=10;int b=20;int c=a+b;printf("%d",c);return 0;}</code></pre>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <div class="code-block-title">整理后的代码</div>
+                                <pre><code><span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;      <span class="c-comment">// 第一个数</span>
+    <span class="c-keyword">int</span> b = <span class="c-number">20</span>;      <span class="c-comment">// 第二个数</span>
+    <span class="c-keyword">int</span> c = a + b;    <span class="c-comment">// 计算两数之和</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, c); <span class="c-comment">// 输出结果</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 判断以下注释哪些是有用的，哪些是无用的：</p>
+                    <ul>
+                        <li><code>int age = 18; // 定义年龄变量</code></li>
+                        <li><code>int age = 18; // 学生入学时的年龄限制</code></li>
+                        <li><code>age = age + 1; // age加1</code></li>
+                        <li><code>age = age + 1; // 学生升入下一年级</code></li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li>第1条 — 无用，代码本身已说明"定义年龄"</li>
+                                <li>第2条 — 有用，解释了为什么是18（入学年龄限制）</li>
+                                <li>第3条 — 无用，代码本身已说明"age加1"</li>
+                                <li>第4条 — 有用，解释了加1的业务含义（升级）</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             调试入门
+             ============================================================ -->
+        <section id="debug-intro" class="section">
+            <h2 class="section-title">调试入门</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">什么是调试？</h3>
+                <div class="subsection-content">
+                    <p><strong>调试（Debugging）</strong>是查找和修复程序错误的过程。"Bug"原意是"虫子"，据说1947年科学家在计算机中发现了一只导致故障的飞蛾，从此"调试"就成了程序员消除错误的工作。</p>
+
+                    <h4>错误的三大类型</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>错误类型</th>
+                                    <th>发现时机</th>
+                                    <th>特点</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>语法错误</strong></td>
+                                    <td>编译时</td>
+                                    <td>编译器会报错，无法生成程序</td>
+                                    <td>缺少分号、括号不匹配</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>运行时错误</strong></td>
+                                    <td>运行时</td>
+                                    <td>程序运行中崩溃</td>
+                                    <td>除以零、数组越界</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>逻辑错误</strong></td>
+                                    <td>运行后</td>
+                                    <td>程序能运行，但结果不对</td>
+                                    <td>公式写错、条件判断反了</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>重要：</strong>
+                        <p>语法错误最容易发现和修复，因为编译器会直接告诉你哪一行出了什么问题。逻辑错误最棘手，因为程序不会报错，只是结果不符合预期。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">调试方法</h3>
+                <div class="subsection-content">
+                    <h4>方法一：阅读错误信息</h4>
+                    <p>编译器给出的错误信息是最直接的线索：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">编译错误信息示例</div>
+                        <pre><code>hello.c(5) : error C2146: 语法错误: 缺少";"（在标识符"printf"的前面）
+
+<span class="c-comment">// 解读：
+// hello.c     → 出错的文件
+// (5)         → 出错的行号（第5行）
+// error C2146 → 错误编号
+// 缺少";"     → 错误原因
+// 在标识符"printf"的前面 → 错误位置</span></code></pre>
+                    </div>
+
+                    <h4>方法二：输出调试法（printf调试）</h4>
+                    <p>在代码中插入 <code>printf</code> 语句来观察变量的值和程序的执行流程：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">printf调试示例</div>
+                        <pre><code><span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
+    <span class="c-keyword">int</span> b = <span class="c-number">0</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"调试: a=%d, b=%d\n"</span>, a, b);  <span class="c-comment">// 查看变量值</span>
+    <span class="c-keyword">int</span> c = a / b;  <span class="c-comment">// 这里会出错！除以0</span>
+    <span class="c-function">printf</span>(<span class="c-string">"调试: 开始计算\n"</span>);       <span class="c-comment">// 这行不会执行</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>调试技巧：</strong>
+                        <ul>
+                            <li>在关键位置输出变量值：<code>printf("debug: x=%d\n", x);</code></li>
+                            <li>输出程序执行到了哪里：<code>printf("debug: 到达步骤3\n");</code></li>
+                            <li>调试完成后记得删除或注释掉调试用的printf</li>
+                        </ul>
+                    </div>
+
+                    <h4>方法三：逐步排除法</h4>
+                    <p>当不确定错误出在哪里时，可以用"二分法"逐步缩小范围：</p>
+                    <ol>
+                        <li>把代码分成两半，在中间加一条输出语句</li>
+                        <li>运行程序，看输出是否出现</li>
+                        <li>如果出现了，说明错误在后半段；如果没出现，错误在前半段</li>
+                        <li>对有问题的那一半重复以上步骤，直到找到错误</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">常见错误速查表</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>错误现象</th>
+                                    <th>可能原因</th>
+                                    <th>解决方法</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>error C2065: 未声明的标识符</td>
+                                    <td>变量名拼写错误或未定义</td>
+                                    <td>检查变量名拼写和定义</td>
+                                </tr>
+                                <tr>
+                                    <td>error C2146: 缺少";"</td>
+                                    <td>上一行末尾少了分号</td>
+                                    <td>在上一行末尾加分号</td>
+                                </tr>
+                                <tr>
+                                    <td>error C2018: 未知字符</td>
+                                    <td>使用了中文标点</td>
+                                    <td>切换到英文输入法重新输入</td>
+                                </tr>
+                                <tr>
+                                    <td>程序一闪而过</td>
+                                    <td>程序执行太快，窗口自动关闭</td>
+                                    <td>在return前加 <code>system("pause");</code></td>
+                                </tr>
+                                <tr>
+                                    <td>输出乱码</td>
+                                    <td>中文字符编码问题</td>
+                                    <td>确保源文件编码为UTF-8或GBK</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 调试入门</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 以下代码有一个语法错误，请找出并修复：</p>
+                    <pre><code>int main() {
+    printf("Hello World\n")
+    return 0;
+}</code></pre>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>第2行 <code>printf("Hello World\n")</code> 末尾缺少分号，应改为 <code>printf("Hello World\n");</code></p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 以下代码能编译通过，但运行结果不对。这是什么类型的错误？如何修复？</p>
+                    <pre><code>int main() {
+    int a = 10, b = 3;
+    float c = a / b;
+    printf("c = %f\n", c);
+    return 0;
+}</code></pre>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>这是<strong>逻辑错误</strong>。程序期望输出3.333...，但实际输出3.000000。因为 <code>a / b</code> 是整数除法，结果为3，然后才赋值给float变量。修复方法：将其中一个操作数转为浮点型，如 <code>(float)a / b</code> 或 <code>a * 1.0 / b</code>。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 阅读以下编译错误信息，指出错误的位置和原因：</p>
+                    <pre><code>test.c(8) : error C2065: "count": 未声明的标识符</code></pre>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>错误在文件 <code>test.c</code> 的第8行，原因是在使用变量 <code>count</code> 之前没有声明它。解决方法：在使用之前添加 <code>int count;</code> 声明。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             综合练习
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">综合练习</h2>
+
+            <div class="practice-box">
+                <div class="practice-box-title">本章综合练习</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 简述计算机从接收用户输入到显示输出结果，经历了哪些步骤？涉及计算机的哪些组成部分？</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>步骤如下：</p>
+                            <ol>
+                                <li><strong>输入：</strong>用户通过输入设备（键盘）输入数据</li>
+                                <li><strong>存储：</strong>数据被送入内存（存储器）暂存</li>
+                                <li><strong>处理：</strong>CPU的控制器读取指令，运算器执行计算</li>
+                                <li><strong>存储：</strong>计算结果存回内存</li>
+                                <li><strong>输出：</strong>结果通过输出设备（显示器）显示给用户</li>
+                            </ol>
+                            <p>涉及组成部分：输入设备、存储器（内存）、运算器、控制器、输出设备。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 将十进制数25转换为二进制，并写出转换过程。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <div class="code-block-title">转换过程</div>
+                                <pre><code>25 ÷ 2 = 12 余 1
+12 ÷ 2 = 6  余 0
+ 6 ÷ 2 = 3  余 0
+ 3 ÷ 2 = 1  余 1
+ 1 ÷ 2 = 0  余 1
+
+从下往上读：11001
+所以 25（十进制）= 11001（二进制）
+
+验证：1×2⁴ + 1×2³ + 0×2² + 0×2¹ + 1×2⁰ = 16+8+0+0+1 = 25 ✓</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 写出一个完整的C程序，要求在屏幕上输出你的姓名和学号（用printf输出两行信息）。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <div class="code-block-title">输出姓名和学号</div>
+                                <pre><code><span class="c-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"姓名：张三\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"学号：2024001\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 解释以下概念的区别：</p>
+                    <ul>
+                        <li>编译（Compile）与链接（Link）</li>
+                        <li>源文件与目标文件</li>
+                        <li>语法错误与逻辑错误</li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li><strong>编译 vs 链接：</strong>编译是将源代码翻译成机器码（生成.obj文件），链接是将编译后的目标文件与库文件合并生成可执行文件（.exe）。编译关注单个文件，链接关注多个文件的组合。</li>
+                                <li><strong>源文件 vs 目标文件：</strong>源文件是程序员编写的.c文件（人类可读），目标文件是编译器生成的.obj文件（机器码，但尚未链接）。</li>
+                                <li><strong>语法错误 vs 逻辑错误：</strong>语法错误违反了语言规则，编译器能检测出来；逻辑错误是代码逻辑有误，程序能运行但结果不正确。</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习5：</strong> 以下代码有哪些问题？请逐一指出并修复：</p>
+                    <pre><code>#include stdio.h
+int main()
+    printf("Hello\n")
+    return 0;
+}</code></pre>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ol>
+                                <li>第1行：<code>#include stdio.h</code> 应改为 <code>#include &lt;stdio.h&gt;</code>（缺少尖括号）</li>
+                                <li>第2行：main函数后面缺少左花括号 <code>{</code></li>
+                                <li>第3行：printf语句末尾缺少分号 <code>;</code></li>
+                                <li>修复后的代码：
+                                    <pre><code>#include &lt;stdio.h&gt;
+int main() {
+    printf("Hello\n");
+    return 0;
+}</code></pre>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习6：</strong> 简述C语言程序从编写到运行的完整流程，以及每个阶段产生的文件类型。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ol>
+                                <li><strong>编辑：</strong>用编辑器编写源代码 → 产生 <code>.c</code> 源文件</li>
+                                <li><strong>预处理：</strong>处理 #include、#define 等预处理指令 → 展开后的源代码</li>
+                                <li><strong>编译：</strong>将源代码翻译为机器码 → 产生 <code>.obj</code> 目标文件</li>
+                                <li><strong>链接：</strong>将目标文件与库文件合并 → 产生 <code>.exe</code> 可执行文件</li>
+                                <li><strong>运行：</strong>操作系统加载可执行文件到内存并执行 → 输出结果</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习7：</strong> 用自己的话解释什么是"算法"，并写出"判断一个整数是奇数还是偶数"的算法步骤。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>算法是解决问题的一系列明确、有限的步骤。</p>
+                            <p>判断奇偶的算法：</p>
+                            <ol>
+                                <li>接收一个整数作为输入</li>
+                                <li>将该整数除以2，求余数</li>
+                                <li>如果余数等于0，则该数为偶数</li>
+                                <li>如果余数等于1，则该数为奇数</li>
+                                <li>输出判断结果</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习8：</strong> 选择题：以下哪个不是操作系统的功能？（ ）</p>
+                    <ul>
+                        <li>A. 管理计算机的内存</li>
+                        <li>B. 编译C语言程序</li>
+                        <li>C. 管理磁盘上的文件</li>
+                        <li>D. 分配CPU时间给各个程序</li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>选B。编译C语言程序是编译器的功能，不是操作系统的功能。操作系统负责管理硬件资源（内存、CPU、设备）和软件资源（文件），而编译器是一个独立的工具软件。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
         <!-- ============================================================
              本章小结
              ============================================================ -->
@@ -975,6 +1702,10 @@ Press any key to continue . . .</code></pre>
                     <li>计算机使用二进制表示数据，掌握二进制与十进制的转换方法</li>
                     <li>C语言程序由注释、预处理指令、全局声明、main函数和自定义函数组成</li>
                     <li>常见的编译错误包括缺少分号、引号不匹配、括号不匹配等</li>
+                    <li>操作系统管理计算机硬件与软件资源，核心功能包括处理器管理、存储管理、文件管理和设备管理</li>
+                    <li>进程是程序运行时的动态实例，与静态的程序文件有本质区别</li>
+                    <li>良好的编码规范包括有意义的命名、一致的缩进和有用的注释</li>
+                    <li>调试方法包括阅读错误信息、printf输出调试和逐步排除法</li>
                 </ul>
 
                 <div class="callout-tip">

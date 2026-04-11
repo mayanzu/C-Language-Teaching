@@ -22,6 +22,8 @@
             <li><a href="#function-pointer">函数指针</a></li>
             <li><a href="#dynamic-memory">动态内存管理</a></li>
             <li><a href="#common-errors">常见错误</a></li>
+            <li><a href="#pointer-summary">指针知识体系</a></li>
+            <li><a href="#practice">综合练习</a></li>
             <li><a href="#summary">本章小结</a></li>
         </ul>
     </nav>
@@ -899,6 +901,243 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
                     </details>
                 </div>
             </div>
+
+
+        <!-- ============================================================
+             指针知识体系
+             ============================================================ -->
+        <section id="pointer-summary" class="section">
+            <h2 class="section-title">指针知识体系</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">指针类型全景图</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>指针类型</th>
+                                    <th>声明</th>
+                                    <th>用途</th>
+                                    <th>章节</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>基本指针</td><td><code>int *p</code></td><td>指向普通变量</td><td>第8章</td></tr>
+                                <tr><td>数组指针</td><td><code>int (*p)[5]</code></td><td>指向整行二维数组</td><td>第9章</td></tr>
+                                <tr><td>指针数组</td><td><code>int *p[5]</code></td><td>存储多个指针</td><td>第9章</td></tr>
+                                <tr><td>函数指针</td><td><code>int (*p)(int,int)</code></td><td>指向函数</td><td>第9章</td></tr>
+                                <tr><td>二级指针</td><td><code>int **pp</code></td><td>指向指针的指针</td><td>第9章</td></tr>
+                                <tr><td>const指针</td><td><code>const int *p</code></td><td>指向常量</td><td>第8章</td></tr>
+                                <tr><td>void指针</td><td><code>void *p</code></td><td>通用指针</td><td>第9章</td></tr>
+                                <tr><td>结构体指针</td><td><code>struct S *p</code></td><td>指向结构体</td><td>第10章</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>如何阅读复杂指针声明：</strong>
+                        <p>从变量名开始，先看右边再看左边，遇到括号先处理括号内：</p>
+                        <ul>
+                            <li><code>int *p[5]</code> → p是数组（先和[]结合），每个元素是int*</li>
+                            <li><code>int (*p)[5]</code> → p是指针（先和*结合），指向含5个int的数组</li>
+                            <li><code>int *f(int)</code> → f是函数，返回int*</li>
+                            <li><code>int (*f)(int)</code> → f是指针，指向参数为int返回int的函数</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">动态内存管理要点</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>函数</th>
+                                    <th>功能</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>malloc(size)</code></td><td>分配字节，不初始化</td><td><code>int *p = malloc(n * sizeof(int));</code></td></tr>
+                                <tr><td><code>calloc(n, size)</code></td><td>分配并清零</td><td><code>int *p = calloc(n, sizeof(int));</code></td></tr>
+                                <tr><td><code>realloc(ptr, size)</code></td><td>重新调整大小</td><td><code>p = realloc(p, new_n * sizeof(int));</code></td></tr>
+                                <tr><td><code>free(ptr)</code></td><td>释放内存</td><td><code>free(p); p = NULL;</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>动态内存铁律：</strong>
+                        <ul>
+                            <li>malloc后必须检查返回值是否为NULL</li>
+                            <li>使用完必须free，否则内存泄漏</li>
+                            <li>free后必须置NULL，防止悬空指针</li>
+                            <li>不要free同一块内存两次</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 指针知识体系</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 解释以下声明的含义：</p>
+                    <ul>
+                        <li><code>int (*arr)[10];</code></li>
+                        <li><code>int *arr[10];</code></li>
+                        <li><code>int (*func)(double);</code></li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li><code>int (*arr)[10]</code> — arr是指向含10个int元素的数组的指针</li>
+                                <li><code>int *arr[10]</code> — arr是含10个int*指针的数组</li>
+                                <li><code>int (*func)(double)</code> — func是指向参数为double返回int的函数的指针</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 使用malloc动态分配一个n个元素的int数组，输入数据后输出，最后释放内存。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> n;
+    <span class="c-function">printf</span>(<span class="c-string">"输入元素个数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &n);
+
+    <span class="c-keyword">int</span> *arr = (<span class="c-keyword">int</span> *)<span class="c-function">malloc</span>(n * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-keyword">if</span> (arr == <span class="c-number">0</span>) { <span class="c-function">printf</span>(<span class="c-string">"分配失败\n"</span>); <span class="c-keyword">return</span> <span class="c-number">1</span>; }
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+
+    <span class="c-function">free</span>(arr);
+    arr = <span class="c-number">0</span>;
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             综合练习
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">综合练习</h2>
+
+            <div class="practice-box">
+                <div class="practice-box-title">本章综合练习</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 使用函数指针数组，实现一个简单的计算器（加减乘除）。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a + b; }
+<span class="c-keyword">int</span> <span class="c-function">sub</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a - b; }
+<span class="c-keyword">int</span> <span class="c-function">mul</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a * b; }
+<span class="c-keyword">int</span> <span class="c-function">divide</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> b != <span class="c-number">0</span> ? a / b : <span class="c-number">0</span>; }
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> (*ops[<span class="c-number">4</span>])(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>) = {add, sub, mul, divide};
+    <span class="c-keyword">char</span> *names[] = {<span class="c-string">"加"</span>, <span class="c-string">"减"</span>, <span class="c-string">"乘"</span>, <span class="c-string">"除"</span>};
+
+    <span class="c-keyword">int</span> a = <span class="c-number">20</span>, b = <span class="c-number">4</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">4</span>; i++)
+        <span class="c-function">printf</span>(<span class="c-string">"%s: %d\n"</span>, names[i], ops[i](a, b));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 选择题：<code>int a=1, *p=&a; int **pp=&p;</code> 以下哪个等于1？（ ）</p>
+                    <ul>
+                        <li>A. <code>pp</code></li>
+                        <li>B. <code>*pp</code></li>
+                        <li>C. <code>**pp</code></li>
+                        <li>D. <code>&pp</code></li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>选C。<code>pp</code>指向p，<code>*pp</code>就是p（即a的地址），<code>**pp</code>就是<code>*p</code>即a的值1。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 使用动态内存分配创建一个可变长度的整型数组，实现：输入n个成绩，计算平均分，输出高于平均分的成绩。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> n;
+    <span class="c-function">printf</span>(<span class="c-string">"输入学生人数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &n);
+
+    <span class="c-keyword">int</span> *scores = (<span class="c-keyword">int</span> *)<span class="c-function">malloc</span>(n * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-keyword">double</span> sum = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &scores[i]);
+        sum += scores[i];
+    }
+    <span class="c-keyword">double</span> avg = sum / n;
+    <span class="c-function">printf</span>(<span class="c-string">"平均分: %.1f\n"</span>, avg);
+    <span class="c-function">printf</span>(<span class="c-string">"高于平均分: "</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++)
+        <span class="c-keyword">if</span> (scores[i] > avg) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, scores[i]);
+
+    <span class="c-function">free</span>(scores);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 解释指针数组和数组指针的区别，各举一个使用场景。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li><strong>指针数组 <code>int *arr[5]</code>：</strong>本质是数组，每个元素是指针。场景：存储多个字符串（如命令行参数argv）。</li>
+                                <li><strong>数组指针 <code>int (*p)[5]</code>：</strong>本质是指针，指向一个数组。场景：遍历二维数组的行。</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
 
 
         <!-- ============================================================
