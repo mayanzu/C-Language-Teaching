@@ -1272,6 +1272,8 @@ printf("%c\n", d.c);  // 假设小端模式</code></pre>
                     <li><strong>联合体：</strong>所有成员共享内存，同一时刻只存一个值</li>
                     <li><strong>枚举：</strong>定义有名字的整数常量，提高代码可读性</li>
                     <li><strong>typedef：</strong>给类型起别名，简化代码</li>
+                    <li><strong>结构体与函数：</strong>传值不影响原结构体，传指针可修改且高效</li>
+                    <li><strong>内存对齐：</strong>结构体大小通常大于各成员大小之和，用sizeof获取实际大小</li>
                 </ul>
 
                 <div class="example-grid">
