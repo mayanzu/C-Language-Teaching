@@ -24,7 +24,7 @@
             <li><a href="#parameter">参数传递</a></li>
             <li><a href="#return-value">返回值</a></li>
             <li><a href="#recursion">递归函数</a></li>
-            <li><a href="#practice">练习题</a></li>
+            <li><a href="#common-errors">常见错误与调试</a></li>
             <li><a href="#summary">小结</a></li>
         </ul>
     </nav>
@@ -182,6 +182,47 @@
                     </div>
                 </div>
             </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">动手练习：定义你的第一个函数</h3>
+                <div class="subsection-content">
+                    <p>学习编程最好的方式就是动手。让我们从简单的函数开始，逐步掌握函数定义的方法。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">练习：定义一个打印分隔线的函数</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数声明</span>
+<span class="c-keyword">void</span> <span class="c-function">printSeparator</span>(<span class="c-keyword">char</span> ch, <span class="c-keyword">int</span> count);
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"成绩单\n"</span>);
+    <span class="c-function">printSeparator</span>(<span class="c-string">'='</span>, <span class="c-number">20</span>);  <span class="c-comment">// 打印20个等号</span>
+    <span class="c-function">printf</span>(<span class="c-string">"语文: 90\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"数学: 85\n"</span>);
+    <span class="c-function">printSeparator</span>(<span class="c-string">'-'</span>, <span class="c-number">20</span>);  <span class="c-comment">// 打印20个短横线</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 函数定义：用指定字符打印分隔线</span>
+<span class="c-keyword">void</span> <span class="c-function">printSeparator</span>(<span class="c-keyword">char</span> ch, <span class="c-keyword">int</span> count) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%c"</span>, ch);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>小贴士：</strong>
+                        <ul>
+                            <li>定义函数时先想清楚：它需要什么输入（参数）？产生什么输出（返回值）？</li>
+                            <li>函数名要有意义：<code>printSeparator</code> 比 <code>func1</code> 好理解得多</li>
+                            <li>先写声明、再写 main、最后写定义，这是常见的代码组织方式</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ============================================================
@@ -230,6 +271,38 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 函数声明</div>
+
+<div class="question-item">
+                    <p><strong>练习1：</strong> 编写一个函数 <code>int isPrime(int n)</code>，判断一个整数是否为素数。如果是素数返回1，否则返回0。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">判断素数</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">isPrime</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span> (n <= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i <= n; i++) {
+        <span class="c-keyword">if</span> (n % i == <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
+    }
+    <span class="c-keyword">return</span> <span class="c-number">1</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num = <span class="c-number">17</span>;
+    <span class="c-keyword">if</span> (<span class="c-function">isPrime</span>(num)) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d是素数\n"</span>, num);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"%d不是素数\n"</span>, num);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              函数调用
@@ -278,7 +351,124 @@
                     </div>
                 </div>
             </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">函数调用的执行流程</h3>
+                <div class="subsection-content">
+                    <p>理解函数调用的执行流程，对于写出正确的程序至关重要。让我们一步步跟踪程序的执行过程：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>步骤</th>
+                                    <th>动作</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>程序从 main 开始执行</td>
+                                    <td>程序总是从 main 函数的第一行开始</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>遇到函数调用，暂停 main</td>
+                                    <td>记住当前执行位置，准备跳转</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>实参值复制给形参</td>
+                                    <td>值传递：实参的副本传给形参</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>跳转到函数体执行</td>
+                                    <td>从函数第一行开始执行</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>遇到 return 或函数末尾</td>
+                                    <td>函数执行完毕</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>返回调用处继续执行</td>
+                                    <td>带回返回值（如有），继续执行 main</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">跟踪函数调用过程</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">doubleIt</span>(<span class="c-keyword">int</span> x) {
+    <span class="c-function">printf</span>(<span class="c-string">"  进入函数: x = %d\n"</span>, x);
+    <span class="c-keyword">int</span> result = x * <span class="c-number">2</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"  函数返回: %d\n"</span>, result);
+    <span class="c-keyword">return</span> result;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"程序开始\n"</span>);
+    <span class="c-keyword">int</span> a = <span class="c-number">5</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"调用前: a = %d\n"</span>, a);
+    <span class="c-keyword">int</span> b = <span class="c-function">doubleIt</span>(a);  <span class="c-comment">// 调用点</span>
+    <span class="c-function">printf</span>(<span class="c-string">"调用后: a = %d, b = %d\n"</span>, a, b);
+    <span class="c-function">printf</span>(<span class="c-string">"程序结束\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+<span class="c-comment">// 输出:</span>
+<span class="c-comment">// 程序开始</span>
+<span class="c-comment">// 调用前: a = 5</span>
+<span class="c-comment">//   进入函数: x = 5</span>
+<span class="c-comment">//   函数返回: 10</span>
+<span class="c-comment">// 调用后: a = 5, b = 10</span>
+<span class="c-comment">// 程序结束</span></code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>关键理解：</strong>
+                        <p>调用函数就像"委托任务"——你把任务交代给对方（传参），对方完成后告诉你结果（返回值），你们各自的工作互不干扰。main 中的变量 a 不会因为函数内的操作而改变。</p>
+                    </div>
+                </div>
+            </div>
         </section>
+
+<div class="question-item">
+                    <p><strong>练习2：</strong> 编写一个函数 <code>void printTriangle(int n)</code>，打印n行星号三角形（第i行有i个星号）。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">打印星号三角形</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">printTriangle</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= n; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
+            <span class="c-function">printf</span>(<span class="c-string">"*"</span>);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printTriangle</span>(<span class="c-number">5</span>);
+    <span class="c-comment">// 输出:</span>
+    <span class="c-comment">// *</span>
+    <span class="c-comment">// **</span>
+    <span class="c-comment">// ***</span>
+    <span class="c-comment">// ****</span>
+    <span class="c-comment">// *****</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              参数传递
@@ -352,7 +542,91 @@
                     </div>
                 </div>
             </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">数组作为函数参数</h3>
+                <div class="subsection-content">
+                    <p>在实际编程中，我们经常需要把数组传给函数处理。但数组传参有一个特殊规则：<strong>数组传给函数时，传递的是首地址，而不是副本</strong>。这意味着函数内可以修改数组的元素！</p>
+
+                    <div class="callout-tip">
+                        <strong>为什么数组传参不同？</strong>
+                        <p>因为数组可能非常大（比如10000个元素），如果像普通变量那样复制一份，既浪费内存又浪费时间。所以C语言选择传递数组的"起始地址"，函数通过地址直接操作原数组。</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">数组作为函数参数</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 函数：打印数组</span>
+<span class="c-comment">// int arr[] 表示接收一个整型数组</span>
+<span class="c-comment">// int n 表示数组长度（数组传参时丢失长度信息，必须额外传入）</span>
+<span class="c-keyword">void</span> <span class="c-function">printArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+}
+
+<span class="c-comment">// 函数：给数组每个元素翻倍</span>
+<span class="c-comment">// 注意：修改会影响到原数组！这和普通变量的值传递不同</span>
+<span class="c-keyword">void</span> <span class="c-function">doubleArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        arr[i] *= <span class="c-number">2</span>;
+    }
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> nums[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
+    <span class="c-keyword">int</span> len = <span class="c-number">5</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"原始数组: "</span>);
+    <span class="c-function">printArray</span>(nums, len);    <span class="c-comment">// 1 2 3 4 5</span>
+
+    <span class="c-function">doubleArray</span>(nums, len);   <span class="c-comment">// 在函数内修改了原数组！</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"翻倍后: "</span>);
+    <span class="c-function">printArray</span>(nums, len);    <span class="c-comment">// 2 4 6 8 10</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>重要区别：</strong>
+                        <ul>
+                            <li>普通变量传参：值传递，函数内修改不影响外部</li>
+                            <li>数组传参：传递地址，函数内<strong>可以修改</strong>原数组元素</li>
+                            <li>数组传参时，长度信息会丢失，必须额外传一个长度参数</li>
+                            <li>在函数内用 <code>sizeof(arr)</code> 得到的是指针大小（4或8），不是数组大小</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 参数传递（值传递）</div>
+
+<div class="question-item">
+                    <p><strong>练习3：</strong> 编写递归函数 <code>int sum(int n)</code>，计算 1+2+3+...+n 的值。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">递归求和</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">sum</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-keyword">if</span> (n <= <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;     <span class="c-comment">// 终止条件</span>
+    <span class="c-keyword">return</span> n + <span class="c-function">sum</span>(n - <span class="c-number">1</span>);  <span class="c-comment">// 递归体</span>
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"1+2+...+100 = %d\n"</span>, <span class="c-function">sum</span>(<span class="c-number">100</span>));  <span class="c-comment">// 5050</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              返回值
@@ -402,6 +676,35 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 返回值</div>
+
+<div class="question-item">
+                    <p><strong>练习4：</strong> 以下代码的输出结果是什么？请解释值传递的原因。</p>
+                    <div class="code-block">
+                        <div class="code-block-title">分析代码</div>
+                        <pre><code><span class="c-keyword">void</span> <span class="c-function">swap</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-keyword">int</span> temp = a;
+    a = b;
+    b = temp;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">3</span>, y = <span class="c-number">5</span>;
+    <span class="c-function">swap</span>(x, y);
+    <span class="c-function">printf</span>(<span class="c-string">"x=%d, y=%d\n"</span>, x, y);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p><strong>输出：x=3, y=5</strong></p>
+                            <p>因为C语言是<strong>值传递</strong>，<code>swap</code> 函数中的 <code>a</code> 和 <code>b</code> 是 <code>x</code> 和 <code>y</code> 的"复印件"，交换复印件不会影响原件。要真正交换需要使用指针传地址，下一章会学到。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              递归函数
@@ -533,129 +836,10 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 递归函数</div>
 
-        <!-- ============================================================
-             练习题
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">练习题</h2>
-
-            <div class="practice-questions">
-                <h3 class="subsection-title">就地练习</h3>
-
-                <!-- 题目1 -->
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 编写一个函数 <code>int isPrime(int n)</code>，判断一个整数是否为素数。如果是素数返回1，否则返回0。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">判断素数</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">isPrime</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">if</span> (n <= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i <= n; i++) {
-        <span class="c-keyword">if</span> (n % i == <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    }
-    <span class="c-keyword">return</span> <span class="c-number">1</span>;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> num = <span class="c-number">17</span>;
-    <span class="c-keyword">if</span> (<span class="c-function">isPrime</span>(num)) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d是素数\n"</span>, num);
-    } <span class="c-keyword">else</span> {
-        <span class="c-function">printf</span>(<span class="c-string">"%d不是素数\n"</span>, num);
-    }
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目2 -->
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 编写一个函数 <code>void printTriangle(int n)</code>，打印n行星号三角形（第i行有i个星号）。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">打印星号三角形</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">void</span> <span class="c-function">printTriangle</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= n; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
-            <span class="c-function">printf</span>(<span class="c-string">"*"</span>);
-        }
-        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    }
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printTriangle</span>(<span class="c-number">5</span>);
-    <span class="c-comment">// 输出:</span>
-    <span class="c-comment">// *</span>
-    <span class="c-comment">// **</span>
-    <span class="c-comment">// ***</span>
-    <span class="c-comment">// ****</span>
-    <span class="c-comment">// *****</span>
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目3 -->
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 编写递归函数 <code>int sum(int n)</code>，计算 1+2+3+...+n 的值。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">递归求和</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">sum</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">if</span> (n <= <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;     <span class="c-comment">// 终止条件</span>
-    <span class="c-keyword">return</span> n + <span class="c-function">sum</span>(n - <span class="c-number">1</span>);  <span class="c-comment">// 递归体</span>
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"1+2+...+100 = %d\n"</span>, <span class="c-function">sum</span>(<span class="c-number">100</span>));  <span class="c-comment">// 5050</span>
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目4 -->
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 以下代码的输出结果是什么？请解释值传递的原因。</p>
-                    <div class="code-block">
-                        <div class="code-block-title">分析代码</div>
-                        <pre><code><span class="c-keyword">void</span> <span class="c-function">swap</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
-    <span class="c-keyword">int</span> temp = a;
-    a = b;
-    b = temp;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> x = <span class="c-number">3</span>, y = <span class="c-number">5</span>;
-    <span class="c-function">swap</span>(x, y);
-    <span class="c-function">printf</span>(<span class="c-string">"x=%d, y=%d\n"</span>, x, y);
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                    </div>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p><strong>输出：x=3, y=5</strong></p>
-                            <p>因为C语言是<strong>值传递</strong>，<code>swap</code> 函数中的 <code>a</code> 和 <code>b</code> 是 <code>x</code> 和 <code>y</code> 的"复印件"，交换复印件不会影响原件。要真正交换需要使用指针传地址，下一章会学到。</p>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目5 -->
-                <div class="question-item">
+<div class="question-item">
                     <p><strong>练习5：</strong> 编写一个函数 <code>int countDigits(int n)</code>，返回一个正整数的位数。例如 <code>countDigits(12345)</code> 返回5。</p>
                     <details>
                         <summary>参考答案</summary>
@@ -683,15 +867,150 @@
                 </div>
             </div>
 
-            <!-- 练习提示 -->
-            <div class="practice-hints">
-                <h3>练习提示</h3>
-                <ul>
-                    <li>定义函数前先想清楚：它需要什么输入（参数）？产出什么结果（返回值）？</li>
-                    <li>递归一定要有终止条件，否则程序会崩溃</li>
-                    <li>值传递意味着形参是实参的"复印件"，修改形参不影响实参</li>
-                    <li>函数声明放在程序开头是好的编程习惯</li>
-                </ul>
+        <!-- ============================================================
+             常见错误与调试
+             ============================================================ -->
+        <section id="common-errors" class="section">
+            <h2 class="section-title">常见错误与调试</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">函数定义中的常见错误</h3>
+                <div class="subsection-content">
+                    <p>初学者在编写函数时，经常会遇到以下几类错误。让我们逐一分析并学习如何避免。</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>错误类型</th>
+                                    <th>错误示例</th>
+                                    <th>正确写法</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>缺少返回值</td>
+                                    <td><code>int add(int a, int b) { printf("%d", a+b); }</code></td>
+                                    <td><code>int add(int a, int b) { return a+b; }</code></td>
+                                    <td>声明了int返回类型就必须return</td>
+                                </tr>
+                                <tr>
+                                    <td>函数名冲突</td>
+                                    <td>定义两个同名函数</td>
+                                    <td>每个函数取不同名字</td>
+                                    <td>C语言不允许同名函数（不支持重载）</td>
+                                </tr>
+                                <tr>
+                                    <td>参数类型不匹配</td>
+                                    <td>声明<code>int f(int)</code>，调用<code>f(3.5)</code></td>
+                                    <td>传入类型匹配的参数</td>
+                                    <td>可能隐式转换，结果不符预期</td>
+                                </tr>
+                                <tr>
+                                    <td>忘记函数声明</td>
+                                    <td>定义在main后，但没声明</td>
+                                    <td>在main前加函数声明</td>
+                                    <td>编译器不认识函数，报错</td>
+                                </tr>
+                                <tr>
+                                    <td>递归无终止</td>
+                                    <td><code>int f(int n) { return n * f(n-1); }</code></td>
+                                    <td><code>if(n<=1) return 1;</code></td>
+                                    <td>缺少终止条件，栈溢出</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">错误代码诊断练习</h3>
+                <div class="subsection-content">
+                    <p>找出下面代码中的错误，这是提高调试能力的好方法：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">找错误（共3处）</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 错误1：缺少函数声明</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> result = <span class="c-function">multiply</span>(<span class="c-number">3</span>, <span class="c-number">4</span>);  <span class="c-comment">// 编译器不认识multiply</span>
+    <span class="c-function">printf</span>(<span class="c-string">"结果: %d\n"</span>, result);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-comment">// 错误2：返回类型为int，但没有return语句</span>
+<span class="c-keyword">int</span> <span class="c-function">multiply</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
+    <span class="c-function">printf</span>(<span class="c-string">"%d * %d = %d\n"</span>, a, b, a * b);
+    <span class="c-comment">// 缺少 return a * b;</span>
+}
+
+<span class="c-comment">// 错误3：递归缺少终止条件</span>
+<span class="c-keyword">int</span> <span class="c-function">countDown</span>(<span class="c-keyword">int</span> n) {
+    <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, n);
+    <span class="c-keyword">return</span> <span class="c-function">countDown</span>(n - <span class="c-number">1</span>);  <span class="c-comment">// 永远不会停止！</span>
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>调试技巧：</strong>
+                        <ul>
+                            <li><strong>自顶向下</strong>：先看编译错误信息，从第一个错误开始修</li>
+                            <li><strong>打印调试</strong>：在函数入口和出口加 printf，观察变量值和执行流程</li>
+                            <li><strong>分步验证</strong>：写完一个函数就测试一个，不要等全写完再测</li>
+                            <li><strong>单步执行</strong>：在 VC++2010 中设置断点，按 F10 逐行执行</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">函数设计原则</h3>
+                <div class="subsection-content">
+                    <p>好的函数设计能让代码更清晰、更好维护。以下是初学者应该掌握的设计原则：</p>
+
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <strong>单一职责</strong>
+                            <ul>
+                                <li>一个函数只做一件事</li>
+                                <li>如：计算和输出分成两个函数</li>
+                                <li>好处：容易理解、容易测试</li>
+                                <li>反例：一个函数既计算又打印</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>命名清晰</strong>
+                            <ul>
+                                <li>函数名要表达"做什么"</li>
+                                <li>如：getMax、isEven、printMenu</li>
+                                <li>避免：func1、doSomething</li>
+                                <li>参数名也要有意义</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>参数适度</strong>
+                            <ul>
+                                <li>参数不宜过多（建议3个以内）</li>
+                                <li>参数太多说明函数做太多事</li>
+                                <li>考虑拆分成多个函数</li>
+                                <li>参数顺序：输入在前，输出在后</li>
+                            </ul>
+                        </div>
+                        <div class="example-item">
+                            <strong>避免副作用</strong>
+                            <ul>
+                                <li>函数尽量通过返回值传递结果</li>
+                                <li>尽量少用全局变量</li>
+                                <li>修改全局变量就是"副作用"</li>
+                                <li>副作用让程序难以调试</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 

@@ -22,7 +22,6 @@
             <li><a href="#function-pointer">函数指针</a></li>
             <li><a href="#dynamic-memory">动态内存管理</a></li>
             <li><a href="#common-errors">常见错误</a></li>
-            <li><a href="#practice">练习题</a></li>
             <li><a href="#summary">本章小结</a></li>
         </ul>
     </nav>
@@ -284,6 +283,37 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 指针算术</div>
+
+<div class="question-item">
+                    <p><strong>练习1：</strong> 编写程序，使用二级指针在函数中交换两个指针的指向。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">交换指针指向</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">swap_pointers</span>(<span class="c-keyword">int</span> <span class="c-operator">**</span>pp1, <span class="c-keyword">int</span> <span class="c-operator">**</span>pp2) {
+    <span class="c-keyword">int</span> <span class="c-operator">*</span>temp = <span class="c-operator">*</span>pp1;
+    <span class="c-operator">*</span>pp1 = <span class="c-operator">*</span>pp2;
+    <span class="c-operator">*</span>pp2 = temp;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
+    <span class="c-keyword">int</span> <span class="c-operator">*</span>p1 = <span class="c-operator">&</span>a, <span class="c-operator">*</span>p2 = <span class="c-operator">&</span>b;
+
+    <span class="c-function">printf</span>(<span class="c-string">"交换前: *p1=%d, *p2=%d\n"</span>, <span class="c-operator">*</span>p1, <span class="c-operator">*</span>p2);
+    <span class="c-function">swap_pointers</span>(<span class="c-operator">&</span>p1, <span class="c-operator">&</span>p2);
+    <span class="c-function">printf</span>(<span class="c-string">"交换后: *p1=%d, *p2=%d\n"</span>, <span class="c-operator">*</span>p1, <span class="c-operator">*</span>p2);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -407,6 +437,46 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 指针数组与数组指针</div>
+
+<div class="question-item">
+                    <p><strong>练习2：</strong> 编写程序，使用 <code>malloc</code> 动态分配一个整型数组，输入数据后求平均值，最后释放内存。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">动态数组求平均值</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> n;
+    <span class="c-function">printf</span>(<span class="c-string">"输入学生人数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>n);
+
+    <span class="c-keyword">int</span> <span class="c-operator">*</span>scores = (<span class="c-keyword">int</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(n <span class="c-operator">*</span> <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-keyword">if</span> (scores == <span class="c-keyword">NULL</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"内存分配失败！\n"</span>);
+        <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    }
+
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"输入第%d个学生的成绩: "</span>, i + <span class="c-number">1</span>);
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>scores[i]);
+        sum += scores[i];
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"平均分: %.2f\n"</span>, (<span class="c-keyword">double</span>)sum / n);
+    <span class="c-function">free</span>(scores);
+    scores = <span class="c-keyword">NULL</span>;
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -660,6 +730,57 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 动态内存管理</div>
+
+<div class="question-item">
+                    <p><strong>练习3：</strong> 使用函数指针实现一个简单的计算器，支持加、减、乘、除四种运算。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">函数指针计算器</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">double</span> <span class="c-function">add</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a + b; }
+<span class="c-keyword">double</span> <span class="c-function">sub</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a - b; }
+<span class="c-keyword">double</span> <span class="c-function">mul</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a <span class="c-operator">*</span> b; }
+<span class="c-keyword">double</span> <span class="c-function">div</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
+    <span class="c-keyword">if</span> (b == <span class="c-number">0</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"错误：除数不能为0！\n"</span>);
+        <span class="c-keyword">return</span> <span class="c-number">0</span>;
+    }
+    <span class="c-keyword">return</span> a / b;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> x, y;
+    <span class="c-keyword">char</span> op;
+
+    <span class="c-function">printf</span>(<span class="c-string">"输入表达式（如 3+5）: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%lf%c%lf"</span>, <span class="c-operator">&</span>x, <span class="c-operator">&</span>op, <span class="c-operator">&</span>y);
+
+    <span class="c-keyword">double</span> (<span class="c-operator">*</span>calc)(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>) = <span class="c-keyword">NULL</span>;
+
+    <span class="c-keyword">switch</span> (op) {
+        <span class="c-keyword">case</span> <span class="c-string">'+'</span>: calc = add; <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'-'</span>: calc = sub; <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'*'</span>: calc = mul; <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> <span class="c-string">'/'</span>: calc = div; <span class="c-keyword">break</span>;
+        <span class="c-keyword">default</span>:
+            <span class="c-function">printf</span>(<span class="c-string">"不支持的运算符\n"</span>);
+            <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    }
+
+    <span class="c-keyword">if</span> (calc != <span class="c-keyword">NULL</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, <span class="c-function">calc</span>(x, y));
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -752,131 +873,10 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 常见错误</div>
 
-
-        <!-- ============================================================
-             练习题
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">练习题</h2>
-
-            <div class="practice-questions">
-                <h3 class="subsection-title">就地练习</h3>
-
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 编写程序，使用二级指针在函数中交换两个指针的指向。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">交换指针指向</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">void</span> <span class="c-function">swap_pointers</span>(<span class="c-keyword">int</span> <span class="c-operator">**</span>pp1, <span class="c-keyword">int</span> <span class="c-operator">**</span>pp2) {
-    <span class="c-keyword">int</span> <span class="c-operator">*</span>temp = <span class="c-operator">*</span>pp1;
-    <span class="c-operator">*</span>pp1 = <span class="c-operator">*</span>pp2;
-    <span class="c-operator">*</span>pp2 = temp;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
-    <span class="c-keyword">int</span> <span class="c-operator">*</span>p1 = <span class="c-operator">&</span>a, <span class="c-operator">*</span>p2 = <span class="c-operator">&</span>b;
-
-    <span class="c-function">printf</span>(<span class="c-string">"交换前: *p1=%d, *p2=%d\n"</span>, <span class="c-operator">*</span>p1, <span class="c-operator">*</span>p2);
-    <span class="c-function">swap_pointers</span>(<span class="c-operator">&</span>p1, <span class="c-operator">&</span>p2);
-    <span class="c-function">printf</span>(<span class="c-string">"交换后: *p1=%d, *p2=%d\n"</span>, <span class="c-operator">*</span>p1, <span class="c-operator">*</span>p2);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 编写程序，使用 <code>malloc</code> 动态分配一个整型数组，输入数据后求平均值，最后释放内存。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">动态数组求平均值</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> n;
-    <span class="c-function">printf</span>(<span class="c-string">"输入学生人数: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>n);
-
-    <span class="c-keyword">int</span> <span class="c-operator">*</span>scores = (<span class="c-keyword">int</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(n <span class="c-operator">*</span> <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-keyword">if</span> (scores == <span class="c-keyword">NULL</span>) {
-        <span class="c-function">printf</span>(<span class="c-string">"内存分配失败！\n"</span>);
-        <span class="c-keyword">return</span> <span class="c-number">1</span>;
-    }
-
-    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"输入第%d个学生的成绩: "</span>, i + <span class="c-number">1</span>);
-        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>scores[i]);
-        sum += scores[i];
-    }
-
-    <span class="c-function">printf</span>(<span class="c-string">"平均分: %.2f\n"</span>, (<span class="c-keyword">double</span>)sum / n);
-    <span class="c-function">free</span>(scores);
-    scores = <span class="c-keyword">NULL</span>;
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 使用函数指针实现一个简单的计算器，支持加、减、乘、除四种运算。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">函数指针计算器</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">double</span> <span class="c-function">add</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a + b; }
-<span class="c-keyword">double</span> <span class="c-function">sub</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a - b; }
-<span class="c-keyword">double</span> <span class="c-function">mul</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) { <span class="c-keyword">return</span> a <span class="c-operator">*</span> b; }
-<span class="c-keyword">double</span> <span class="c-function">div</span>(<span class="c-keyword">double</span> a, <span class="c-keyword">double</span> b) {
-    <span class="c-keyword">if</span> (b == <span class="c-number">0</span>) {
-        <span class="c-function">printf</span>(<span class="c-string">"错误：除数不能为0！\n"</span>);
-        <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    }
-    <span class="c-keyword">return</span> a / b;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">double</span> x, y;
-    <span class="c-keyword">char</span> op;
-
-    <span class="c-function">printf</span>(<span class="c-string">"输入表达式（如 3+5）: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%lf%c%lf"</span>, <span class="c-operator">&</span>x, <span class="c-operator">&</span>op, <span class="c-operator">&</span>y);
-
-    <span class="c-keyword">double</span> (<span class="c-operator">*</span>calc)(<span class="c-keyword">double</span>, <span class="c-keyword">double</span>) = <span class="c-keyword">NULL</span>;
-
-    <span class="c-keyword">switch</span> (op) {
-        <span class="c-keyword">case</span> <span class="c-string">'+'</span>: calc = add; <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> <span class="c-string">'-'</span>: calc = sub; <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> <span class="c-string">'*'</span>: calc = mul; <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> <span class="c-string">'/'</span>: calc = div; <span class="c-keyword">break</span>;
-        <span class="c-keyword">default</span>:
-            <span class="c-function">printf</span>(<span class="c-string">"不支持的运算符\n"</span>);
-            <span class="c-keyword">return</span> <span class="c-number">1</span>;
-    }
-
-    <span class="c-keyword">if</span> (calc != <span class="c-keyword">NULL</span>) {
-        <span class="c-function">printf</span>(<span class="c-string">"结果: %.2f\n"</span>, <span class="c-function">calc</span>(x, y));
-    }
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
+<div class="question-item">
                     <p><strong>练习4：</strong> 解释以下代码中的错误，并给出修正方案：</p>
                     <div class="code-block">
                         <div class="code-block-title">找错误</div>
@@ -899,17 +899,6 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
                     </details>
                 </div>
             </div>
-
-            <div class="practice-hints">
-                <h3>练习提示</h3>
-                <ul>
-                    <li>使用二级指针时，画一个指针指向关系图有助于理解</li>
-                    <li>每次 <code>malloc</code> 之后立即写好对应的 <code>free</code>，养成配对习惯</li>
-                    <li>函数指针声明较复杂，可以用 <code>typedef</code> 简化</li>
-                    <li>遇到指针问题，用 <code>printf</code> 打印地址和值是最好的调试方法</li>
-                </ul>
-            </div>
-        </section>
 
 
         <!-- ============================================================

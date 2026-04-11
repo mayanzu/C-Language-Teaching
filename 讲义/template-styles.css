@@ -1095,6 +1095,66 @@ td code {
     font-size: 16px;
 }
 
+/* 边学边练 - 内联练习框 */
+.practice-box {
+    background: linear-gradient(135deg, #F0F7FF 0%, #F5F0FF 100%);
+    border: 2px solid #D0DFFF;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-xl) 0 var(--spacing-2xl);
+    position: relative;
+}
+
+.practice-box-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-accent-blue);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid #D0DFFF;
+}
+
+.practice-box-title::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: var(--color-accent-blue);
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V5z'/%3E%3C/svg%3E");
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.practice-box .question-item {
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid rgba(0, 102, 204, 0.15);
+}
+
+.practice-box .question-item:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.practice-box .question-item:last-of-type {
+    padding-bottom: 0;
+}
+
+.practice-box .question-item details {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(0, 102, 204, 0.15);
+}
+
+.practice-box .question-item p {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
 /* 练习提示 */
 .practice-hints {
     background: var(--color-info-bg);
@@ -1124,10 +1184,15 @@ td code {
 }
 
 .practice-hints li::before {
-    content: '💡';
+    content: '';
     position: absolute;
     left: 0;
-    font-size: 18px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230066CC'%3E%3Ccircle cx='8' cy='8' r='7'/%3E%3Ctext x='8' y='12' text-anchor='middle' fill='white' font-size='10' font-weight='bold'%3Ei%3C/text%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 

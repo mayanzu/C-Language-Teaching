@@ -23,7 +23,7 @@
             <li><a href="#string-basics">字符串基础</a></li>
             <li><a href="#string-functions">字符串函数</a></li>
             <li><a href="#array-operations">数组常见操作</a></li>
-            <li><a href="#practice">练习题</a></li>
+            <li><a href="#common-errors">常见错误与调试</a></li>
             <li><a href="#summary">小结</a></li>
         </ul>
     </nav>
@@ -220,6 +220,39 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 一维数组</div>
+
+<div class="question-item">
+                    <p><strong>练习1：</strong> 声明一个整型数组，存储5个整数，用循环输入5个数，然后逆序输出它们。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">逆序输出数组</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[<span class="c-number">5</span>];
+
+    <span class="c-comment">// 输入5个数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"请输入5个整数:\n"</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
+    }
+
+    <span class="c-comment">// 逆序输出</span>
+    <span class="c-function">printf</span>(<span class="c-string">"逆序输出: "</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">4</span>; i >= <span class="c-number">0</span>; i--) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              二维数组
@@ -301,6 +334,37 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 二维数组</div>
+
+<div class="question-item">
+                    <p><strong>练习2：</strong> 编写程序，计算一个整型数组中所有元素的和与平均值。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">数组求和与平均值</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">85</span>, <span class="c-number">92</span>, <span class="c-number">78</span>, <span class="c-number">90</span>, <span class="c-number">65</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        sum += arr[i];
+    }
+
+    <span class="c-keyword">double</span> avg = (<span class="c-keyword">double</span>)sum / n;
+
+    <span class="c-function">printf</span>(<span class="c-string">"总和: %d\n"</span>, sum);
+    <span class="c-function">printf</span>(<span class="c-string">"平均值: %.1f\n"</span>, avg);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              字符串基础
@@ -388,6 +452,36 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 字符串基础</div>
+
+<div class="question-item">
+                    <p><strong>练习3：</strong> 使用 <code>strlen</code>、<code>strcpy</code>、<code>strcat</code> 函数：定义两个字符串，将它们拼接后输出长度。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">字符串拼接</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> str1[<span class="c-number">100</span>] = <span class="c-string">"Hello"</span>;
+    <span class="c-keyword">char</span> str2[] = <span class="c-string">" World"</span>;
+
+    <span class="c-comment">// 拼接前</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
+
+    <span class="c-comment">// 拼接</span>
+    <span class="c-function">strcat</span>(str1, str2);
+    <span class="c-function">printf</span>(<span class="c-string">"拼接后: %s\n"</span>, str1);        <span class="c-comment">// Hello World</span>
+    <span class="c-function">printf</span>(<span class="c-string">"拼接后长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 11</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              字符串函数
@@ -481,7 +575,112 @@
                     </div>
                 </div>
             </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">安全字符串函数</h3>
+                <div class="subsection-content">
+                    <p><code>strcpy</code> 和 <code>strcat</code> 不检查目标数组大小，容易导致缓冲区溢出。C语言提供了更安全的"带长度限制"版本：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>安全函数</th>
+                                    <th>对应的不安全函数</th>
+                                    <th>区别</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>strncpy(dst, src, n)</code></td>
+                                    <td><code>strcpy(dst, src)</code></td>
+                                    <td>最多复制 n 个字符</td>
+                                </tr>
+                                <tr>
+                                    <td><code>strncat(dst, src, n)</code></td>
+                                    <td><code>strcat(dst, src)</code></td>
+                                    <td>最多追加 n 个字符</td>
+                                </tr>
+                                <tr>
+                                    <td><code>strncmp(s1, s2, n)</code></td>
+                                    <td><code>strcmp(s1, s2)</code></td>
+                                    <td>只比较前 n 个字符</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">安全函数使用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> dest[<span class="c-number">10</span>];
+
+    <span class="c-comment">// 安全复制：最多复制9个字符，留1个给\0</span>
+    <span class="c-function">strncpy</span>(dest, <span class="c-string">"Hello World"</span>, <span class="c-number">9</span>);
+    dest[<span class="c-number">9</span>] = <span class="c-string">'\0'</span>;  <span class="c-comment">// 确保以\0结尾！</span>
+    <span class="c-function">printf</span>(<span class="c-string">"复制结果: %s\n"</span>, dest);  <span class="c-comment">// Hello Wor</span>
+
+    <span class="c-comment">// 安全拼接</span>
+    <span class="c-keyword">char</span> greeting[<span class="c-number">20</span>] = <span class="c-string">"Hi, "</span>;
+    <span class="c-function">strncat</span>(greeting, <span class="c-string">"Welcome to C programming!"</span>, <span class="c-number">10</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"拼接结果: %s\n"</span>, greeting);  <span class="c-comment">// Hi, Welcome to</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>注意 strncpy 的陷阱：</strong>
+                        <ul>
+                            <li><code>strncpy</code> 如果源字符串长度不足 n，会用 <code>\0</code> 填充剩余位置</li>
+                            <li>但如果源字符串长度 >= n，<strong>不会自动添加 <code>\0</code></strong>！必须手动添加</li>
+                            <li>建议：<code>strncpy(dest, src, n-1); dest[n-1] = '\0';</code></li>
+                            <li><code>fgets</code> 比用 <code>scanf("%s")</code> 安全，推荐使用</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 字符串函数</div>
+
+<div class="question-item">
+                    <p><strong>练习4：</strong> 实现冒泡排序，对一个整型数组进行升序排列，并输出每轮排序后的结果。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">冒泡排序（带过程输出）</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> arr[] = {<span class="c-number">5</span>, <span class="c-number">3</span>, <span class="c-number">8</span>, <span class="c-number">1</span>, <span class="c-number">2</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {
+                <span class="c-keyword">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="c-number">1</span>];
+                arr[j + <span class="c-number">1</span>] = temp;
+            }
+        }
+        <span class="c-comment">// 输出每轮结果</span>
+        <span class="c-function">printf</span>(<span class="c-string">"第%d轮: "</span>, i + <span class="c-number">1</span>);
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> k = <span class="c-number">0</span>; k < n; k++) {
+            <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[k]);
+        }
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              数组常见操作
@@ -589,141 +788,10 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 数组常见操作</div>
 
-        <!-- ============================================================
-             练习题
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">练习题</h2>
-
-            <div class="practice-questions">
-                <h3 class="subsection-title">就地练习</h3>
-
-                <!-- 题目1 -->
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 声明一个整型数组，存储5个整数，用循环输入5个数，然后逆序输出它们。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">逆序输出数组</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> arr[<span class="c-number">5</span>];
-
-    <span class="c-comment">// 输入5个数</span>
-    <span class="c-function">printf</span>(<span class="c-string">"请输入5个整数:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
-        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
-    }
-
-    <span class="c-comment">// 逆序输出</span>
-    <span class="c-function">printf</span>(<span class="c-string">"逆序输出: "</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">4</span>; i >= <span class="c-number">0</span>; i--) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
-    }
-    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目2 -->
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 编写程序，计算一个整型数组中所有元素的和与平均值。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">数组求和与平均值</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> arr[] = {<span class="c-number">85</span>, <span class="c-number">92</span>, <span class="c-number">78</span>, <span class="c-number">90</span>, <span class="c-number">65</span>};
-    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
-    <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
-
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
-        sum += arr[i];
-    }
-
-    <span class="c-keyword">double</span> avg = (<span class="c-keyword">double</span>)sum / n;
-
-    <span class="c-function">printf</span>(<span class="c-string">"总和: %d\n"</span>, sum);
-    <span class="c-function">printf</span>(<span class="c-string">"平均值: %.1f\n"</span>, avg);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目3 -->
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 使用 <code>strlen</code>、<code>strcpy</code>、<code>strcat</code> 函数：定义两个字符串，将它们拼接后输出长度。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">字符串拼接</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">char</span> str1[<span class="c-number">100</span>] = <span class="c-string">"Hello"</span>;
-    <span class="c-keyword">char</span> str2[] = <span class="c-string">" World"</span>;
-
-    <span class="c-comment">// 拼接前</span>
-    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
-
-    <span class="c-comment">// 拼接</span>
-    <span class="c-function">strcat</span>(str1, str2);
-    <span class="c-function">printf</span>(<span class="c-string">"拼接后: %s\n"</span>, str1);        <span class="c-comment">// Hello World</span>
-    <span class="c-function">printf</span>(<span class="c-string">"拼接后长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 11</span>
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目4 -->
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 实现冒泡排序，对一个整型数组进行升序排列，并输出每轮排序后的结果。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">冒泡排序（带过程输出）</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> arr[] = {<span class="c-number">5</span>, <span class="c-number">3</span>, <span class="c-number">8</span>, <span class="c-number">1</span>, <span class="c-number">2</span>};
-    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
-
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
-            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {
-                <span class="c-keyword">int</span> temp = arr[j];
-                arr[j] = arr[j + <span class="c-number">1</span>];
-                arr[j + <span class="c-number">1</span>] = temp;
-            }
-        }
-        <span class="c-comment">// 输出每轮结果</span>
-        <span class="c-function">printf</span>(<span class="c-string">"第%d轮: "</span>, i + <span class="c-number">1</span>);
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> k = <span class="c-number">0</span>; k < n; k++) {
-            <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[k]);
-        }
-        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
-    }
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目5 -->
-                <div class="question-item">
+<div class="question-item">
                     <p><strong>练习5：</strong> 找出整型数组中的最大值和最小值，并输出它们各自的下标。</p>
                     <details>
                         <summary>参考答案</summary>
@@ -753,15 +821,154 @@
                 </div>
             </div>
 
-            <!-- 练习提示 -->
-            <div class="practice-hints">
-                <h3>练习提示</h3>
-                <ul>
-                    <li>数组下标从0开始，循环条件通常是 <code>i < n</code> 而不是 <code>i <= n</code></li>
-                    <li>交换两个变量必须借助第三个临时变量，就像两个人换座位需要站起来</li>
-                    <li>字符串操作记得 <code>#include &lt;string.h&gt;</code></li>
-                    <li>字符数组要预留 <code>\0</code> 的位置，<code>"Hello"</code> 需要6个字节</li>
-                </ul>
+        <!-- ============================================================
+             常见错误与调试
+             ============================================================ -->
+        <section id="common-errors" class="section">
+            <h2 class="section-title">常见错误与调试</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">数组常见错误一览</h3>
+                <div class="subsection-content">
+                    <p>初学者在使用数组时，容易犯以下错误。对照检查，看看你有没有踩过这些坑：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>错误类型</th>
+                                    <th>错误代码</th>
+                                    <th>正确做法</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>越界访问</td>
+                                    <td><code>int a[5]; a[5] = 10;</code></td>
+                                    <td>有效下标 0~4，<code>a[4]</code> 是最后一个</td>
+                                </tr>
+                                <tr>
+                                    <td>数组赋值</td>
+                                    <td><code>int a[5]; a = {1,2,3};</code></td>
+                                    <td>只能在声明时初始化，或逐个赋值</td>
+                                </tr>
+                                <tr>
+                                    <td>字符串比较</td>
+                                    <td><code>if (str1 == str2)</code></td>
+                                    <td>用 <code>strcmp(str1, str2) == 0</code></td>
+                                </tr>
+                                <tr>
+                                    <td>字符串赋值</td>
+                                    <td><code>str1 = "Hello";</code></td>
+                                    <td>用 <code>strcpy(str1, "Hello");</code></td>
+                                </tr>
+                                <tr>
+                                    <td>忘记 \0</td>
+                                    <td><code>char s[5] = "Hello";</code></td>
+                                    <td>需要6个字节，<code>char s[6]</code></td>
+                                </tr>
+                                <tr>
+                                    <td>scanf溢出</td>
+                                    <td><code>scanf("%s", buf);</code></td>
+                                    <td>用 <code>fgets(buf, size, stdin);</code></td>
+                                </tr>
+                                <tr>
+                                    <td>未初始化</td>
+                                    <td><code>int a[5]; printf("%d", a[0]);</code></td>
+                                    <td>局部数组不初始化内容不确定，先初始化再使用</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">错误诊断练习</h3>
+                <div class="subsection-content">
+                    <p>找出以下代码中的错误，并思考如何修复：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">找错练习</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 错误1：数组越界</span>
+    <span class="c-keyword">int</span> arr[<span class="c-number">3</span>] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>};
+    arr[<span class="c-number">3</span>] = <span class="c-number">4</span>;  <span class="c-comment">// 错！下标范围是 0~2</span>
+
+    <span class="c-comment">// 错误2：字符串空间不足</span>
+    <span class="c-keyword">char</span> name[<span class="c-number">5</span>] = <span class="c-string">"Hello"</span>;  <span class="c-comment">// 错！"Hello"需要6字节(含\0)</span>
+
+    <span class="c-comment">// 错误3：用==比较字符串</span>
+    <span class="c-keyword">char</span> s1[] = <span class="c-string">"abc"</span>;
+    <span class="c-keyword">char</span> s2[] = <span class="c-string">"abc"</span>;
+    <span class="c-keyword">if</span> (s1 == s2) {  <span class="c-comment">// 错！比较的是地址，不是内容</span>
+        <span class="c-function">printf</span>(<span class="c-string">"相等\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>修复方法：</strong>
+                        <ul>
+                            <li>错误1：<code>arr[3] = 4;</code> → 改为 <code>arr[2] = 4;</code> 或声明 <code>int arr[4]</code></li>
+                            <li>错误2：<code>char name[5]</code> → 改为 <code>char name[6]</code></li>
+                            <li>错误3：<code>s1 == s2</code> → 改为 <code>strcmp(s1, s2) == 0</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">调试技巧：打印数组内容</h3>
+                <div class="subsection-content">
+                    <p>当程序结果不对时，最有效的调试方法之一就是<strong>打印数组的每个元素</strong>，检查它们的值是否符合预期。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">调试辅助函数</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 打印整型数组的辅助函数</span>
+<span class="c-keyword">void</span> <span class="c-function">printArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n) {
+    <span class="c-function">printf</span>(<span class="c-string">"数组内容: ["</span>);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, arr[i]);
+        <span class="c-keyword">if</span> (i < n - <span class="c-number">1</span>) <span class="c-function">printf</span>(<span class="c-string">", "</span>);
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"]\n"</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> data[] = {<span class="c-number">3</span>, <span class="c-number">1</span>, <span class="c-number">4</span>, <span class="c-number">1</span>, <span class="c-number">5</span>};
+    <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
+
+    <span class="c-comment">// 排序前查看</span>
+    <span class="c-function">printf</span>(<span class="c-string">"排序前: "</span>);
+    <span class="c-function">printArray</span>(data, n);
+
+    <span class="c-comment">// ... 排序代码 ...
+
+    // 排序后查看</span>
+    <span class="c-function">printf</span>(<span class="c-string">"排序后: "</span>);
+    <span class="c-function">printArray</span>(data, n);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>调试小贴士：</strong>
+                        <ul>
+                            <li>在关键步骤前后都打印数组内容，可以快速定位问题</li>
+                            <li>打印时带上说明文字，如"排序前"、"交换后"等</li>
+                            <li>检查数组长度是否正确：用 <code>sizeof(arr)/sizeof(arr[0])</code> 计算元素个数</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -778,8 +985,10 @@
                     <li><strong>数组名是首元素地址</strong>，不能对数组名直接赋值</li>
                     <li><strong>字符串</strong>是以 <code>\0</code> 结尾的字符数组，字符串常量会自动添加 <code>\0</code></li>
                     <li>常用字符串函数：<code>strlen</code>（求长度）、<code>strcpy</code>（复制）、<code>strcat</code>（拼接）、<code>strcmp</code>（比较）</li>
+                    <li>安全字符串函数：<code>strncpy</code>、<code>strncat</code>、<code>strncmp</code> 限制操作长度，防止溢出</li>
                     <li><strong>冒泡排序</strong>通过相邻元素比较和交换，每轮将最大值"冒泡"到末尾</li>
                     <li>字符串比较用 <code>strcmp()</code>，不能用 <code>==</code>；字符串赋值用 <code>strcpy()</code>，不能用 <code>=</code></li>
+                    <li>局部数组未初始化时值为垃圾值，必须手动初始化后再使用</li>
                 </ul>
 
                 <div class="example-grid">
@@ -791,6 +1000,7 @@
                             <li>理解下标从0开始的原因</li>
                             <li>能使用字符串函数</li>
                             <li>能实现冒泡排序</li>
+                            <li>能识别和避免数组常见错误</li>
                         </ul>
                     </div>
                     <div class="example-item">

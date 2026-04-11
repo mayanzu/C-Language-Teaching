@@ -23,7 +23,8 @@
             <li><a href="#macro">宏定义</a></li>
             <li><a href="#include">文件包含</a></li>
             <li><a href="#conditional">条件编译</a></li>
-            <li><a href="#practice">练习题</a></li>
+            <li><a href="#storage-class">存储类说明符</a></li>
+            <li><a href="#advanced-macro">宏的高级用法</a></li>
             <li><a href="#summary">小结</a></li>
         </ul>
     </nav>
@@ -238,6 +239,39 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 变量作用域</div>
+
+<div class="question-item">
+                    <p><strong>练习1：</strong> 分析以下代码的输出结果：</p>
+                    <div class="code-block">
+                        <div class="code-block-title">分析代码</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> x = <span class="c-number">1</span>;
+
+<span class="c-keyword">void</span> <span class="c-function">test</span>() {
+    <span class="c-keyword">int</span> x = <span class="c-number">2</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"函数内 x = %d\n"</span>, x);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">test</span>();
+    <span class="c-function">printf</span>(<span class="c-string">"main内 x = %d\n"</span>, x);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p><strong>输出：</strong></p>
+                            <p><code>函数内 x = 2</code></p>
+                            <p><code>main内 x = 1</code></p>
+                            <p>原因：函数内的局部变量 x 隐藏了全局变量 x。函数内使用的是局部变量（2），main 中没有同名的局部变量，所以使用的是全局变量（1）。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              静态变量
@@ -318,6 +352,33 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 静态变量</div>
+
+<div class="question-item">
+                    <p><strong>练习2：</strong> 写一个程序，使用静态局部变量统计 <code>greet()</code> 函数被调用的次数。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">统计函数调用次数</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">void</span> <span class="c-function">greet</span>() {
+    <span class="c-keyword">static</span> <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
+    count++;
+    <span class="c-function">printf</span>(<span class="c-string">"你好！你是第 %d 次调用。\n"</span>, count);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">greet</span>();
+    <span class="c-function">greet</span>();
+    <span class="c-function">greet</span>();
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              宏定义
@@ -394,6 +455,29 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 宏定义</div>
+
+<div class="question-item">
+                    <p><strong>练习3：</strong> 使用宏定义计算圆面积（公式：πr²），然后在主函数中使用这个宏。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">使用宏计算圆面积</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-preprocessor">#define</span> PI <span class="c-number">3.14159</span>
+<span class="c-preprocessor">#define</span> <span class="c-function">AREA</span>(r) (PI * (r) * (r))
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> radius = <span class="c-number">5.0</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"半径为 %.1f 的圆面积是 %.2f\n"</span>, radius, <span class="c-function">AREA</span>(radius));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              文件包含
@@ -472,6 +556,44 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 文件包含</div>
+
+<div class="question-item">
+                    <p><strong>练习4：</strong> 创建一个简单的头文件 <code>utils.h</code> 和对应的实现，定义一个判断闰年的函数，并在主程序中使用。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">utils.h</div>
+                            <pre><code><span class="c-preprocessor">#ifndef</span> UTILS_H
+<span class="c-preprocessor">#define</span> UTILS_H
+
+<span class="c-keyword">int</span> <span class="c-function">isLeapYear</span>(<span class="c-keyword">int</span> year);
+
+<span class="c-preprocessor">#endif</span></code></pre>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-title">utils.c</div>
+                            <pre><code"><span class="c-keyword">int</span> <span class="c-function">isLeapYear</span>(<span class="c-keyword">int</span> year) {
+    <span class="c-keyword">return</span> (year % <span class="c-number">4</span> == <span class="c-number">0</span> && year % <span class="c-number">100</span> != <span class="c-number">0</span>) || (year % <span class="c-number">400</span> == <span class="c-number">0</span>);
+}</code></pre>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-title">main.c</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">"utils.h"</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> year = <span class="c-number">2024</span>;
+    <span class="c-keyword">if</span> (<span class="c-function">isLeapYear</span>(year)) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d 年是闰年\n"</span>, year);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              条件编译
@@ -582,131 +704,10 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 条件编译</div>
 
-        <!-- ============================================================
-             练习题
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">练习题</h2>
-
-            <div class="practice-questions">
-                <h3 class="subsection-title">就地练习</h3>
-
-                <!-- 题目1 -->
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 分析以下代码的输出结果：</p>
-                    <div class="code-block">
-                        <div class="code-block-title">分析代码</div>
-                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> x = <span class="c-number">1</span>;
-
-<span class="c-keyword">void</span> <span class="c-function">test</span>() {
-    <span class="c-keyword">int</span> x = <span class="c-number">2</span>;
-    <span class="c-function">printf</span>(<span class="c-string">"函数内 x = %d\n"</span>, x);
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">test</span>();
-    <span class="c-function">printf</span>(<span class="c-string">"main内 x = %d\n"</span>, x);
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                    </div>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p><strong>输出：</strong></p>
-                            <p><code>函数内 x = 2</code></p>
-                            <p><code>main内 x = 1</code></p>
-                            <p>原因：函数内的局部变量 x 隐藏了全局变量 x。函数内使用的是局部变量（2），main 中没有同名的局部变量，所以使用的是全局变量（1）。</p>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目2 -->
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 写一个程序，使用静态局部变量统计 <code>greet()</code> 函数被调用的次数。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">统计函数调用次数</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">void</span> <span class="c-function">greet</span>() {
-    <span class="c-keyword">static</span> <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
-    count++;
-    <span class="c-function">printf</span>(<span class="c-string">"你好！你是第 %d 次调用。\n"</span>, count);
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">greet</span>();
-    <span class="c-function">greet</span>();
-    <span class="c-function">greet</span>();
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目3 -->
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 使用宏定义计算圆面积（公式：πr²），然后在主函数中使用这个宏。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">使用宏计算圆面积</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-preprocessor">#define</span> PI <span class="c-number">3.14159</span>
-<span class="c-preprocessor">#define</span> <span class="c-function">AREA</span>(r) (PI * (r) * (r))
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">double</span> radius = <span class="c-number">5.0</span>;
-    <span class="c-function">printf</span>(<span class="c-string">"半径为 %.1f 的圆面积是 %.2f\n"</span>, radius, <span class="c-function">AREA</span>(radius));
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目4 -->
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 创建一个简单的头文件 <code>utils.h</code> 和对应的实现，定义一个判断闰年的函数，并在主程序中使用。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">utils.h</div>
-                            <pre><code><span class="c-preprocessor">#ifndef</span> UTILS_H
-<span class="c-preprocessor">#define</span> UTILS_H
-
-<span class="c-keyword">int</span> <span class="c-function">isLeapYear</span>(<span class="c-keyword">int</span> year);
-
-<span class="c-preprocessor">#endif</span></code></pre>
-                        </div>
-                        <div class="code-block">
-                            <div class="code-block-title">utils.c</div>
-                            <pre><code"><span class="c-keyword">int</span> <span class="c-function">isLeapYear</span>(<span class="c-keyword">int</span> year) {
-    <span class="c-keyword">return</span> (year % <span class="c-number">4</span> == <span class="c-number">0</span> && year % <span class="c-number">100</span> != <span class="c-number">0</span>) || (year % <span class="c-number">400</span> == <span class="c-number">0</span>);
-}</code></pre>
-                        </div>
-                        <div class="code-block">
-                            <div class="code-block-title">main.c</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-<span class="c-keyword">#include</span> <span class="c-string">"utils.h"</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> year = <span class="c-number">2024</span>;
-    <span class="c-keyword">if</span> (<span class="c-function">isLeapYear</span>(year)) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d 年是闰年\n"</span>, year);
-    }
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 题目5 -->
-                <div class="question-item">
+<div class="question-item">
                     <p><strong>练习5：</strong> 使用条件编译，根据是否定义了 <code>DEBUG</code> 宏来选择性地输出调试信息。</p>
                     <details>
                         <summary>参考答案</summary>
@@ -733,18 +734,414 @@
                 </div>
             </div>
 
-            <!-- 练习提示 -->
-            <div class="practice-hints">
-                <h3>练习提示</h3>
-                <ul>
-                    <li>局部变量在函数结束时销毁，静态变量在整个程序运行期间保留</li>
-                    <li>全局变量可以被多个函数共享，但会增加代码耦合</li>
-                    <li>宏定义没有分号，加括号避免优先级问题</li>
-                    <li>头文件要用条件编译防止重复包含</li>
-                    <li>条件编译可以让同一份代码适配不同环境</li>
-                </ul>
+        <!-- ============================================================
+             存储类说明符
+             ============================================================ -->
+        <section id="storage-class" class="section">
+            <h2 class="section-title">存储类说明符</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">四种存储类</h3>
+                <div class="subsection-content">
+                    <p>C语言提供了四种存储类说明符，它们决定了变量的<strong>存储位置</strong>、<strong>生命周期</strong>和<strong>作用域</strong>：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>存储类</th>
+                                    <th>存储位置</th>
+                                    <th>生命周期</th>
+                                    <th>作用域</th>
+                                    <th>默认初始化</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>auto</code></td>
+                                    <td>栈</td>
+                                    <td>函数调用期间</td>
+                                    <td>函数内</td>
+                                    <td>不确定（垃圾值）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>static</code></td>
+                                    <td>数据段</td>
+                                    <td>程序运行期间</td>
+                                    <td>函数内/文件内</td>
+                                    <td>自动初始化为0</td>
+                                </tr>
+                                <tr>
+                                    <td><code>extern</code></td>
+                                    <td>数据段</td>
+                                    <td>程序运行期间</td>
+                                    <td>全局（跨文件）</td>
+                                    <td>自动初始化为0</td>
+                                </tr>
+                                <tr>
+                                    <td><code>register</code></td>
+                                    <td>CPU寄存器（可能）</td>
+                                    <td>函数调用期间</td>
+                                    <td>函数内</td>
+                                    <td>不确定</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>新手注意：</strong>
+                        <ul>
+                            <li><code>auto</code> 是局部变量的默认存储类，平时不需要显式写出</li>
+                            <li><code>register</code> 只是"建议"编译器使用寄存器，编译器可能忽略</li>
+                            <li>不能对 <code>register</code> 变量取地址（<code>&</code>），因为它可能不在内存中</li>
+                            <li>现代编译器会自动优化，<code>register</code> 很少使用</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">extern 关键字详解</h3>
+                <div class="subsection-content">
+                    <p>当程序由多个源文件组成时，<code>extern</code> 用于声明"这个变量在别的文件中定义了，我要用它"。</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">extern 跨文件使用示例</div>
+                        <pre><code><span class="c-comment">// === file1.c ===</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> globalCount = <span class="c-number">0</span>;  <span class="c-comment">// 定义全局变量（分配内存）</span>
+
+<span class="c-keyword">void</span> <span class="c-function">increment</span>() {
+    globalCount++;
+}
+
+<span class="c-comment">// === file2.c ===</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">extern</span> <span class="c-keyword">int</span> globalCount;  <span class="c-comment">// 声明：变量在别处定义（不分配内存）</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">increment</span>();
+    <span class="c-function">increment</span>();
+    <span class="c-function">printf</span>(<span class="c-string">"count = %d\n"</span>, globalCount);  <span class="c-comment">// 2</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>定义 vs 声明：</strong>
+                        <ul>
+                            <li><strong>定义</strong>（<code>int globalCount = 0;</code>）：分配内存，只能出现一次</li>
+                            <li><strong>声明</strong>（<code>extern int globalCount;</code>）：告诉编译器变量存在，不分配内存</li>
+                            <li>类比：定义是"建房子"，声明是"告诉别人这里有房子"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">变量初始化规则</h3>
+                <div class="subsection-content">
+                    <p>不同存储类的变量，如果未显式初始化，默认值不同：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>变量类型</th>
+                                    <th>未初始化的默认值</th>
+                                    <th>是否安全</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>全局变量 / 静态变量</td>
+                                    <td>自动初始化为 0</td>
+                                    <td>安全</td>
+                                </tr>
+                                <tr>
+                                    <td>局部变量（auto）</td>
+                                    <td>不确定（垃圾值）</td>
+                                    <td><strong>危险！</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>动态分配的内存（malloc）</td>
+                                    <td>不确定（垃圾值）</td>
+                                    <td><strong>危险！</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">未初始化的危险</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> globalVar;  <span class="c-comment">// 全局变量，自动初始化为0</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> localVar;  <span class="c-comment">// 局部变量，值不确定！</span>
+    <span class="c-keyword">static</span> <span class="c-keyword">int</span> staticVar;  <span class="c-comment">// 静态变量，自动初始化为0</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"全局变量: %d\n"</span>, globalVar);   <span class="c-comment">// 0</span>
+    <span class="c-function">printf</span>(<span class="c-string">"局部变量: %d\n"</span>, localVar);   <span class="c-comment">// 不确定！可能是任意值</span>
+    <span class="c-function">printf</span>(<span class="c-string">"静态变量: %d\n"</span>, staticVar);  <span class="c-comment">// 0</span>
+
+    <span class="c-comment">// 良好习惯：始终手动初始化变量</span>
+    <span class="c-keyword">int</span> safeVar = <span class="c-number">0</span>;  <span class="c-comment">// 明确初始化</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>重要规则：</strong>
+                        <p>始终手动初始化局部变量！不要依赖不确定的默认值。养成 <code>int x = 0;</code> 的习惯，而不是 <code>int x;</code>。</p>
+                    </div>
+                </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 存储类说明符</div>
+
+<div class="question-item">
+                    <p><strong>练习6：</strong> 分析以下代码的输出结果，并解释为什么：</p>
+                    <div class="code-block">
+                        <div class="code-block-title">分析代码</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> count = <span class="c-number">0</span>;
+
+<span class="c-keyword">void</span> <span class="c-function">func</span>() {
+    <span class="c-keyword">static</span> <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
+    count++;
+    <span class="c-function">printf</span>(<span class="c-string">"局部 count = %d\n"</span>, count);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">func</span>();
+    <span class="c-function">func</span>();
+    <span class="c-function">printf</span>(<span class="c-string">"全局 count = %d\n"</span>, count);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p><strong>输出：</strong></p>
+                            <p><code>局部 count = 1</code></p>
+                            <p><code>局部 count = 2</code></p>
+                            <p><code>全局 count = 0</code></p>
+                            <p>原因：函数 <code>func</code> 中的 <code>static int count</code> 是静态局部变量，隐藏了全局变量 <code>count</code>。静态局部变量只初始化一次，每次调用保留上次的值。全局变量 <code>count</code> 未被修改，始终为0。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+        <!-- ============================================================
+             宏的高级用法
+             ============================================================ -->
+        <section id="advanced-macro" class="section">
+            <h2 class="section-title">宏的高级用法</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">宏的常见陷阱</h3>
+                <div class="subsection-content">
+                    <p>带参数的宏是纯文本替换，容易产生意想不到的结果。以下是初学者最容易掉进去的陷阱：</p>
+
+                    <div class="code-block">
+                        <div class="code-block-title">陷阱1：缺少括号</div>
+                        <pre><code><span class="c-comment">// 错误写法</span>
+<span class="c-preprocessor">#define</span> <span class="c-function">SQUARE</span>(x) x * x
+
+<span class="c-keyword">int</span> result = <span class="c-function">SQUARE</span>(<span class="c-number">2</span> + <span class="c-number">3</span>);
+<span class="c-comment">// 替换后变成: 2 + 3 * 2 + 3 = 2 + 6 + 3 = 11</span>
+<span class="c-comment">// 期望结果: 5 * 5 = 25</span>
+
+<span class="c-comment">// 正确写法：给参数和整体都加括号</span>
+<span class="c-preprocessor">#define</span> <span class="c-function">SQUARE</span>(x) ((x) * (x))
+<span class="c-comment">// 替换后: ((2 + 3) * (2 + 3)) = 25 ✓</span></code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">陷阱2：自增自减</div>
+                        <pre><code><span class="c-preprocessor">#define</span> <span class="c-function">SQUARE</span>(x) ((x) * (x))
+
+<span class="c-keyword">int</span> a = <span class="c-number">5</span>;
+<span class="c-keyword">int</span> result = <span class="c-function">SQUARE</span>(a++);
+<span class="c-comment">// 替换后: ((a++) * (a++))</span>
+<span class="c-comment">// a 被自增了两次！结果是未定义行为</span>
+<span class="c-comment">// 正确做法：不要在宏参数中使用 ++/--</span></code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>宏的黄金法则：</strong>
+                        <ul>
+                            <li>宏参数要加括号：<code>(x)</code> 而不是 <code>x</code></li>
+                            <li>整个宏表达式要加括号：<code>((x)*(x))</code></li>
+                            <li>不要在宏参数中使用 <code>++</code>、<code>--</code></li>
+                            <li>如果逻辑复杂，优先使用函数而不是宏</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">宏 vs 函数</h3>
+                <div class="subsection-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>特性</th>
+                                    <th>宏（#define）</th>
+                                    <th>函数</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>处理时机</td>
+                                    <td>预处理阶段（编译前）</td>
+                                    <td>运行时</td>
+                                </tr>
+                                <tr>
+                                    <td>类型检查</td>
+                                    <td>无</td>
+                                    <td>有</td>
+                                </tr>
+                                <tr>
+                                    <td>参数求值</td>
+                                    <td>可能多次求值</td>
+                                    <td>只求值一次</td>
+                                </tr>
+                                <tr>
+                                    <td>调试</td>
+                                    <td>困难（文本替换后不可见）</td>
+                                    <td>容易（可设断点）</td>
+                                </tr>
+                                <tr>
+                                    <td>代码大小</td>
+                                    <td>每次使用都展开，可能增大代码</td>
+                                    <td>只有一份代码</td>
+                                </tr>
+                                <tr>
+                                    <td>执行速度</td>
+                                    <td>无函数调用开销，更快</td>
+                                    <td>有调用开销，稍慢</td>
+                                </tr>
+                                <tr>
+                                    <td>适用场景</td>
+                                    <td>简单常量、短小表达式</td>
+                                    <td>复杂逻辑、需要类型安全</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>选择建议：</strong>
+                        <ul>
+                            <li>定义常量：优先用 <code>#define</code> 或 <code>const</code></li>
+                            <li>简单运算：可以用宏，但要加括号</li>
+                            <li>复杂逻辑：用函数，更安全更易调试</li>
+                            <li>C99 之后，<code>inline</code> 函数是更好的选择（兼顾效率和安全性）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">预定义宏</h3>
+                <div class="subsection-content">
+                    <p>C语言编译器预先定义了一些有用的宏，可以在代码中直接使用：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>宏名</th>
+                                    <th>含义</th>
+                                    <th>示例值</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>__FILE__</code></td>
+                                    <td>当前源文件名</td>
+                                    <td><code>"main.c"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>__LINE__</code></td>
+                                    <td>当前行号</td>
+                                    <td><code>42</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>__DATE__</code></td>
+                                    <td>编译日期</td>
+                                    <td><code>"Jan 15 2024"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>__TIME__</code></td>
+                                    <td>编译时间</td>
+                                    <td><code>"14:30:05"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>__func__</code></td>
+                                    <td>当前函数名（C99）</td>
+                                    <td><code>"main"</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">预定义宏使用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-comment">// 用预定义宏实现调试打印</span>
+<span class="c-preprocessor">#define</span> <span class="c-function">DEBUG_PRINT</span>(msg) \
+    <span class="c-function">printf</span>(<span class="c-string">"[%s:%d %s] %s\n"</span>, __FILE__, __LINE__, __func__, msg)
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">DEBUG_PRINT</span>(<span class="c-string">"程序开始运行"</span>);
+    <span class="c-comment">// 输出: [main.c:10 main] 程序开始运行</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"编译日期: %s\n"</span>, __DATE__);
+    <span class="c-function">printf</span>(<span class="c-string">"编译时间: %s\n"</span>, __TIME__);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>实用技巧：</strong>
+                        <p>在调试时，用 <code>printf("文件:%s 行:%d\n", __FILE__, __LINE__);</code> 可以快速定位程序执行到了哪里。这比手动写行号方便得多，而且代码修改后行号会自动更新。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 宏的高级用法</div>
+
+<div class="question-item">
+                    <p><strong>练习7：</strong> 以下宏定义有什么问题？请改正：</p>
+                    <div class="code-block">
+                        <pre><code><span class="c-preprocessor">#define</span> <span class="c-function">DOUBLE</span>(x) x + x
+<span class="c-preprocessor">#define</span> <span class="c-function">MAX</span>(a, b) a > b ? a : b</code></pre>
+                    </div>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p><strong>问题1：</strong> <code>DOUBLE(x)</code> 缺少括号。例如 <code>DOUBLE(3) * 2</code> 会展开为 <code>3 + 3 * 2 = 9</code>，而不是期望的 <code>(3+3)*2 = 12</code>。</p>
+                            <p><strong>修正：</strong> <code>#define DOUBLE(x) ((x) + (x))</code></p>
+                            <p><strong>问题2：</strong> <code>MAX(a, b)</code> 缺少括号。例如 <code>MAX(1,2) + 1</code> 会展开为 <code>1 > 2 ? 1 : 2 + 1</code>，由于 <code>+</code> 优先级高于 <code>?:</code>，实际为 <code>1 > 2 ? 1 : 3</code>，结果为3而非2。</p>
+                            <p><strong>修正：</strong> <code>#define MAX(a, b) ((a) > (b) ? (a) : (b))</code></p>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
         <!-- ============================================================
              本章小结
@@ -762,6 +1159,9 @@
                     <li><strong>#define</strong>：宏定义，文本替换，适合定义常量</li>
                     <li><strong>#include</strong>：文件包含，将其他文件内容复制到当前位置</li>
                     <li><strong>条件编译</strong>：<code>#if</code>/<code>#ifdef</code>/<code>#ifndef</code> 根据条件选择编译哪些代码</li>
+                    <li><strong>存储类</strong>：<code>auto</code>（默认栈变量）、<code>static</code>（持久化）、<code>extern</code>（跨文件）、<code>register</code>（建议寄存器）</li>
+                    <li><strong>宏陷阱</strong>：参数和整体都要加括号，避免 <code>++</code>/<code>--</code>，复杂逻辑用函数</li>
+                    <li><strong>预定义宏</strong>：<code>__FILE__</code>、<code>__LINE__</code>、<code>__DATE__</code>、<code>__TIME__</code> 等辅助调试</li>
                 </ul>
 
                 <div class="example-grid">
@@ -773,6 +1173,8 @@
                             <li>会使用宏定义常量</li>
                             <li>会用条件编译保护头文件</li>
                             <li>理解条件编译的作用</li>
+                            <li>了解四种存储类的区别</li>
+                            <li>能避免宏定义的常见陷阱</li>
                         </ul>
                     </div>
                     <div class="example-item">

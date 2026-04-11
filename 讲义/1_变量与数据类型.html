@@ -20,9 +20,9 @@
             <li><a href="#integer">整型</a></li>
             <li><a href="#float">浮点型</a></li>
             <li><a href="#char">字符型</a></li>
+            <li><a href="#escape">转义字符</a></li>
             <li><a href="#type-conversion">类型转换</a></li>
             <li><a href="#constant">常量</a></li>
-            <li><a href="#practice">练习题</a></li>
             <li><a href="#summary">本章小结</a></li>
         </ul>
     </nav>
@@ -192,6 +192,32 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 变量基础</div>
+
+<div class="question-item">
+                    <p><strong>练习1：</strong> 声明不同类型的变量存储你的个人信息（姓名首字母、年龄、身高），并格式化输出。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">个人信息输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> initial = <span class="c-string">'Z'</span>;     <span class="c-comment">// 姓名首字母</span>
+    <span class="c-keyword">int</span> age = <span class="c-number">20</span>;            <span class="c-comment">// 年龄</span>
+    <span class="c-keyword">float</span> height = <span class="c-number">1.75f</span>;    <span class="c-comment">// 身高（米）</span>
+
+    <span class="c-function">printf</span>(<span class="c-string">"姓名首字母: %c\n"</span>, initial);
+    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d岁\n"</span>, age);
+    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f米\n"</span>, height);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -356,9 +382,64 @@
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
+
+                    <div class="callout-warning">
+                        <strong>整数溢出：</strong>
+                        <p>当整数超过其类型能表示的最大值时，会发生<strong>溢出</strong>，结果不可预测：</p>
+                        <ul>
+                            <li><code>int</code> 最大值约 21亿（2147483647），超过后会"绕回"到负数</li>
+                            <li>就像汽车里程表：到99999后变成00000</li>
+                            <li>避免方法：用 <code>long long</code> 存放大数，或提前检查</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">整数溢出示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;limits.h&gt;</span>  <span class="c-comment">// 包含INT_MAX等常量</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> max = <span class="c-function">INT_MAX</span>;  <span class="c-comment">// 2147483647</span>
+    <span class="c-function">printf</span>(<span class="c-string">"int最大值: %d\n"</span>, max);
+    <span class="c-function">printf</span>(<span class="c-string">"最大值+1: %d\n"</span>, max + <span class="c-number">1</span>);  <span class="c-comment">// 溢出！变成负数</span>
+
+    <span class="c-comment">// 用long long安全地存放大数</span>
+    <span class="c-keyword">long long</span> big = (<span class="c-keyword">long long</span>)max + <span class="c-number">1</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"安全计算: %lld\n"</span>, big);  <span class="c-comment">// 正确: 2147483648</span>
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 整型</div>
+
+<div class="question-item">
+                    <p><strong>练习2：</strong> 编写程序，输入一个整数，分别以十进制、八进制、十六进制输出。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">进制转换输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> num;
+
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;num);
+
+    <span class="c-function">printf</span>(<span class="c-string">"十进制: %d\n"</span>, num);
+    <span class="c-function">printf</span>(<span class="c-string">"八进制: %o\n"</span>, num);
+    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %x\n"</span>, num);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -441,6 +522,31 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 浮点型与类型大小</div>
+
+<div class="question-item">
+                    <p><strong>练习4：</strong> 使用 <code>sizeof</code> 运算符查看你的电脑上各数据类型占用的字节数。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">查看类型大小</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"char:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"short:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"int:    %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"float:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">float</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"double: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -516,6 +622,111 @@
             </div>
         </section>
 
+        <!-- ============================================================
+             转义字符
+             ============================================================ -->
+        <section id="escape" class="section">
+            <h2 class="section-title">转义字符</h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">常用转义字符</h3>
+                <div class="subsection-content">
+                    <p>有些字符无法直接用键盘输入（如换行、制表符），或者与语法冲突（如引号）。C语言用<strong>反斜杠 <code>\</code></strong> 开头的转义字符来表示这些特殊字符。</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>转义字符</th>
+                                    <th>含义</th>
+                                    <th>ASCII值</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>\n</code></td>
+                                    <td>换行</td>
+                                    <td>10</td>
+                                    <td><code>printf("Hello\nWorld");</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>\t</code></td>
+                                    <td>水平制表符（Tab）</td>
+                                    <td>9</td>
+                                    <td><code>printf("A\tB");</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>\\</code></td>
+                                    <td>反斜杠本身</td>
+                                    <td>92</td>
+                                    <td><code>printf("C:\\Users");</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>\'</code></td>
+                                    <td>单引号</td>
+                                    <td>39</td>
+                                    <td><code>char ch = '\'';</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>\"</code></td>
+                                    <td>双引号</td>
+                                    <td>34</td>
+                                    <td><code>printf("他说\"你好\"");</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>\0</code></td>
+                                    <td>空字符（字符串结束符）</td>
+                                    <td>0</td>
+                                    <td><code>char s[] = "Hi";</code> 末尾自动加</td>
+                                </tr>
+                                <tr>
+                                    <td><code>\r</code></td>
+                                    <td>回车</td>
+                                    <td>13</td>
+                                    <td>Windows换行：<code>\r\n</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>\b</code></td>
+                                    <td>退格</td>
+                                    <td>8</td>
+                                    <td>删除前一个字符</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-title">转义字符使用示例</div>
+                        <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-comment">// 换行与制表</span>
+    <span class="c-function">printf</span>(<span class="c-string">"姓名\t年龄\t成绩\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"张三\t20\t89.5\n"</span>);
+
+    <span class="c-comment">// 输出引号和反斜杠</span>
+    <span class="c-function">printf</span>(<span class="c-string">"文件路径: C:\\Users\\doc\\file.txt\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"他说: \"Hello!\"\n"</span>);
+
+    <span class="c-comment">// 单引号字符</span>
+    <span class="c-keyword">char</span> quote = <span class="c-string">'\''</span>;
+    <span class="c-function">printf</span>(<span class="c-string">"单引号字符: %c\n"</span>, quote);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>常见错误：</strong>
+                        <ul>
+                            <li>忘记转义反斜杠：<code>"C:\new"</code> 实际是 <code>"C:"</code> + 换行 + <code>"ew"</code>！正确写法：<code>"C:\\new"</code></li>
+                            <li>在字符常量中忘记转义引号：<code>char ch = ''';</code> 错误！应为 <code>char ch = '\'';</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- ============================================================
              类型转换
@@ -596,6 +807,34 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 类型转换</div>
+
+<div class="question-item">
+                    <p><strong>练习3：</strong> 编写程序，输入一个华氏温度，输出对应的摄氏温度。公式：<code>c = (f - 32) * 5 / 9</code>。注意：要使用浮点除法得到正确结果。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">温度转换</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> fahrenheit, celsius;
+
+    <span class="c-function">printf</span>(<span class="c-string">"请输入华氏温度: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amp;fahrenheit);
+
+    <span class="c-comment">// 注意：5.0/9.0 确保浮点除法</span>
+    celsius = (fahrenheit - <span class="c-number">32</span>) * <span class="c-number">5.0</span> / <span class="c-number">9.0</span>;
+
+    <span class="c-function">printf</span>(<span class="c-string">"摄氏温度: %.1f\n"</span>, celsius);
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -705,122 +944,6 @@
 
 
         <!-- ============================================================
-             练习题
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">练习题</h2>
-
-            <div class="practice-questions">
-                <h3 class="subsection-title">就地练习</h3>
-
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 声明不同类型的变量存储你的个人信息（姓名首字母、年龄、身高），并格式化输出。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">个人信息输出</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">char</span> initial = <span class="c-string">'Z'</span>;     <span class="c-comment">// 姓名首字母</span>
-    <span class="c-keyword">int</span> age = <span class="c-number">20</span>;            <span class="c-comment">// 年龄</span>
-    <span class="c-keyword">float</span> height = <span class="c-number">1.75f</span>;    <span class="c-comment">// 身高（米）</span>
-
-    <span class="c-function">printf</span>(<span class="c-string">"姓名首字母: %c\n"</span>, initial);
-    <span class="c-function">printf</span>(<span class="c-string">"年龄: %d岁\n"</span>, age);
-    <span class="c-function">printf</span>(<span class="c-string">"身高: %.2f米\n"</span>, height);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 编写程序，输入一个整数，分别以十进制、八进制、十六进制输出。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">进制转换输出</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> num;
-
-    <span class="c-function">printf</span>(<span class="c-string">"请输入一个整数: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;num);
-
-    <span class="c-function">printf</span>(<span class="c-string">"十进制: %d\n"</span>, num);
-    <span class="c-function">printf</span>(<span class="c-string">"八进制: %o\n"</span>, num);
-    <span class="c-function">printf</span>(<span class="c-string">"十六进制: %x\n"</span>, num);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 编写程序，输入一个华氏温度，输出对应的摄氏温度。公式：<code>c = (f - 32) * 5 / 9</code>。注意：要使用浮点除法得到正确结果。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">温度转换</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">double</span> fahrenheit, celsius;
-
-    <span class="c-function">printf</span>(<span class="c-string">"请输入华氏温度: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%lf"</span>, &amp;fahrenheit);
-
-    <span class="c-comment">// 注意：5.0/9.0 确保浮点除法</span>
-    celsius = (fahrenheit - <span class="c-number">32</span>) * <span class="c-number">5.0</span> / <span class="c-number">9.0</span>;
-
-    <span class="c-function">printf</span>(<span class="c-string">"摄氏温度: %.1f\n"</span>, celsius);
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 使用 <code>sizeof</code> 运算符查看你的电脑上各数据类型占用的字节数。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">查看类型大小</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"char:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"short:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"int:    %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"long:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"float:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">float</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"double: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-            </div>
-
-            <div class="practice-hints">
-                <h3>练习提示</h3>
-                <ul>
-                    <li>记住整数除法和浮点除法的区别，需要小数结果时确保至少一个操作数是浮点型</li>
-                    <li>字符和整数可以互换使用，理解ASCII码是关键</li>
-                    <li>使用变量前一定记得初始化，避免使用垃圾值</li>
-                    <li>常量名用大写字母，变量名用小写字母，养成好习惯</li>
-                </ul>
-            </div>
-        </section>
-
-
-        <!-- ============================================================
              本章小结
              ============================================================ -->
         <section id="summary" class="section">
@@ -833,7 +956,36 @@
                     <li>类型转换分为自动转换（小→大）和强制转换（显式指定）</li>
                     <li>常量是不可修改的值，可用 <code>const</code> 或 <code>#define</code> 定义</li>
                     <li>字符本质是整数，通过ASCII编码与数字对应</li>
+                    <li>转义字符用 <code>\</code> 开头表示特殊字符：<code>\n</code>（换行）、<code>\t</code>（制表）、<code>\\</code>（反斜杠）等</li>
+                    <li>整数溢出：超过类型范围时结果不可预测，用 <code>limits.h</code> 中的常量检查</li>
                 </ul>
+
+                <div class="table-container">
+                    <h4>格式说明符速查表</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>格式符</th>
+                                <th>用途</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>%d</code></td><td>输出int</td><td><code>printf("%d", 42);</code></td></tr>
+                            <tr><td><code>%ld</code></td><td>输出long</td><td><code>printf("%ld", 100000L);</code></td></tr>
+                            <tr><td><code>%lld</code></td><td>输出long long</td><td><code>printf("%lld", 999999LL);</code></td></tr>
+                            <tr><td><code>%u</code></td><td>输出unsigned int</td><td><code>printf("%u", 42U);</code></td></tr>
+                            <tr><td><code>%f</code></td><td>输出float/double</td><td><code>printf("%f", 3.14);</code></td></tr>
+                            <tr><td><code>%lf</code></td><td>scanf读double</td><td><code>scanf("%lf", &d);</code></td></tr>
+                            <tr><td><code>%.nf</code></td><td>保留n位小数</td><td><code>printf("%.2f", 3.14);</code></td></tr>
+                            <tr><td><code>%c</code></td><td>输出char</td><td><code>printf("%c", 'A');</code></td></tr>
+                            <tr><td><code>%s</code></td><td>输出字符串</td><td><code>printf("%s", "Hi");</code></td></tr>
+                            <tr><td><code>%o</code></td><td>八进制输出</td><td><code>printf("%o", 42);</code></td></tr>
+                            <tr><td><code>%x</code></td><td>十六进制输出</td><td><code>printf("%x", 42);</code></td></tr>
+                            <tr><td><code>%p</code></td><td>输出地址</td><td><code>printf("%p", &a);</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="callout-tip">
                     <strong>准备好了吗？</strong>

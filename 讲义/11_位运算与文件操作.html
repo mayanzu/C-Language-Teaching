@@ -22,7 +22,6 @@
             <li><a href="#file-basic">文件操作基础</a></li>
             <li><a href="#file-io">文件读写</a></li>
             <li><a href="#file-binary">二进制文件</a></li>
-            <li><a href="#practice">练习题</a></li>
             <li><a href="#summary">本章小结</a></li>
         </ul>
     </nav>
@@ -367,6 +366,37 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 移位运算</div>
+
+<div class="question-item">
+                    <p><strong>练习1：</strong>编写程序，输入一个整数，输出它的二进制表示中有多少个1。使用 <code>n & (n-1)</code> 技巧实现。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">计算1的个数</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">count_ones</span>(<span class="c-keyword">unsigned int</span> n) {
+    <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
+    <span class="c-keyword">while</span> (n) {
+        n &amp;= n - <span class="c-number">1</span>;
+        count++;
+    }
+    <span class="c-keyword">return</span> count;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">unsigned int</span> num;
+    <span class="c-function">printf</span>(<span class="c-string">"请输入一个非负整数: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%u"</span>, &amp;num);
+    <span class="c-function">printf</span>(<span class="c-string">"%u 的二进制中有 %d 个1\n"</span>, num, count_ones(num));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -501,6 +531,40 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 位操作技巧</div>
+
+<div class="question-item">
+                    <p><strong>练习2：</strong>编写程序，输入一个整数n和位号k（0开始），将第k位设置为1、清除为0、翻转，分别输出结果。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">位操作练习</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">unsigned int</span> n;
+    <span class="c-keyword">int</span> k;
+    <span class="c-function">printf</span>(<span class="c-string">"输入整数和位号: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%u %d"</span>, &amp;n, &amp;k);
+
+    <span class="c-function">printf</span>(<span class="c-string">"原始值: %u\n"</span>, n);
+
+    <span class="c-comment">// 设置第k位</span>
+    <span class="c-function">printf</span>(<span class="c-string">"设置第%d位: %u\n"</span>, k, n | (<span class="c-number">1</span> &lt;&lt; k));
+
+    <span class="c-comment">// 清除第k位</span>
+    <span class="c-function">printf</span>(<span class="c-string">"清除第%d位: %u\n"</span>, k, n &amp; ~(<span class="c-number">1</span> &lt;&lt; k));
+
+    <span class="c-comment">// 翻转第k位</span>
+    <span class="c-function">printf</span>(<span class="c-string">"翻转第%d位: %u\n"</span>, k, n ^ (<span class="c-number">1</span> &lt;&lt; k));
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -611,6 +675,54 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 文件操作基础</div>
+
+<div class="question-item">
+                    <p><strong>练习3：</strong>编写程序，将一组学生信息（姓名、年龄、成绩）写入二进制文件，然后再读取出来显示。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">二进制文件读写学生信息</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">typedef struct</span> {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">float</span> score;
+} <span class="c-variable">Student</span>;
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-variable">Student</span> students[] = {
+        {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>},
+        {<span class="c-string">"李四"</span>, <span class="c-number">21</span>, <span class="c-number">92.3</span>},
+        {<span class="c-string">"王五"</span>, <span class="c-number">19</span>, <span class="c-number">78.0</span>}
+    };
+    <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(students) / <span class="c-keyword">sizeof</span>(students[<span class="c-number">0</span>]);
+
+    <span class="c-comment">// 写入</span>
+    <span class="c-keyword">FILE</span> *fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"wb"</span>);
+    <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    <span class="c-function">fwrite</span>(students, <span class="c-keyword">sizeof</span>(<span class="c-variable">Student</span>), n, fp);
+    <span class="c-function">fclose</span>(fp);
+
+    <span class="c-comment">// 读取</span>
+    <span class="c-variable">Student</span> read_stu[<span class="c-number">3</span>];
+    fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"rb"</span>);
+    <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    <span class="c-function">fread</span>(read_stu, <span class="c-keyword">sizeof</span>(<span class="c-variable">Student</span>), n, fp);
+    <span class="c-function">fclose</span>(fp);
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
+        <span class="c-function">printf</span>(<span class="c-string">"%s %d %.1f\n"</span>, read_stu[i].name, read_stu[i].age, read_stu[i].score);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -738,6 +850,53 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 文件读写</div>
+
+<div class="question-item">
+                    <p><strong>练习4：</strong>编写一个文件复制程序，将一个文件的内容复制到另一个文件中。要求能处理文本文件和二进制文件。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">文件复制程序</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">char</span> src[<span class="c-number">100</span>], dst[<span class="c-number">100</span>];
+    <span class="c-function">printf</span>(<span class="c-string">"输入源文件名: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, src);
+    <span class="c-function">printf</span>(<span class="c-string">"输入目标文件名: "</span>);
+    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, dst);
+
+    <span class="c-keyword">FILE</span> *fin = <span class="c-function">fopen</span>(src, <span class="c-string">"rb"</span>);
+    <span class="c-keyword">if</span> (!fin) {
+        <span class="c-function">printf</span>(<span class="c-string">"源文件打开失败\n"</span>);
+        <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    }
+
+    <span class="c-keyword">FILE</span> *fout = <span class="c-function">fopen</span>(dst, <span class="c-string">"wb"</span>);
+    <span class="c-keyword">if</span> (!fout) {
+        <span class="c-function">printf</span>(<span class="c-string">"目标文件打开失败\n"</span>);
+        <span class="c-function">fclose</span>(fin);
+        <span class="c-keyword">return</span> <span class="c-number">1</span>;
+    }
+
+    <span class="c-comment">// 逐字节复制</span>
+    <span class="c-keyword">int</span> ch;
+    <span class="c-keyword">while</span> ((ch = <span class="c-function">fgetc</span>(fin)) != <span class="c-keyword">EOF</span>) {
+        <span class="c-function">fputc</span>(ch, fout);
+    }
+
+    <span class="c-function">printf</span>(<span class="c-string">"复制完成！\n"</span>);
+
+    <span class="c-function">fclose</span>(fin);
+    <span class="c-function">fclose</span>(fout);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -922,164 +1081,10 @@
                 </div>
             </div>
         </section>
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 二进制文件操作</div>
 
-
-        <!-- ============================================================
-             练习题
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">练习题</h2>
-
-            <div class="practice-questions">
-                <div class="question-item">
-                    <p><strong>练习1：</strong>编写程序，输入一个整数，输出它的二进制表示中有多少个1。使用 <code>n & (n-1)</code> 技巧实现。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">计算1的个数</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">count_ones</span>(<span class="c-keyword">unsigned int</span> n) {
-    <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
-    <span class="c-keyword">while</span> (n) {
-        n &amp;= n - <span class="c-number">1</span>;
-        count++;
-    }
-    <span class="c-keyword">return</span> count;
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">unsigned int</span> num;
-    <span class="c-function">printf</span>(<span class="c-string">"请输入一个非负整数: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%u"</span>, &amp;num);
-    <span class="c-function">printf</span>(<span class="c-string">"%u 的二进制中有 %d 个1\n"</span>, num, count_ones(num));
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong>编写程序，输入一个整数n和位号k（0开始），将第k位设置为1、清除为0、翻转，分别输出结果。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">位操作练习</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">unsigned int</span> n;
-    <span class="c-keyword">int</span> k;
-    <span class="c-function">printf</span>(<span class="c-string">"输入整数和位号: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%u %d"</span>, &amp;n, &amp;k);
-
-    <span class="c-function">printf</span>(<span class="c-string">"原始值: %u\n"</span>, n);
-
-    <span class="c-comment">// 设置第k位</span>
-    <span class="c-function">printf</span>(<span class="c-string">"设置第%d位: %u\n"</span>, k, n | (<span class="c-number">1</span> &lt;&lt; k));
-
-    <span class="c-comment">// 清除第k位</span>
-    <span class="c-function">printf</span>(<span class="c-string">"清除第%d位: %u\n"</span>, k, n &amp; ~(<span class="c-number">1</span> &lt;&lt; k));
-
-    <span class="c-comment">// 翻转第k位</span>
-    <span class="c-function">printf</span>(<span class="c-string">"翻转第%d位: %u\n"</span>, k, n ^ (<span class="c-number">1</span> &lt;&lt; k));
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习3：</strong>编写程序，将一组学生信息（姓名、年龄、成绩）写入二进制文件，然后再读取出来显示。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">二进制文件读写学生信息</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">typedef struct</span> {
-    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
-    <span class="c-keyword">int</span> age;
-    <span class="c-keyword">float</span> score;
-} <span class="c-variable">Student</span>;
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-variable">Student</span> students[] = {
-        {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>},
-        {<span class="c-string">"李四"</span>, <span class="c-number">21</span>, <span class="c-number">92.3</span>},
-        {<span class="c-string">"王五"</span>, <span class="c-number">19</span>, <span class="c-number">78.0</span>}
-    };
-    <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(students) / <span class="c-keyword">sizeof</span>(students[<span class="c-number">0</span>]);
-
-    <span class="c-comment">// 写入</span>
-    <span class="c-keyword">FILE</span> *fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"wb"</span>);
-    <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> <span class="c-number">1</span>;
-    <span class="c-function">fwrite</span>(students, <span class="c-keyword">sizeof</span>(<span class="c-variable">Student</span>), n, fp);
-    <span class="c-function">fclose</span>(fp);
-
-    <span class="c-comment">// 读取</span>
-    <span class="c-variable">Student</span> read_stu[<span class="c-number">3</span>];
-    fp = <span class="c-function">fopen</span>(<span class="c-string">"students.dat"</span>, <span class="c-string">"rb"</span>);
-    <span class="c-keyword">if</span> (!fp) <span class="c-keyword">return</span> <span class="c-number">1</span>;
-    <span class="c-function">fread</span>(read_stu, <span class="c-keyword">sizeof</span>(<span class="c-variable">Student</span>), n, fp);
-    <span class="c-function">fclose</span>(fp);
-
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
-        <span class="c-function">printf</span>(<span class="c-string">"%s %d %.1f\n"</span>, read_stu[i].name, read_stu[i].age, read_stu[i].score);
-    }
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习4：</strong>编写一个文件复制程序，将一个文件的内容复制到另一个文件中。要求能处理文本文件和二进制文件。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="code-block">
-                            <div class="code-block-title">文件复制程序</div>
-                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">char</span> src[<span class="c-number">100</span>], dst[<span class="c-number">100</span>];
-    <span class="c-function">printf</span>(<span class="c-string">"输入源文件名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, src);
-    <span class="c-function">printf</span>(<span class="c-string">"输入目标文件名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, dst);
-
-    <span class="c-keyword">FILE</span> *fin = <span class="c-function">fopen</span>(src, <span class="c-string">"rb"</span>);
-    <span class="c-keyword">if</span> (!fin) {
-        <span class="c-function">printf</span>(<span class="c-string">"源文件打开失败\n"</span>);
-        <span class="c-keyword">return</span> <span class="c-number">1</span>;
-    }
-
-    <span class="c-keyword">FILE</span> *fout = <span class="c-function">fopen</span>(dst, <span class="c-string">"wb"</span>);
-    <span class="c-keyword">if</span> (!fout) {
-        <span class="c-function">printf</span>(<span class="c-string">"目标文件打开失败\n"</span>);
-        <span class="c-function">fclose</span>(fin);
-        <span class="c-keyword">return</span> <span class="c-number">1</span>;
-    }
-
-    <span class="c-comment">// 逐字节复制</span>
-    <span class="c-keyword">int</span> ch;
-    <span class="c-keyword">while</span> ((ch = <span class="c-function">fgetc</span>(fin)) != <span class="c-keyword">EOF</span>) {
-        <span class="c-function">fputc</span>(ch, fout);
-    }
-
-    <span class="c-function">printf</span>(<span class="c-string">"复制完成！\n"</span>);
-
-    <span class="c-function">fclose</span>(fin);
-    <span class="c-function">fclose</span>(fout);
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
+<div class="question-item">
                     <p><strong>练习5：</strong>实现一个简单的加密程序：使用异或运算对文件内容进行加密和解密。提示：用同一个密钥异或两次即可还原。</p>
                     <details>
                         <summary>参考答案</summary>
@@ -1121,7 +1126,6 @@
                     </details>
                 </div>
             </div>
-        </section>
 
 
         <!-- ============================================================
