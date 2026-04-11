@@ -1068,6 +1068,194 @@
 
 
         <!-- ============================================================
+             综合练习
+             ============================================================ -->
+        <section id="practice" class="section">
+            <h2 class="section-title">综合练习</h2>
+
+            <div class="practice-box">
+                <div class="practice-box-title">本章综合练习</div>
+
+                <div class="question-item">
+                    <p><strong>练习1：</strong> 定义一个学生结构体（学号、姓名、三门课成绩），写程序输入5个学生信息，计算每个学生的平均分并输出最高平均分的学生信息。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">struct</span> Student {
+    <span class="c-keyword">int</span> id;
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">float</span> scores[<span class="c-number">3</span>];
+    <span class="c-keyword">float</span> average;
+};
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> Student stu[<span class="c-number">5</span>];
+
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+        <span class="c-function">scanf</span>(<span class="c-string">"%d %s %f %f %f"</span>, &stu[i].id, stu[i].name,
+              &stu[i].scores[<span class="c-number">0</span>], &stu[i].scores[<span class="c-number">1</span>], &stu[i].scores[<span class="c-number">2</span>]);
+        stu[i].average = (stu[i].scores[<span class="c-number">0</span>] + stu[i].scores[<span class="c-number">1</span>] + stu[i].scores[<span class="c-number">2</span>]) / <span class="c-number">3</span>;
+    }
+
+    <span class="c-keyword">int</span> max_idx = <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i < <span class="c-number">5</span>; i++)
+        <span class="c-keyword">if</span> (stu[i].average > stu[max_idx].average) max_idx = i;
+
+    <span class="c-function">printf</span>(<span class="c-string">"最高平均分: %s, 平均: %.1f\n"</span>, stu[max_idx].name, stu[max_idx].average);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 使用结构体指针和动态内存分配，创建一个链表并实现插入、遍历功能。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
+
+<span class="c-keyword">struct</span> Node {
+    <span class="c-keyword">int</span> data;
+    <span class="c-keyword">struct</span> Node *next;
+};
+
+<span class="c-comment">// 头插法</span>
+<span class="c-keyword">struct</span> Node* <span class="c-function">insert</span>(<span class="c-keyword">struct</span> Node *head, <span class="c-keyword">int</span> val) {
+    <span class="c-keyword">struct</span> Node *newNode = (<span class="c-keyword">struct</span> Node*)<span class="c-function">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> Node));
+    newNode->data = val;
+    newNode->next = head;
+    <span class="c-keyword">return</span> newNode;
+}
+
+<span class="c-keyword">void</span> <span class="c-function">printList</span>(<span class="c-keyword">struct</span> Node *head) {
+    <span class="c-keyword">while</span> (head) {
+        <span class="c-function">printf</span>(<span class="c-string">"%d -> "</span>, head->data);
+        head = head->next;
+    }
+    <span class="c-function">printf</span>(<span class="c-string">"NULL\n"</span>);
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">struct</span> Node *head = <span class="c-number">0</span>;
+    head = <span class="c-function">insert</span>(head, <span class="c-number">3</span>);
+    head = <span class="c-function">insert</span>(head, <span class="c-number">2</span>);
+    head = <span class="c-function">insert</span>(head, <span class="c-number">1</span>);
+    <span class="c-function">printList</span>(head);  <span class="c-comment">// 1 -> 2 -> 3 -> NULL</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习3：</strong> 选择题：以下代码输出什么？</p>
+                    <pre><code>union Data {
+    int i;
+    char c;
+};
+union Data d;
+d.i = 0x41424344;
+printf("%c\n", d.c);  // 假设小端模式</code></pre>
+                    <ul>
+                        <li>A. A</li>
+                        <li>B. B</li>
+                        <li>C. C</li>
+                        <li>D. D</li>
+                    </ul>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <p>选D。小端模式下低地址存储低位字节0x44即'D'。联合体所有成员共享内存，<code>d.c</code>访问的是<code>d.i</code>最低字节。</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 使用typedef和枚举定义一个表示星期几的类型，并写一个函数根据星期几输出对应的中文。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">typedef enum</span> {
+    MON = <span class="c-number">1</span>, TUE, WED, THU, FRI, SAT, SUN
+} Weekday;
+
+<span class="c-keyword">const char</span>* <span class="c-function">getDayName</span>(Weekday day) {
+    <span class="c-keyword">static const char</span>* names[] = {
+        <span class="c-string">""</span>, <span class="c-string">"周一"</span>, <span class="c-string">"周二"</span>, <span class="c-string">"周三"</span>,
+        <span class="c-string">"周四"</span>, <span class="c-string">"周五"</span>, <span class="c-string">"周六"</span>, <span class="c-string">"周日"</span>
+    };
+    <span class="c-keyword">return</span> names[day];
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    Weekday today = FRI;
+    <span class="c-function">printf</span>(<span class="c-string">"今天是%s\n"</span>, <span class="c-function">getDayName</span>(today));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习5：</strong> 解释结构体和联合体的主要区别，以及各自的使用场景。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <ul>
+                                <li><strong>结构体</strong>：所有成员同时存在，各自占独立内存，总大小≥各成员大小之和。场景：描述一个实体的多个属性（如学生有姓名、年龄、成绩）。</li>
+                                <li><strong>联合体</strong>：所有成员共享同一段内存，同一时刻只能使用一个成员，大小=最大成员的大小。场景：同一数据有多种解读方式（如IP地址可以是整数也可以是4个字节）。</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习6：</strong> 写一个程序，使用结构体存储日期（年、月、日），写一个函数判断两个日期的先后顺序。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="callout-tip">
+                            <div class="code-block">
+                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">typedef struct</span> {
+    <span class="c-keyword">int</span> year, month, day;
+} Date;
+
+<span class="c-comment">// 返回 -1: d1&lt;d2, 0: 相等, 1: d1&gt;d2</span>
+<span class="c-keyword">int</span> <span class="c-function">compareDate</span>(Date d1, Date d2) {
+    <span class="c-keyword">if</span> (d1.year != d2.year) <span class="c-keyword">return</span> d1.year > d2.year ? <span class="c-number">1</span> : -<span class="c-number">1</span>;
+    <span class="c-keyword">if</span> (d1.month != d2.month) <span class="c-keyword">return</span> d1.month > d2.month ? <span class="c-number">1</span> : -<span class="c-number">1</span>;
+    <span class="c-keyword">if</span> (d1.day != d2.day) <span class="c-keyword">return</span> d1.day > d2.day ? <span class="c-number">1</span> : -<span class="c-number">1</span>;
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    Date d1 = {<span class="c-number">2024</span>, <span class="c-number">3</span>, <span class="c-number">15</span>}, d2 = {<span class="c-number">2024</span>, <span class="c-number">5</span>, <span class="c-number">1</span>};
+    <span class="c-keyword">int</span> r = <span class="c-function">compareDate</span>(d1, d2);
+    <span class="c-function">printf</span>(<span class="c-string">"%s\n"</span>, r < <span class="c-number">0</span> ? <span class="c-string">"d1更早"</span> : r > <span class="c-number">0</span> ? <span class="c-string">"d1更晚"</span> : <span class="c-string">"相同日期"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
              本章小结
              ============================================================ -->
         <section id="summary" class="section">
