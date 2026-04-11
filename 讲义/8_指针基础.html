@@ -28,7 +28,6 @@
             <li><a href="#const-pointer">const指针</a></li>
             <li><a href="#common-errors">常见错误</a></li>
             <li><a href="#pointer-apps">指针应用实例</a></li>
-            <li><a href="#practice">综合练习</a></li>
             <li><a href="#summary">小结</a></li>
         </ul>
     </nav>
@@ -1130,85 +1129,6 @@
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
-                        </div>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ============================================================
-             综合练习
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">综合练习</h2>
-
-            <div class="practice-box">
-                <div class="practice-box-title">本章综合练习</div>
-
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 写一个程序，输入三个整数，使用指针和函数按从大到小的顺序输出。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">void</span> <span class="c-function">swap</span>(<span class="c-keyword">int</span> *a, <span class="c-keyword">int</span> *b) {
-    <span class="c-keyword">if</span> (*a < *b) { <span class="c-keyword">int</span> t = *a; *a = *b; *b = t; }
-}
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> a, b, c;
-    <span class="c-function">scanf</span>(<span class="c-string">"%d%d%d"</span>, &a, &b, &c);
-    <span class="c-function">swap</span>(&a, &b);
-    <span class="c-function">swap</span>(&a, &c);
-    <span class="c-function">swap</span>(&b, &c);
-    <span class="c-function">printf</span>(<span class="c-string">"%d %d %d\n"</span>, a, b, c);
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 选择题：<code>int a=5, *p=&a;</code> 以下哪个表达式等于5？（ ）</p>
-                    <ul>
-                        <li>A. <code>p</code></li>
-                        <li>B. <code>*p</code></li>
-                        <li>C. <code>&p</code></li>
-                        <li>D. <code>**p</code></li>
-                    </ul>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>选B。<code>*p</code> 是解引用，获取p指向的变量a的值5。<code>p</code> 是地址，<code>&p</code> 是指针自身的地址，<code>**p</code> 是二级解引用（p不是二级指针，会出错）。</p>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 写一个函数，使用指针实现字符串的复制（类似strcpy的功能）。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <pre><code><span class="c-keyword">void</span> <span class="c-function">myStrcpy</span>(<span class="c-keyword">char</span> *dest, <span class="c-keyword">const</span> <span class="c-keyword">char</span> *src) {
-    <span class="c-keyword">while</span> ((*dest++ = *src++) != <span class="c-string">'\0'</span>)
-        ;
-}</code></pre>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 解释以下代码的作用：<code>int arr[5] = {1,2,3,4,5}; int *p = arr + 2; printf("%d", *p);</code></p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p><code>arr + 2</code> 指向数组第3个元素（下标2），即值为3的元素。<code>*p</code> 解引用得到3，所以输出3。</p>
                         </div>
                     </details>
                 </div>

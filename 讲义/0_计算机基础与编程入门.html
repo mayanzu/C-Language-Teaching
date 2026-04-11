@@ -26,7 +26,6 @@
             <li><a href="#os-basics">操作系统基础</a></li>
             <li><a href="#coding-style">编码规范入门</a></li>
             <li><a href="#debug-intro">调试入门</a></li>
-            <li><a href="#practice">综合练习</a></li>
             <li><a href="#summary">本章小结</a></li>
         </ul>
     </nav>
@@ -195,32 +194,36 @@
                 <div class="practice-box-title">边学边练 - 计算机基础</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 请说出计算机的五大组成部分，并用自己的话简述各自的作用。</p>
+                    <p><strong>练习1：</strong> 编写你的第一个C程序：在屏幕上输出"Hello, Computer!"，并在下一行输出你的姓名。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><strong>运算器（ALU）：</strong>执行算术和逻辑运算，相当于厨师的"手"</li>
-                                <li><strong>控制器：</strong>指挥各部件协调工作，相当于厨师的"大脑"</li>
-                                <li><strong>存储器（内存）：</strong>存储程序和数据，相当于厨师的"工作台"</li>
-                                <li><strong>输入设备：</strong>向计算机输入数据（如键盘），相当于"采购的食材"</li>
-                                <li><strong>输出设备：</strong>显示处理结果（如显示器），相当于"端上桌的菜"</li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">第一个C程序</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"Hello, Computer!\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"张三\n"</span>);  <span class="c-comment">// 替换为你的姓名</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习2：</strong> 程序从编写到运行需要经历哪几个步骤？请按顺序排列。</p>
+                    <p><strong>练习2：</strong> 编写程序，使用printf输出以下信息：第一行输出"C语言学习之旅"，第二行输出"第1章：计算机基础"，第三行输出"=============="（10个等号）。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ol>
-                                <li><strong>编写源代码</strong> → 保存为 <code>.c</code> 文件</li>
-                                <li><strong>编译（Compile）</strong> → 翻译成二进制机器码</li>
-                                <li><strong>链接（Link）</strong> → 连接系统库，生成 <code>.exe</code></li>
-                                <li><strong>运行（Run）</strong> → 加载到内存，CPU执行</li>
-                            </ol>
+                        <div class="code-block">
+                            <div class="code-block-title">格式化输出练习</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"C语言学习之旅\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"第1章：计算机基础\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"==============\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
@@ -1516,172 +1519,6 @@ Projects\hello.c
                         <summary>参考答案</summary>
                         <div class="callout-tip">
                             <p>错误在文件 <code>test.c</code> 的第8行，原因是在使用变量 <code>count</code> 之前没有声明它。解决方法：在使用之前添加 <code>int count;</code> 声明。</p>
-                        </div>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ============================================================
-             综合练习
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">综合练习</h2>
-
-            <div class="practice-box">
-                <div class="practice-box-title">本章综合练习</div>
-
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 简述计算机从接收用户输入到显示输出结果，经历了哪些步骤？涉及计算机的哪些组成部分？</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>步骤如下：</p>
-                            <ol>
-                                <li><strong>输入：</strong>用户通过输入设备（键盘）输入数据</li>
-                                <li><strong>存储：</strong>数据被送入内存（存储器）暂存</li>
-                                <li><strong>处理：</strong>CPU的控制器读取指令，运算器执行计算</li>
-                                <li><strong>存储：</strong>计算结果存回内存</li>
-                                <li><strong>输出：</strong>结果通过输出设备（显示器）显示给用户</li>
-                            </ol>
-                            <p>涉及组成部分：输入设备、存储器（内存）、运算器、控制器、输出设备。</p>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 将十进制数25转换为二进制，并写出转换过程。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <div class="code-block-title">转换过程</div>
-                                <pre><code>25 ÷ 2 = 12 余 1
-12 ÷ 2 = 6  余 0
- 6 ÷ 2 = 3  余 0
- 3 ÷ 2 = 1  余 1
- 1 ÷ 2 = 0  余 1
-
-从下往上读：11001
-所以 25（十进制）= 11001（二进制）
-
-验证：1×2⁴ + 1×2³ + 0×2² + 0×2¹ + 1×2⁰ = 16+8+0+0+1 = 25 ✓</code></pre>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 写出一个完整的C程序，要求在屏幕上输出你的姓名和学号（用printf输出两行信息）。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <div class="code-block-title">输出姓名和学号</div>
-                                <pre><code><span class="c-preprocessor">#include &lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"姓名：张三\n"</span>);
-    <span class="c-function">printf</span>(<span class="c-string">"学号：2024001\n"</span>);
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 解释以下概念的区别：</p>
-                    <ul>
-                        <li>编译（Compile）与链接（Link）</li>
-                        <li>源文件与目标文件</li>
-                        <li>语法错误与逻辑错误</li>
-                    </ul>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><strong>编译 vs 链接：</strong>编译是将源代码翻译成机器码（生成.obj文件），链接是将编译后的目标文件与库文件合并生成可执行文件（.exe）。编译关注单个文件，链接关注多个文件的组合。</li>
-                                <li><strong>源文件 vs 目标文件：</strong>源文件是程序员编写的.c文件（人类可读），目标文件是编译器生成的.obj文件（机器码，但尚未链接）。</li>
-                                <li><strong>语法错误 vs 逻辑错误：</strong>语法错误违反了语言规则，编译器能检测出来；逻辑错误是代码逻辑有误，程序能运行但结果不正确。</li>
-                            </ul>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习5：</strong> 以下代码有哪些问题？请逐一指出并修复：</p>
-                    <pre><code>#include stdio.h
-int main()
-    printf("Hello\n")
-    return 0;
-}</code></pre>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ol>
-                                <li>第1行：<code>#include stdio.h</code> 应改为 <code>#include &lt;stdio.h&gt;</code>（缺少尖括号）</li>
-                                <li>第2行：main函数后面缺少左花括号 <code>{</code></li>
-                                <li>第3行：printf语句末尾缺少分号 <code>;</code></li>
-                                <li>修复后的代码：
-                                    <pre><code>#include &lt;stdio.h&gt;
-int main() {
-    printf("Hello\n");
-    return 0;
-}</code></pre>
-                                </li>
-                            </ol>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习6：</strong> 简述C语言程序从编写到运行的完整流程，以及每个阶段产生的文件类型。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ol>
-                                <li><strong>编辑：</strong>用编辑器编写源代码 → 产生 <code>.c</code> 源文件</li>
-                                <li><strong>预处理：</strong>处理 #include、#define 等预处理指令 → 展开后的源代码</li>
-                                <li><strong>编译：</strong>将源代码翻译为机器码 → 产生 <code>.obj</code> 目标文件</li>
-                                <li><strong>链接：</strong>将目标文件与库文件合并 → 产生 <code>.exe</code> 可执行文件</li>
-                                <li><strong>运行：</strong>操作系统加载可执行文件到内存并执行 → 输出结果</li>
-                            </ol>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习7：</strong> 用自己的话解释什么是"算法"，并写出"判断一个整数是奇数还是偶数"的算法步骤。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>算法是解决问题的一系列明确、有限的步骤。</p>
-                            <p>判断奇偶的算法：</p>
-                            <ol>
-                                <li>接收一个整数作为输入</li>
-                                <li>将该整数除以2，求余数</li>
-                                <li>如果余数等于0，则该数为偶数</li>
-                                <li>如果余数等于1，则该数为奇数</li>
-                                <li>输出判断结果</li>
-                            </ol>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习8：</strong> 选择题：以下哪个不是操作系统的功能？（ ）</p>
-                    <ul>
-                        <li>A. 管理计算机的内存</li>
-                        <li>B. 编译C语言程序</li>
-                        <li>C. 管理磁盘上的文件</li>
-                        <li>D. 分配CPU时间给各个程序</li>
-                    </ul>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>选B。编译C语言程序是编译器的功能，不是操作系统的功能。操作系统负责管理硬件资源（内存、CPU、设备）和软件资源（文件），而编译器是一个独立的工具软件。</p>
                         </div>
                     </details>
                 </div>

@@ -23,7 +23,6 @@
             <li><a href="#dynamic-memory">动态内存管理</a></li>
             <li><a href="#common-errors">常见错误</a></li>
             <li><a href="#pointer-summary">指针知识体系</a></li>
-            <li><a href="#practice">综合练习</a></li>
             <li><a href="#summary">本章小结</a></li>
         </ul>
     </nav>
@@ -1029,110 +1028,6 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>
-                        </div>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ============================================================
-             综合练习
-             ============================================================ -->
-        <section id="practice" class="section">
-            <h2 class="section-title">综合练习</h2>
-
-            <div class="practice-box">
-                <div class="practice-box-title">本章综合练习</div>
-
-                <div class="question-item">
-                    <p><strong>练习1：</strong> 使用函数指针数组，实现一个简单的计算器（加减乘除）。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">add</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a + b; }
-<span class="c-keyword">int</span> <span class="c-function">sub</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a - b; }
-<span class="c-keyword">int</span> <span class="c-function">mul</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> a * b; }
-<span class="c-keyword">int</span> <span class="c-function">divide</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) { <span class="c-keyword">return</span> b != <span class="c-number">0</span> ? a / b : <span class="c-number">0</span>; }
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> (*ops[<span class="c-number">4</span>])(<span class="c-keyword">int</span>, <span class="c-keyword">int</span>) = {add, sub, mul, divide};
-    <span class="c-keyword">char</span> *names[] = {<span class="c-string">"加"</span>, <span class="c-string">"减"</span>, <span class="c-string">"乘"</span>, <span class="c-string">"除"</span>};
-
-    <span class="c-keyword">int</span> a = <span class="c-number">20</span>, b = <span class="c-number">4</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">4</span>; i++)
-        <span class="c-function">printf</span>(<span class="c-string">"%s: %d\n"</span>, names[i], ops[i](a, b));
-
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 选择题：<code>int a=1, *p=&a; int **pp=&p;</code> 以下哪个等于1？（ ）</p>
-                    <ul>
-                        <li>A. <code>pp</code></li>
-                        <li>B. <code>*pp</code></li>
-                        <li>C. <code>**pp</code></li>
-                        <li>D. <code>&pp</code></li>
-                    </ul>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>选C。<code>pp</code>指向p，<code>*pp</code>就是p（即a的地址），<code>**pp</code>就是<code>*p</code>即a的值1。</p>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习3：</strong> 使用动态内存分配创建一个可变长度的整型数组，实现：输入n个成绩，计算平均分，输出高于平均分的成绩。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;stdlib.h&gt;</span>
-
-<span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> n;
-    <span class="c-function">printf</span>(<span class="c-string">"输入学生人数: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &n);
-
-    <span class="c-keyword">int</span> *scores = (<span class="c-keyword">int</span> *)<span class="c-function">malloc</span>(n * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-keyword">double</span> sum = <span class="c-number">0</span>;
-
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
-        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &scores[i]);
-        sum += scores[i];
-    }
-    <span class="c-keyword">double</span> avg = sum / n;
-    <span class="c-function">printf</span>(<span class="c-string">"平均分: %.1f\n"</span>, avg);
-    <span class="c-function">printf</span>(<span class="c-string">"高于平均分: "</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++)
-        <span class="c-keyword">if</span> (scores[i] > avg) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, scores[i]);
-
-    <span class="c-function">free</span>(scores);
-    <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习4：</strong> 解释指针数组和数组指针的区别，各举一个使用场景。</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><strong>指针数组 <code>int *arr[5]</code>：</strong>本质是数组，每个元素是指针。场景：存储多个字符串（如命令行参数argv）。</li>
-                                <li><strong>数组指针 <code>int (*p)[5]</code>：</strong>本质是指针，指向一个数组。场景：遍历二维数组的行。</li>
-                            </ul>
                         </div>
                     </details>
                 </div>
