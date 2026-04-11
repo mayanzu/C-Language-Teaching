@@ -831,23 +831,7 @@ Press any key to continue . . .</code></pre>
                 <div class="practice-box-title">边学边练 - 程序结构</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 指出下面程序的五个组成部分（注释、预处理指令、全局声明、main函数、自定义函数）：</p>
-                    <details>
-                        <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ol>
-                                <li><strong>注释：</strong><code>/* 计算两个数的和 */</code></li>
-                                <li><strong>预处理指令：</strong><code>#include &lt;stdio.h&gt;</code></li>
-                                <li><strong>全局声明：</strong><code>int global_var = 10;</code></li>
-                                <li><strong>main函数：</strong>程序入口，包含输入、处理、输出三部分</li>
-                                <li><strong>自定义函数：</strong><code>int add(int a, int b)</code>，实现加法功能</li>
-                            </ol>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="question-item">
-                    <p><strong>练习2：</strong> 编写一个程序，输出 "I am learning C!"，并添加适当的注释说明程序功能。</p>
+                    <p><strong>练习1：</strong> 编写一个程序，输出 "I am learning C!"，并添加适当的注释说明程序功能。</p>
                     <details>
                         <summary>参考答案</summary>
                         <div class="code-block">
@@ -862,6 +846,31 @@ Press any key to continue . . .</code></pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">printf</span>(<span class="c-string">"I am learning C!\n"</span>);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="question-item">
+                    <p><strong>练习2：</strong> 编写程序，使用多行注释说明程序目的（计算两个数的和），然后使用单行注释标注每行代码的作用，最后输出 "10 + 20 = 30"。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">注释练习</div>
+                            <pre><code><span class="c-comment">/*
+ * 程序名称：加法计算
+ * 功能：计算并输出两个整数的和
+ * 日期：2024年
+ */</span>
+
+<span class="c-preprocessor">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>  <span class="c-comment">// 包含标准输入输出库</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {                    <span class="c-comment">// 主函数，程序入口</span>
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>;                 <span class="c-comment">// 定义第一个整数</span>
+    <span class="c-keyword">int</span> b = <span class="c-number">20</span>;                 <span class="c-comment">// 定义第二个整数</span>
+    <span class="c-keyword">int</span> sum = a + b;            <span class="c-comment">// 计算两数之和</span>
+    <span class="c-function">printf</span>(<span class="c-string">"%d + %d = %d\n"</span>, a, b, sum);  <span class="c-comment">// 输出结果</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;                   <span class="c-comment">// 程序正常结束</span>
 }</code></pre>
                         </div>
                     </details>
@@ -1105,40 +1114,65 @@ Projects\hello.c
                 <div class="practice-box-title">边学边练 - 操作系统基础</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 打开Windows任务管理器（Ctrl+Shift+Esc），观察当前有哪些进程在运行，记录3个你认识的进程名称及其作用。</p>
+                    <p><strong>练习1：</strong> 编写程序，使用printf输出C语言开发流程的4个步骤，每个步骤占一行：1.编辑源代码(.c) 2.编译(.obj) 3.链接(.exe) 4.运行。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><strong>explorer.exe：</strong>Windows资源管理器，管理桌面和任务栏</li>
-                                <li><strong>svchost.exe：</strong>系统服务宿主进程，运行各种Windows服务</li>
-                                <li><strong>csrss.exe：</strong>客户端/服务器运行时子系统，管理图形界面</li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">开发流程输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"C语言程序开发流程：\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"1. 编辑源代码(.c)\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"2. 编译生成目标文件(.obj)\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"3. 链接生成可执行文件(.exe)\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"4. 运行程序\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习2：</strong> 解释"程序"和"进程"的区别，并用生活中的例子做类比。</p>
+                    <p><strong>练习2：</strong> 编写程序，输出计算机五大组成部分的名称，并为每行添加编号（1-5）。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>程序是静态的代码文件（存储在磁盘上），进程是程序运行时的动态实例（存在于内存中）。类比：程序就像写在纸上的菜谱，进程就像厨师按菜谱做菜的过程。同一份菜谱（程序）可以有多个厨师同时在用（多个进程）。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">计算机组成输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"计算机五大组成部分：\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"1. 运算器\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"2. 控制器\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"3. 存储器\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"4. 输入设备\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"5. 输出设备\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习3：</strong> 写出C语言开发过程中涉及的文件类型（从源代码到可执行文件），并说明每种文件的扩展名和作用。</p>
+                    <p><strong>练习3：</strong> 编写程序，使用printf输出一个简易的菜单界面，包含：标题"学生管理系统"，选项1.添加学生 2.删除学生 3.查询学生 4.退出系统。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ol>
-                                <li><strong>.c 文件（源代码）：</strong>程序员编写的C语言代码</li>
-                                <li><strong>.h 文件（头文件）：</strong>声明函数和宏的辅助文件</li>
-                                <li><strong>.obj 文件（目标文件）：</strong>编译器将.c文件编译后生成的中间文件</li>
-                                <li><strong>.exe 文件（可执行文件）：</strong>链接器将.obj文件与库链接后生成的可运行程序</li>
-                            </ol>
+                        <div class="code-block">
+                            <div class="code-block-title">菜单界面输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"==================\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"   学生管理系统   \n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"==================\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"1. 添加学生\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"2. 删除学生\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"3. 查询学生\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"4. 退出系统\n"</span>);
+    <span class="c-function">printf</span>(<span class="c-string">"==================\n"</span>);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
@@ -1263,24 +1297,25 @@ Projects\hello.c
                 <div class="practice-box-title">边学边练 - 编码规范</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 以下变量名哪些是好的命名？哪些不好？为什么？</p>
-                    <ul>
-                        <li><code>a</code></li>
-                        <li><code>student_count</code></li>
-                        <li><code>MAX_LENGTH</code></li>
-                        <li><code>x1</code></li>
-                        <li><code>total_price</code></li>
-                    </ul>
+                    <p><strong>练习1：</strong> 编写程序，使用规范的变量名（student_count, max_score, average_grade）计算并输出3个学生的平均成绩（假设成绩分别为85, 90, 78）。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><code>a</code> — 不好，含义不明</li>
-                                <li><code>student_count</code> — 好，语义清晰，snake_case风格</li>
-                                <li><code>MAX_LENGTH</code> — 好，常量命名规范（全大写+下划线）</li>
-                                <li><code>x1</code> — 不好，含义不明</li>
-                                <li><code>total_price</code> — 好，语义清晰，snake_case风格</li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">规范命名示例</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> student_count = <span class="c-number">3</span>;           <span class="c-comment">// 学生人数</span>
+    <span class="c-keyword">int</span> score1 = <span class="c-number">85</span>;                 <span class="c-comment">// 第一个学生成绩</span>
+    <span class="c-keyword">int</span> score2 = <span class="c-number">90</span>;                 <span class="c-comment">// 第二个学生成绩</span>
+    <span class="c-keyword">int</span> score3 = <span class="c-number">78</span>;                 <span class="c-comment">// 第三个学生成绩</span>
+    <span class="c-keyword">int</span> total_score = score1 + score2 + score3;  <span class="c-comment">// 总成绩</span>
+    <span class="c-keyword">float</span> average_grade = (<span class="c-keyword">float</span>)total_score / student_count;  <span class="c-comment">// 平均成绩</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"学生人数: %d\n"</span>, student_count);
+    <span class="c-function">printf</span>(<span class="c-string">"平均成绩: %.2f\n"</span>, average_grade);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
@@ -1290,38 +1325,43 @@ Projects\hello.c
                     <pre><code>int main(){int a=10;int b=20;int c=a+b;printf("%d",c);return 0;}</code></pre>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <div class="code-block">
-                                <div class="code-block-title">整理后的代码</div>
-                                <pre><code><span class="c-keyword">int</span> <span class="c-function">main</span>() {
+                        <div class="code-block">
+                            <div class="code-block-title">整理后的代码</div>
+                            <pre><code><span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>;      <span class="c-comment">// 第一个数</span>
     <span class="c-keyword">int</span> b = <span class="c-number">20</span>;      <span class="c-comment">// 第二个数</span>
     <span class="c-keyword">int</span> c = a + b;    <span class="c-comment">// 计算两数之和</span>
     <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, c); <span class="c-comment">// 输出结果</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
-                            </div>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习3：</strong> 判断以下注释哪些是有用的，哪些是无用的：</p>
-                    <ul>
-                        <li><code>int age = 18; // 定义年龄变量</code></li>
-                        <li><code>int age = 18; // 学生入学时的年龄限制</code></li>
-                        <li><code>age = age + 1; // age加1</code></li>
-                        <li><code>age = age + 1; // 学生升入下一年级</code></li>
-                    </ul>
+                    <p><strong>练习3：</strong> 编写程序，计算并输出一个长方形的周长和面积。要求：使用有意义的变量名（length, width, perimeter, area），并添加注释说明每个变量的含义。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li>第1条 — 无用，代码本身已说明"定义年龄"</li>
-                                <li>第2条 — 有用，解释了为什么是18（入学年龄限制）</li>
-                                <li>第3条 — 无用，代码本身已说明"age加1"</li>
-                                <li>第4条 — 有用，解释了加1的业务含义（升级）</li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">长方形计算</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">float</span> length = <span class="c-number">8.5</span>;    <span class="c-comment">// 长方形的长度（单位：厘米）</span>
+    <span class="c-keyword">float</span> width = <span class="c-number">5.2</span>;     <span class="c-comment">// 长方形的宽度（单位：厘米）</span>
+    <span class="c-keyword">float</span> perimeter;       <span class="c-comment">// 周长</span>
+    <span class="c-keyword">float</span> area;            <span class="c-comment">// 面积</span>
+    
+    perimeter = <span class="c-number">2</span> * (length + width);  <span class="c-comment">// 计算周长：2*(长+宽)</span>
+    area = length * width;               <span class="c-comment">// 计算面积：长*宽</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"长方形长度: %.2f cm\n"</span>, length);
+    <span class="c-function">printf</span>(<span class="c-string">"长方形宽度: %.2f cm\n"</span>, width);
+    <span class="c-function">printf</span>(<span class="c-string">"周长: %.2f cm\n"</span>, perimeter);
+    <span class="c-function">printf</span>(<span class="c-string">"面积: %.2f cm²\n"</span>, area);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
@@ -1483,42 +1523,52 @@ Projects\hello.c
                 <div class="practice-box-title">边学边练 - 调试入门</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 以下代码有一个语法错误，请找出并修复：</p>
-                    <pre><code>int main() {
-    printf("Hello World\n")
-    return 0;
-}</code></pre>
+                    <p><strong>练习1：</strong> 编写程序，输出"Hello World"，但故意在printf语句后遗漏分号，观察编译错误信息，然后修复错误使程序正确运行。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>第2行 <code>printf("Hello World\n")</code> 末尾缺少分号，应改为 <code>printf("Hello World\n");</code></p>
+                        <div class="code-block">
+                            <div class="code-block-title">修复后的程序</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-function">printf</span>(<span class="c-string">"Hello World\n"</span>);  <span class="c-comment">// 注意：末尾必须有分号</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习2：</strong> 以下代码能编译通过，但运行结果不对。这是什么类型的错误？如何修复？</p>
-                    <pre><code>int main() {
-    int a = 10, b = 3;
-    float c = a / b;
-    printf("c = %f\n", c);
-    return 0;
-}</code></pre>
+                    <p><strong>练习2：</strong> 编写程序，计算10除以3的精确结果（保留3位小数）。要求：修正整数除法问题，使输出结果为3.333。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>这是<strong>逻辑错误</strong>。程序期望输出3.333...，但实际输出3.000000。因为 <code>a / b</code> 是整数除法，结果为3，然后才赋值给float变量。修复方法：将其中一个操作数转为浮点型，如 <code>(float)a / b</code> 或 <code>a * 1.0 / b</code>。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">正确的浮点除法</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">3</span>;
+    <span class="c-keyword">float</span> result = (<span class="c-keyword">float</span>)a / b;  <span class="c-comment">// 将a转换为float，进行浮点除法</span>
+    <span class="c-function">printf</span>(<span class="c-string">"10 / 3 = %.3f\n"</span>, result);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习3：</strong> 阅读以下编译错误信息，指出错误的位置和原因：</p>
-                    <pre><code>test.c(8) : error C2065: "count": 未声明的标识符</code></pre>
+                    <p><strong>练习3：</strong> 编写程序，声明变量count并赋值为100，然后输出"count = 100"。要求：确保变量先声明后使用。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p>错误在文件 <code>test.c</code> 的第8行，原因是在使用变量 <code>count</code> 之前没有声明它。解决方法：在使用之前添加 <code>int count;</code> 声明。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">变量声明与使用</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> count = <span class="c-number">100</span>;  <span class="c-comment">// 先声明变量count</span>
+    <span class="c-function">printf</span>(<span class="c-string">"count = %d\n"</span>, count);  <span class="c-comment">// 然后使用变量</span>
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>

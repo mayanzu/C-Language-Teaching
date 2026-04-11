@@ -1013,22 +1013,24 @@
                 <div class="practice-box-title">边学边练 - 布尔类型</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 以下表达式的结果是什么？（真或假）</p>
-                    <ul>
-                        <li><code>5 > 3</code></li>
-                        <li><code>10 == 20</code></li>
-                        <li><code>-1</code>（作为布尔值）</li>
-                        <li><code>0</code>（作为布尔值）</li>
-                    </ul>
+                    <p><strong>练习1：</strong> 编写程序，使用_Bool类型声明两个变量：is_greater表示5>3的结果，is_equal表示10==20的结果，然后输出这两个变量的值（1表示真，0表示假）。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><code>5 > 3</code> → 真（1）</li>
-                                <li><code>10 == 20</code> → 假（0）</li>
-                                <li><code>-1</code> → 真（非0即真）</li>
-                                <li><code>0</code> → 假（0即假）</li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">布尔类型练习</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">_Bool</span> is_greater = <span class="c-number">5</span> > <span class="c-number">3</span>;    <span class="c-comment">// 5大于3，结果为真(1)</span>
+    <span class="c-keyword">_Bool</span> is_equal = <span class="c-number">10</span> == <span class="c-number">20</span>;   <span class="c-comment">// 10等于20，结果为假(0)</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"5 > 3 的结果是: %d\n"</span>, is_greater);
+    <span class="c-function">printf</span>(<span class="c-string">"10 == 20 的结果是: %d\n"</span>, is_equal);
+    <span class="c-function">printf</span>(<span class="c-string">"非0值-1的布尔值: %d\n"</span>, (<span class="c-keyword">_Bool</span>)(-<span class="c-number">1</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"0的布尔值: %d\n"</span>, (<span class="c-keyword">_Bool</span>)<span class="c-number">0</span>);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
@@ -1157,43 +1159,53 @@
                 <div class="practice-box-title">边学边练 - 命名规范与类型选择</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 为以下场景选择最合适的数据类型，并给出合理的变量名：</p>
-                    <ul>
-                        <li>学生的考试成绩（0-100分）</li>
-                        <li>银行账户余额（精确到分）</li>
-                        <li>一个城市的人口数量</li>
-                        <li>判断用户是否登录</li>
-                    </ul>
+                    <p><strong>练习1：</strong> 编写程序，声明并初始化以下变量：学生成绩score=85（int）、银行余额balance=1250.50（double）、城市人口population=8000000（unsigned int）、是否登录is_logged_in=1（int）。然后使用printf输出这些变量的值。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li>学生成绩：<code>int score;</code> — 0-100是整数范围，int足够</li>
-                                <li>银行余额：<code>long long balance;</code> — 以分为单位的整数，避免浮点精度问题</li>
-                                <li>城市人口：<code>unsigned int population;</code> — 人口不可能为负，unsigned int范围0~42亿</li>
-                                <li>是否登录：<code>int is_logged_in;</code> — 0/1表示真/假</li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">变量声明与输出</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> score = <span class="c-number">85</span>;                    <span class="c-comment">// 学生成绩</span>
+    <span class="c-keyword">double</span> balance = <span class="c-number">1250.50</span>;          <span class="c-comment">// 银行余额</span>
+    <span class="c-keyword">unsigned int</span> population = <span class="c-number">8000000</span>; <span class="c-comment">// 城市人口</span>
+    <span class="c-keyword">int</span> is_logged_in = <span class="c-number">1</span>;              <span class="c-comment">// 是否登录</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"学生成绩: %d\n"</span>, score);
+    <span class="c-function">printf</span>(<span class="c-string">"银行余额: %.2f\n"</span>, balance);
+    <span class="c-function">printf</span>(<span class="c-string">"城市人口: %u\n"</span>, population);
+    <span class="c-function">printf</span>(<span class="c-string">"是否登录: %d\n"</span>, is_logged_in);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
 
                 <div class="question-item">
-                    <p><strong>练习2：</strong> 改进以下变量名，使其更规范、更易读：</p>
-                    <ul>
-                        <li><code>int a;</code> （表示学生的年龄）</li>
-                        <li><code>float x;</code> （表示圆的半径）</li>
-                        <li><code>int f;</code> （表示是否及格）</li>
-                        <li><code>double d;</code> （表示距离）</li>
-                    </ul>
+                    <p><strong>练习2：</strong> 编写程序，使用规范的变量名计算圆的面积和周长。要求：半径radius=5.0，使用double类型，输出结果保留2位小数。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <ul>
-                                <li><code>int student_age;</code></li>
-                                <li><code>double radius;</code> — 半径用double更精确</li>
-                                <li><code>int is_pass;</code> — 用is前缀表示布尔含义</li>
-                                <li><code>double distance;</code></li>
-                            </ul>
+                        <div class="code-block">
+                            <div class="code-block-title">圆的计算</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">double</span> radius = <span class="c-number">5.0</span>;       <span class="c-comment">// 圆的半径</span>
+    <span class="c-keyword">double</span> pi = <span class="c-number">3.14159</span>;       <span class="c-comment">// 圆周率</span>
+    <span class="c-keyword">double</span> area;               <span class="c-comment">// 面积</span>
+    <span class="c-keyword">double</span> circumference;      <span class="c-comment">// 周长</span>
+    
+    area = pi * radius * radius;
+    circumference = <span class="c-number">2</span> * pi * radius;
+    
+    <span class="c-function">printf</span>(<span class="c-string">"半径: %.2f\n"</span>, radius);
+    <span class="c-function">printf</span>(<span class="c-string">"面积: %.2f\n"</span>, area);
+    <span class="c-function">printf</span>(<span class="c-string">"周长: %.2f\n"</span>, circumference);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>

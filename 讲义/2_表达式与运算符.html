@@ -1217,24 +1217,23 @@ i++;   <span class="c-comment">// i变为6</span>
                 <div class="practice-box-title">边学边练 - 短路求值与未定义行为</div>
 
 <div class="question-item">
-                    <p><strong>练习4：</strong> 以下代码是否有未定义行为？如果有，请指出并修正：</p>
-                    <div class="code-block">
-                        <div class="code-block-title">代码</div>
-                        <pre><code><span class="c-keyword">int</span> i = <span class="c-number">3</span>;
-<span class="c-keyword">int</span> a = i++ + i++;</code></pre>
-                    </div>
+                    <p><strong>练习4：</strong> 编写程序，演示正确的自增运算。要求：初始化i=3，先让a=i++，然后让a加上i++，最后输出a和i的值。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p><strong>是的，这是未定义行为！</strong></p>
-                            <p>在同一个表达式中，<code>i</code> 被自增了两次，C语言标准没有规定哪个自增先执行，不同编译器可能给出不同结果。</p>
-                            <p><strong>修正方法：</strong></p>
-                            <div class="code-block">
-                                <div class="code-block-title">修正后代码</div>
-                                <pre><code><span class="c-keyword">int</span> i = <span class="c-number">3</span>;
-<span class="c-keyword">int</span> a = i++;  <span class="c-comment">// a = 3, i = 4</span>
-a += i++;      <span class="c-comment">// a = 3 + 4 = 7, i = 5</span></code></pre>
-                            </div>
+                        <div class="code-block">
+                            <div class="code-block-title">正确的自增运算</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> i = <span class="c-number">3</span>;
+    <span class="c-keyword">int</span> a = i++;   <span class="c-comment">// a = 3, i = 4</span>
+    a += i++;      <span class="c-comment">// a = 3 + 4 = 7, i = 5</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"a = %d\n"</span>, a);
+    <span class="c-function">printf</span>(<span class="c-string">"i = %d\n"</span>, i);
+    
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
@@ -1323,15 +1322,20 @@ a += i++;      <span class="c-comment">// a = 3 + 4 = 7, i = 5</span></code></pr
                 <div class="practice-box-title">边学边练 - 逗号与sizeof</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 以下代码的输出结果是什么？</p>
-                    <pre><code>int a = (1, 2, 3);
-int b = 1, c = 2, d = 3;
-printf("a=%d, b=%d, c=%d, d=%d\n", a, b, c, d);</code></pre>
+                    <p><strong>练习1：</strong> 编写程序，演示逗号运算符和逗号分隔符的区别。要求：使用逗号运算符让a取(1, 2, 3)的最后一个值，使用逗号分隔符声明b=1, c=2, d=3，然后输出所有变量的值。</p>
                     <details>
                         <summary>参考答案</summary>
-                        <div class="callout-tip">
-                            <p><code>a=3, b=1, c=2, d=3</code></p>
-                            <p>第一行是逗号运算符，取最后一个值3；第二行是逗号分隔符，分别声明并初始化三个变量。</p>
+                        <div class="code-block">
+                            <div class="code-block-title">逗号运算符与分隔符</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> a = (<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>);       <span class="c-comment">// 逗号运算符，a = 3</span>
+    <span class="c-keyword">int</span> b = <span class="c-number">1</span>, c = <span class="c-number">2</span>, d = <span class="c-number">3</span>;  <span class="c-comment">// 逗号分隔符，声明三个变量</span>
+    
+    <span class="c-function">printf</span>(<span class="c-string">"a=%d, b=%d, c=%d, d=%d\n"</span>, a, b, c, d);
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
                         </div>
                     </details>
                 </div>
