@@ -177,6 +177,7 @@ body {
     font-family: var(--font-system);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     background: var(--color-background);
     color: var(--color-text-primary);
     line-height: 1.6;
@@ -1343,6 +1344,142 @@ td code {
 
     .code-block pre {
         font-size: 16px;
+    }
+}
+
+/* ============================================
+   高分屏 / Retina / 高DPI 优化
+   ============================================ */
+
+/* 启用高DPI子像素渲染 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: subpixel-antialiased;
+        -moz-osx-font-smoothing: auto;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* SVG图标在高分屏保持锐利 */
+    .svg-sprite,
+    .icon,
+    .icon-inline {
+        shape-rendering: geometricPrecision;
+    }
+
+    /* 代码块字体微调 - 高分屏下用更清晰的渲染 */
+    .code-block pre,
+    .code-block code {
+        -webkit-font-smoothing: subpixel-antialiased;
+        text-rendering: optimizeLegibility;
+        font-feature-settings: "liga" 0;  /* 禁用连字，避免代码显示异常 */
+    }
+
+    /* 表格边框在高分屏下更精细 */
+    table th,
+    table td {
+        border-width: 0.5px;
+    }
+
+    /* 滚动条在高分屏更细 */
+    .tutorial-nav::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* 分隔线更精细 */
+    .tutorial-header {
+        border-bottom-width: 0.5px;
+    }
+
+    .tutorial-nav {
+        border-right-width: 0.5px;
+    }
+}
+
+/* 2K/4K 高分大屏 - 1440p及以上 */
+@media screen and (min-width: 2560px) and (-webkit-min-device-pixel-ratio: 1.5),
+       screen and (min-width: 2560px) and (min-resolution: 144dpi) {
+    .tutorial-content {
+        max-width: 1400px;
+    }
+
+    .tutorial-nav {
+        width: 340px;
+    }
+
+    .tutorial-content {
+        margin-left: 340px;
+    }
+
+    .tutorial-header h1 {
+        font-size: 42px;
+    }
+
+    .section-title {
+        font-size: 34px;
+    }
+
+    .subsection-title {
+        font-size: 26px;
+    }
+
+    body {
+        font-size: 19px;
+    }
+
+    .code-block pre {
+        font-size: 17px;
+        line-height: 1.75;
+    }
+
+    .tutorial-nav a {
+        font-size: 16px;
+    }
+
+    /* 表格在大屏更宽松 */
+    table th,
+    table td {
+        padding: 12px 16px;
+    }
+
+    /* Callout 在大屏更宽松 */
+    .callout-tip,
+    .callout-warning,
+    .callout-note,
+    .callout-success {
+        padding: 20px 24px;
+    }
+}
+
+/* Mac Retina (2x) 优化 - 常见的 13-16寸 MacBook */
+@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 1800px) {
+    .code-block pre {
+        font-size: 14.5px;   /* Ret屏上 14.5px 比 14px 更清晰 */
+        letter-spacing: 0.01em;
+    }
+
+    .tutorial-nav a {
+        font-size: 13.5px;
+    }
+}
+
+/* Windows 高DPI缩放 (125%, 150%, 175%, 200%) */
+@media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
+    /* 125%-150% 缩放 */
+    body {
+        text-rendering: optimizeLegibility;
+    }
+}
+
+@media (min-resolution: 192dpi) {
+    /* 200% 及以上缩放 */
+    body {
+        text-rendering: optimizeLegibility;
+    }
+
+    /* 按钮和交互元素保持可点击区域 */
+    .copy-button {
+        min-width: 44px;
+        min-height: 28px;
     }
 }
 
