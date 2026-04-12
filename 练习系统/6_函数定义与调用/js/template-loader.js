@@ -1,4 +1,4 @@
-﻿// 模板加载器 - 负责动态加载题库数据
+// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         console.log('[TemplateLoader] 构造函数已调用');
@@ -96,55 +96,55 @@ class TemplateLoader {
             },
             {
                 id: 2,
-                question: "以下代码的输出结果是什么？\n\n<C>\nvoid func(int x) {\n    x = x + 10;\n}\n\nint main() {\n    int a = 5;\n    func(a);\n    printf(\"%d\", a);\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nvoid func(int a[]) {\n    a[0] = 100;\n}\n\nint main() {\n    int arr[] = {1, 2, 3};\n    func(arr);\n    printf(\"%d\", arr[0]);\n    return 0;\n}\n</C>",
                 options: [
-                    "`5`",
-                    "`15`",
-                    "`10`",
-                    "编译错误"
+                    "`1`",
+                    "`100`",
+                    "编译错误",
+                    "未定义行为"
                 ],
-                correctAnswer: 0,
-                explanation: "C语言中，基本数据类型作为参数传递时采用「值传递」方式。函数 `func` 接收的是变量 `a` 的副本，对 `x` 的修改不会影响原变量 `a`。所以输出仍然是 `5`。",
-                codeExample: "#include <stdio.h>\n\nvoid func(int x) {\n    x = x + 10;  // 修改的是副本\n    printf(\"函数内x=%d\\n\", x);  // 15\n}\n\nint main() {\n    int a = 5;\n    func(a);  // 传递a的副本\n    printf(\"main中a=%d\\n\", a);  // 5（不变）\n    return 0;\n}"
+                correctAnswer: 1,
+                explanation: "这是「数组参数传递」的陷阱！数组作为参数传递时，传递的是首地址（指针），不是值拷贝。函数内通过`a[0]=100`修改的是原数组的内容。「易错点」：1) 数组参数看似值传递，实际是指针传递；2) 函数内修改数组元素会影响原数组；3) `int a[]`等价于`int *a`，都是指针。「对比」：基本类型（int等）是值传递，数组是指针传递。",
+                codeExample: "#include <stdio.h>\n\nvoid func(int a[]) {  /* 等价于 int *a */\n    a[0] = 100;  /* 修改原数组！ */\n}\n\nint main() {\n    int arr[] = {1, 2, 3};\n    func(arr);\n    printf(\"arr[0] = %d\\n\", arr[0]);  /* 100 */\n    \n    /* 对比：基本类型是值传递 */\n    int x = 5;\n    /* void f(int n) { n = 100; } */\n    /* f(x); printf(\"%d\", x);  仍然是5 */\n    return 0;\n}"
             },
             {
                 id: 3,
-                question: "以下哪个库函数用于计算字符串长度？",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 10;\nvoid func(int x) {\n    printf(\"%d \", x);\n}\n\nint main() {\n    func(20);\n    printf(\"%d\", x);\n    return 0;\n}\n</C>",
                 options: [
-                    "`strlen()`",
-                    "`sizeof()`",
-                    "`length()`",
-                    "`strsize()`"
+                    "`20 10`",
+                    "`10 20`",
+                    "`20 20`",
+                    "`10 10`"
                 ],
                 correctAnswer: 0,
-                explanation: "`strlen()` 是C标准库函数，定义在 `<string.h>` 中，用于计算字符串的实际长度（不包括'\\0'）。`sizeof()` 是运算符，返回数据类型或变量的字节数。C语言没有 `length()` 和 `strsize()` 函数。",
-                codeExample: "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str[] = \"Hello\";\n    \n    printf(\"strlen(str) = %lu\\n\", strlen(str));  // 5（字符数）\n    printf(\"sizeof(str) = %lu\\n\", sizeof(str));  // 6（包括'\\0'）\n    \n    return 0;\n}"
+                explanation: "这是「局部变量遮蔽全局变量」的陷阱！`func`的参数`x`遮蔽了全局变量`x`，在`func`内`x`指的是参数(20)。`main`中直接使用`x`指的是全局变量(10)。「易错点」：1) 局部变量和全局变量同名时，局部变量优先；2) 函数参数也是局部变量，会遮蔽同名全局变量；3) 在函数内无法直接访问被遮蔽的全局变量。",
+                codeExample: "#include <stdio.h>\n\nint x = 10;  /* 全局变量 */\n\nvoid func(int x) {  /* 参数x遮蔽全局x */\n    printf(\"func内x=%d\\n\", x);  /* 20(参数) */\n}\n\nint main() {\n    func(20);\n    printf(\"main中x=%d\\n\", x);  /* 10(全局) */\n    \n    int x = 30;  /* 局部x遮蔽全局x */\n    printf(\"局部x=%d\\n\", x);  /* 30 */\n    return 0;\n}"
             },
             {
                 id: 4,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}\n\nint main() {\n    printf(\"%d\", factorial(4));\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint func(int a, int b) {\n    return a++ + ++b;\n}\n\nint main() {\n    int x = 3, y = 4;\n    int result = func(x, y);\n    printf(\"%d %d %d\", result, x, y);\n    return 0;\n}\n</C>",
                 options: [
-                    "`10`",
-                    "`24`",
-                    "`120`",
-                    "栈溢出错误"
+                    "`8 3 4`",
+                    "`8 4 5`",
+                    "`7 3 4`",
+                    "`8 3 5`"
                 ],
-                correctAnswer: 1,
-                explanation: "这是递归计算阶乘的函数。`factorial(4)` 计算过程：4×3×2×1 = 24。递归终止条件是 `n <= 1` 时返回1。",
-                codeExample: "#include <stdio.h>\n\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}\n\nint main() {\n    // factorial(4)的递归过程：\n    // 4 * factorial(3)\n    // 4 * 3 * factorial(2)\n    // 4 * 3 * 2 * factorial(1)\n    // 4 * 3 * 2 * 1 = 24\n    printf(\"%d\\n\", factorial(4));  // 24\n    return 0;\n}"
+                correctAnswer: 0,
+                explanation: "这是「函数参数求值+自增」的陷阱！1) C语言函数参数是「值传递」，`a`和`b`是`x`和`y`的副本；2) `a++`先用a=3再增为4，`++b`先增为5再使用，所以返回3+5=8；3) 但`x`和`y`不受影响，因为修改的是副本。「易错点」：1) 函数内对参数的自增不影响外部变量；2) `a++`和`++b`在return表达式中的求值顺序是确定的（同一表达式内）。",
+                codeExample: "#include <stdio.h>\n\nint func(int a, int b) {\n    return a++ + ++b;  /* a=3(后增), b=5(前增), 返回8 */\n}\n\nint main() {\n    int x = 3, y = 4;\n    int result = func(x, y);  /* 值传递，x/y不变 */\n    printf(\"result=%d, x=%d, y=%d\\n\", result, x, y);  /* 8,3,4 */\n    return 0;\n}"
             },
             {
                 id: 5,
-                question: "关于函数声明（函数原型），以下说法错误的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint func() {\n    return 1, 2, 3;\n}\n\nint main() {\n    int x = func();\n    printf(\"%d\", x);\n    return 0;\n}\n</C>",
                 options: [
-                    "函数声明可以省略参数名，只保留参数类型",
-                    "函数声明必须以分号结尾",
-                    "函数声明和函数定义可以多次出现",
-                    "函数声明通常放在调用之前，定义可以在调用之后"
+                    "`1`",
+                    "`3`",
+                    "`6`",
+                    "编译错误"
                 ],
-                correctAnswer: 2,
-                explanation: "函数声明可以多次出现，但函数定义只能出现一次。函数声明告诉编译器函数的接口，函数定义提供具体实现。重复定义会导致编译错误。",
-                codeExample: "#include <stdio.h>\n\n// 函数声明（可以多次）\nint add(int, int);  // 可以省略参数名\nint add(int a, int b);  // 也可以带参数名\n\nint main() {\n    printf(\"%d\\n\", add(3, 5));\n    return 0;\n}\n\n// 函数定义（只能一次）\nint add(int a, int b) {\n    return a + b;\n}\n\n// int add(int x, int y) { return x + y; }  // 错误：重复定义"
+                correctAnswer: 1,
+                explanation: "这是「逗号表达式作为返回值」的陷阱！`return 1, 2, 3`中，逗号运算符从左到右依次求值，返回最右边的值3。「易错点」：1) 逗号运算符的结果是最后一个表达式的值；2) `return 1, 2, 3`不是返回多个值，而是返回逗号表达式的结果3；3) C语言函数只能返回一个值。「关键区别」：`return (1, 2, 3)`和`return 1, 2, 3`效果相同。",
+                codeExample: "#include <stdio.h>\n\nint func() {\n    return 1, 2, 3;  /* 逗号表达式，返回3 */\n}\n\nint main() {\n    printf(\"%d\\n\", func());  /* 3 */\n    \n    /* 逗号表达式示例 */\n    int a = (1, 2, 3);  /* a = 3 */\n    int b = (printf(\"Hi\"), 5);  /* 先输出Hi，b = 5 */\n    printf(\"a=%d, b=%d\\n\", a, b);\n    return 0;\n}"
             },
             {
                 id: 6,
@@ -161,55 +161,55 @@ class TemplateLoader {
             },
             {
                 id: 7,
-                question: "以下哪个函数调用是正确的？已知函数原型为 `int max(int a, int b);`",
-                options: [
-                    "`int result = max(5, 10);`",
-                    "`max(5, 10);`",
-                    "`printf(\"%d\", max(5, 10));`",
-                    "以上都正确"
-                ],
-                correctAnswer: 3,
-                explanation: "函数返回值可以被使用（赋值给变量、作为参数传递）也可以被忽略。选项A将返回值赋值，选项B忽略返回值（合法但浪费），选项C将返回值作为printf的参数，这三种调用方式都是语法正确的。",
-                codeExample: "#include <stdio.h>\n\nint max(int a, int b) {\n    return a > b ? a : b;\n}\n\nint main() {\n    // 方式1：接收返回值\n    int result = max(5, 10);\n    printf(\"%d\\n\", result);\n    \n    // 方式2：忽略返回值（合法但不常用）\n    max(5, 10);\n    \n    // 方式3：返回值作为参数\n    printf(\"%d\\n\", max(5, 10));\n    \n    return 0;\n}"
-            },
-            {
-                id: 8,
-                question: "以下代码的输出结果是什么？\n\n<C>\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint main() {\n    int x = 5, y = 10;\n    swap(&x, &y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nvoid swap(int *a, int *b) {\n    int *temp = a;\n    a = b;\n    b = temp;\n}\n\nint main() {\n    int x = 5, y = 10;\n    swap(&x, &y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}\n</C>",
                 options: [
                     "`5 10`",
                     "`10 5`",
-                    "`0 0`",
+                    "未定义行为",
                     "编译错误"
                 ],
-                correctAnswer: 1,
-                explanation: "通过指针传递参数（地址传递），函数可以修改原变量的值。`swap` 函数接收 `x` 和 `y` 的地址，通过解引用修改它们的值，成功交换了两个变量。",
-                codeExample: "#include <stdio.h>\n\nvoid swap(int *a, int *b) {\n    int temp = *a;  // temp = 5\n    *a = *b;        // x = 10\n    *b = temp;      // y = 5\n}\n\nint main() {\n    int x = 5, y = 10;\n    printf(\"交换前：x=%d, y=%d\\n\", x, y);\n    swap(&x, &y);  // 传递地址\n    printf(\"交换后：x=%d, y=%d\\n\", x, y);\n    return 0;\n}"
+                correctAnswer: 0,
+                explanation: "这是「交换指针副本而非交换值」的经典陷阱！`swap`函数交换的是指针`a`和`b`的副本，而不是交换它们指向的值。`a=b`只改变了局部指针a的指向，不影响main中的x和y。「易错点」：1) 交换指针副本≠交换指针指向的值；2) 要交换值需要用`int temp=*a; *a=*b; *b=temp;`；3) 要交换外部指针需要用二级指针。「关键理解」：指针参数也是值传递，修改指针本身不影响外部。",
+                codeExample: "#include <stdio.h>\n\n/* 错误：交换指针副本 */\nvoid swap_wrong(int *a, int *b) {\n    int *temp = a; a = b; b = temp;  /* 只交换了副本 */\n}\n\n/* 正确：交换指针指向的值 */\nvoid swap_right(int *a, int *b) {\n    int temp = *a; *a = *b; *b = temp;  /* 交换值 */\n}\n\nint main() {\n    int x = 5, y = 10;\n    swap_wrong(&x, &y);\n    printf(\"wrong: %d %d\\n\", x, y);  /* 5 10 */\n    \n    swap_right(&x, &y);\n    printf(\"right: %d %d\\n\", x, y);  /* 10 5 */\n    return 0;\n}"
             },
             {
-                id: 9,
-                question: "`pow(2, 3)` 函数调用的返回值是什么？（假设已包含 `<math.h>`）",
+                id: 8,
+                question: "以下代码的输出结果是什么？\n\n<C>\nint func(int a, int b) {\n    return a > b ? a : b;\n}\n\nint main() {\n    printf(\"%d\", func(func(3, 5), func(2, 8)));\n    return 0;\n}\n</C>",
                 options: [
                     "`5`",
-                    "`6`",
-                    "`8.0`",
-                    "`9`"
-                ],
-                correctAnswer: 2,
-                explanation: "`pow(x, y)` 是数学库函数，计算 x 的 y 次方，返回类型是 `double`。`pow(2, 3)` 计算 2³ = 8.0。",
-                codeExample: "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double result = pow(2, 3);  // 2的3次方 = 8.0\n    printf(\"%.1f\\n\", result);   // 8.0\n    \n    // pow返回double类型\n    printf(\"pow(2, 10) = %.0f\\n\", pow(2, 10));  // 1024.0\n    \n    return 0;\n}"
-            },
-            {
-                id: 10,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint count = 0;\n\nvoid increment() {\n    count++;\n}\n\nint main() {\n    increment();\n    increment();\n    increment();\n    printf(\"%d\", count);\n    return 0;\n}\n</C>",
-                options: [
-                    "`0`",
-                    "`1`",
+                    "`8`",
                     "`3`",
                     "未定义行为"
                 ],
+                correctAnswer: 1,
+                explanation: "这是「函数嵌套调用」的陷阱！先计算内层：`func(3,5)`返回5，`func(2,8)`返回8。然后外层：`func(5,8)`返回8。「易错点」：1) 函数参数的求值顺序是未指定的，但这里无论先算哪个内层func，结果都一样；2) 如果两个内层调用有副作用（如修改同一全局变量），结果可能不确定；3) 函数返回值可以直接作为另一个函数的参数。",
+                codeExample: "#include <stdio.h>\n\nint func(int a, int b) {\n    return a > b ? a : b;\n}\n\nint main() {\n    /* 嵌套调用 */\n    int result = func(func(3, 5), func(2, 8));\n    /* 等价于：func(5, 8) = 8 */\n    printf(\"%d\\n\", result);  /* 8 */\n    return 0;\n}"
+            },
+            {
+                id: 9,
+                question: "以下代码的输出结果是什么？\n\n<C>\nint func(int a, int b) {\n    return a + b;\n}\n\nint main() {\n    int (*pf)(int, int) = func;\n    printf(\"%d\", pf(3, 4));\n    return 0;\n}\n</C>",
+                options: [
+                    "`7`",
+                    "编译错误",
+                    "未定义行为",
+                    "`0`"
+                ],
+                correctAnswer: 0,
+                explanation: "这是「函数指针调用」的陷阱！`int (*pf)(int, int) = func`定义了一个函数指针pf，指向func。通过函数指针调用`pf(3,4)`和直接调用`func(3,4)`效果完全相同，返回7。「易错点」：1) 函数名就是函数的地址，不需要`&`运算符；2) `pf(3,4)`和`(*pf)(3,4)`等价；3) 函数指针常用于回调函数和策略模式。",
+                codeExample: "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\nint sub(int a, int b) { return a - b; }\n\nint main() {\n    int (*pf)(int, int) = add;  /* 函数指针 */\n    printf(\"add: %d\\n\", pf(3, 4));     /* 7 */\n    printf(\"add: %d\\n\", (*pf)(3, 4));  /* 7，等价写法 */\n    \n    pf = sub;  /* 指向另一个函数 */\n    printf(\"sub: %d\\n\", pf(3, 4));     /* -1 */\n    return 0;\n}"
+            },
+            {
+                id: 10,
+                question: "以下代码的输出结果是什么？\n\n<C>\nvoid func(int a, int b) {\n    printf(\"%d %d\", a, b);\n}\n\nint main() {\n    func(1);\n    return 0;\n}\n</C>",
+                options: [
+                    "`1 0`",
+                    "`1 随机值`",
+                    "编译错误或未定义行为",
+                    "`1`"
+                ],
                 correctAnswer: 2,
-                explanation: "全局变量 `count` 在所有函数中共享。每次调用 `increment()` 都会使 `count` 加1。调用3次后，`count` 的值为3。",
-                codeExample: "#include <stdio.h>\n\nint count = 0;  // 全局变量\n\nvoid increment() {\n    count++;  // 修改全局变量\n    printf(\"count = %d\\n\", count);\n}\n\nint main() {\n    increment();  // count = 1\n    increment();  // count = 2\n    increment();  // count = 3\n    printf(\"最终 count = %d\\n\", count);\n    return 0;\n}"
+                explanation: "这是「函数参数不匹配」的陷阱！`func`需要2个参数，但调用时只传了1个。C89中这是未定义行为（参数类型不匹配），C99中这是编译错误。「易错点」：1) 如果没有函数声明，编译器不会检查参数个数；2) 有函数声明时，参数不匹配会编译错误；3) C语言不像C++那样支持函数重载和默认参数。「教训」：始终在使用函数前声明函数原型。",
+                codeExample: "#include <stdio.h>\n\n/* 有声明：编译器会检查参数 */\nvoid func(int a, int b);\n\nint main() {\n    /* func(1);  编译错误：参数太少 */\n    func(1, 2);  /* 正确 */\n    return 0;\n}\n\nvoid func(int a, int b) {\n    printf(\"%d %d\\n\", a, b);\n}"
             },
             {
                 id: 11,
@@ -226,16 +226,16 @@ class TemplateLoader {
             },
             {
                 id: 12,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint func(int n) {\n    if (n == 0) return 0;\n    if (n == 1) return 1;\n    return func(n-1) + func(n-2);\n}\n\nint main() {\n    printf(\"%d\", func(5));\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint func(int n) {\n    static int count = 0;\n    count += n;\n    return count;\n}\n\nint main() {\n    printf(\"%d \", func(1));\n    printf(\"%d \", func(2));\n    printf(\"%d\", func(3));\n    return 0;\n}\n</C>",
                 options: [
-                    "`3`",
-                    "`5`",
-                    "`8`",
-                    "`13`"
+                    "`1 2 3`",
+                    "`1 3 6`",
+                    "`0 0 0`",
+                    "`1 2 6`"
                 ],
                 correctAnswer: 1,
-                explanation: "这是斐波那契数列的递归实现。`func(5)` 计算过程：func(5) = func(4) + func(3) = (func(3) + func(2)) + (func(2) + func(1)) = 5。斐波那契数列：0, 1, 1, 2, 3, 5, 8...",
-                codeExample: "#include <stdio.h>\n\nint func(int n) {\n    if (n == 0) return 0;\n    if (n == 1) return 1;\n    return func(n-1) + func(n-2);\n}\n\nint main() {\n    // 斐波那契数列\n    for (int i = 0; i <= 5; i++) {\n        printf(\"func(%d) = %d\\n\", i, func(i));\n    }\n    // 输出：0, 1, 1, 2, 3, 5\n    return 0;\n}"
+                explanation: "这是「static局部变量在函数中」的陷阱！`static int count = 0`只初始化一次，后续调用不会重新初始化。第一次：count=0+1=1；第二次：count=1+2=3；第三次：count=3+3=6。「易错点」：1) 误以为每次调用函数count都重置为0；2) `static`变量在函数调用之间保持其值；3) `static`变量存储在静态区，不是栈上。",
+                codeExample: "#include <stdio.h>\n\nint func(int n) {\n    static int count = 0;  /* 只初始化一次！ */\n    count += n;\n    return count;\n}\n\nint main() {\n    printf(\"%d \", func(1));  /* 1 */\n    printf(\"%d \", func(2));  /* 3 */\n    printf(\"%d\\n\", func(3));  /* 6 */\n    \n    /* 对比：无static */\n    /* int func2(int n) { int count = 0; count += n; return count; } */\n    /* func2(1)=1, func2(2)=2, func2(3)=3 */\n    return 0;\n}"
             },
             {
                 id: 13,
@@ -265,17 +265,18 @@ class TemplateLoader {
             },
             {
                 id: 15,
-                question: "`strcpy(dest, src)` 函数的作用是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint func(int n) {\n    if (n == 0) return 0;\n    return n + func(--n);\n}\n\nint main() {\n    printf(\"%d\", func(5));\n    return 0;\n}\n</C>",
                 options: [
-                    "比较两个字符串是否相等",
-                    "将 `src` 字符串复制到 `dest`",
-                    "连接两个字符串",
-                    "计算字符串长度"
+                    "`15`",
+                    "`10`",
+                    "未定义行为",
+                    "`14`"
                 ],
-                correctAnswer: 1,
-                explanation: "`strcpy()` 是字符串复制函数，将源字符串 `src`（包括'\\0'）复制到目标字符串 `dest`。需要确保 `dest` 有足够的空间。注意：`strcpy` 不检查边界，容易造成缓冲区溢出。",
-                codeExample: "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char src[] = \"Hello\";\n    char dest[20];  // 确保足够大\n    \n    strcpy(dest, src);  // 复制src到dest\n    printf(\"dest = %s\\n\", dest);  // Hello\n    \n    // 注意：dest必须足够大\n    // char small[3];\n    // strcpy(small, src);  // 危险！缓冲区溢出\n    \n    return 0;\n}"
-            },
+                correctAnswer: 2,
+                explanation: "这是「递归中修改参数导致未定义行为」的陷阱！`return n + func(--n)`中，`n`和`--n`在同一表达式中，`n`被读取的同时也被`--n`修改，两者之间没有序列点，这是「未定义行为」。「易错点」：1) 误以为先读取n再递减，结果为5+4+3+2+1=15；2) 实际上编译器可能先执行`--n`再读取n，结果为4+3+2+1+0=10；3) 不同编译器结果不同。「正确写法」：`return n + func(n-1)`。",
+                codeExample: "#include <stdio.h>\n\n/* 危险：未定义行为 */\n/* int func_wrong(int n) { */\n/*     if (n == 0) return 0; */\n/*     return n + func_wrong(--n);  未定义行为！ */\n/* } */\n\n/* 正确：不修改n */\nint func_right(int n) {\n    if (n == 0) return 0;\n    return n + func_right(n - 1);  /* n不变，传n-1 */\n}\n\nint main() {\n    printf(\"%d\\n\", func_right(5));  /* 15 */\n    return 0;\n}"
+            }
+            ,
             {
                 id: 16,
                 question: "以下代码的输出结果是什么？\n\n<C>\nvoid swap(int *a, int *b) {\n    int *temp = a;\n    a = b;\n    b = temp;  /* 交换指针而非值 */\n}\n\nint main() {\n    int x = 5, y = 10;\n    swap(&x, &y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}\n</C>",

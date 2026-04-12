@@ -1,4 +1,4 @@
-﻿// 模板加载器 - 负责动态加载题库数据
+// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         this.questions = [];
@@ -42,21 +42,21 @@ class TemplateLoader {
     getBuiltInQuestions() {
         return [
             {
-                "id": 1,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    int a = 10;\n    int *p = &a;\n    int **pp = &p;\n    **pp = **pp + 1;\n    printf(\"%d %d %d\", a, *p, **pp);\n    return 0;\n}\n</C>",
-                "options": ["`10 10 10`", "`11 11 11`", "`10 11 11`", "编译错误"],
-                "correctAnswer": 1,
-                "explanation": "`pp`指向指针`p`，`p`指向`a`。`**pp`等价于`a`，执行`**pp=**pp+1`即`a=a+1`，将a从10变为11。所有表达式（a、*p、**pp）都指向同一个内存位置，值同步变化为11。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int *p = &a;\n    int **pp = &p;\n    \n    printf(\"初始: a=%d, *p=%d, **pp=%d\\n\", a, *p, **pp);\n    \n    /* 通过二级指针修改 */\n    **pp = **pp + 1;\n    printf(\"修改后: a=%d, *p=%d, **pp=%d\\n\", a, *p, **pp);\n    /* 输出: 11 11 11 */\n    \n    /* 修改指针本身 */\n    int b = 20;\n    *pp = &b;  /* 修改p，使其指向b */\n    printf(\"现在 *p=%d, **pp=%d\\n\", *p, **pp);  /* 20 20 */\n    \n    return 0;\n}"
-            },
+    "id": 1,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint *func() {\n    int a = 10;\n    return &a;\n}\n\nint main() {\n    int *p = func();\n    printf(\"%d\", *p);\n    return 0;\n}\n</C>",
+    "options": ["`10`", "未定义行为", "`0`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「返回局部变量地址」的致命陷阱！`func`返回局部变量`a`的地址，但`a`在函数返回后栈帧被销毁，该地址变成「悬空指针」。解引用悬空指针是「未定义行为」。「易错点」：1) 局部变量存储在栈上，函数返回后内存被回收；2) 可能偶然输出10，但这是不可靠的；3) 正确做法是返回`malloc`分配的内存或使用`static`变量。",
+    "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\n/* 错误：返回局部变量地址 */\n/* int *func_wrong() { int a = 10; return &a; }  悬空指针 */\n\n/* 正确方法1：动态分配 */\nint *func_malloc() {\n    int *p = malloc(sizeof(int));\n    *p = 10;\n    return p;  /* 调用者负责free */\n}\n\n/* 正确方法2：static变量 */\nint *func_static() {\n    static int a = 10;  /* 存储在静态区，不随函数返回销毁 */\n    return &a;\n}\n\nint main() {\n    int *p1 = func_malloc();\n    printf(\"%d\\n\", *p1);  /* 10 */\n    free(p1);\n    \n    int *p2 = func_static();\n    printf(\"%d\\n\", *p2);  /* 10 */\n    return 0;\n}"
+},
             {
-                "id": 2,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[3][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12}};\nint (*p)[4] = arr;\nprintf(\"%d\", *(*(p+1)+2));\n</C>",
-                "options": ["`3`", "`7`", "`6`", "`11`"],
-                "correctAnswer": 1,
-                "explanation": "`p+1` 指向第二行，`*(p+1)` 得到第二行首地址，`*(p+1)+2` 指向第二行第三个元素，`*(*(p+1)+2)` 得到值7。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[3][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12}};\n    int (*p)[4] = arr;\n    \n    printf(\"第0行第0列: %d\\n\", **p);  // 1\n    printf(\"第1行第0列: %d\\n\", *(*(p+1)));  // 5\n    printf(\"第1行第2列: %d\\n\", *(*(p+1)+2));  // 7\n    printf(\"第2行第3列: %d\\n\", *(*(p+2)+3));  // 12\n    \n    return 0;\n}"
-            },
+    "id": 2,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[3][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12}};\nint **p = (int**)arr;\nprintf(\"%d\", p[1][2]);\n</C>",
+    "options": ["`7`", "未定义行为", "`3`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「二级指针与二维数组混淆」的陷阱！`int **p`和`int (*)[4]`是完全不同的类型。`int **p`期望p指向一个「指针数组」，但二维数组`arr`在内存中是连续的，不是指针数组。强制转换后`p[1]`会把arr[0][1]（值为2）当作指针地址，解引用导致「未定义行为」。「易错点」：1) `int **`不能接收`int[3][4]`；2) 正确的类型是`int (*p)[4]`；3) 二维数组≠指针的指针。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[3][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12}};\n    \n    /* 错误：int**不能接收二维数组 */\n    /* int **p = (int**)arr;  类型不匹配！ */\n    \n    /* 正确：使用数组指针 */\n    int (*p)[4] = arr;\n    printf(\"p[1][2] = %d\\n\", p[1][2]);  /* 7 */\n    \n    /* 内存布局：连续12个int */\n    /* arr[0][0]=1, arr[0][1]=2, ..., arr[2][3]=12 */\n    return 0;\n}"
+},
             {
                 "id": 3,
                 "question": "关于函数指针，以下定义正确的是：",
@@ -66,13 +66,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\n\nint multiply(int a, int b) { return a * b; }\n\nint main() {\n    int (*func)(int, int);\n    \n    func = add;\n    printf(\"add: %d\\n\", func(3, 4));  // 7\n    \n    func = multiply;\n    printf(\"multiply: %d\\n\", func(3, 4));  // 12\n    \n    return 0;\n}"
             },
             {
-                "id": 4,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nchar *str[] = {\"Hello\", \"World\", \"C\"};\nprintf(\"%s\", str[1]);\n</C>",
-                "options": ["`Hello`", "`World`", "`C`", "编译错误"],
-                "correctAnswer": 1,
-                "explanation": "`str` 是指针数组，每个元素是指向字符串的指针。`str[1]` 指向第二个字符串「World」。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    char *str[] = {\"Hello\", \"World\", \"C\"};\n    \n    printf(\"%s\\n\", str[0]);  // Hello\n    printf(\"%s\\n\", str[1]);  // World\n    printf(\"%s\\n\", str[2]);  // C\n    \n    // 访问单个字符\n    printf(\"%c\\n\", str[1][0]);  // W\n    printf(\"%c\\n\", str[1][1]);  // o\n    \n    return 0;\n}"
-            },
+    "id": 4,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar *str[] = {\"Hello\", \"World\", \"C\"};\nstr[1][0] = 'G';\nprintf(\"%s\", str[1]);\n</C>",
+    "options": ["`Gorld`", "未定义行为（可能崩溃）", "`World`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「指针数组中修改字符串常量」的陷阱！`str`是指针数组，每个元素指向字符串常量。字符串常量存储在只读区，`str[1][0]='G'`尝试修改只读内存，这是「未定义行为」。「易错点」：1) `char *str[]`中的字符串是常量，不可修改；2) `char str[][10]`中的字符串是数组副本，可以修改；3) 修改字符串常量通常导致段错误。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    /* 危险：指针数组指向常量区 */\n    char *str[] = {\"Hello\", \"World\", \"C\"};\n    /* str[1][0] = 'G';  未定义行为！ */\n    \n    /* 安全：二维数组，字符串在栈上 */\n    char arr[][10] = {\"Hello\", \"World\", \"C\"};\n    arr[1][0] = 'G';\n    printf(\"%s\\n\", arr[1]);  /* Gorld */\n    \n    /* 区别：\n     * char *s[] = {...}  -> 指向常量区，不可修改\n     * char s[][N] = {...} -> 栈上副本，可修改\n     */\n    return 0;\n}"
+},
             {
                 "id": 5,
                 "question": "以下代码中，哪个是正确的函数指针数组定义？",
@@ -82,13 +82,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint add_one(int x) { return x + 1; }\nint mul_two(int x) { return x * 2; }\nint square(int x) { return x * x; }\n\nint main() {\n    int (*func[3])(int) = {add_one, mul_two, square};\n    \n    int num = 5;\n    for (int i = 0; i < 3; i++) {\n        printf(\"func[%d](%d) = %d\\n\", i, num, func[i](num));\n    }\n    \n    return 0;\n}"
             },
             {
-                "id": 6,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    int a = 1, b = 2, c = 3;\n    int *arr[] = {&a, &b, &c};\n    int **p = arr;\n    p++;\n    printf(\"%d\", **p);\n    return 0;\n}\n</C>",
-                "options": ["`1`", "`2`", "`3`", "未定义行为"],
-                "correctAnswer": 1,
-                "explanation": "`int **p=arr`使p指向arr[0]。`p++`后p指向arr[1]（即&b）。`**p`等价于`*arr[1]`=`*(&b)`=b = 2。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3;\n    int *arr[] = {&a, &b, &c};\n    int **p = arr;\n    \n    printf(\"p指向arr[0], **p = %d\\n\", **p);  /* 1 */\n    p++;\n    printf(\"p++后指向arr[1], **p = %d\\n\", **p);  /* 2 */\n    p++;\n    printf(\"再++后指向arr[2], **p = %d\\n\", **p);  /* 3 */\n    \n    return 0;\n}"
-            },
+    "id": 6,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint *func() {\n    static int x = 0;\n    x++;\n    return &x;\n}\n\nint main() {\n    int *a = func();\n    int *b = func();\n    printf(\"%d %d\", *a, *b);\n    return 0;\n}\n</C>",
+    "options": ["`1 2`", "`2 2`", "`1 1`", "未定义行为"],
+    "correctAnswer": 1,
+    "explanation": "这是「返回static变量指针的别名陷阱」！`static int x`只初始化一次，两次调用`func`都返回同一个`x`的地址。第二次调用使x从1变为2，由于`a`和`b`指向同一个变量，`*a`和`*b`都是2。「易错点」：1) a和b是「别名」（指向同一内存）；2) 任何通过a或b的修改都会影响另一个；3) 这是static变量指针的固有陷阱。",
+    "codeExample": "#include <stdio.h>\n\nint *func() {\n    static int x = 0;\n    x++;\n    return &x;  /* 返回同一变量的地址 */\n}\n\nint main() {\n    int *a = func();  /* x=1, a指向x */\n    int *b = func();  /* x=2, b也指向x */\n    printf(\"*a=%d, *b=%d\\n\", *a, *b);  /* 2, 2 */\n    \n    /* a和b指向同一地址 */\n    printf(\"a=%p, b=%p\\n\", (void*)a, (void*)b);  /* 相同 */\n    \n    *a = 100;\n    printf(\"*b=%d\\n\", *b);  /* 100，受影响 */\n    return 0;\n}"
+},
             {
                 "id": 7,
                 "question": "以下代码的输出结果是什么？\n\n<C>\nint *arr[3];\nint a = 10, b = 20, c = 30;\narr[0] = &a; arr[1] = &b; arr[2] = &c;\nprintf(\"%d\", *arr[1]);\n</C>",
@@ -98,13 +98,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    int *arr[3];\n    int a = 10, b = 20, c = 30;\n    \n    arr[0] = &a;\n    arr[1] = &b;\n    arr[2] = &c;\n    \n    printf(\"*arr[0] = %d\\n\", *arr[0]);  // 10\n    printf(\"*arr[1] = %d\\n\", *arr[1]);  // 20\n    printf(\"*arr[2] = %d\\n\", *arr[2]);  // 30\n    \n    return 0;\n}"
             },
             {
-                "id": 8,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint add(int x) { return x + 10; }\nint mul(int x) { return x * 2; }\nint sub(int x) { return x - 5; }\n\nint main() {\n    int (*f[3])(int) = {add, mul, sub};\n    int x = 5;\n    printf(\"%d\", f[1](f[0](x)));\n    return 0;\n}\n</C>",
-                "options": ["`20`", "`30`", "`10`", "`25`"],
-                "correctAnswer": 1,
-                "explanation": "嵌套调用：内层`f[0](x)`=`add(5)` = 15；外层`f[1](15)`=`mul(15)` = 30。",
-                "codeExample": "#include <stdio.h>\n\nint add(int x) { return x + 10; }\nint mul(int x) { return x * 2; }\nint sub(int x) { return x - 5; }\n\nint main() {\n    int (*f[3])(int) = {add, mul, sub};\n    \n    printf(\"f[0](5) = %d\\n\", f[0](5));  /* add: 15 */\n    printf(\"f[1](5) = %d\\n\", f[1](5));  /* mul: 10 */\n    printf(\"f[1](f[0](5)) = %d\\n\", f[1](f[0](5)));  /* mul(add(5)) = 30 */\n    \n    return 0;\n}"
-            },
+    "id": 8,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint add(int a, int b) { return a + b; }\nint (*func)(int) = (int(*)(int))add;\nprintf(\"%d\", func(3, 4));\n</C>",
+    "options": ["`7`", "未定义行为", "`3`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「函数指针类型不匹配」的陷阱！`add`的类型是`int(int,int)`，但`func`被强制转换为`int(*)(int)`（只接受1个参数）。通过错误类型的函数指针调用函数是「未定义行为」。「易错点」：1) 函数指针类型必须与函数签名完全匹配；2) 强制类型转换只能绕过编译器检查，不能改变实际行为；3) 调用时参数传递机制不匹配，可能导致栈损坏。",
+    "codeExample": "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\n\nint main() {\n    /* 正确：类型匹配 */\n    int (*f1)(int, int) = add;\n    printf(\"%d\\n\", f1(3, 4));  /* 7 */\n    \n    /* 错误：类型不匹配，强制转换也无法修复 */\n    /* int (*f2)(int) = (int(*)(int))add; */\n    /* f2(3, 4);  未定义行为！ */\n    \n    return 0;\n}"
+},
             {
                 "id": 9,
                 "question": "关于函数返回指针，以下说法正确的是：",
@@ -114,13 +114,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\n// 正确：返回静态变量地址\nint *method1() {\n    static int x = 10;\n    return &x;\n}\n\n// 正确：返回动态分配的内存\nint *method2() {\n    int *p = (int*)malloc(sizeof(int));\n    if (p != NULL) *p = 20;\n    return p;\n}\n\nint main() {\n    int *p1 = method1();\n    printf(\"method1: %d\\n\", *p1);\n    \n    int *p2 = method2();\n    if (p2 != NULL) {\n        printf(\"method2: %d\\n\", *p2);\n        free(p2);\n    }\n    \n    return 0;\n}"
             },
             {
-                "id": 10,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint x = 10, y = 20;\nint *p[] = {&x, &y};\nint **pp = p;\nprintf(\"%d\", **pp);\n</C>",
-                "options": ["`10`", "`20`", "输出地址", "编译错误"],
-                "correctAnswer": 0,
-                "explanation": "`pp` 指向指针数组p的首元素（指向x的指针），`**pp` 解引用两次得到x的值10。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 10, y = 20;\n    int *p[] = {&x, &y};\n    int **pp = p;\n    \n    printf(\"**pp = %d\\n\", **pp);  // 10\n    printf(\"**(pp+1) = %d\\n\", **(pp+1));  // 20\n    \n    // 修改值\n    **pp = 100;\n    printf(\"x = %d\\n\", x);  // 100\n    \n    return 0;\n}"
-            },
+    "id": 10,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[3][4] = {0};\nint **p = (int**)arr;\nprintf(\"%zu %zu\", sizeof(arr), sizeof(p));\n</C>",
+    "options": ["`48 8`", "`12 8`", "`48 48`", "编译错误"],
+    "correctAnswer": 0,
+    "explanation": "这是「二维数组与二级指针sizeof差异」的陷阱！`sizeof(arr)`=3×4×4=48字节（整个二维数组）。`sizeof(p)`=8字节（64位指针大小）。虽然`p=(int**)arr`做了强制转换，但sizeof只看声明类型。「易错点」：1) sizeof在编译时确定，不受运行时赋值影响；2) `int[3][4]`和`int**`是完全不同的内存布局；3) 强制转换不改变变量类型。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[3][4] = {0};\n    int **p = (int**)arr;  /* 危险的强制转换 */\n    \n    printf(\"sizeof(arr) = %zu\\n\", sizeof(arr));  /* 48 */\n    printf(\"sizeof(p) = %zu\\n\", sizeof(p));    /* 8 */\n    \n    /* 正确的类型 */\n    int (*q)[4] = arr;\n    printf(\"sizeof(q) = %zu\\n\", sizeof(q));    /* 8(指针) */\n    printf(\"sizeof(*q) = %zu\\n\", sizeof(*q));  /* 16(一行) */\n    return 0;\n}"
+},
             {
                 "id": 11,
                 "question": "关于 `void*` 指针，以下说法正确的是：",
@@ -130,13 +130,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    double y = 3.14;\n    void *p;\n    \n    p = &x;\n    printf(\"int: %d\\n\", *(int*)p);\n    \n    p = &y;\n    printf(\"double: %.2f\\n\", *(double*)p);\n    \n    // 错误：不能直接解引用或运算\n    // printf(\"%d\", *p);  // 错误\n    // p++;  // 错误\n    \n    return 0;\n}"
             },
             {
-                "id": 12,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[] = {1, 2, 3, 4, 5};\nint *p1 = arr;\nint *p2 = arr + 4;\nprintf(\"%ld\", p2 - p1);\n</C>",
-                "options": ["`16`（字节差）", "`4`（元素数）", "`20`", "编译错误"],
-                "correctAnswer": 1,
-                "explanation": "两个指针相减得到元素个数差，不是字节数差。p2指向arr[4]，p1指向arr[0]，相差4个元素。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *p1 = arr;\n    int *p2 = arr + 4;\n    \n    printf(\"指针相减: %ld个元素\\n\", p2 - p1);  // 4\n    printf(\"地址差: %ld字节\\n\", (char*)p2 - (char*)p1);  // 16\n    \n    return 0;\n}"
-            },
+    "id": 12,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[] = {10, 20, 30, 40, 50};\nint *p = arr + 3;\nprintf(\"%d\", p[-2]);\n</C>",
+    "options": ["`20`", "`30`", "未定义行为", "编译错误"],
+    "correctAnswer": 0,
+    "explanation": "这是「负数下标」的陷阱！`p[-2]`等价于`*(p-2)`。p指向arr[3]，`p-2`指向arr[1]，值为20。负数下标在C中是合法的，只要不越界。「易错点」：1) `p[-2]`完全合法，等价于`*(p-2)`；2) 但如果p指向数组首元素，`p[-1]`就是越界访问（UB）；3) 负数下标容易导致越界，需格外小心。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 3;\n    \n    printf(\"p[-2] = %d\\n\", p[-2]);  /* 20 */\n    printf(\"p[-1] = %d\\n\", p[-1]);  /* 30 */\n    printf(\"p[0] = %d\\n\", p[0]);   /* 40 */\n    printf(\"p[1] = %d\\n\", p[1]);   /* 50 */\n    \n    /* 等价写法 */\n    printf(\"*(p-2) = %d\\n\", *(p-2));  /* 20 */\n    return 0;\n}"
+},
             {
                 "id": 13,
                 "question": "以下代码的输出结果是什么？\n\n<C>\ntypedef int (*FuncPtr)(int, int);\n\nint add(int a, int b) { return a + b; }\nint sub(int a, int b) { return a - b; }\n\nint main() {\n    FuncPtr f = add;\n    printf(\"%d\", f(10, 5));\n    return 0;\n}\n</C>",
@@ -146,13 +146,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\ntypedef int (*FuncPtr)(int, int);\n\nint add(int a, int b) { return a + b; }\nint sub(int a, int b) { return a - b; }\n\nint main() {\n    FuncPtr f;\n    \n    f = add;\n    printf(\"add(10, 5) = %d\\n\", f(10, 5));\n    \n    f = sub;\n    printf(\"sub(10, 5) = %d\\n\", f(10, 5));\n    \n    return 0;\n}"
             },
             {
-                "id": 14,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint main() {\n    int x = 3, y = 7;\n    swap(&x, &y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}\n</C>",
-                "options": ["`3 7`", "`7 3`", "`3 3`", "编译错误"],
-                "correctAnswer": 1,
-                "explanation": "通过传递指针，`swap`函数可以修改调用者的变量。交换后x=7，y=3。这是指针作为函数参数的经典用法。",
-                "codeExample": "#include <stdio.h>\n\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint main() {\n    int x = 3, y = 7;\n    printf(\"交换前: x=%d, y=%d\\n\", x, y);\n    swap(&x, &y);\n    printf(\"交换后: x=%d, y=%d\\n\", x, y);\n    return 0;\n}"
-            },
+    "id": 14,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nvoid get(int **p) {\n    int x = 42;\n    *p = &x;\n}\n\nint main() {\n    int *ptr = NULL;\n    get(&ptr);\n    printf(\"%d\", *ptr);\n    return 0;\n}\n</C>",
+    "options": ["`42`", "未定义行为", "`0`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「二级指针指向局部变量」的陷阱！虽然正确使用了二级指针来修改外部指针ptr，但`*p=&x`让ptr指向了`get`函数的局部变量x。函数返回后x被销毁，ptr变成「悬空指针」，解引用是「未定义行为」。「易错点」：1) 二级指针用法正确，但指向的对象生命周期不对；2) 局部变量在函数返回后不存在；3) 应返回`malloc`分配的内存或`static`变量的地址。",
+    "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\n/* 错误：指向局部变量 */\n/* void get_wrong(int **p) { int x = 42; *p = &x; }  悬空指针 */\n\n/* 正确方法1：动态分配 */\nvoid get_malloc(int **p) {\n    *p = malloc(sizeof(int));\n    **p = 42;\n}\n\n/* 正确方法2：static变量 */\nvoid get_static(int **p) {\n    static int x = 42;\n    *p = &x;\n}\n\nint main() {\n    int *ptr = NULL;\n    get_malloc(&ptr);\n    printf(\"%d\\n\", *ptr);  /* 42 */\n    free(ptr);\n    return 0;\n}"
+},
             {
                 "id": 15,
                 "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[] = {10, 20, 30, 40, 50};\nint *p = arr + 2;\nprintf(\"%d %d\", *p, *(p - 1));\n</C>",
@@ -162,13 +162,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 2;\n    \n    printf(\"*p = %d\\n\", *p);        /* 30 */\n    printf(\"*(p-1) = %d\\n\", *(p-1));  /* 20 */\n    printf(\"*(p+1) = %d\\n\", *(p+1));  /* 40 */\n    \n    return 0;\n}"
             },
             {
-                "id": 16,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 5;\nint *p = &a;\nint *q = &a;\n*p = 10;\nprintf(\"%d %d\", *p, *q);\n</C>",
-                "options": ["`10 5`", "`5 10`", "`10 10`", "未定义行为"],
-                "correctAnswer": 2,
-                "explanation": "p和q都指向同一个变量a。通过*p修改a为10后，*q也会读到10，因为p和q指向同一块内存。这是「指针别名」问题。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 5;\n    int *p = &a;\n    int *q = &a;\n    \n    printf(\"初始: *p=%d, *q=%d\\n\", *p, *q);  /* 5, 5 */\n    \n    *p = 10;\n    printf(\"修改后: *p=%d, *q=%d\\n\", *p, *q);  /* 10, 10 */\n    \n    /* 两个指针指向同一地址 */\n    printf(\"p=%p, q=%p\\n\", (void*)p, (void*)q);  /* 相同 */\n    \n    return 0;\n}"
-            },
+    "id": 16,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[] = {10, 20, 30};\nint *p = arr;\nchar *cp = (char*)p;\nprintf(\"%td %td\", p+1 - p, cp+1 - cp);\n</C>",
+    "options": ["`1 1`", "`1 4`", "`4 1`", "`4 4`"],
+    "correctAnswer": 1,
+    "explanation": "这是「指针类型决定步长」的陷阱！`p+1-p`中p是`int*`，步长为4字节，差值为1（1个int）。`cp+1-cp`中cp是`char*`，步长为1字节，差值为1（1个char）。但注意：`p+1-p`和`cp+1-cp`的结果类型都是`ptrdiff_t`，值都是1，但含义不同。「易错点」：1) 指针加减以「指向类型的大小」为单位；2) `int*`步长4字节，`char*`步长1字节；3) 同一地址用不同类型指针运算，结果不同。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30};\n    int *p = arr;\n    char *cp = (char*)p;\n    \n    printf(\"p+1 = %p, p = %p\\n\", (void*)(p+1), (void*)p);\n    printf(\"cp+1 = %p, cp = %p\\n\", (void*)(cp+1), (void*)cp);\n    \n    /* int*步长4字节 */\n    printf(\"(char*)(p+1) - (char*)p = %td字节\\n\", \n           (char*)(p+1) - (char*)p);  /* 4 */\n    \n    /* char*步长1字节 */\n    printf(\"cp+1 - cp = %td字节\\n\", cp+1 - cp);  /* 1 */\n    return 0;\n}"
+},
             {
                 "id": 17,
                 "question": "以下关于 `const` 与指针的说法，正确的是？",

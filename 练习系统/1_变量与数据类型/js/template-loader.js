@@ -50,13 +50,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    int _score = 90;     /* 合法 */\n    int student_name = 0; /* 合法 */\n    /* int 2name = 0; */   /* 非法：以数字开头 */\n    /* int int = 0; */     /* 非法：关键字 */\n    /* int my-name = 0; */ /* 非法：包含连字符 */\n    printf(\"_score = %d\\n\", _score);\n    return 0;\n}"
             },
             {
-                "id": 2,
-                "question": "在C语言中，`int`类型通常占用多少字节？",
-                "options": ["1字节", "2字节", "4字节", "8字节"],
-                "correctAnswer": 2,
-                "explanation": "在大多数现代平台上（32位和64位系统），`int`类型通常占用4个字节。但C标准只保证`int`至少为2字节，实际大小取决于平台。使用`sizeof(int)`可获取确切大小。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"char: %lu 字节\\n\", sizeof(char));   /* 1 */\n    printf(\"short: %lu 字节\\n\", sizeof(short)); /* 通常2 */\n    printf(\"int: %lu 字节\\n\", sizeof(int));    /* 通常4 */\n    printf(\"long: %lu 字节\\n\", sizeof(long));  /* 4或8 */\n    return 0;\n}"
-            },
+        "id": 2,
+        "question": "以下代码的输出是什么？\n\n<C>\nint a = 2147483647;\na = a + 1;\nprintf(\"%d\", a);\n</C>",
+        "options": ["`2147483648`", "`-2147483648`", "`0`", "未定义行为"],
+        "correctAnswer": 1,
+        "explanation": "这是「有符号整数溢出」的经典陷阱！`int`在32位系统上最大值是2147483647（`INT_MAX`），加1后发生溢出，结果回绕到最小值-2147483648（`INT_MIN`）。「易错点」：1) 有符号整数溢出在C标准中是未定义行为，但大多数系统采用补码表示，结果回绕；2) 无符号整数溢出则是明确定义的回绕行为；3) 这种bug很难发现，因为编译器通常不会警告。",
+        "codeExample": "#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    int a = INT_MAX;  /* 2147483647 */\n    printf(\"INT_MAX = %d\\n\", a);\n    printf(\"INT_MAX+1 = %d\\n\", a+1);  /* -2147483648! 回绕 */\n    \n    /* 无符号溢出是明确定义的 */\n    unsigned int b = UINT_MAX;  /* 4294967295 */\n    printf(\"UINT_MAX+1 = %u\\n\", b+1);  /* 0 回绕 */\n    \n    return 0;\n}"
+    },
             {
                 "id": 3,
                 "question": "以下代码的输出结果是什么？\n\n<C>\nchar c = 200;\nprintf(\"%d\", c);\n</C>",
@@ -66,13 +66,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    char c = 200;  /* 溢出！200 > 127 */\n    printf(\"%%d格式: %d\\n\", c);   /* -56 */\n    printf(\"%%u格式: %u\\n\", (unsigned char)c);  /* 200 */\n    \n    /* 正确做法 */\n    unsigned char uc = 200;  /* 无符号char范围0-255 */\n    printf(\"unsigned char: %d\\n\", uc);  /* 200 */\n    \n    printf(\"char范围: %d ~ %d\\n\", CHAR_MIN, CHAR_MAX);\n    return 0;\n}"
             },
             {
-                "id": 4,
-                "question": "以下哪个不是C语言的基本数据类型？",
-                "options": ["`int`", "`float`", "`string`", "`char`"],
-                "correctAnswer": 2,
-                "explanation": "C语言没有内置的`string`类型。C语言中字符串是通过字符数组或字符指针来实现的。基本数据类型包括`int`、`float`、`char`、`double`等。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    /* C语言基本数据类型 */\n    int i = 10;\n    float f = 3.14f;\n    char c = 'A';\n    double d = 3.14159;\n    \n    /* C语言没有string类型，用字符数组代替 */\n    char str[] = \"Hello\";  /* 字符数组 */\n    char *ptr = \"World\";   /* 字符指针 */\n    \n    printf(\"%d %f %c %lf %s %s\\n\", i, f, c, d, str, ptr);\n    return 0;\n}"
-            },
+        "id": 4,
+        "question": "以下代码的输出是什么？\n\n<C>\nchar a = 'a';\nchar b = 97;\nif (a == b)\n    printf(\"相等\");\nelse\n    printf(\"不相等\");\n</C>",
+        "options": ["`不相等`", "`相等`", "编译错误", "运行时错误"],
+        "correctAnswer": 1,
+        "explanation": "这是「字符与ASCII码等价」的陷阱！在C语言中，`char`本质上是小整数。`'a'`的ASCII码值就是97，所以`a == b`为真。「易错点」：1) 误以为字符`'a'`和数字`97`是不同类型不能比较；2) C语言中`char`就是整型，`'a'`和`97`完全等价；3) `char c = 'a'`和`char c = 97`效果完全相同。「关键理解」：字符在C中用其ASCII码值存储，字符常量`'a'`就是整数97的另一种写法。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    char a = 'a';\n    char b = 97;\n    printf(\"a == b: %s\\n\", a == b ? \"是\" : \"否\");  /* 是 */\n    printf(\"'a' = %d\\n\", 'a');   /* 97 */\n    printf(\"97 = %c\\n\", 97);    /* a */\n    \n    /* 字符运算 */\n    printf(\"'a'+1 = %c\\n\", 'a'+1);  /* b */\n    printf(\"'A'+32 = %c\\n\", 'A'+32); /* a(大小写转换) */\n    \n    return 0;\n}"
+    },
             {
                 "id": 5,
                 "question": "以下代码的输出结果是什么？\n\n<C>\nfloat f = 3.14f;\nprintf(\"%d\", (int)f);\n</C>",
@@ -90,13 +90,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    const int x = 10;\n    printf(\"x = %d\\n\", x);\n    \n    /* x = 20; */ /* 编译错误：不能修改const变量 */\n    \n    /* 但可以通过指针绕过（不推荐！） */\n    int *p = (int*)&x;\n    *p = 20;  /* 未定义行为，不要这样做！ */\n    printf(\"x = %d\\n\", x);\n    \n    return 0;\n}"
             },
             {
-                "id": 7,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nint a = 10;\nint b = a;\nb = 20;\nprintf(\"%d\", a);\n</C>",
-                "options": ["`10`", "`20`", "编译错误", "未定义行为"],
-                "correctAnswer": 0,
-                "explanation": "`int b = a;`是值拷贝，b获得a的值的副本。修改b不会影响a。基本类型的赋值都是值拷贝。",
-                "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int b = a;   /* b获得a的值的副本 */\n    b = 20;      /* 修改b不影响a */\n    \n    printf(\"a = %d\\n\", a);  /* 10 */\n    printf(\"b = %d\\n\", b);  /* 20 */\n    \n    return 0;\n}"
-            },
+        "id": 7,
+        "question": "以下代码的输出是什么？\n\n<C>\ndouble d = 0.1 + 0.2;\nif (d == 0.3)\n    printf(\"相等\");\nelse\n    printf(\"不相等\");\n</C>",
+        "options": ["`相等`", "`不相等`", "编译错误", "运行时错误"],
+        "correctAnswer": 1,
+        "explanation": "这是「浮点数精度」的经典陷阱！0.1和0.2在二进制中无法精确表示，`0.1+0.2`的实际结果约为0.30000000000000004，不等于0.3。「易错点」：1) 永远不要用`==`比较浮点数；2) 浮点数在计算机中用二进制存储，0.1、0.2等十进制小数无法精确表示；3) 正确做法是判断差值是否小于一个很小的数（如`fabs(d-0.3) < 1e-9`）。「教训」：浮点数比较必须使用容差法。",
+        "codeExample": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double d = 0.1 + 0.2;\n    printf(\"0.1 + 0.2 = %.17f\\n\", d);  /* 0.30000000000000004 */\n    printf(\"d == 0.3: %s\\n\", d == 0.3 ? \"是\" : \"否\");  /* 否 */\n    \n    /* 正确的浮点数比较方法 */\n    double eps = 1e-9;\n    if (fabs(d - 0.3) < eps) {\n        printf(\"近似相等\\n\");\n    }\n    \n    /* 更多浮点陷阱 */\n    float f = 123456789.0f;\n    printf(\"f = %.0f\\n\", f);  /* 123456792! 精度丢失 */\n    \n    return 0;\n}"
+    },
             {
                 "id": 8,
                 "question": "`sizeof(char)` 的值一定是？",

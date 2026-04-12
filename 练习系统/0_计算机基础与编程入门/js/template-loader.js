@@ -73,61 +73,22 @@ class TemplateLoader {
     // 获取内置题库数据（用于 file:// 协议支持）
     getBuiltInQuestions() {
         return [
-    {
-        "id": 1,
-        "question": "计算机的五大基本组成部分不包括以下哪个？",
-        "options": ["运算器", "控制器", "编译器", "存储器"],
-        "correctAnswer": 2,
-        "explanation": "计算机的五大基本组成部分是：运算器（ALU）、控制器、存储器（内存）、输入设备和输出设备。编译器是软件工具，不属于硬件组成部分。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"计算机五大组成:\\n\");\n    printf(\"1. 运算器(ALU)\\n\");\n    printf(\"2. 控制器\\n\");\n    printf(\"3. 存储器(内存)\\n\");\n    printf(\"4. 输入设备\\n\");\n    printf(\"5. 输出设备\\n\");\n    return 0;\n}"
-    },
-    {
-        "id": 2,
-        "question": "在C语言中，源代码文件经过编译后生成的文件是什么？",
-        "options": ["可执行文件(.exe)", "目标文件(.obj)", "汇编文件(.asm)", "源文件(.c)"],
-        "correctAnswer": 1,
-        "explanation": "C语言程序的开发流程：1.编写源代码(.c) → 2.编译生成目标文件(.obj) → 3.链接生成可执行文件(.exe) → 4.运行。编译只生成目标文件，需要链接后才能生成可执行文件。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"C语言开发流程:\\n\");\n    printf(\"1. 编写源代码(.c)\\n\");\n    printf(\"2. 编译生成目标文件(.obj)\\n\");\n    printf(\"3. 链接生成可执行文件(.exe)\\n\");\n    printf(\"4. 运行程序\\n\");\n    return 0;\n}"
-    },
+
     {
         "id": 3,
-        "question": "下列哪个是C语言程序的入口函数？",
-        "options": ["`start()`", "`main()`", "`begin()`", "`init()`"],
+        "question": "以下哪个 `main` 函数的定义是正确的？",
+        "options": ["`void main() { }`", "`int main() { return 0; }`", "`main() { }`", "`int Main() { return 0; }`"],
         "correctAnswer": 1,
-        "explanation": "每个C语言程序必须有且只有一个 `main()` 函数，它是程序的入口点，程序从这里开始执行。其他函数名不是C语言的标准入口函数。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    /* main是程序入口 */\n    printf(\"Hello, World!\\n\");\n    return 0;\n}"
-    },
-    {
-        "id": 4,
-        "question": "以下关于内存的说法，正确的是？",
-        "options": ["内存中的数据断电后不会丢失", "内存比硬盘速度快成千上万倍", "内存就是硬盘", "内存中的数据可以永久保存"],
-        "correctAnswer": 1,
-        "explanation": "内存（RAM）的特点：速度快（比硬盘快成千上万倍）、临时性（断电后数据会丢失）、可读写。内存不是硬盘，硬盘用于永久存储数据。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int age = 18;  /* 变量存储在内存中 */\n    printf(\"age的值: %d\\n\", age);\n    printf(\"程序结束后，age的值丢失\\n\");\n    return 0;\n}"
+        "explanation": "C标准规定 `main` 函数的返回类型必须是 `int`。`void main()` 不符合标准（某些编译器允许但不可移植）。`main()` 在C89中隐式返回int但C99后不合法。`Main()` 大写M不是程序入口。「易错点」：1) `void main()` 在VC++中能编译但不符合标准；2) C语言区分大小写，`Main` ≠ `main`；3) 省略返回类型在C99后非法。",
+        "codeExample": "#include <stdio.h>\n\n/* 正确写法 */\nint main() {\n    printf(\"Hello\\n\");\n    return 0;  /* 返回0表示成功 */\n}\n\n/* 错误写法 */\n/* void main() { }  不符合C标准 */\n/* main() { }       C99后不合法 */\n/* int Main() { }   不是程序入口 */"
     },
     {
         "id": 5,
-        "question": "在C语言中，`#include <stdio.h>` 的作用是什么？",
-        "options": ["定义一个新函数", "包含标准输入输出库的头文件", "声明一个变量", "创建一个新文件"],
+        "question": "以下代码能否正确编译？为什么？\n\n<C>\n#include <stdio.h>\nint main() {\n    printf(\"%d\", sqrt(25));\n    return 0;\n}\n</C>",
+        "options": ["能编译，输出5", "不能编译，缺少 `#include <math.h>`", "能编译，但输出0", "能编译，但输出随机值"],
         "correctAnswer": 1,
-        "explanation": "`#include <stdio.h>` 是预处理指令，告诉编译器包含标准输入输出库的头文件。这样我们才能使用 `printf`、`scanf` 等输入输出函数。",
-        "codeExample": "#include <stdio.h>  /* 包含标准输入输出库 */\n\nint main() {\n    /* 有了stdio.h才能使用printf */\n    printf(\"Hello!\\n\");\n    return 0;\n}"
-    },
-    {
-        "id": 6,
-        "question": "二进制数 `1101` 转换为十进制是多少？",
-        "options": ["`12`", "`13`", "`14`", "`15`"],
-        "correctAnswer": 1,
-        "explanation": "二进制转十进制（按权展开）：1×2³ + 1×2² + 0×2¹ + 1×2⁰ = 8 + 4 + 0 + 1 = 13。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    /* 二进制1101转十进制 */\n    /* 1*8 + 1*4 + 0*2 + 1*1 = 13 */\n    int binary_1101 = 0b1101;  /* C语言中0b前缀表示二进制 */\n    printf(\"二进制1101 = 十进制%d\\n\", binary_1101);  /* 输出: 13 */\n    return 0;\n}"
-    },
-    {
-        "id": 7,
-        "question": "十进制数 `10` 转换为二进制是多少？",
-        "options": ["`1010`", "`1100`", "`1001`", "`0110`"],
-        "correctAnswer": 0,
-        "explanation": "十进制转二进制（除2取余法）：10÷2=5余0，5÷2=2余1，2÷2=1余0，1÷2=0余1。从下往上读：1010。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int dec = 10;\n    printf(\"十进制%d = 二进制\", dec);\n    /* 手动计算: 10 = 1010 */\n    /* 1*8 + 0*4 + 1*2 + 0*1 = 10 */\n    printf(\"1010\\n\");\n    return 0;\n}"
+        "explanation": "这是「头文件依赖」的常见陷阱！`sqrt()` 函数声明在 `<math.h>` 中，不在 `<stdio.h>` 中。缺少 `<math.h>` 会导致编译器不知道 `sqrt` 的函数原型。「易错点」：1) 误以为 `<stdio.h>` 包含所有常用函数；2) 即使编译器隐式声明 `sqrt`（C89允许），参数类型不匹配也会导致错误结果；3) 使用 `gcc` 编译时还需加 `-lm` 链接数学库。「教训」：每个库函数都需要包含对应的头文件。",
+        "codeExample": "#include <stdio.h>\n#include <math.h>  /* 必须包含！sqrt在这里声明 */\n\nint main() {\n    /* 缺少math.h时：编译器不认识sqrt */\n    printf(\"sqrt(25) = %.0f\\n\", sqrt(25));  /* 5 */\n    \n    /* 常见头文件与函数对应： */\n    /* stdio.h  -> printf, scanf, fopen */\n    /* math.h   -> sqrt, pow, sin, cos */\n    /* string.h -> strlen, strcpy, strcmp */\n    /* stdlib.h -> malloc, free, atoi */\n    return 0;\n}"
     },
     {
         "id": 8,
@@ -155,11 +116,11 @@ class TemplateLoader {
     },
     {
         "id": 11,
-        "question": "`printf(\"Hello\\n\");` 中，`\\n` 的作用是什么？",
-        "options": ["输出字符n", "换行", "回车但不换行", "空格"],
+        "question": "以下代码的输出结果是什么？\n\n<C>\nprintf(\"Hello\\0World\");\n</C>",
+        "options": ["`HelloWorld`", "`Hello`", "`Hello\\0World`", "编译错误"],
         "correctAnswer": 1,
-        "explanation": "`\\n` 是转义字符，表示换行（newline）。它让光标移动到下一行的开头。这是C语言中最常用的转义字符之一。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"第一行\\n\");   /* \\n换行 */\n    printf(\"第二行\\n\");   /* \\n换行 */\n    printf(\"第三行\");     /* 没有换行 */\n    return 0;\n}"
+        "explanation": "这是「`\\0`空字符截断输出」的陷阱！`\\0`是字符串结束标志，`printf`的`%s`格式遇到`\\0`就停止输出。所以只输出`Hello`，`World`不会被输出。「易错点」：1) 误以为`\\0`会原样输出；2) `\\0`和`0`不同：`\\0`是空字符（ASCII码0），`0`是数字字符（ASCII码48）；3) C语言所有字符串都以`\\0`结尾，这是字符串处理函数判断结束的依据。",
+        "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    /* \\\\0截断输出 */\n    printf(\"输出: %s\\n\", \"Hello\\0World\");  /* 只输出Hello */\n    \n    /* sizeof vs strlen */\n    char str[] = \"Hello\\0World\";\n    printf(\"sizeof: %zu\\n\", sizeof(str));   /* 12(含末尾\\\\0) */\n    printf(\"strlen: %zu\\n\", strlen(str));   /* 5(遇到第一个\\\\0停止) */\n    \n    /* \\\\0和0的区别 */\n    printf(\"'\\\\0'的ASCII: %d\\n\", '\\0');   /* 0 */\n    printf(\"'0'的ASCII: %d\\n\", '0');     /* 48 */\n    \n    return 0;\n}"
     },
     {
         "id": 12,
@@ -243,11 +204,11 @@ class TemplateLoader {
     },
     {
         "id": 22,
-        "question": "以下关于C语言的说法，错误的是？",
-        "options": ["C语言是高级语言", "C语言可以直接操作硬件", "C语言不需要编译就能运行", "C语言生成的代码执行效率高"],
+        "question": "以下代码的输出是什么？\n\n<C>\nint i = 1;\nint j = i++ + i++;\nprintf(\"%d %d\", i, j);\n</C>",
+        "options": ["`3 2`", "`3 3`", "未定义行为", "`2 2`"],
         "correctAnswer": 2,
-        "explanation": "C语言是高级语言，但需要经过编译、链接后才能运行。源代码(.c)必须先编译成目标文件(.obj)，再链接成可执行文件(.exe)，最后才能运行。C语言不能直接运行源代码。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    printf(\"C语言开发步骤:\\n\");\n    printf(\"1. 编写源代码\\n\");\n    printf(\"2. 编译(必须!)\\n\");\n    printf(\"3. 链接\\n\");\n    printf(\"4. 运行\\n\");\n    return 0;\n}"
+        "explanation": "这是「序列点」的经典陷阱！在同一表达式中对同一变量多次修改是「未定义行为」。`i++ + i++` 中 `i` 被修改了两次，两次修改之间没有序列点。「易错点」：1) 不同编译器可能给出不同结果（2、3等）；2) C标准规定这是未定义行为，任何结果都是可能的；3) 类似的还有 `a[i] = i++`、`f(i++, i++)` 等。「规则」：在两个序列点之间，同一变量的值最多只能被修改一次。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int i = 1;\n    \n    /* 未定义行为！i被修改两次 */\n    /* int j = i++ + i++;  不同编译器结果不同 */\n    \n    /* 正确写法：分开操作 */\n    int a = i++;  /* a=1, i=2 */\n    int b = i++;  /* b=2, i=3 */\n    printf(\"i=%d, a+b=%d\\n\", i, a+b);  /* i=3, a+b=3 */\n    \n    /* 其他未定义行为示例： */\n    /* a[i] = i++;          未定义行为 */\n    /* printf(\"%d %d\", i++, i++);  未定义行为 */\n    return 0;\n}"
     },
     {
         "id": 23,

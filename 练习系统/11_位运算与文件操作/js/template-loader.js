@@ -1,4 +1,4 @@
-﻿// 模板加载器 - 负责动态加载题库数据
+// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         console.log('[TemplateLoader] 构造函数已调用');
@@ -95,57 +95,57 @@ class TemplateLoader {
                 codeExample: "#include <stdio.h>\n\n#define FLAG_READ  0x01\n#define FLAG_WRITE 0x02\n\nint main() {\n    int x = 2, y = 3;\n    \n    /* 错误：& 优先级低于 == */\n    if (x & y == 2)  /* 解析为: x & (y==2) = 2 & 0 = 0 */\n        printf(\"错误写法: True\\n\");\n    else\n        printf(\"错误写法: False\\n\");  /* 输出此行 */\n    \n    /* 正确：加括号 */\n    if ((x & y) == 2)  /* (2&3)==2 → 2==2 → True */\n        printf(\"正确写法: True\\n\");  /* 输出此行 */\n    else\n        printf(\"正确写法: False\\n\");\n    \n    /* 实际应用场景 */\n    int permissions = FLAG_READ | FLAG_WRITE;  /* 3 (0011) */\n    \n    /* 错误检查 */\n    if (permissions & FLAG_READ == FLAG_READ)  /* 错误！ */\n        printf(\"有读权限(错误)\\n\");\n    else\n        printf(\"无读权限(错误)\\n\");  /* 误判 */\n    \n    /* 正确检查 */\n    if ((permissions & FLAG_READ) == FLAG_READ)  /* 正确 */\n        printf(\"有读权限(正确)\\n\");  /* 输出 */\n    \n    /* 更简洁写法 */\n    if (permissions & FLAG_READ)  /* 非零即真 */\n        printf(\"有读权限(简洁)\\n\");\n    \n    return 0;\n}"
             },
             {
-                id: 2,
-                question: "关于按位或运算（|），以下说法正确的是：",
-                options: [
-                    "只有对应位都是1时结果为1",
-                    "只有对应位都是0时结果为0",
-                    "对应位有一个是1时结果为1",
-                    "对应位不同时结果为1"
-                ],
-                correctAnswer: 2,
-                explanation: "按位或（|）：对应位有至少一个是1时结果为1，两个都是0时结果为0。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 12;  // 1100\n    int b = 10;  // 1010\n    \n    int result = a | b;  // 1110 = 14\n    printf(\"%d | %d = %d\\n\", a, b, result);\n    \n    // 常用于设置标志位\n    int flags = 0;\n    flags = flags | 1;  // 设置第0位\n    flags = flags | 4;  // 设置第2位\n    printf(\"flags = %d (二进制: 0101)\\n\", flags);\n    \n    return 0;\n}"
-            },
+    id: 2,
+    question: "以下代码的输出结果是什么？\n\n<C>\nint a = 5, b = 0;\nif (a | b)\n    printf(\"A \");\nif (a || b)\n    printf(\"B \");\nb = 0;\nif (a & b)\n    printf(\"C \");\nif (a && b)\n    printf(\"D\");\n</C>",
+    options: [
+        "`A B`",
+        "`A B C D`",
+        "`B`",
+        "`A B C`"
+    ],
+    correctAnswer: 0,
+    explanation: "这是「位运算与逻辑运算混淆」的陷阱！`a|b`=5|0=5(非零为真)，`a||b`=5||0=1(真)。`a&b`=5&0=0(假)，`a&&b`=5&&0=0(假)。所以输出A B。「易错点」：1) `|`是按位或，不短路；`||`是逻辑或，短路求值；2) `&`是按位与，不短路；`&&`是逻辑与，短路求值；3) 位运算结果是数值，逻辑运算结果是0或1。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 5, b = 0;\n    printf(\"5|0 = %d\\n\", a|b);    /* 5(位或) */\n    printf(\"5||0 = %d\\n\", a||b);  /* 1(逻辑或) */\n    printf(\"5&0 = %d\\n\", a&b);    /* 0(位与) */\n    printf(\"5&&0 = %d\\n\", a&&b);  /* 0(逻辑与) */\n    \n    /* 短路区别： */\n    int x = 0;\n    /* if (x != 0 | ++y > 0)  位或：y会自增 */\n    /* if (x != 0 || ++y > 0) 逻辑或：y不会自增(短路) */\n    return 0;\n}"
+},
             {
-                id: 3,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 8;  // 二进制: 1000\nprintf(\"%d\", x >> 2);\n</C>",
-                options: [
-                    "`2`",
-                    "`4`",
-                    "`16`",
-                    "`32`"
-                ],
-                correctAnswer: 0,
-                explanation: "右移运算（>>）：将二进制位向右移动。1000 >> 2 = 0010，十进制为2。右移n位相当于除以2^n。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 8;  // 1000\n    \n    printf(\"x >> 1 = %d\\n\", x >> 1);  // 0100 = 4\n    printf(\"x >> 2 = %d\\n\", x >> 2);  // 0010 = 2\n    printf(\"x >> 3 = %d\\n\", x >> 3);  // 0001 = 1\n    \n    // 等价于除法\n    printf(\"x / 2 = %d\\n\", x / 2);\n    printf(\"x / 4 = %d\\n\", x / 4);\n    \n    return 0;\n}"
-            },
+    id: 3,
+    question: "以下代码的输出结果是什么？\n\n<C>\nint x = -8;\nprintf(\"%d\", x >> 2);\n</C>",
+    options: [
+        "`-2`",
+        "`1073741822`",
+        "未定义行为",
+        "`2`"
+    ],
+    correctAnswer: 0,
+    explanation: "这是「有符号负数右移」的陷阱！C标准规定有符号负数的右移是「实现定义行为」。大多数系统采用「算术右移」（高位补符号位1），所以-8>>2=-2。「易错点」：1) 算术右移高位补1（符号位），逻辑右移高位补0；2) C标准不保证一定是算术右移；3) -8的二进制(补码)：1111...1000，右移2位得1111...1110=-2。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    int x = -8;\n    printf(\"-8 >> 2 = %d\\n\", x >> 2);  /* -2(算术右移) */\n    \n    /* 对比无符号右移 */\n    unsigned int y = 0xFFFFFFF8;  /* -8的无符号表示 */\n    printf(\"unsigned >> 2 = %u\\n\", y >> 2);  /* 逻辑右移，高位补0 */\n    \n    /* 安全做法：用无符号类型 */\n    return 0;\n}"
+},
             {
-                id: 4,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 3;  // 二进制: 0011\nprintf(\"%d\", x << 2);\n</C>",
-                options: [
-                    "`6`",
-                    "`9`",
-                    "`12`",
-                    "`1`"
-                ],
-                correctAnswer: 2,
-                explanation: "左移运算（<<）：将二进制位向左移动。0011 << 2 = 1100，十进制为12。左移n位相当于乘以2^n。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 3;  // 0011\n    \n    printf(\"x << 1 = %d\\n\", x << 1);  // 0110 = 6\n    printf(\"x << 2 = %d\\n\", x << 2);  // 1100 = 12\n    printf(\"x << 3 = %d\\n\", x << 3);  // 11000 = 24\n    \n    // 等价于乘法\n    printf(\"x * 2 = %d\\n\", x * 2);\n    printf(\"x * 4 = %d\\n\", x * 4);\n    \n    return 0;\n}"
-            },
+    id: 4,
+    question: "以下代码的输出结果是什么？\n\n<C>\nint x = 1;\nprintf(\"%d\", x << 32);\n</C>",
+    options: [
+        "`0`",
+        "`4294967296`",
+        "未定义行为",
+        "`1`"
+    ],
+    correctAnswer: 2,
+    explanation: "这是「移位量超出位宽」的陷阱！C标准规定：如果移位量大于等于数据类型的位数（int为32位），这是「未定义行为」。「易错点」：1) `1<<32`不是2^32，而是UB；2) 不同编译器结果不同：可能为0、1或4294967296；3) 正确做法是使用`1LL<<32`或确保移位量小于位数；4) `1<<31`也是UB（有符号整数溢出），应用`1U<<31`。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    /* 未定义行为！移位量>=位数 */\n    /* printf(\"%d\", 1 << 32);  UB! */\n    \n    /* 正确：使用long long */\n    printf(\"1LL << 32 = %lld\\n\", 1LL << 32);  /* 4294967296 */\n    \n    /* 正确：使用unsigned */\n    printf(\"1U << 31 = %u\\n\", 1U << 31);  /* 2147483648 */\n    \n    /* 错误：有符号溢出 */\n    /* printf(\"%d\", 1 << 31);  未定义行为! */\n    return 0;\n}"
+},
             {
-                id: 5,
-                question: "关于按位异或运算（^），以下说法正确的是：",
-                options: [
-                    "对应位相同时结果为1",
-                    "对应位不同时结果为1",
-                    "对应位都是1时结果为1",
-                    "对应位都是0时结果为1"
-                ],
-                correctAnswer: 1,
-                explanation: "按位异或（^）：对应位不同时结果为1，相同时结果为0。常用于交换变量、加密等。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 5;  // 0101\n    int b = 3;  // 0011\n    \n    printf(\"a ^ b = %d\\n\", a ^ b);  // 0110 = 6\n    \n    // 异或性质：a ^ a = 0, a ^ 0 = a\n    printf(\"a ^ a = %d\\n\", a ^ a);  // 0\n    printf(\"a ^ 0 = %d\\n\", a ^ 0);  // 5\n    \n    // 交换两个数（不用临时变量）\n    int x = 10, y = 20;\n    x = x ^ y;\n    y = x ^ y;  // y = (x^y) ^ y = x\n    x = x ^ y;  // x = (x^y) ^ x = y\n    printf(\"交换后: x=%d, y=%d\\n\", x, y);\n    \n    return 0;\n}"
-            },
+    id: 5,
+    question: "以下代码的输出结果是什么？\n\n<C>\nint a = 5;\na = a ^ a;\nprintf(\"%d\", a);\n</C>",
+    options: [
+        "`5`",
+        "`0`",
+        "`10`",
+        "未定义行为"
+    ],
+    correctAnswer: 1,
+    explanation: "这是「XOR自反性」的陷阱！`a^a=0`，任何数与自身异或结果为0。这也是XOR交换变量的基础，但如果对同一变量使用XOR交换会清零。「易错点」：1) `a^a=0`，`a^0=a`（XOR性质）；2) XOR交换`a^=b; b^=a; a^=b;`在a和b是同一变量时会清零；3) 实际开发中应使用临时变量交换，更安全可读。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 5;\n    printf(\"a ^ a = %d\\n\", a ^ a);  /* 0 */\n    printf(\"a ^ 0 = %d\\n\", a ^ 0);  /* 5 */\n    \n    /* XOR交换陷阱：同一变量会清零 */\n    int x = 10;\n    /* 如果 &x == &y（同一变量）： */\n    /* x ^= x;  x = 0 */\n    /* x ^= x;  x = 0^0 = 0 */\n    /* x ^= x;  x = 0^0 = 0 */\n    /* 结果：x被清零！ */\n    \n    /* 安全交换：用临时变量 */\n    int temp = x;\n    return 0;\n}"
+},
             {
                 id: 6,
                 question: "以下代码的输出结果是什么？\n\n<C>\nint main() {\n    signed char x = -4;  /* 11111100 (8位补码) */\n    int y = x >> 1;  /* 算术右移 */\n    printf(\"%d\", y);\n    return 0;\n}\n</C>",
@@ -160,57 +160,57 @@ class TemplateLoader {
                 codeExample: "#include <stdio.h>\n\nint main() {\n    /* 有符号数右移 */\n    signed char x = -4;  /* 11111100 */\n    printf(\"x = %d (11111100)\\n\", x);\n    \n    int y = x >> 1;  /* 算术右移: 11111110 = -2 */\n    printf(\"x >> 1 = %d\\n\", y);  /* -2 */\n    printf(\"x / 2 = %d\\n\", x / 2);  /* -2 */\n    \n    /* 无符号数右移 */\n    unsigned char ux = 252;  /* 11111100 */\n    printf(\"\\nux = %u (11111100)\\n\", ux);\n    \n    unsigned int uy = ux >> 1;  /* 逻辑右移: 01111110 = 126 */\n    printf(\"ux >> 1 = %u\\n\", uy);  /* 126 */\n    printf(\"ux / 2 = %u\\n\", ux / 2);  /* 126 */\n    \n    /* 陷阱对比 */\n    signed char s = -8;\n    unsigned char u = 248;  /* 相同位模式 */\n    \n    printf(\"\\n有符号 -8 >> 2 = %d\\n\", s >> 2);  /* -2 (填充1) */\n    printf(\"无符号 248 >> 2 = %u\\n\", u >> 2);  /* 62 (填充0) */\n    \n    /* 左移：都是逻辑左移 */\n    printf(\"\\n-4 << 1 = %d\\n\", -4 << 1);  /* -8 */\n    printf(\"252 << 1 = %u\\n\", 252u << 1);  /* 504 */\n    \n    return 0;\n}"
             },
             {
-                id: 7,
-                question: "以下代码实现的功能是：\n\n<C>\nint check_bit(int num, int pos) {\n    return (num >> pos) & 1;\n}\n</C>",
-                options: [
-                    "设置第pos位为1",
-                    "清除第pos位为0",
-                    "检查第pos位是否为1",
-                    "翻转第pos位"
-                ],
-                correctAnswer: 2,
-                explanation: "将num右移pos位后，最低位就是原第pos位。与1做与运算得到该位的值（0或1）。",
-                codeExample: "#include <stdio.h>\n\nint check_bit(int num, int pos) {\n    return (num >> pos) & 1;\n}\n\nint set_bit(int num, int pos) {\n    return num | (1 << pos);\n}\n\nint clear_bit(int num, int pos) {\n    return num & ~(1 << pos);\n}\n\nint toggle_bit(int num, int pos) {\n    return num ^ (1 << pos);\n}\n\nint main() {\n    int x = 5;  // 0101\n    \n    printf(\"x = %d (0101)\\n\", x);\n    printf(\"第0位: %d\\n\", check_bit(x, 0));  // 1\n    printf(\"第1位: %d\\n\", check_bit(x, 1));  // 0\n    printf(\"第2位: %d\\n\", check_bit(x, 2));  // 1\n    \n    printf(\"\\n设置第1位: %d\\n\", set_bit(x, 1));  // 7 (0111)\n    printf(\"清除第0位: %d\\n\", clear_bit(x, 0));  // 4 (0100)\n    printf(\"翻转第1位: %d\\n\", toggle_bit(x, 1));  // 7 (0111)\n    \n    return 0;\n}"
-            },
+    id: 7,
+    question: "以下代码的输出结果是什么？\n\n<C>\nint x = 13;  // 二进制: 1101\nx = x & (x - 1);\nprintf(\"%d\", x);\n</C>",
+    options: [
+        "`12`",
+        "`13`",
+        "`1`",
+        "`0`"
+    ],
+    correctAnswer: 0,
+    explanation: "这是「x&(x-1)清除最右1」的位运算技巧！`x-1`将最右边的1变为0，其右边的0全变为1。`x&(x-1)`的效果是清除最右边的1。13=1101，12=1100，1101&1100=1100=12。「易错点」：1) 这个技巧常用于统计1的个数；2) `x&(x-1)`每次清除一个1，循环直到0的次数就是1的个数；3) 类似技巧还有`x&(-x)`获取最右1。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 13;  /* 1101 */\n    printf(\"x = %d\\n\", x);\n    x = x & (x - 1);  /* 清除最右1: 1100=12 */\n    printf(\"x & (x-1) = %d\\n\", x);  /* 12 */\n    x = x & (x - 1);  /* 1000=8 */\n    printf(\"再次: %d\\n\", x);  /* 8 */\n    x = x & (x - 1);  /* 0000=0 */\n    printf(\"再次: %d\\n\", x);  /* 0 */\n    \n    /* 统计1的个数 */\n    int count = 0, n = 13;\n    while (n) { n &= n - 1; count++; }\n    printf(\"13有%d个1\\n\", count);  /* 3 */\n    return 0;\n}"
+},
             {
-                id: 8,
-                question: "关于文件操作函数 `fopen`，以下说法正确的是：",
-                options: [
-                    "`fopen` 失败时返回0",
-                    "`fopen` 失败时返回NULL",
-                    "`fopen` 失败时返回-1",
-                    "`fopen` 永远不会失败"
-                ],
-                correctAnswer: 1,
-                explanation: "`fopen` 失败时返回NULL指针。使用前应检查返回值，避免对NULL指针操作导致程序崩溃。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    FILE *fp = fopen(\"test.txt\", \"r\");\n    \n    if (fp == NULL) {\n        printf(\"文件打开失败\\n\");\n        return 1;\n    }\n    \n    printf(\"文件打开成功\\n\");\n    \n    // 使用文件...\n    \n    fclose(fp);\n    return 0;\n}"
-            },
+    id: 8,
+    question: "以下代码的输出结果是什么？\n\n<C>\nFILE *fp = fopen(\"nonexist.txt\", \"r\");\nfprintf(fp, \"Hello\");\nprintf(\"done\");\n</C>",
+    options: [
+        "`done`",
+        "段错误（崩溃）",
+        "编译错误",
+        "创建nonexist.txt并写入Hello"
+    ],
+    correctAnswer: 1,
+    explanation: "这是「fopen返回值未检查」的陷阱！`fopen(\"nonexist.txt\", \"r\")`打开不存在的文件会返回NULL。对NULL指针调用`fprintf`是未定义行为，通常导致段错误。「易错点」：1) 必须检查fopen返回值是否为NULL；2) 使用\"r\"模式打开不存在的文件会失败；3) 使用\"w\"模式会创建文件不会返回NULL。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    FILE *fp = fopen(\"nonexist.txt\", \"r\");\n    \n    /* 必须检查返回值！ */\n    if (fp == NULL) {\n        printf(\"文件打开失败\\n\");\n        return 1;\n    }\n    \n    fprintf(fp, \"Hello\");  /* 只有fp非NULL才能使用 */\n    fclose(fp);\n    return 0;\n}"
+},
             {
-                id: 9,
-                question: "以下哪个是正确的文件打开模式？",
-                options: [
-                    "`\"r\"` - 读取模式，文件不存在则创建",
-                    "`\"w\"` - 写入模式，文件存在则覆盖",
-                    "`\"a\"` - 追加模式，文件不存在则报错",
-                    "`\"x\"` - 独占模式"
-                ],
-                correctAnswer: 1,
-                explanation: "`\"r\"` 读取，文件不存在返回NULL；`\"w\"` 写入，文件存在则清空；`\"a\"` 追加，文件不存在则创建。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    // 读取模式（文件必须存在）\n    FILE *fp1 = fopen(\"input.txt\", \"r\");\n    \n    // 写入模式（清空或创建）\n    FILE *fp2 = fopen(\"output.txt\", \"w\");\n    \n    // 追加模式（不清空，追加到末尾）\n    FILE *fp3 = fopen(\"log.txt\", \"a\");\n    \n    // 读写模式\n    FILE *fp4 = fopen(\"data.txt\", \"r+\");\n    \n    // 关闭文件\n    if (fp1) fclose(fp1);\n    if (fp2) fclose(fp2);\n    if (fp3) fclose(fp3);\n    if (fp4) fclose(fp4);\n    \n    return 0;\n}"
-            },
+    id: 9,
+    question: "以下代码的输出结果是什么？\n\n<C>\nFILE *fp = fopen(\"test.txt\", \"a+\");\nfseek(fp, 0, SEEK_SET);\nfprintf(fp, \"Hello\");\nfclose(fp);\n</C>\n\n假设test.txt原有内容为\"ABC\"",
+    options: [
+        "文件内容变为`ABCHello`",
+        "文件内容变为`HelloABC`",
+        "文件内容变为`ABCHello`（Hello追加到末尾）",
+        "文件内容变为`Hello`"
+    ],
+    correctAnswer: 2,
+    explanation: "这是「a+模式写入位置」的陷阱！`a+`模式允许读取和追加写入。虽然`fseek`可以移动读取位置，但「写入操作总是在文件末尾进行」，不受`fseek`影响。所以`Hello`追加到ABC后面，文件内容为`ABCHello`。「易错点」：1) `a+`模式的写入总是追加到末尾，fseek只影响读取位置；2) `r+`模式的写入位置受fseek控制；3) `w+`模式会清空文件。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    /* a+模式：写入总在末尾 */\n    FILE *fp = fopen(\"test.txt\", \"a+\");\n    fseek(fp, 0, SEEK_SET);  /* 只影响读取位置 */\n    fprintf(fp, \"Hello\");    /* 写入仍在末尾 */\n    fclose(fp);\n    \n    /* 对比r+模式：写入位置受fseek控制 */\n    /* FILE *fp2 = fopen(\"test.txt\", \"r+\"); */\n    /* fseek(fp2, 0, SEEK_SET); */\n    /* fprintf(fp2, \"Hello\");  写入在文件开头 */\n    return 0;\n}"
+},
             {
-                id: 10,
-                question: "以下代码的功能是：\n\n<C>\nFILE *fp = fopen(\"data.txt\", \"w\");\nif (fp != NULL) {\n    fputc('A', fp);\n    fclose(fp);\n}\n</C>",
-                options: [
-                    "从文件读取一个字符",
-                    "向文件写入一个字符",
-                    "向文件写入一个字符串",
-                    "删除文件"
-                ],
-                correctAnswer: 1,
-                explanation: "`fputc` 向文件写入一个字符。这段代码创建文件并写入字符'A'。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    // 写入单个字符\n    FILE *fp = fopen(\"test.txt\", \"w\");\n    if (fp != NULL) {\n        fputc('H', fp);\n        fputc('e', fp);\n        fputc('l', fp);\n        fputc('l', fp);\n        fputc('o', fp);\n        fclose(fp);\n    }\n    \n    // 读取单个字符\n    fp = fopen(\"test.txt\", \"r\");\n    if (fp != NULL) {\n        int ch;\n        while ((ch = fgetc(fp)) != EOF) {\n            putchar(ch);\n        }\n        fclose(fp);\n    }\n    \n    return 0;\n}"
-            },
+    id: 10,
+    question: "以下代码的输出结果是什么？\n\n<C>\nchar buf[5];\nFILE *fp = fopen(\"test.txt\", \"r\");  // 内容为\"ABCDE\"\nfgets(buf, 5, fp);\nprintf(\"%s\", buf);\n</C>",
+    options: [
+        "`ABCD`",
+        "`ABCDE`",
+        "`ABC`",
+        "未定义行为"
+    ],
+    correctAnswer: 0,
+    explanation: "这是「fgets读取长度」的陷阱！`fgets(buf, 5, fp)`最多读取4个字符（保留1个位置给`\\0`），所以只读取ABCD。「易错点」：1) fgets的第二个参数n表示最多读取n-1个字符，第n个位置存`\\0`；2) 如果遇到换行符或EOF会提前结束；3) 读取的字符数=min(n-1, 实际可用字符数)。",
+    codeExample: "#include <stdio.h>\n\nint main() {\n    char buf[5];\n    FILE *fp = fopen(\"test.txt\", \"r\");  /* 内容ABCDE */\n    \n    fgets(buf, 5, fp);  /* 最多读4个字符+\\\\0 */\n    printf(\"buf = [%s]\\n\", buf);  /* ABCD */\n    printf(\"buf[4] = %d\\n\", buf[4]);  /* 0(\\\\0) */\n    \n    /* 继续读取 */\n    fgets(buf, 5, fp);  /* 读取剩余的E+\\\\n */\n    printf(\"next = [%s]\\n\", buf);  /* E */\n    \n    fclose(fp);\n    return 0;\n}"
+},
             {
                 id: 11,
                 question: "以下代码可能产生什么问题？\n\n<C>\nFILE *fp = fopen(\"binary.dat\", \"rb\");\nif (fp != NULL) {\n    char ch;  /* 错误：应该是int */\n    while ((ch = fgetc(fp)) != EOF) {\n        putchar(ch);\n    }\n    fclose(fp);\n}\n</C>",

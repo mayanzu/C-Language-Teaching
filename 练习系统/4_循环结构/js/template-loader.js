@@ -51,37 +51,37 @@ class TemplateLoader {
                 codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 0;\n    \n    /* 后缀自增：先比较后自增 */\n    while (i++ < 5) {  /* 先用i值比较，再i自增 */\n        printf(\"%d \", i);  /* 输出自增后的值 */\n    }\n    printf(\"\\n最终i=%d\\n\", i);  /* 输出6 */\n    \n    /* 对比：前缀自增 */\n    int j = 0;\n    while (++j < 5) {  /* 先自增，再比较 */\n        printf(\"%d \", j);  /* 输出1 2 3 4 */\n    }\n    printf(\"\\n最终j=%d\\n\", j);  /* 输出5 */\n    \n    return 0;\n}"
             },
             {
-                id: 2,
-                question: "以下代码执行后sum的值是多少？\n\n<C>\nint i = 1, sum = 0;\nwhile (i <= 10) {\n    sum += i;\n    i++;\n}\nprintf(\"%d\", sum);\n</C>",
-                options: ["45", "55", "10", "0"],
-                correctAnswer: 1,
-                explanation: "while循环累加1到10的所有整数：1+2+3+...+10=55。这是while循环求和的经典应用。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1, sum = 0;\n    while (i <= 10) {\n        sum += i;  // sum = sum + i\n        i++;\n    }\n    printf(\"%d\", sum);  // 输出55\n    return 0;\n}"
-            },
+        id: 2,
+        question: "以下代码的输出结果是什么？\n\n<C>\nint i = 0;\nwhile (i < 5);\n{\n    printf(\"%d \", i);\n    i++;\n}\n</C>",
+        options: ["`0 1 2 3 4`", "无限循环", "编译错误", "`0`"],
+        correctAnswer: 1,
+        explanation: "这是「分号导致空循环体」的致命陷阱！`while(i<5);`后面的分号使循环体为空语句，i永远不变，导致无限循环。「易错点」：1) `while`后面的分号`;`使循环体变成空语句；2) 花括号`{}`内的代码不是循环体，而是循环后的普通代码块；3) 类似陷阱也出现在`for`和`if`语句后。「教训」：写循环时注意不要在条件后多加分号。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 0;\n    /* while(i < 5);  <- 分号导致无限循环！ */\n    /* { printf(\"%d \", i); i++; } 不是循环体 */\n    \n    /* 正确写法：无分号 */\n    while (i < 5) {\n        printf(\"%d \", i);\n        i++;\n    }\n    /* 输出：0 1 2 3 4 */\n    return 0;\n}"
+    },
             {
-                id: 3,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint n = 5;\nwhile (n > 0) {\n    printf(\"%d \", n);\n    n--;\n}\n</C>",
-                options: ["5 4 3 2 1", "1 2 3 4 5", "5 4 3 2", "无限循环"],
-                correctAnswer: 0,
-                explanation: "while循环从n = 5开始递减，每次输出n并减1，直到n = 0时停止。输出5 4 3 2 1。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int n = 5;\n    while (n > 0) {\n        printf(\"%d \", n);  // 输出5 4 3 2 1\n        n--;\n    }\n    return 0;\n}"
-            },
+        id: 3,
+        question: "以下代码的输出结果是什么？\n\n<C>\nint i = 0;\nwhile (i++ < 3)\n    printf(\"%d \", i);\nprintf(\"end\");\n</C>",
+        options: ["`1 2 3 end`", "`0 1 2 end`", "`1 2 end`", "`0 1 2 3 end`"],
+        correctAnswer: 0,
+        explanation: "这是「后缀自增+无花括号循环体」的双重陷阱！1) `i++<3`先用i的值比较再自增，所以输出的是自增后的值1,2,3；2) 没有花括号时，循环体只有`printf`一条语句，最后的`printf(\"end\")`不属于循环体。「易错点」：1) 后缀++先比较后自增，输出时i已增1；2) 无花括号时循环体仅含下一条语句；3) i最终值为4（3<3为假时i已自增为4）。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 0;\n    while (i++ < 3)\n        printf(\"%d \", i);  /* 只有这一句是循环体 */\n    printf(\"end\");  /* 这句不在循环内 */\n    printf(\"\\ni最终=%d\\n\", i);  /* i=4 */\n    \n    /* 等价于： */\n    int j = 0;\n    while (j++ < 3) {\n        printf(\"%d \", j);  /* 1 2 3 */\n    }\n    printf(\"end\");\n    return 0;\n}"
+    },
             {
-                id: 4,
-                question: "以下代码会输出什么？\n\n<C>\nint i = 0;\nwhile (i < 3) {\n    printf(\"%d \", i);\n    i += 2;\n}\n</C>",
-                options: ["0 2", "0 1 2", "0 2 4", "无输出"],
-                correctAnswer: 0,
-                explanation: "i从0开始，每次增加2。i = 0时输出0，i变为2；i = 2时输出2，i变为4；i = 4不满足i<3，循环结束。输出0 2。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 0;\n    while (i < 3) {\n        printf(\"%d \", i);  // 输出0 2\n        i += 2;\n    }\n    return 0;\n}"
-            },
+        id: 4,
+        question: "以下代码的输出结果是什么？\n\n<C>\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        if (i == j) continue;\n        printf(\"%d%d \", i, j);\n    }\n}\n</C>",
+        options: ["`01 02 10 12 20 21`", "`00 11 22`", "`01 10 12 21 20 02`", "`00 01 02 10 11 12 20 21 22`"],
+        correctAnswer: 0,
+        explanation: "这是「continue在嵌套循环中」的陷阱！`continue`只跳过当前内层循环的本次迭代，不影响外层循环。当`i==j`时跳过输出，所以输出的是`i≠j`的组合。「易错点」：1) `continue`只影响最内层包含它的循环；2) `break`同理，只跳出最内层循环；3) 要跳出外层循环需要用标志变量或`goto`。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            if (i == j) continue;  /* 只跳过内层本次 */\n            printf(\"%d%d \", i, j);\n        }\n    }\n    /* 输出：01 02 10 12 20 21 */\n    \n    /* 对比：break只跳出内层 */\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            if (i == j) break;  /* 只跳出内层 */\n            printf(\"%d%d \", i, j);\n        }\n    }\n    /* 输出：10 20 21 */\n    return 0;\n}"
+    },
             {
-                id: 5,
-                question: "以下while循环执行多少次？\n\n<C>\nint count = 0, i = 10;\nwhile (i >= 5) {\n    count++;\n    i -= 2;\n}\nprintf(\"%d\", count);\n</C>",
-                options: ["2", "3", "4", "5"],
-                correctAnswer: 1,
-                explanation: "i从10开始，每次减2。i = 10(>=5)执行1次，i = 8(>=5)执行2次，i = 6(>=5)执行3次，i = 4(<5)停止。共3次。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int count = 0, i = 10;\n    while (i >= 5) {\n        count++;\n        printf(\"第%d次，i=%d\\n\", count, i);\n        i -= 2;\n    }\n    printf(\"共执行%d次\", count);  // 输出3\n    return 0;\n}"
-            },
+        id: 5,
+        question: "以下代码的输出结果是什么？\n\n<C>\nint i = 0;\nwhile (i < 10) {\n    if (i == 5)\n        continue;\n    printf(\"%d \", i);\n    i++;\n}\n</C>",
+        options: ["`0 1 2 3 4 6 7 8 9`", "无限循环", "`0 1 2 3 4`", "编译错误"],
+        "correctAnswer": 1,
+        explanation: "这是「continue导致死循环」的经典陷阱！当`i==5`时执行`continue`跳过后续语句，但`i++`也在跳过范围内，i永远停留在5，导致无限循环。「易错点」：1) `continue`跳过了`i++`，导致i不再变化；2) 在`while`循环中使用`continue`时，必须确保循环变量的更新在`continue`之前；3) `for`循环不会有此问题，因为`i++`在更新表达式中。「教训」：while循环中continue前必须更新循环变量。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    int i = 0;\n    /* 死循环！i=5时continue跳过i++ */\n    /* while (i < 10) { */\n    /*     if (i == 5) continue;  i永远=5 */\n    /*     printf(\"%d \", i); */\n    /*     i++; */\n    /* } */\n    \n    /* 修复方法1：continue前更新i */\n    i = 0;\n    while (i < 10) {\n        if (i == 5) { i++; continue; }\n        printf(\"%d \", i);\n        i++;\n    }\n    /* 输出：0 1 2 3 4 6 7 8 9 */\n    \n    /* 修复方法2：用for循环 */\n    for (int j = 0; j < 10; j++) {\n        if (j == 5) continue;  /* for的j++不受影响 */\n        printf(\"%d \", j);\n    }\n    return 0;\n}"
+    },
             {
                 id: 6,
                 question: "以下代码的输出结果是什么？\n\n<C>\nint i;\nfor (i = 0; i < 5; i++) {\n    printf(\"%d \", i);\n    i++;  /* 循环体内也自增 */\n}\n</C>",
@@ -91,13 +91,13 @@ class TemplateLoader {
                 codeExample: "#include <stdio.h>\n\nint main() {\n    int i;\n    \n    /* 危险：循环体内修改循环变量 */\n    for (i = 0; i < 5; i++) {\n        printf(\"%d \", i);  /* 输出0 2 4 */\n        i++;  /* 体内自增，加上for的i++，每次增2 */\n    }\n    printf(\"\\n最终i=%d\\n\", i);  /* i=6 */\n    \n    /* 正确做法：不在体内修改i */\n    for (i = 0; i < 5; i++) {\n        printf(\"%d \", i);  /* 输出0 1 2 3 4 */\n    }\n    \n    return 0;\n}"
             },
             {
-                id: 7,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint i = 1;\nwhile (i <= 10) {\n    if (i % 2 == 0) {\n        printf(\"%d \", i);\n    }\n    i++;\n}\n</C>",
-                options: ["2 4 6 8 10", "1 3 5 7 9", "1 2 3 4 5", "无输出"],
-                correctAnswer: 0,
-                explanation: "while循环从1到10，只有当i是偶数时才输出。输出2 4 6 8 10。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1;\n    while (i <= 10) {\n        if (i % 2 == 0) {\n            printf(\"%d \", i);  // 输出偶数\n        }\n        i++;\n    }\n    return 0;\n}"
-            },
+        id: 7,
+        question: "以下代码的输出结果是什么？\n\n<C>\nfor (int i = 0; i < 5; i++) {\n    if (i == 3)\n        break;\n    if (i == 1)\n        continue;\n    printf(\"%d \", i);\n}\n</C>",
+        options: ["`0 2`", "`0 1 2`", "`0 2 4`", "`0`"],
+        correctAnswer: 0,
+        explanation: "这是「break和continue组合」的陷阱！i=0输出0；i=1跳过(continue)；i=2输出2；i=3直接退出(break)，不再执行后续。「易错点」：1) break是直接退出整个循环，不是跳过当前迭代；2) continue只跳过当前迭代，继续下一次；3) break优先于continue，遇到break循环立即终止。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0; i < 5; i++) {\n        if (i == 3) break;      /* 直接退出循环 */\n        if (i == 1) continue;   /* 跳过本次迭代 */\n        printf(\"%d \", i);       /* 输出0 2 */\n    }\n    return 0;\n}"
+    },
             {
                 id: 8,
                 question: "以下代码判断条件有什么问题？\n\n<C>\nint i = 5;\nwhile (i) {\n    printf(\"%d \", i);\n    i--;\n}\n</C>",
@@ -109,13 +109,13 @@ class TemplateLoader {
             
             // ========== 第9-16题：do-while循环基础 ==========
             {
-                id: 9,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint i = 1;\ndo {\n    printf(\"%d \", i);\n    i++;\n} while (i <= 5);\n</C>",
-                options: ["1 2 3 4 5", "2 3 4 5 6", "1 2 3 4", "无输出"],
-                correctAnswer: 0,
-                explanation: "do-while先执行循环体再判断条件。从i = 1开始输出并自增，直到i>5停止。输出1 2 3 4 5。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int i = 1;\n    do {\n        printf(\"%d \", i);  // 先执行\n        i++;\n    } while (i <= 5);  // 后判断\n    return 0;\n}"
-            },
+        id: 9,
+        question: "以下代码的输出结果是什么？\n\n<C>\nint x = 0;\nfor (int i = 0; i < 5; i++) {\n    x += i;\n    if (x > 3) break;\n}\nprintf(\"%d\", x);\n</C>",
+        options: ["`6`", "`3`", "`10`", "`5`"],
+        correctAnswer: 0,
+        explanation: "这是「循环中break的触发时机」陷阱！i=0时x=0；i=1时x=1；i=2时x=3；i=3时x=6>3触发break。此时x=6。「易错点」：1) break在x+=i之后判断，所以x已经被更新了；2) 不要误以为break在累加前判断；3) 循环变量的更新和break条件的判断顺序很重要。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 0;\n    for (int i = 0; i < 5; i++) {\n        x += i;          /* 先累加 */\n        printf(\"i=%d, x=%d\\n\", i, x);\n        if (x > 3) break;  /* 后判断 */\n    }\n    printf(\"最终x=%d\\n\", x);  /* x=6 */\n    return 0;\n}"
+    },
             {
                 id: 10,
                 question: "while和do-while的关键区别是什么？\n\n<C>\nint i = 10;\nwhile (i < 5) {\n    printf(\"A\");\n}\n\nint j = 10;\ndo {\n    printf(\"B\");\n} while (j < 5);\n</C>",
@@ -133,21 +133,21 @@ class TemplateLoader {
                 codeExample: "#include <stdio.h>\n\nint main() {\n    int count = 0;\n    int flag = 0;\n    \n    /* do-while至少执行一次 */\n    do {\n        count++;\n        printf(\"执行了一次\\n\");\n    } while (flag);  /* flag=0为假，但已执行过一次 */\n    printf(\"count=%d\\n\", count);  /* 输出1 */\n    \n    /* 对比：while一次都不执行 */\n    int count2 = 0;\n    while (flag) {  /* flag=0，一次都不执行 */\n        count2++;\n    }\n    printf(\"count2=%d\\n\", count2);  /* 输出0 */\n    \n    return 0;\n}"
             },
             {
-                id: 12,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint n = 0;\ndo {\n    printf(\"%d \", n);\n    n++;\n} while (n < 0);\n</C>",
-                options: ["0", "无输出", "0 1", "无限循环"],
-                correctAnswer: 0,
-                explanation: "do-while至少执行一次循环体，输出0后n变为1。判断n<0不满足，循环结束。只输出0。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int n = 0;\n    do {\n        printf(\"%d \", n);  // 至少执行一次，输出0\n        n++;\n    } while (n < 0);  // 1<0不满足，结束\n    return 0;\n}"
-            },
+        id: 12,
+        question: "以下代码的输出结果是什么？\n\n<C>\nfor (int i = 0; i < 3; i++) {\n    static int count = 0;\n    count += i;\n    printf(\"%d \", count);\n}\n</C>",
+        options: ["`0 1 3`", "`0 0 0`", "`0 1 2`", "编译错误"],
+        correctAnswer: 0,
+        explanation: "这是「static变量在循环中」的陷阱！`static`局部变量只初始化一次，后续循环不会重新初始化。i=0时count=0+0=0；i=1时count=0+1=1；i=2时count=1+2=3。「易错点」：1) 误以为每次循环都重新初始化count=0；2) `static`变量存储在静态区，生命周期贯穿整个程序；3) 如果去掉`static`，每次循环count都从0开始，输出0 0 0。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0; i < 3; i++) {\n        static int count = 0;  /* 只初始化一次！ */\n        count += i;\n        printf(\"%d \", count);  /* 0 1 3 */\n    }\n    printf(\"\\n\");\n    \n    /* 对比：无static */\n    for (int i = 0; i < 3; i++) {\n        int count = 0;  /* 每次循环都初始化 */\n        count += i;\n        printf(\"%d \", count);  /* 0 1 2 */\n    }\n    return 0;\n}"
+    },
             {
-                id: 13,
-                question: "以下do-while循环执行多少次？\n\n<C>\nint count = 0, i = 5;\ndo {\n    count++;\n    i--;\n} while (i > 0);\nprintf(\"%d\", count);\n</C>",
-                options: ["4", "5", "6", "0"],
-                correctAnswer: 1,
-                explanation: "i从5开始，每次递减。i = 5执行1次，i = 4执行2次，i = 3执行3次，i = 2执行4次，i = 1执行5次，i = 0不满足i>0停止。共5次。",
-                codeExample: "#include <stdio.h>\nint main() {\n    int count = 0, i = 5;\n    do {\n        count++;\n        printf(\"第%d次，i=%d\\n\", count, i);\n        i--;\n    } while (i > 0);\n    printf(\"共执行%d次\", count);  // 输出5\n    return 0;\n}"
-            },
+        id: 13,
+        question: "以下代码的输出结果是什么？\n\n<C>\nfor (int i = 0, sum = 0; i < 5; i++) {\n    sum += i;\n    printf(\"%d \", sum);\n}\n</C>",
+        options: ["`0 1 3 6 10`", "`0 1 2 3 4`", "`1 3 6 10 15`", "编译错误"],
+        correctAnswer: 0,
+        explanation: "这是「for循环初始化声明多个变量」的陷阱！`int i=0, sum=0`在for的初始化部分声明了两个变量。i=0时sum=0；i=1时sum=1；i=2时sum=3；i=3时sum=6；i=4时sum=10。「易错点」：1) 误以为sum每次循环重置为0；2) for的初始化部分可以声明多个同类型变量；3) sum在循环外不可访问（i也是）。",
+        codeExample: "#include <stdio.h>\n\nint main() {\n    for (int i = 0, sum = 0; i < 5; i++) {\n        sum += i;\n        printf(\"i=%d, sum=%d\\n\", i, sum);\n    }\n    /* i=0, sum=0 */\n    /* i=1, sum=1 */\n    /* i=2, sum=3 */\n    /* i=3, sum=6 */\n    /* i=4, sum=10 */\n    return 0;\n}"
+    },
             {
                 id: 14,
                 question: "以下代码的输出结果是什么？\n\n<C>\nint i = 10;\ndo {\n    printf(\"%d \", i);\n    i -= 3;\n} while (i > 0);\n</C>",

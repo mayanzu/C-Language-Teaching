@@ -38,13 +38,13 @@ class TemplateLoader {
     getBuiltInQuestions() {
         return [
             {
-                "id": 1,
-                "question": "关于结构体的定义，以下说法正确的是：",
-                "options": ["结构体名和变量名可以相同", "结构体成员不能是指针", "结构体定义必须在main函数内", "结构体可以包含自己类型的成员"],
-                "correctAnswer": 0,
-                "explanation": "结构体名（标签）和变量名属于不同的命名空间，可以相同。结构体成员可以是指针，但不能包含自己类型的完整成员（可以是指针）。",
-                "codeExample": "#include <stdio.h>\n#include <string.h>\n\nstruct Student {\n    char name[50];\n    int age;\n    struct Student *next;  // 正确：指针\n    // struct Student s;   // 错误：不能包含自己\n};\n\nint main() {\n    struct Student Student;  // 正确：变量名和结构体名相同\n    Student.age = 20;\n    strcpy(Student.name, \"张三\");\n    printf(\"姓名: %s, 年龄: %d\\n\", Student.name, Student.age);\n    return 0;\n}"
-            },
+    "id": 1,
+    "question": "以下代码的输出结果是什么？\n\n<C>\ntypedef struct {\n    Node *next;\n    int data;\n} Node;\n\nint main() {\n    Node n;\n    n.data = 10;\n    printf(\"%d\", n.data);\n    return 0;\n}\n</C>",
+    "options": ["`10`", "编译错误", "`0`", "未定义行为"],
+    "correctAnswer": 1,
+    "explanation": "这是「typedef别名在定义体内不可用」的陷阱！`Node *next`使用了`Node`类型，但此时`Node`的typedef还未完成，编译器不认识`Node`。「易错点」：1) typedef的别名在结构体定义内部不可用；2) 正确做法是使用结构体标签：`struct Node { struct Node *next; int data; };`；3) 或者先声明结构体标签再typedef。",
+    "codeExample": "#include <stdio.h>\n\n/* 错误：typedef别名在体内不可用 */\n/* typedef struct { Node *next; int data; } Node;  编译错误 */\n\n/* 正确方法1：使用结构体标签 */\nstruct Node {\n    struct Node *next;  /* 使用struct Node */\n    int data;\n};\n\n/* 正确方法2：先声明标签再typedef */\ntypedef struct Node2 {\n    struct Node2 *next;\n    int data;\n} Node2;\n\nint main() {\n    struct Node n = {NULL, 10};\n    printf(\"%d\\n\", n.data);  /* 10 */\n    return 0;\n}"
+},
             {
                 "id": 2,
                 "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nint main() {\n    struct Node n1 = {10, NULL};\n    struct Node n2 = {20, &n1};\n    struct Node *p = &n2;\n    printf(\"%d\", p->next->data);\n    p->next = p->next->next;\n    printf(\" %d\", p->data);\n    return 0;\n}\n</C>",
@@ -54,45 +54,45 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nint main() {\n    struct Node n1 = {10, NULL};\n    struct Node n2 = {20, &n1};\n    struct Node *p = &n2;\n    \n    printf(\"p->next->data = %d\\n\", p->next->data);  /* 10 */\n    \n    /* 修改链接 */\n    p->next = p->next->next;  /* n2.next = NULL */\n    printf(\"p->data = %d\\n\", p->data);  /* 20 */\n    \n    /* 危险！现在p->next是NULL */\n    if (p->next != NULL) {\n        printf(\"%d\", p->next->data);\n    } else {\n        printf(\"链表已断开\\n\");\n    }\n    \n    return 0;\n}"
             },
             {
-                "id": 3,
-                "question": "关于 `typedef`，以下说法正确的是：",
-                "options": ["`typedef` 创建新的数据类型", "`typedef` 为已有类型定义别名", "`typedef` 只能用于结构体", "`typedef` 和 `#define` 完全相同"],
-                "correctAnswer": 1,
-                "explanation": "`typedef` 为已有类型定义别名，不创建新类型。可用于任何类型。与 `#define` 不同，`typedef` 由编译器处理，更安全。",
-                "codeExample": "#include <stdio.h>\n\ntypedef int Integer;\ntypedef unsigned long ULONG;\ntypedef char* String;\n\ntypedef struct {\n    int x;\n    int y;\n} Point;\n\nint main() {\n    Integer num = 10;\n    ULONG id = 12345;\n    String name = \"Alice\";\n    Point p = {5, 10};\n    \n    printf(\"num: %d, id: %lu\\n\", num, id);\n    printf(\"name: %s\\n\", name);\n    printf(\"Point: (%d, %d)\\n\", p.x, p.y);\n    \n    return 0;\n}"
-            },
+    "id": 3,
+    "question": "以下代码的输出结果是什么？\n\n<C>\ntypedef char *PCHAR;\nPCHAR a, b;\nchar *c, d;\nprintf(\"%zu %zu %zu %zu\", sizeof(a), sizeof(b), sizeof(c), sizeof(d));\n</C>",
+    "options": ["`8 8 8 1`", "`8 8 8 8`", "`8 1 8 1`", "`1 1 1 1`"],
+    "correctAnswer": 0,
+    "explanation": "这是「typedef与#define声明变量的区别」的陷阱！`PCHAR a, b`中a和b都是`char*`类型（typedef创建类型别名）。而`char *c, d`中c是`char*`，d是`char`（*只作用于c）。「易错点」：1) `typedef char *PCHAR`使`PCHAR`成为完整的类型名；2) `PCHAR a, b`等价于`char *a, *b`；3) `char *c, d`等价于`char *c; char d`，d不是指针！",
+    "codeExample": "#include <stdio.h>\n\ntypedef char *PCHAR;\n\nint main() {\n    PCHAR a, b;     /* a和b都是char* */\n    char *c, d;     /* c是char*, d是char */\n    \n    printf(\"sizeof(a) = %zu\\n\", sizeof(a));  /* 8(指针) */\n    printf(\"sizeof(b) = %zu\\n\", sizeof(b));  /* 8(指针) */\n    printf(\"sizeof(c) = %zu\\n\", sizeof(c));  /* 8(指针) */\n    printf(\"sizeof(d) = %zu\\n\", sizeof(d));  /* 1(char) */\n    \n    /* typedef vs #define */\n    /* #define PCHAR2 char* */\n    /* PCHAR2 e, f;  等价于 char* e, f; -> e是指针, f是char! */\n    return 0;\n}"
+},
             {
-                "id": 4,
-                "question": "以下代码的输出结果是什么？\n\n<C>\ntypedef struct {\n    int a;\n    int b;\n} Data;\n\nint main() {\n    Data d = {10, 20};\n    Data *p = &d;\n    p->a = 30;\n    printf(\"%d %d\", d.a, d.b);\n    return 0;\n}\n</C>",
-                "options": ["`10 20`", "`30 20`", "`10 30`", "编译错误"],
-                "correctAnswer": 1,
-                "explanation": "通过指针 `p->a = 30` 修改了结构体d的成员a的值。`typedef` 简化了结构体使用，不需要写 `struct` 关键字。",
-                "codeExample": "#include <stdio.h>\n\ntypedef struct {\n    int a;\n    int b;\n} Data;\n\nint main() {\n    Data d = {10, 20};\n    Data *p = &d;\n    \n    printf(\"修改前: a=%d, b=%d\\n\", d.a, d.b);\n    p->a = 30;\n    printf(\"修改后: a=%d, b=%d\\n\", d.a, d.b);\n    \n    return 0;\n}"
-            },
+    "id": 4,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Data {\n    char c;\n    double d;\n    char c2;\n};\nprintf(\"%zu\", sizeof(struct Data));\n</C>",
+    "options": ["`10`", "`24`", "`16`", "`18`"],
+    "correctAnswer": 1,
+    "explanation": "这是「结构体内存对齐」的陷阱！在64位系统中，double的对齐要求是8字节。布局：c占1字节+7字节填充，d占8字节，c2占1字节+7字节填充，共24字节。「易错点」：1) 结构体大小不等于各成员大小之和；2) 对齐填充是为了提高内存访问效率；3) 如果调整成员顺序为`char,char,double`，大小只需16字节。",
+    "codeExample": "#include <stdio.h>\n#include <stddef.h>\n\nstruct Data1 { char c; double d; char c2; };  /* 24字节 */\nstruct Data2 { char c; char c2; double d; };  /* 16字节 */\n\nint main() {\n    printf(\"Data1: %zu字节\\n\", sizeof(struct Data1));  /* 24 */\n    printf(\"Data2: %zu字节\\n\", sizeof(struct Data2));  /* 16 */\n    \n    /* Data1布局(24字节): c[1] + pad[7] + d[8] + c2[1] + pad[7] */\n    /* Data2布局(16字节): c[1] + c2[1] + pad[6] + d[8] */\n    \n    /* 教训：按对齐要求从小到大或从大到小排列成员 */\n    return 0;\n}"
+},
             {
-                "id": 5,
-                "question": "关于结构体数组，以下说法正确的是：",
-                "options": ["结构体数组不能初始化", "结构体数组元素通过 `->` 访问成员", "结构体数组元素通过 `.` 访问成员", "结构体数组不能作为函数参数"],
-                "correctAnswer": 2,
-                "explanation": "结构体数组元素是结构体变量，使用 `.` 访问成员。只有指针才使用 `->`。结构体数组可以初始化和作为函数参数。",
-                "codeExample": "#include <stdio.h>\n\nstruct Student {\n    char name[20];\n    int score;\n};\n\nint main() {\n    struct Student students[3] = {\n        {\"Alice\", 90},\n        {\"Bob\", 85},\n        {\"Charlie\", 92}\n    };\n    \n    for (int i = 0; i < 3; i++) {\n        printf(\"%s: %d\\n\", students[i].name, students[i].score);\n    }\n    \n    // 指针访问\n    struct Student *p = students;\n    printf(\"通过指针: %s\\n\", p->name);\n    \n    return 0;\n}"
-            },
+    "id": 5,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nstruct S { char a; int b; };\nstruct S arr[2] = {{'A', 1}, {'B', 2}};\nprintf(\"%zu\", sizeof(arr));\n</C>",
+    "options": ["`8`", "`16`", "`12`", "`10`"],
+    "correctAnswer": 1,
+    "explanation": "这是「结构体数组与内存对齐」的陷阱！`struct S`中char占1字节+3字节填充+int占4字节=8字节。数组2个元素共16字节。「易错点」：1) 结构体大小不是成员大小之和（char+int≠5）；2) 每个结构体元素都需要对齐；3) `sizeof(arr)`=`2*sizeof(struct S)`=`2*8`=16。",
+    "codeExample": "#include <stdio.h>\n\nstruct S { char a; int b; };\n\nint main() {\n    struct S arr[2] = {{'A', 1}, {'B', 2}};\n    printf(\"sizeof(struct S) = %zu\\n\", sizeof(struct S));  /* 8 */\n    printf(\"sizeof(arr) = %zu\\n\", sizeof(arr));  /* 16 */\n    \n    /* 内存布局(每个元素8字节): */\n    /* arr[0]: a[1] + pad[3] + b[4] */\n    /* arr[1]: a[1] + pad[3] + b[4] */\n    return 0;\n}"
+},
             {
-                "id": 6,
-                "question": "关于链表节点的定义，以下哪个是正确的？",
-                "options": ["结构体不能包含指向自己的指针", "`struct Node { int data; struct Node next; };`", "`struct Node { int data; struct Node *next; };`", "链表节点必须使用typedef"],
-                "correctAnswer": 2,
-                "explanation": "链表节点包含数据和指向下一个节点的指针。不能包含自己类型的完整成员，但可以包含指向自己类型的指针。",
-                "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nint main() {\n    struct Node *head = malloc(sizeof(struct Node));\n    struct Node *second = malloc(sizeof(struct Node));\n    struct Node *third = malloc(sizeof(struct Node));\n    \n    head->data = 1; head->next = second;\n    second->data = 2; second->next = third;\n    third->data = 3; third->next = NULL;\n    \n    struct Node *current = head;\n    while (current != NULL) {\n        printf(\"%d -> \", current->data);\n        current = current->next;\n    }\n    printf(\"NULL\\n\");\n    \n    free(head); free(second); free(third);\n    return 0;\n}"
-            },
+    "id": 6,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Data {\n    char *name;\n    int value;\n};\n\nint main() {\n    struct Data a = {\"Hello\", 10};\n    struct Data b = a;\n    b.name[0] = 'h';\n    printf(\"%s\", a.name);\n    return 0;\n}\n</C>",
+    "options": ["`hello`", "`Hello`", "未定义行为", "编译错误"],
+    "correctAnswer": 0,
+    "explanation": "这是「结构体浅拷贝」的陷阱！结构体赋值是浅拷贝，指针成员只复制地址，不复制指向的内容。`a.name`和`b.name`指向同一个字符串常量`\"Hello\"`。`b.name[0]='h'`尝试修改字符串常量，这是未定义行为，但如果字符串存储在可修改区域，则`a.name`也会变为`hello`。「易错点」：1) 结构体拷贝只复制指针值，两个指针指向同一内存；2) 修改指针指向的内容会影响所有副本；3) 这称为「浅拷贝问题」，需要深拷贝来解决。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\nstruct Data {\n    char *name;\n    int value;\n};\n\nint main() {\n    /* 浅拷贝问题 */\n    char str[] = \"Hello\";  /* 可修改的数组 */\n    struct Data a = {str, 10};\n    struct Data b = a;  /* 浅拷贝：b.name也指向str */\n    b.name[0] = 'h';   /* 修改了str，a.name也受影响 */\n    printf(\"a.name = %s\\n\", a.name);  /* hello */\n    \n    /* 深拷贝：为b分配独立内存 */\n    char str2[] = \"World\";\n    struct Data c = {str2, 20};\n    struct Data d;\n    d.name = malloc(strlen(c.name) + 1);\n    strcpy(d.name, c.name);  /* 独立副本 */\n    d.value = c.value;\n    d.name[0] = 'w';\n    printf(\"c.name = %s\\n\", c.name);  /* World(不受影响) */\n    free(d.name);\n    return 0;\n}"
+},
             {
-                "id": 7,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Data {\n    int x;\n    int y;\n};\n\nint main() {\n    struct Data arr[3] = {{1,2}, {3,4}, {5,6}};\n    struct Data *p = arr + 1;\n    printf(\"%d\", p->x);\n    return 0;\n}\n</C>",
-                "options": ["`1`", "`3`", "`5`", "`2`"],
-                "correctAnswer": 1,
-                "explanation": "`arr + 1` 指向第二个结构体元素（arr[1]），其x成员的值是3。",
-                "codeExample": "#include <stdio.h>\n\nstruct Data {\n    int x;\n    int y;\n};\n\nint main() {\n    struct Data arr[3] = {{1,2}, {3,4}, {5,6}};\n    struct Data *p = arr;\n    \n    printf(\"arr[0]: x=%d, y=%d\\n\", p->x, p->y);\n    \n    p = arr + 1;\n    printf(\"arr[1]: x=%d, y=%d\\n\", p->x, p->y);\n    \n    p++;\n    printf(\"arr[2]: x=%d, y=%d\\n\", p->x, p->y);\n    \n    return 0;\n}"
-            },
+    "id": 7,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nstruct S {\n    unsigned int a : 3;\n    unsigned int b : 3;\n};\n\nint main() {\n    struct S s = {7, 5};\n    s.a++;\n    printf(\"%d %d\", s.a, s.b);\n    return 0;\n}\n</C>",
+    "options": ["`0 5`", "`8 5`", "`7 5`", "未定义行为"],
+    "correctAnswer": 0,
+    "explanation": "这是「位域溢出回绕」的陷阱！3位无符号位域最大值是7。`s.a=7`已经是最值，`s.a++`溢出回绕为0。「易错点」：1) 位域的值超出范围时会回绕（对无符号）或未定义行为（对有符号）；2) 3位只能表示0-7；3) 位域溢出不像普通整数溢出那样有编译器警告。",
+    "codeExample": "#include <stdio.h>\n\nstruct S {\n    unsigned int a : 3;\n    unsigned int b : 3;\n};\n\nint main() {\n    struct S s = {7, 5};\n    printf(\"a=%d, b=%d\\n\", s.a, s.b);  /* 7, 5 */\n    s.a++;  /* 7+1溢出，回绕为0 */\n    printf(\"a++后: a=%d\\n\", s.a);  /* 0 */\n    return 0;\n}"
+},
             {
                 "id": 8,
                 "question": "关于结构体的大小，以下说法正确的是：",
@@ -102,13 +102,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n\nstruct Example1 {\n    char a;   // 1字节\n    int b;    // 4字节\n    char c;   // 1字节\n};  // 可能12字节（有填充）\n\nstruct Example2 {\n    char a;   // 1字节\n    char c;   // 1字节\n    int b;    // 4字节\n};  // 可能8字节（优化排列）\n\nint main() {\n    printf(\"Example1: %lu字节\\n\", sizeof(struct Example1));\n    printf(\"Example2: %lu字节\\n\", sizeof(struct Example2));\n    \n    return 0;\n}"
             },
             {
-                "id": 9,
-                "question": "以下代码的输出结果是什么？\n\n<C>\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n\nint main() {\n    Node n1 = {10, NULL};\n    Node n2 = {20, &n1};\n    printf(\"%d\", n2.next->data);\n    return 0;\n}\n</C>",
-                "options": ["`10`", "`20`", "编译错误", "段错误"],
-                "correctAnswer": 0,
-                "explanation": "`n2.next` 指向n1，`n2.next->data` 访问n1的data成员，值为10。这是简单的链表结构。",
-                "codeExample": "#include <stdio.h>\n\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n\nint main() {\n    Node n1 = {10, NULL};\n    Node n2 = {20, &n1};\n    Node n3 = {30, &n2};\n    \n    printf(\"n3.data = %d\\n\", n3.data);\n    printf(\"n3.next->data = %d\\n\", n3.next->data);\n    printf(\"n3.next->next->data = %d\\n\", n3.next->next->data);\n    \n    return 0;\n}"
-            },
+    "id": 9,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nvoid insert(struct Node **head, int data) {\n    struct Node *n = malloc(sizeof(*n));\n    n->data = data;\n    n->next = *head;\n    *head = n;\n}\n\nint main() {\n    struct Node *head = NULL;\n    insert(head, 1);\n    printf(\"%d\", head->data);\n    return 0;\n}\n</C>",
+    "options": ["`1`", "段错误（head仍为NULL）", "`0`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「链表头插入修改指针」的陷阱！`insert(head, 1)`传递的是`head`的值（NULL），不是`head`的地址。函数内修改的是head的副本，外部的head仍然是NULL。`head->data`解引用NULL导致段错误。「易错点」：1) 要修改外部指针必须传二级指针`&head`；2) `insert(head, 1)`只传了NULL值；3) 正确调用应为`insert(&head, 1)`。",
+    "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node { int data; struct Node *next; };\n\n/* 错误：值传递无法修改外部head */\n/* void insert_wrong(struct Node *head, int data) { ... } */\n\n/* 正确：传二级指针 */\nvoid insert(struct Node **head, int data) {\n    struct Node *n = malloc(sizeof(*n));\n    n->data = data;\n    n->next = *head;\n    *head = n;  /* 修改外部head */\n}\n\nint main() {\n    struct Node *head = NULL;\n    insert(&head, 1);  /* 传head的地址 */\n    insert(&head, 2);\n    printf(\"%d\\n\", head->data);  /* 2 */\n    return 0;\n}"
+},
             {
                 "id": 10,
                 "question": "关于结构体指针作为函数参数，以下说法正确的是：",
@@ -126,13 +126,13 @@ class TemplateLoader {
                 "codeExample": "#include <stdio.h>\n#include <stddef.h>\n\nstruct Data1 {\n    char a;\n    int b;\n    char c;\n};\n\nstruct Data2 {\n    char a;\n    char c;\n    int b;\n};\n\n#pragma pack(push, 1)\nstruct Data3 {\n    char a;\n    int b;\n    char c;\n};\n#pragma pack(pop)\n\nint main() {\n    printf(\"Data1: %lu bytes\\n\", sizeof(struct Data1));  /* 12 */\n    printf(\"Data2: %lu bytes\\n\", sizeof(struct Data2));  /* 8 */\n    printf(\"Data3 (packed): %lu bytes\\n\", sizeof(struct Data3));  /* 6 */\n    \n    return 0;\n}"
             },
             {
-                "id": 12,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Point {\n    int x, y;\n};\n\nint main() {\n    struct Point p1 = {10, 20};\n    struct Point p2 = p1;\n    p2.x = 30;\n    printf(\"%d %d\", p1.x, p2.x);\n    return 0;\n}\n</C>",
-                "options": ["`10 30`", "`30 30`", "`10 10`", "编译错误"],
-                "correctAnswer": 0,
-                "explanation": "结构体赋值是值拷贝，p2是p1的副本。修改p2不影响p1。",
-                "codeExample": "#include <stdio.h>\n\nstruct Point {\n    int x, y;\n};\n\nint main() {\n    struct Point p1 = {10, 20};\n    struct Point p2 = p1;  // 值拷贝\n    \n    printf(\"拷贝后: p1=(%d,%d), p2=(%d,%d)\\n\", p1.x, p1.y, p2.x, p2.y);\n    \n    p2.x = 30;\n    p2.y = 40;\n    printf(\"修改p2后: p1=(%d,%d), p2=(%d,%d)\\n\", p1.x, p1.y, p2.x, p2.y);\n    \n    return 0;\n}"
-            },
+    "id": 12,
+    "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Data {\n    int *ptr;\n    int value;\n};\n\nstruct Data func() {\n    int x = 42;\n    struct Data d = {&x, x};\n    return d;\n}\n\nint main() {\n    struct Data d = func();\n    printf(\"%d %d\", *d.ptr, d.value);\n    return 0;\n}\n</C>",
+    "options": ["`42 42`", "未定义行为（*d.ptr无效）", "`0 42`", "编译错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「返回含指针成员的结构体」的陷阱！`func`返回的结构体中`ptr`指向局部变量`x`。虽然结构体是值拷贝返回的，但指针成员只复制了地址值。函数返回后`x`被销毁，`d.ptr`变成悬空指针。「易错点」：1) 结构体值拷贝只复制指针的值（地址），不复制指向的内容；2) 指针成员指向的局部变量随函数返回而销毁；3) `d.value=42`是正确的（int值拷贝），但`*d.ptr`是UB。",
+    "codeExample": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Data {\n    int *ptr;\n    int value;\n};\n\n/* 危险：返回含悬空指针的结构体 */\n/* struct Data func_wrong() { int x = 42; struct Data d = {&x, x}; return d; } */\n\n/* 正确：动态分配 */\nstruct Data func_right() {\n    int *p = malloc(sizeof(int));\n    *p = 42;\n    struct Data d = {p, *p};\n    return d;\n}\n\nint main() {\n    struct Data d = func_right();\n    printf(\"%d %d\\n\", *d.ptr, d.value);  /* 42 42 */\n    free(d.ptr);  /* 调用者负责释放 */\n    return 0;\n}"
+},
             {
                 "id": 13,
                 "question": "关于结构体的位域（bit field），以下说法正确的是：",

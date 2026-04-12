@@ -1,4 +1,4 @@
-﻿// 模板加载器 - 负责动态加载题库数据
+// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         console.log('[TemplateLoader] 构造函数已调用');
@@ -96,42 +96,42 @@ class TemplateLoader {
             },
             {
                 id: 2,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint a = 100;\nint *p = &a;\nprintf(\"%d\", *p);\n</C>",
+                question: "以下代码在64位系统上的输出是什么？\n\n<C>\nint arr[5] = {1,2,3,4,5};\nint *p = arr;\nprintf(\"%zu %zu\", sizeof(arr), sizeof(p));\n</C>",
                 options: [
-                    "输出变量a的地址",
-                    "`100`",
+                    "`20 20`",
+                    "`20 8`",
+                    "`5 8`",
+                    "`4 4`"
+                ],
+                correctAnswer: 1,
+                explanation: "这是「数组名与指针的sizeof差异」的陷阱！`sizeof(arr)`返回整个数组大小=5×4=20字节。`sizeof(p)`返回指针大小，64位系统上为8字节。「易错点」：1) 数组名在sizeof中不退化为指针；2) 赋值给指针后，sizeof只测指针大小；3) 作为函数参数时数组名退化为指针，sizeof会返回指针大小。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr[5] = {1,2,3,4,5};\n    int *p = arr;\n    printf(\"sizeof(arr) = %zu\\n\", sizeof(arr));  /* 20 */\n    printf(\"sizeof(p) = %zu\\n\", sizeof(p));    /* 8(64位) */\n    printf(\"元素个数 = %zu\\n\", sizeof(arr)/sizeof(arr[0]));  /* 5 */\n    return 0;\n}"
+            },
+            {
+                id: 3,
+                question: "以下代码的输出结果是什么？\n\n<C>\nint a[3] = {1, 2, 3};\nint *p = a + 1;\nint *q = &a + 1;\nprintf(\"%d %d\", *(p-1), *(q-1));\n</C>",
+                options: [
+                    "`1 3`",
+                    "`1 1`",
+                    "`2 3`",
+                    "未定义行为"
+                ],
+                correctAnswer: 0,
+                explanation: "这是「&a与a的类型差异」的陷阱！`a`类型是`int*`，`a+1`移动一个int(4字节)指向a[1]。`&a`类型是`int(*)[3]`（指向整个数组的指针），`&a+1`跳过整个数组(12字节)指向数组之后。`*(p-1)`=a[0]=1，`*(q-1)`=`*(((int*)(&a+1))-1)`=a[2]=3。「易错点」：1) `a+1`移动一个元素，`&a+1`跳过整个数组；2) `&a`的类型是指向数组的指针，不是`int**`。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int a[3] = {1, 2, 3};\n    int *p = a + 1;      /* 指向a[1] */\n    int *q = &a + 1;     /* 跳过整个数组 */\n    printf(\"*(p-1) = %d\\n\", *(p-1));  /* a[0]=1 */\n    printf(\"*(q-1) = %d\\n\", *(q-1));  /* a[2]=3 */\n    \n    /* 类型区别： */\n    /* a   -> int*     , a+1移动1个int */\n    /* &a  -> int(*)[3], &a+1跳过3个int */\n    return 0;\n}"
+            },
+            {
+                id: 4,
+                question: "以下代码的输出结果是什么？\n\n<C>\nint a = 10;\nint *p = &a;\nint **pp = &p;\n**pp = 20;\nprintf(\"%d\", a);\n</C>",
+                options: [
+                    "`10`",
+                    "`20`",
                     "编译错误",
                     "未定义行为"
                 ],
                 correctAnswer: 1,
-                explanation: "`*p` 是解引用操作，获取指针p所指向地址中存储的值。由于p指向a，`*p` 就是a的值100。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 100;\n    int *p = &a;  // p指向a\n    \n    printf(\"*p = %d\\n\", *p);  // 解引用，输出100\n    printf(\"p = %p\\n\", (void*)p);  // 输出地址\n    printf(\"&a = %p\\n\", (void*)&a);  // a的地址\n    \n    return 0;\n}"
-            },
-            {
-                id: 3,
-                question: "地址运算符 `&` 的作用是：",
-                options: [
-                    "获取变量的值",
-                    "获取变量的地址",
-                    "定义指针变量",
-                    "解引用指针"
-                ],
-                correctAnswer: 1,
-                explanation: "`&` 是取地址运算符，用于获取变量的内存地址。`*` 是解引用运算符，用于访问指针所指向的值。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 50;\n    int *ptr;\n    \n    ptr = &x;  // &x 获取x的地址\n    \n    printf(\"x的值: %d\\n\", x);\n    printf(\"x的地址: %p\\n\", (void*)&x);\n    printf(\"ptr存储的地址: %p\\n\", (void*)ptr);\n    printf(\"*ptr的值: %d\\n\", *ptr);  // 解引用\n    \n    return 0;\n}"
-            },
-            {
-                id: 4,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 10, y = 20;\nint *p = &x;\n*p = 30;\nprintf(\"%d %d\", x, y);\n</C>",
-                options: [
-                    "`10 20`",
-                    "`30 20`",
-                    "`10 30`",
-                    "`30 30`"
-                ],
-                correctAnswer: 1,
-                explanation: "指针p指向x，`*p = 30` 通过指针修改了x的值为30。y没有被修改，仍然是20。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 10, y = 20;\n    int *p = &x;  // p指向x\n    \n    printf(\"修改前: x=%d, y=%d\\n\", x, y);\n    *p = 30;  // 通过指针修改x的值\n    printf(\"修改后: x=%d, y=%d\\n\", x, y);\n    \n    return 0;\n}"
+                explanation: "这是「二级指针间接修改」的陷阱！`pp`指向`p`，`*pp`就是`p`，`**pp`就是`*p`就是`a`。所以`**pp=20`等价于`a=20`。「易错点」：1) `*pp`得到p（一级指针），`**pp`得到a（值）；2) 二级指针用于修改一级指针的指向或值；3) 常见于函数中需要修改外部指针的场景。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int *p = &a;\n    int **pp = &p;\n    \n    printf(\"a = %d\\n\", a);      /* 10 */\n    printf(\"*p = %d\\n\", *p);     /* 10 */\n    printf(\"**pp = %d\\n\", **pp); /* 10 */\n    \n    **pp = 20;  /* 等价于 a = 20 */\n    printf(\"修改后 a = %d\\n\", a);  /* 20 */\n    return 0;\n}"
             },
             {
                 id: 5,
@@ -226,16 +226,16 @@ class TemplateLoader {
             },
             {
                 id: 12,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint a = 10;\nint *p = &a;\n*p = *p + 5;\nprintf(\"%d\", a);\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nchar c = 200;\nint *p = (int*)&c;\nprintf(\"%d\", *p);\n</C>",
                 options: [
-                    "`10`",
-                    "`15`",
-                    "`5`",
+                    "`200`",
+                    "未定义行为",
+                    "`-56`",
                     "编译错误"
                 ],
                 correctAnswer: 1,
-                explanation: "指针p指向a，`*p = *p + 5` 等价于 `a = a + 5`，所以a的值变为15。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int *p = &a;\n    \n    printf(\"修改前: a = %d\\n\", a);\n    *p = *p + 5;  // 通过指针修改a\n    printf(\"修改后: a = %d\\n\", a);\n    printf(\"*p = %d\\n\", *p);\n    \n    return 0;\n}"
+                explanation: "这是「类型双关导致未定义行为」的陷阱！`char c=200`只占1字节，但`int *p=(int*)&c`将char指针强制转为int指针，`*p`会读取4个字节（int大小），超出c的1字节范围，读取了未初始化的内存，这是「未定义行为」。「易错点」：1) 强制类型转换不改变内存内容，只改变解读方式；2) 读取超出对象范围的内存是UB；3) 正确做法是先赋值再解引用，或使用union。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    char c = 200;\n    /* int *p = (int*)&c;  未定义行为！读取越界 */\n    /* printf(\"%d\", *p);  可能输出任意值 */\n    \n    /* 正确：直接使用char */\n    printf(\"c = %d\\n\", c);  /* -56(有符号char) */\n    \n    /* 正确：使用unsigned char */\n    unsigned char uc = 200;\n    printf(\"uc = %d\\n\", uc);  /* 200 */\n    return 0;\n}"
             },
             {
                 id: 13,
@@ -252,29 +252,29 @@ class TemplateLoader {
             },
             {
                 id: 14,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint arr[] = {1, 2, 3, 4, 5};\nint *p = &arr[2];\nprintf(\"%d %d\", *(p-1), *(p+1));\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint arr[3] = {10, 20, 30};\nint *p = arr + 3;\nprintf(\"%d\", *p);\n</C>",
                 options: [
-                    "`1 3`",
-                    "`2 4`",
-                    "`3 5`",
-                    "`2 3`"
+                    "`0`",
+                    "未定义行为",
+                    "`30`",
+                    "随机值"
                 ],
                 correctAnswer: 1,
-                explanation: "指针p指向arr[2]（值为3）。`*(p-1)` 是arr[1]（值为2），`*(p+1)` 是arr[3]（值为4）。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *p = &arr[2];  // p指向3\n    \n    printf(\"*p = %d\\n\", *p);      // 3\n    printf(\"*(p-1) = %d\\n\", *(p-1));  // 2\n    printf(\"*(p+1) = %d\\n\", *(p+1));  // 4\n    printf(\"*(p-2) = %d\\n\", *(p-2));  // 1\n    \n    return 0;\n}"
+                explanation: "这是「指针越界访问」的陷阱！`arr+3`指向数组最后一个元素之后的位置，这是合法的指针（可以指向越界位置），但解引用`*p`是「未定义行为」。「易错点」：1) C标准允许指针指向数组越界一个位置（past-the-end），但不可解引用；2) 类似STL中的`end()`迭代器，只表示位置不可访问；3) `arr+3`本身合法，`*(arr+3)`非法。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    \n    /* 合法：指向越界位置 */\n    int *p = arr + 3;  /* 指向arr[3]，越界一个位置 */\n    /* int val = *p;  未定义行为！不可解引用 */\n    \n    /* 合法用途：作为循环终止条件 */\n    for (int *q = arr; q < arr + 3; q++) {\n        printf(\"%d \", *q);  /* 10 20 30 */\n    }\n    return 0;\n}"
             },
             {
                 id: 15,
-                question: "以下代码实现的功能是：\n\n<C>\nvoid modify(int *p) {\n    *p = *p * 2;\n}\n\nint main() {\n    int x = 5;\n    modify(&x);\n    printf(\"%d\", x);\n    return 0;\n}\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nvoid alloc(int *p) {\n    p = (int*)malloc(sizeof(int));\n    *p = 42;\n}\n\nint main() {\n    int *ptr = NULL;\n    alloc(ptr);\n    printf(\"%d\", *ptr);\n    return 0;\n}\n</C>",
                 options: [
-                    "输出 `5`",
-                    "输出 `10`",
-                    "编译错误",
-                    "输出 `0`"
+                    "`42`",
+                    "段错误（崩溃）",
+                    "`0`",
+                    "编译错误"
                 ],
                 correctAnswer: 1,
-                explanation: "函数 `modify` 通过指针参数修改了原变量x的值，将5乘以2得到10。这是指针作为函数参数实现值修改的典型应用。",
-                codeExample: "#include <stdio.h>\n\nvoid modify(int *p) {\n    printf(\"函数内修改前: *p = %d\\n\", *p);\n    *p = *p * 2;\n    printf(\"函数内修改后: *p = %d\\n\", *p);\n}\n\nint main() {\n    int x = 5;\n    printf(\"调用前: x = %d\\n\", x);\n    modify(&x);\n    printf(\"调用后: x = %d\\n\", x);\n    return 0;\n}"
+                explanation: "这是「指针值传递无法修改外部指针」的陷阱！`alloc`的参数`p`是`ptr`的副本，`p=malloc(...)`只修改了副本，`ptr`仍然是NULL。`*ptr`解引用NULL指针导致段错误。「易错点」：1) 指针参数也是值传递，修改指针本身不影响外部；2) 要修改外部指针需要传二级指针`int **p`；3) 这也是内存泄漏——malloc的内存无法释放。",
+                codeExample: "#include <stdio.h>\n#include <stdlib.h>\n\n/* 错误：值传递无法修改外部指针 */\nvoid alloc_wrong(int *p) {\n    p = (int*)malloc(sizeof(int));  /* 只修改了副本 */\n    *p = 42;\n}\n\n/* 正确：传二级指针 */\nvoid alloc_right(int **p) {\n    *p = (int*)malloc(sizeof(int));  /* 修改外部指针 */\n    **p = 42;\n}\n\nint main() {\n    int *ptr = NULL;\n    alloc_right(&ptr);  /* 传ptr的地址 */\n    printf(\"%d\\n\", *ptr);  /* 42 */\n    free(ptr);\n    return 0;\n}"
             },
             {
                 id: 16,
@@ -291,16 +291,16 @@ class TemplateLoader {
             },
             {
                 id: 17,
-                question: "关于指针运算，以下说法错误的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint arr[5] = {10, 20, 30, 40, 50};\nint *p = &arr[0];\nint *q = &arr[5];\nprintf(\"%td\", q - p);\n</C>",
                 options: [
-                    "指针可以加上或减去整数",
-                    "两个指针可以相减",
-                    "两个指针可以相加",
-                    "指针可以进行关系比较"
+                    "`5`",
+                    "`20`",
+                    "未定义行为",
+                    "`4`"
                 ],
-                correctAnswer: 2,
-                explanation: "指针不能相加，因为两个地址相加没有实际意义。但指针可以减去整数（向前移动）、加上整数（向后移动）、两个指针相减（计算距离）、以及进行关系比较。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p1 = &arr[1];\n    int *p2 = &arr[4];\n    \n    // 合法操作\n    int *p3 = p1 + 2;  // 指针加整数\n    int *p4 = p2 - 1;  // 指针减整数\n    int diff = p2 - p1;  // 指针相减，结果为3\n    \n    printf(\"diff = %d\\n\", diff);\n    \n    if (p1 < p2) {\n        printf(\"p1 在 p2 前面\\n\");\n    }\n    \n    // 非法操作\n    // int *p5 = p1 + p2;  // 错误：指针不能相加\n    \n    return 0;\n}"
+                correctAnswer: 0,
+                explanation: "这是「指针相减的结果类型」的陷阱！两个指向同一数组的指针相减，结果是元素个数（不是字节数），类型为`ptrdiff_t`。`q-p`=`&arr[5]-&arr[0]`=5个元素。「易错点」：1) 指针相减结果是元素个数，不是字节数；2) `q-p`≠`(char*)q-(char*)p`，后者才是字节数(20)；3) 只有指向同一数组的指针才能相减，否则是UB；4) `&arr[5]`指向越界一个位置是合法的。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    int arr[5] = {10, 20, 30, 40, 50};\n    int *p = &arr[0];\n    int *q = &arr[5];\n    \n    printf(\"q - p = %td (元素个数)\\n\", q - p);  /* 5 */\n    printf(\"(char*)q - (char*)p = %td (字节数)\\n\", \n           (char*)q - (char*)p);  /* 20 */\n    \n    /* 指针相减 = (地址差) / sizeof(int) */\n    /* = (20字节) / 4 = 5个元素 */\n    return 0;\n}"
             },
             {
                 id: 18,
@@ -421,16 +421,16 @@ class TemplateLoader {
             },
             {
                 id: 27,
-                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 10, y = 20;\nint *p = &x;\np = &y;\nprintf(\"%d\", *p);\n</C>",
+                question: "以下代码的输出结果是什么？\n\n<C>\nchar *p = \"Hello\";\np[0] = 'h';\nprintf(\"%s\", p);\n</C>",
                 options: [
-                    "`10`",
-                    "`20`",
-                    "`30`",
+                    "`hello`",
+                    "未定义行为（可能崩溃）",
+                    "`Hello`",
                     "编译错误"
                 ],
                 correctAnswer: 1,
-                explanation: "指针p先指向x，然后重新指向y。最后 `*p` 输出y的值20。指针变量可以改变指向。",
-                codeExample: "#include <stdio.h>\n\nint main() {\n    int x = 10, y = 20;\n    int *p = &x;\n    \n    printf(\"p指向x: *p = %d\\n\", *p);  // 10\n    \n    p = &y;  // p改为指向y\n    printf(\"p指向y: *p = %d\\n\", *p);  // 20\n    \n    *p = 30;  // 修改y的值\n    printf(\"修改后: y = %d\\n\", y);    // 30\n    \n    return 0;\n}"
+                explanation: "这是「修改字符串常量」的致命陷阱！`\"Hello\"`存储在只读常量区，`p[0]='h'`尝试修改只读内存，这是「未定义行为」，通常导致段错误（SIGSEGV）。「易错点」：1) `char *p=\"Hello\"`指向常量区，不可修改；2) `char p[]=\"Hello\"`是数组，在栈上，可以修改；3) C标准规定修改字符串字面量是UB；4) 某些编译器/平台可能不崩溃，但行为不可移植。",
+                codeExample: "#include <stdio.h>\n\nint main() {\n    /* 危险：指向常量区，不可修改 */\n    char *p = \"Hello\";\n    /* p[0] = 'h';  未定义行为！可能崩溃 */\n    \n    /* 安全：数组在栈上，可以修改 */\n    char arr[] = \"Hello\";\n    arr[0] = 'h';\n    printf(\"%s\\n\", arr);  /* hello */\n    \n    /* 区别：\n     * char *p = \"Hello\"  -> 指向只读常量区\n     * char a[] = \"Hello\" -> 栈上副本，可修改\n     */\n    return 0;\n}"
             },
             {
                 id: 28,

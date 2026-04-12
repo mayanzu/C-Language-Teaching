@@ -1,4 +1,4 @@
-﻿// 模板加载器 - 负责动态加载题库数据
+// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         console.log('[TemplateLoader] 构造函数已调用');
@@ -109,16 +109,16 @@ class TemplateLoader {
             },
             {
                 id: 3,
-                question: "关于 `#define` 宏定义，以下说法错误的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\n#define X 1\n#define Y (X + 1)\n#undef X\n#define X 2\nprintf(\"%d\", Y);\n</C>",
                 options: [
-                    "宏定义在预处理阶段进行文本替换",
-                    "宏定义不进行类型检查",
-                    "宏定义必须以分号结尾",
-                    "宏定义可以定义常量和带参数的宏"
+                    "`2`",
+                    "`3`",
+                    "`1`",
+                    "编译错误"
                 ],
-                correctAnswer: 2,
-                explanation: "宏定义「不需要」以分号结尾。宏是预处理器的文本替换，不进行语法检查。加分号会导致替换时多出分号，可能引起错误。",
-                codeExample: "#include <stdio.h>\n\n// 正确：不加分号\n#define PI 3.14159\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\n\n// 错误示例\n// #define VALUE 100;  // 分号会被替换进去\n\nint main() {\n    printf(\"PI = %f\\n\", PI);\n    printf(\"MAX(5, 10) = %d\\n\", MAX(5, 10));\n    \n    // 如果定义时加了分号\n    // int x = VALUE;  // 会变成: int x = 100;;（语法错误）\n    \n    return 0;\n}"
+                correctAnswer: 1,
+                explanation: "这是「宏展开时机」的陷阱！宏是在预处理阶段展开的，`Y`展开为`(X+1)`，此时`X`已被重定义为2，所以`Y=(2+1)=3`。「易错点」：1) `#undef X`取消定义后，`#define X 2`重新定义；2) 宏展开时使用的是当前有效的宏定义，不是定义Y时的值；3) 如果Y定义为`#define Y 1+1`，则不受X影响。",
+                codeExample: "#include <stdio.h>\n\n#define X 1\n#define Y (X + 1)\n#undef X\n#define X 2\n\nint main() {\n    printf(\"Y = %d\\n\", Y);  /* (2+1) = 3 */\n    \n    /* 宏展开过程：\n     * Y -> (X + 1)\n     * X -> 2（当前定义）\n     * 结果: (2 + 1) = 3\n     */\n    return 0;\n}"
             },
             {
                 id: 4,
@@ -161,16 +161,16 @@ class TemplateLoader {
             },
             {
                 id: 7,
-                question: "关于 `#include` 指令，以下说法正确的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\nint x = 10;\nvoid func() {\n    int x = 20;\n    {\n        int x = 30;\n        printf(\"%d \", x);\n    }\n    printf(\"%d \", x);\n}\n\nint main() {\n    func();\n    printf(\"%d\", x);\n    return 0;\n}\n</C>",
                 options: [
-                    "`#include <file.h>` 和 `#include \"file.h\"` 完全相同",
-                    "`#include <file.h>` 在系统目录中搜索头文件",
-                    "`#include \"file.h\"` 只能包含当前目录的文件",
-                    "`#include` 可以包含C源文件（.c）但不推荐"
+                    "`30 20 10`",
+                    "`10 20 30`",
+                    "`30 30 30`",
+                    "`30 10 10`"
                 ],
-                correctAnswer: 1,
-                explanation: "`#include <file.h>` 在系统头文件目录中搜索，用于标准库头文件。`#include \"file.h\"` 先在当前目录搜索，然后在系统目录搜索，用于自定义头文件。虽然可以包含.c文件，但强烈不推荐，应该包含.h头文件。",
-                codeExample: "#include <stdio.h>      // 系统头文件，尖括号\n#include <string.h>     // 系统头文件\n// #include \"myheader.h\"   // 自定义头文件，双引号\n\n// 包含.c文件是可以的，但不推荐\n// #include \"helper.c\"  // 不推荐！会导致重复定义\n\nint main() {\n    printf(\"Hello\\n\");\n    return 0;\n}"
+                correctAnswer: 0,
+                explanation: "这是「嵌套作用域变量遮蔽」的陷阱！内层块`{int x=30;}`遮蔽了外层的`x=20`，输出30。出块后回到`x=20`，输出20。全局`x=10`在func内被局部x遮蔽，main中输出10。「易错点」：1) 每层花括号创建新的作用域；2) 内层变量遮蔽外层同名变量；3) 出了内层作用域，外层变量恢复可见。",
+                codeExample: "#include <stdio.h>\n\nint x = 10;  /* 全局 */\n\nvoid func() {\n    int x = 20;  /* 遮蔽全局x */\n    {\n        int x = 30;  /* 遮蔽外层x */\n        printf(\"内层: %d\\n\", x);  /* 30 */\n    }\n    printf(\"外层: %d\\n\", x);  /* 20 */\n}\n\nint main() {\n    func();\n    printf(\"全局: %d\\n\", x);  /* 10 */\n    return 0;\n}"
             },
             {
                 id: 8,
@@ -187,16 +187,16 @@ class TemplateLoader {
             },
             {
                 id: 9,
-                question: "关于 `extern` 关键字，以下说法正确的是：",
+                question: "以下代码的输出结果是什么？\n\n<C>\n#define SQUARE(x) x*x\nint result = SQUARE(2+3);\nprintf(\"%d\", result);\n</C>",
                 options: [
-                    "`extern` 用于声明外部变量，不分配存储空间",
-                    "`extern` 变量只能在全局作用域声明",
-                    "`extern` 可以用于函数定义",
-                    "`extern` 变量必须初始化"
+                    "`25`",
+                    "`11`",
+                    "`13`",
+                    "编译错误"
                 ],
-                correctAnswer: 0,
-                explanation: "`extern` 用于声明在其他文件中定义的全局变量或函数，告诉编译器该变量或函数在别处定义，不分配新的存储空间。`extern` 声明不应该初始化（初始化会变成定义）。",
-                codeExample: "#include <stdio.h>\n\n// file1.c\nint global_var = 100;  // 定义并初始化\n\nvoid print_var() {\n    printf(\"%d\\n\", global_var);\n}\n\n// file2.c\nextern int global_var;  // 声明，不分配空间\nextern void print_var();  // 函数声明\n\nint main() {\n    printf(\"%d\\n\", global_var);  // 访问file1.c中的变量\n    print_var();\n    return 0;\n}"
+                correctAnswer: 1,
+                explanation: "这是「宏缺少括号导致优先级错误」的经典陷阱！`SQUARE(2+3)`展开为`2+3*2+3`，而不是`(2+3)*(2+3)`。由于`*`优先级高于`+`，计算过程为`2+(3*2)+3=2+6+3=11`。「易错点」：1) 宏是文本替换，不会自动加括号；2) 正确定义应为`#define SQUARE(x) ((x)*(x))`；3) 参数要用括号包裹，整体也要用括号包裹。",
+                codeExample: "#include <stdio.h>\n\n/* 错误：缺少括号 */\n#define SQUARE_WRONG(x) x*x\n\n/* 正确：加括号 */\n#define SQUARE_RIGHT(x) ((x)*(x))\n\nint main() {\n    printf(\"SQUARE_WRONG(2+3) = %d\\n\", SQUARE_WRONG(2+3));  /* 11 */\n    printf(\"SQUARE_RIGHT(2+3) = %d\\n\", SQUARE_RIGHT(2+3));  /* 25 */\n    \n    /* 展开过程：\n     * WRONG: 2+3*2+3 = 2+6+3 = 11\n     * RIGHT: ((2+3)*(2+3)) = 5*5 = 25\n     */\n    return 0;\n}"
             },
             {
                 id: 10,

@@ -1,4 +1,4 @@
-﻿// 模板加载器 - 负责动态加载题库数据
+// 模板加载器 - 负责动态加载题库数据
 class TemplateLoader {
     constructor() {
         this.questions = [];
@@ -83,35 +83,35 @@ class TemplateLoader {
   },
   {
     "id": 2,
-    "question": "若 `int a[5] = {1, 2, 3};`，则 `a[4]` 的值是？",
-    "options": ["`0`", "`3`", "随机值", "编译错误"],
-    "correctAnswer": 0,
-    "explanation": "当数组初始化列表元素少于数组大小时，剩余元素会被自动初始化为0。因此 `a[0]=1, a[1]=2, a[2]=3, a[3]=0, a[4]=0`。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[5] = {1, 2, 3};  // 只初始化前3个元素\n    \n    // 输出所有元素\n    for(int i = 0; i < 5; i++) {\n        printf(\"a[%d] = %d\\n\", i, a[i]);\n    }\n    \n    /* 输出结果：\n    a[0] = 1\n    a[1] = 2\n    a[2] = 3\n    a[3] = 0  // 未初始化的元素自动为0\n    a[4] = 0  // 未初始化的元素自动为0\n    */\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar str[] = \"Hello\";\nstr[5] = '!';\nprintf(\"%s\", str);\n</C>",
+    "options": ["`Hello!`", "`Hello`", "未定义行为", "编译错误"],
+    "correctAnswer": 2,
+    "explanation": "这是「覆盖字符串结束符」的陷阱！`\"Hello\"`初始化的数组大小为6，`str[5]`原本是`\\0`（字符串结束标志）。将`str[5]`改为`'!'`后，字符串失去了结束标志，`printf`的`%s`会继续读取内存直到遇到下一个`\\0`，这是「未定义行为」。「易错点」：1) 忘记`\"Hello\"`实际占6字节（含`\\0`）；2) `str[5]`不是越界访问，但覆盖了`\\0`；3) 结果可能输出`Hello!`加上乱码，也可能崩溃。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str[] = \"Hello\";  /* 大小为6: H,e,l,l,o,\\0 */\n    printf(\"sizeof(str) = %zu\\n\", sizeof(str));  /* 6 */\n    printf(\"str[5] = %d (\\\\0的ASCII)\\n\", str[5]);  /* 0 */\n    \n    /* 覆盖\\\\0 - 未定义行为！ */\n    /* str[5] = '!';  printf会越界读取 */\n    \n    /* 正确做法：数组足够大 */\n    char str2[10] = \"Hello\";  /* 大小10，有空间 */\n    str2[5] = '!';\n    str2[6] = '\\0';  /* 手动添加结束符 */\n    printf(\"%s\\n\", str2);  /* Hello! */\n    return 0;\n}"
   },
   {
     "id": 3,
-    "question": "以下关于二维数组的定义，正确的是？",
-    "options": ["`int a[][3] = {{1, 2, 3}, {4, 5, 6}};`", "`int a[2][] = {{1, 2, 3}, {4, 5, 6}};`", "`int a[][] = {{1, 2, 3}, {4, 5, 6}};`", "`int a[2, 3] = {{1, 2, 3}, {4, 5, 6}};`"],
-    "correctAnswer": 0,
-    "explanation": "选项A正确：二维数组定义时，第一维可以省略（由初始化列表确定），但第二维必须指定。选项B错误：第二维不能省略。选项C错误：两维都不能省略。选项D错误：应使用方括号 `[]`，不是逗号。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    // 正确的定义方式\n    int a[][3] = {{1, 2, 3}, {4, 5, 6}};  // 第一维省略，第二维指定为3\n    \n    // 也可以这样定义\n    int b[2][3] = {{1, 2, 3}, {4, 5, 6}};  // 两维都指定\n    \n    // 错误的定义方式\n    // int c[2][] = {{1, 2, 3}, {4, 5, 6}};  // 错误：第二维不能省略\n    // int d[][] = {{1, 2, 3}, {4, 5, 6}};    // 错误：两维都不能省略\n    // int e[2, 3] = {{1, 2, 3}, {4, 5, 6}}; // 错误：应使用方括号\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nint a[5] = {1, 2, 3, 4, 5};\nint *p = a;\nprintf(\"%d %d\", *p++, *(++p));\n</C>",
+    "options": ["`1 3`", "`2 3`", "未定义行为", "`1 2`"],
+    "correctAnswer": 2,
+    "explanation": "这是「函数参数求值顺序」的经典陷阱！`*p++`和`*(++p)`在同一个函数调用的参数列表中，C标准没有规定函数参数的求值顺序。如果先算`*p++`，p先变为2再变为3；如果先算`*(++p)`，p先变为2，`*p++`得到2。不同编译器结果不同，这是「未定义行为」。「易错点」：1) 误以为参数从左到右求值；2) 实际上编译器可以从右到左或任意顺序求值；3) 同一表达式中对同一变量既有修改又有读取，且无序列点分隔。",
+    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[5] = {1, 2, 3, 4, 5};\n    int *p = a;\n    \n    /* 未定义行为！参数求值顺序不确定 */\n    /* printf(\"%d %d\", *p++, *(++p)); */\n    \n    /* 正确做法：分开操作 */\n    int val1 = *p++;  /* val1=1, p指向a[1] */\n    int val2 = *(++p); /* p先指向a[2], val2=3 */\n    printf(\"%d %d\\n\", val1, val2);  /* 1 3 */\n    \n    return 0;\n}"
   },
   {
     "id": 4,
-    "question": "若 `int a[3][2] = {{1, 2}, {3, 4}, {5, 6}};`，则 `a[1][1]` 的值是？",
-    "options": ["`1`", "`2`", "`3`", "`4`"],
-    "correctAnswer": 3,
-    "explanation": "二维数组 `a[3][2]` 表示3衁2列的数组。`a[1][1]` 表示第2行第2列的元素。数组元素排列如下：\n第1行：`a[0][0]=1, a[0][1]=2`\n第2行：`a[1][0]=3, a[1][1]=4`\n第3行：`a[2][0]=5, a[2][1]=6`\n所以 `a[1][1]` 的值是4。",
-    "codeExample": "#include <stdio.h>\n\nint main() {\n    int a[3][2] = {{1, 2}, {3, 4}, {5, 6}};\n    \n    // 输出所有元素\n    for(int i = 0; i < 3; i++) {\n        for(int j = 0; j < 2; j++) {\n            printf(\"a[%d][%d] = %d \", i, j, a[i][j]);\n        }\n        printf(\"\\n\");\n    }\n    \n    /* 输出结果：\n    a[0][0] = 1 a[0][1] = 2 \n    a[1][0] = 3 a[1][1] = 4 \n    a[2][0] = 5 a[2][1] = 6 \n    */\n    \n    printf(\"a[1][1] = %d\\n\", a[1][1]);  // 输出：a[1][1] = 4\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar s1[] = \"abc\";\nchar s2[] = \"abc\";\nif (s1 == s2)\n    printf(\"相等\");\nelse\n    printf(\"不相等\");\n</C>",
+    "options": ["`相等`", "`不相等`", "编译错误", "运行时错误"],
+    "correctAnswer": 1,
+    "explanation": "这是「数组名比较vs字符串比较」的陷阱！`s1 == s2`比较的是两个数组的「地址」，不是字符串内容。`s1`和`s2`是两个不同的数组，存储在不同的内存地址，所以地址不相等。「易错点」：1) `==`对数组名比较的是地址，不是内容；2) 比较字符串内容必须用`strcmp()`；3) 即使两个数组内容相同，地址也一定不同。「正确做法」：`if(strcmp(s1, s2) == 0)`。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s1[] = \"abc\";\n    char s2[] = \"abc\";\n    \n    /* 比较地址 - 永远不相等 */\n    printf(\"s1地址: %p\\n\", (void*)s1);\n    printf(\"s2地址: %p\\n\", (void*)s2);\n    printf(\"s1 == s2: %s\\n\", s1 == s2 ? \"是\" : \"否\");  /* 否 */\n    \n    /* 比较内容 - 相等 */\n    printf(\"strcmp: %d\\n\", strcmp(s1, s2));  /* 0表示相等 */\n    \n    /* 注意：指针指向同一字符串字面量时 */\n    char *p1 = \"abc\";  /* 指向常量区同一位置 */\n    char *p2 = \"abc\";  /* 编译器可能优化为同一地址 */\n    printf(\"p1 == p2: %s\\n\", p1 == p2 ? \"是\" : \"否\");  /* 可能是！ */\n    return 0;\n}"
   },
   {
     "id": 5,
-    "question": "以下关于字符数组和字符串的说法，正确的是？",
-    "options": ["字符串必须以 `'\\0'` 结尾", "字符数组就是字符串", "字符串长度等于数组大小", "字符数组不能存放字符串"],
-    "correctAnswer": 0,
-    "explanation": "选项A正确：C语言中字符串是以 `'\\0'`（空字符）结尾的字符序列。选项B错误：字符数组不一定是字符串，只有以 `'\\0'` 结尾的字符数组才是字符串。选项C错误：字符串长度是有效字符的数量（不包括 `'\\0'`），通常小于数组大小。选项D错误：字符数组可以存放字符串。",
-    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    // 字符数组（也是字符串）\n    char str1[] = \"Hello\";  // 自动添加'\\0'，实际大小为6\n    \n    // 字符数组（不是字符串）\n    char arr[] = {'H', 'e', 'l', 'l', 'o'};  // 没有'\\0'，不是字符串\n    \n    // 字符数组（手动添加'\\0'）\n    char str2[] = {'H', 'e', 'l', 'l', 'o', '\\0'};  // 手动添加'\\0'\n    \n    printf(\"str1长度: %zu, 数组大小: %zu\\n\", strlen(str1), sizeof(str1));\n    // 输出：str1长度: 5, 数组大小: 6\n    \n    // arr不能使用strlen，因为没有'\\0'\n    printf(\"str2长度: %zu, 数组大小: %zu\\n\", strlen(str2), sizeof(str2));\n    // 输出：str2长度: 5, 数组大小: 6\n    \n    return 0;\n}"
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar str[5] = \"Hello\";\nprintf(\"%s\", str);\n</C>",
+    "options": ["`Hello`", "未定义行为（无\\\\0结尾）", "编译错误", "`Hell`"],
+    "correctAnswer": 1,
+    "explanation": "这是「字符数组大小不足」的陷阱！`\"Hello\"`需要6个字节（5个字符+1个`\\0`），但`str`只有5个字节。C标准规定，当数组大小不足以存放字符串结尾的`\\0`时，`\\0`不会被存储。`str`中没有`\\0`，`printf`的`%s`会越界读取，这是「未定义行为」。「易错点」：1) 忘记字符串末尾的`\\0`也需要空间；2) 这不是编译错误，但运行时可能输出乱码；3) `char str[5]=\"Hello\"`和`char str[]=\"Hello\"`（大小6）完全不同。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    /* 危险！大小5不够存放\\\\0 */\n    char str[5] = \"Hello\";  /* 没有空间存放\\\\0 */\n    /* printf(\"%s\", str);  未定义行为！ */\n    \n    /* 正确做法：大小至少6 */\n    char str2[6] = \"Hello\";  /* 有空间存放\\\\0 */\n    printf(\"%s\\n\", str2);  /* Hello */\n    \n    /* 或者让编译器自动计算大小 */\n    char str3[] = \"Hello\";  /* 大小自动为6 */\n    printf(\"sizeof(str3) = %zu\\n\", sizeof(str3));  /* 6 */\n    return 0;\n}"
   },
   {
     "id": 6,
@@ -131,19 +131,19 @@ class TemplateLoader {
   },
   {
     "id": 8,
-    "question": "以下哪个函数可以计算字符串长度？",
-    "options": ["`strlen()`", "`sizeof()`", "`length()`", "`size()`"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar str[] = \"Hello\\\\0World\";\nprintf(\"%zu %zu\", strlen(str), sizeof(str));\n</C>",
+    "options": ["`5 12`", "`11 12`", "`5 6`", "`11 11`"],
     "correctAnswer": 0,
-    "explanation": "选项A正确：`strlen()` 是C标准库中的函数，用于计算字符串长度（不包括结尾的 `'\\0'`）。选项B错误：`sizeof` 是运算符，不是函数，返回变量或类型的大小（字节）。选项C和D错误：`length()` 和 `size()` 不是C标准库中的函数。",
-    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str[] = \"Hello World\";\n    \n    // 使用strlen计算字符串长度\n    size_t len = strlen(str);\n    printf(\"字符串长度: %zu\\n\", len);  // 输出：字符串长度: 11\n    \n    // sizeof返回数组大小（包括'\\0'）\n    printf(\"数组大小: %zu\\n\", sizeof(str));  // 输出：数组大小: 12\n    \n    return 0;\n}"
+    "explanation": "这是「strlen与sizeof对含\\\\0字符串的处理」的陷阱！`strlen`遇到第一个`\\0`就停止计数，所以只计算`Hello`的长度5。`sizeof`计算整个数组大小，包括所有字符和末尾的`\\0`：`H,e,l,l,o,\\0,W,o,r,l,d,\\0`共12字节。「易错点」：1) `strlen`统计的是`\\0`之前的字符数；2) `sizeof`统计的是整个数组占用的字节数（含末尾自动添加的`\\0`）；3) 中间的`\\0`是字符串的一部分，但`strlen`不会统计它之后的字符。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str[] = \"Hello\\0World\";\n    printf(\"strlen: %zu\\n\", strlen(str));  /* 5 */\n    printf(\"sizeof: %zu\\n\", sizeof(str));  /* 12 */\n    \n    /* 内存内容: H e l l o \\\\0 W o r l d \\\\0 */\n    /* strlen遇到第一个\\\\0停止: 5 */\n    /* sizeof计算整个数组: 12(含末尾\\\\0) */\n    \n    /* 逐字节输出验证 */\n    for (int i = 0; i < (int)sizeof(str); i++) {\n        printf(\"str[%d] = %d (%c)\\n\", i, str[i], \n               str[i] >= 32 && str[i] < 127 ? str[i] : '.');\n    }\n    return 0;\n}"
   },
   {
     "id": 9,
-    "question": "若 `char str1[10] = \"Hello\", char str2[10];`，以下哪个操作是正确的？",
-    "options": ["`str2 = str1;`", "`strcpy(str2, str1);`", "`str2[10] = str1[10];`", "`strcmp(str2, str1);`"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar dest[5];\nchar src[] = \"Hello\";\nstrcpy(dest, src);\nprintf(\"%s\", dest);\n</C>",
+    "options": ["`Hello`", "缓冲区溢出（未定义行为）", "编译错误", "`Hell`"],
     "correctAnswer": 1,
-    "explanation": "选项B正确：`strcpy()` 是C标准库函数，用于将一个字符串复制到另一个字符串中。选项A错误：不能使用赋值运算符直接复制数组。选项C错误：数组越界访问，`str2[10]` 和 `str1[10]` 都超出了数组范围（有效索引是0-9）。选项D错误：`strcmp()` 是比较字符串的函数，不是复制字符串。",
-    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str1[10] = \"Hello\";\n    char str2[10];\n    \n    // 正确的字符串复制方式\n    strcpy(str2, str1);\n    printf(\"str2 = %s\\n\", str2);  // 输出：str2 = Hello\n    \n    // 错误的方式\n    // str2 = str1;  // 错误：不能直接赋值数组\n    \n    // 正确的字符串比较方式\n    if(strcmp(str1, str2) == 0) {\n        printf(\"两个字符串相同\\n\");\n    }\n    \n    return 0;\n}"
+    "explanation": "这是「strcpy缓冲区溢出」的经典陷阱！`src`是`\"Hello\"`，包含6个字节（5个字符+`\\0`），但`dest`只有5个字节。`strcpy`不检查目标缓冲区大小，会将6个字节全部复制到5字节的数组中，导致缓冲区溢出，这是「未定义行为」。「易错点」：1) `strcpy`不做边界检查，是最危险的字符串函数之一；2) 应使用`strncpy`或`snprintf`等安全函数；3) 缓冲区溢出可能导致程序崩溃或安全漏洞。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    /* 危险！dest太小 */\n    char dest[5];\n    char src[] = \"Hello\";  /* 6字节(含\\\\0) */\n    /* strcpy(dest, src);  缓冲区溢出！ */\n    \n    /* 安全做法1：确保dest足够大 */\n    char dest2[10];\n    strcpy(dest2, src);  /* OK */\n    printf(\"%s\\n\", dest2);\n    \n    /* 安全做法2：使用strncpy限制长度 */\n    char dest3[5];\n    strncpy(dest3, src, sizeof(dest3)-1);\n    dest3[sizeof(dest3)-1] = '\\0';  /* 手动添加结束符 */\n    printf(\"%s\\n\", dest3);  /* Hell */\n    \n    return 0;\n}"
   },
   {
     "id": 10,
@@ -171,11 +171,11 @@ class TemplateLoader {
   },
   {
     "id": 13,
-    "question": "以下哪个函数用于比较两个字符串？",
-    "options": ["`strcmp()`", "`strcpy()`", "`strcat()`", "`strlen()`"],
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar s1[] = \"abc\";\nchar s2[] = \"ABC\";\nprintf(\"%d\", strcmp(s1, s2) > 0);\n</C>",
+    "options": ["`1`", "`0`", "不确定", "编译错误"],
     "correctAnswer": 0,
-    "explanation": "选项A正确：`strcmp()` 函数用于比较两个字符串，返回0表示相等，负数表示第一个字符串小于第二个字符串，正数表示第一个字符串大于第二个字符串。选项B错误：`strcpy()` 用于复制字符串。选项C错误：`strcat()` 用于连接字符串。选项D错误：`strlen()` 用于计算字符串长度。",
-    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char str1[] = \"Hello\";\n    char str2[] = \"World\";\n    char str3[] = \"Hello\";\n    \n    // 比较字符串\n    int result1 = strcmp(str1, str2);\n    int result2 = strcmp(str1, str3);\n    \n    if(result1 == 0) {\n        printf(\"str1和str2相等\\n\");\n    } else if(result1 < 0) {\n        printf(\"str1小于str2\\n\");\n    } else {\n        printf(\"str1大于str2\\n\");\n    }\n    \n    if(result2 == 0) {\n        printf(\"str1和str3相等\\n\");\n    }\n    \n    return 0;\n}"
+    "explanation": "这是「strcmp返回值与ASCII大小关系」的陷阱！`strcmp`按字典序比较，基于ASCII码值。`'a'(97) > 'A'(65)`，所以`\"abc\" > \"ABC\"`，`strcmp`返回正数，`strcmp(s1,s2)>0`为真(1)。「易错点」：1) 误以为大写字母大于小写字母，实际上小写字母ASCII码值更大；2) `strcmp`返回值的正负表示大小关系，不是返回差值；3) `strcmp`逐字符比较，第一个不同的字符决定结果。",
+    "codeExample": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s1[] = \"abc\";\n    char s2[] = \"ABC\";\n    \n    printf(\"strcmp(s1, s2) = %d\\n\", strcmp(s1, s2));  /* 正数 */\n    printf(\"'a' - 'A' = %d\\n\", 'a' - 'A');  /* 32 */\n    printf(\"s1 > s2: %d\\n\", strcmp(s1, s2) > 0);  /* 1(真) */\n    \n    /* ASCII码：小写 > 大写 */\n    printf(\"'a'=%d, 'A'=%d\\n\", 'a', 'A');  /* 97, 65 */\n    return 0;\n}"
   },
   {
     "id": 14,
