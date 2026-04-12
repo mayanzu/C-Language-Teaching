@@ -118,6 +118,9 @@
    ============================================ */
 
 :root {
+    /* --- 基准字号（可通过媒体查询缩放整个页面） --- */
+    --base-font-size: 17px;
+
     /* --- 颜色系统 --- */
     --color-text-primary: #1D1D1F;
     --color-text-secondary: #6E6E73;
@@ -181,7 +184,7 @@ body {
     background: var(--color-background);
     color: var(--color-text-primary);
     line-height: 1.6;
-    font-size: 17px;
+    font-size: var(--base-font-size);
 }
 
 html {
@@ -257,7 +260,7 @@ html {
     padding: var(--spacing-sm) var(--spacing-md);
     color: var(--color-text-secondary);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 0.82rem;
     font-weight: 500;
     border-radius: var(--radius-sm);
     transition: all 0.2s ease;
@@ -289,7 +292,7 @@ html {
 }
 
 .tutorial-header h1 {
-    font-size: 40px;
+    font-size: 2.35rem;
     font-weight: 700;
     letter-spacing: -0.015em;
     color: var(--color-text-primary);
@@ -298,7 +301,7 @@ html {
 }
 
 .tutorial-header p {
-    font-size: 19px;
+    font-size: 1.12rem;
     color: var(--color-text-secondary);
     line-height: 1.5;
     max-width: 720px;
@@ -316,7 +319,7 @@ html {
 }
 
 .section-title {
-    font-size: 32px;
+    font-size: 1.88rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--color-text-primary);
@@ -330,7 +333,7 @@ html {
 }
 
 .subsection-title {
-    font-size: 24px;
+    font-size: 1.41rem;
     font-weight: 600;
     letter-spacing: -0.015em;
     color: var(--color-text-primary);
@@ -1324,14 +1327,12 @@ td code {
 
 @media screen and (min-width: 2560px) {
     :root {
-        --font-size-base: 20px;
-        --font-size-h1: 38px;
-        --font-size-h2: 28px;
+        --base-font-size: 22px;
     }
 
     .tutorial-content {
-        max-width: 1280px;
-        padding: 32px 40px;
+        max-width: 1400px;
+        padding: 40px 48px;
     }
 
     .tutorial-nav {
@@ -1342,16 +1343,99 @@ td code {
         margin-left: 320px;
     }
 
-    .code-block pre {
-        font-size: 16px;
+    .tutorial-nav a {
+        font-size: 0.86rem;
     }
 }
 
 /* ============================================
-   高分屏 / Retina / 高DPI 优化
+   高分屏核心优化 - 整体缩放
    ============================================ */
 
-/* 启用高DPI子像素渲染 */
+/* 2x Retina (MacBook, 高分显示器) - 整体放大1.2倍 */
+@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 2559px) {
+    :root {
+        --base-font-size: 20px;    /* 原17px → 20px */
+    }
+
+    .tutorial-content {
+        max-width: 1100px;         /* 内容区更宽 */
+    }
+
+    .tutorial-nav {
+        width: 240px;              /* 侧边栏更宽 */
+    }
+
+    .tutorial-content {
+        margin-left: 240px;
+    }
+}
+
+/* 3x 高分屏 (部分手机/显示器) - 放大1.4倍 */
+@media (-webkit-min-device-pixel-ratio: 3) {
+    :root {
+        --base-font-size: 24px;
+    }
+
+    .tutorial-content {
+        max-width: 1200px;
+    }
+
+    .tutorial-nav {
+        width: 280px;
+    }
+
+    .tutorial-content {
+        margin-left: 280px;
+    }
+}
+
+/* Windows 150% 缩放 */
+@media (min-resolution: 120dpi) and (max-resolution: 159dpi) {
+    :root {
+        --base-font-size: 19px;
+    }
+}
+
+/* Windows 175%-200% 缩放 */
+@media (min-resolution: 160dpi) and (max-resolution: 220dpi) {
+    :root {
+        --base-font-size: 22px;
+    }
+
+    .tutorial-content {
+        max-width: 1100px;
+    }
+
+    .tutorial-nav {
+        width: 260px;
+    }
+
+    .tutorial-content {
+        margin-left: 260px;
+    }
+}
+
+/* Windows 250%+ 缩放 */
+@media (min-resolution: 221dpi) {
+    :root {
+        --base-font-size: 26px;
+    }
+
+    .tutorial-content {
+        max-width: 1200px;
+    }
+
+    .tutorial-nav {
+        width: 300px;
+    }
+
+    .tutorial-content {
+        margin-left: 300px;
+    }
+}
+
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     body {
         -webkit-font-smoothing: subpixel-antialiased;
@@ -1395,72 +1479,9 @@ td code {
     }
 }
 
-/* 2K/4K 高分大屏 - 1440p及以上 */
-@media screen and (min-width: 2560px) and (-webkit-min-device-pixel-ratio: 1.5),
-       screen and (min-width: 2560px) and (min-resolution: 144dpi) {
-    .tutorial-content {
-        max-width: 1400px;
-    }
 
-    .tutorial-nav {
-        width: 340px;
-    }
 
-    .tutorial-content {
-        margin-left: 340px;
-    }
 
-    .tutorial-header h1 {
-        font-size: 42px;
-    }
-
-    .section-title {
-        font-size: 34px;
-    }
-
-    .subsection-title {
-        font-size: 26px;
-    }
-
-    body {
-        font-size: 19px;
-    }
-
-    .code-block pre {
-        font-size: 17px;
-        line-height: 1.75;
-    }
-
-    .tutorial-nav a {
-        font-size: 16px;
-    }
-
-    /* 表格在大屏更宽松 */
-    table th,
-    table td {
-        padding: 12px 16px;
-    }
-
-    /* Callout 在大屏更宽松 */
-    .callout-tip,
-    .callout-warning,
-    .callout-note,
-    .callout-success {
-        padding: 20px 24px;
-    }
-}
-
-/* Mac Retina (2x) 优化 - 常见的 13-16寸 MacBook */
-@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 1800px) {
-    .code-block pre {
-        font-size: 14.5px;   /* Ret屏上 14.5px 比 14px 更清晰 */
-        letter-spacing: 0.01em;
-    }
-
-    .tutorial-nav a {
-        font-size: 13.5px;
-    }
-}
 
 /* Windows 高DPI缩放 (125%, 150%, 175%, 200%) */
 @media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
@@ -1485,6 +1506,10 @@ td code {
 
 /* 平板适配 */
 @media (max-width: 1024px) {
+    :root {
+        --base-font-size: 16px;
+    }
+
     .tutorial-nav {
         width: 200px;
     }
@@ -1497,6 +1522,10 @@ td code {
 
 /* 手机适配 */
 @media (max-width: 768px) {
+    :root {
+        --base-font-size: 16px;
+    }
+
     .tutorial-nav {
         position: static;
         width: 100%;
@@ -1511,22 +1540,6 @@ td code {
         padding: var(--spacing-lg) var(--spacing-md);
     }
 
-    .tutorial-header h1 {
-        font-size: 30px;
-    }
-
-    .tutorial-header p {
-        font-size: 16px;
-    }
-
-    .section-title {
-        font-size: 26px;
-    }
-
-    .subsection-title {
-        font-size: 20px;
-    }
-
     .tutorial-container {
         flex-direction: column;
     }
@@ -1538,32 +1551,15 @@ td code {
 
 /* 小屏适配 */
 @media (max-width: 480px) {
-    body {
-        font-size: 16px;
+    :root {
+        --base-font-size: 16px;
     }
 
     .tutorial-content {
         padding: var(--spacing-lg) var(--spacing-md);
     }
 
-    .tutorial-header h1 {
-        font-size: 28px;
-    }
-
-    .section-title {
-        font-size: 24px;
-    }
-
-    .subsection-title {
-        font-size: 20px;
-    }
-
-    .code-block-title {
-        font-size: 13px;
-    }
-
     .code-block pre {
-        font-size: 13px;
         padding: var(--spacing-md);
     }
 }
