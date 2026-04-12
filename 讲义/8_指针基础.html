@@ -114,6 +114,10 @@
              ============================================================ -->
         <section id="concept" class="section">
             <h2 class="section-title">指针的概念</h2>
+            <div class="callout-note">
+                <strong>NULL 指针：</strong><code>int *p = NULL;</code> 等价于 <code>int *p = 0;</code>。NULL 就是0，表示指针不指向任何有效地址。使用前必须检查：<code>if (p != NULL) { *p = 5; }</code>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">内存地址</h3>
@@ -183,6 +187,12 @@
              ============================================================ -->
         <section id="declaration" class="section">
             <h2 class="section-title">指针声明与初始化</h2>
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>二级考试指针大小约定：</strong>
+                        <p>二级考试按 VC++2010（32位）计算，<strong>所有指针大小 = 4 字节</strong>，与指针类型无关。不要按自己电脑（64位可能是8字节）来算！</p>
+                    </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">声明语法</h3>
@@ -469,6 +479,20 @@
              ============================================================ -->
         <section id="pointer-array" class="section">
             <h2 class="section-title">指针与数组</h2>
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>指针访问数组的四种等价写法（二级每年必考）：</strong>
+                <pre><code>int a[5] = {10, 20, 30, 40, 50};
+int *p = a;
+
+// 以下四种写法完全等价，都访问 a[i]：
+a[i]       // 数组下标法
+*(a + i)   // 数组名+偏移再解引用
+p[i]       // 指针下标法
+*(p + i)   // 指针+偏移再解引用</code></pre>
+                <p><strong>注意：</strong>指针 +1 实际加的是所指向类型的字节数。<code>int *p; p+1</code> 地址加4字节（int大小），不是加1！</p>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">数组名就是首地址</h3>

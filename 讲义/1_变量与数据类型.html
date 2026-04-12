@@ -521,7 +521,22 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
     <span class="c-function">printf</span>(<span class="c-string">"long long: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long long</span>));
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
-}</code></pre>
+}
+</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>二级考试 sizeof 约定（必记）：</strong>
+                        <p>计算机二级考试统一使用 VC++2010（32位环境），各类型的 sizeof 固定如下：</p>
+                        <table>
+                            <tr><th>类型</th><th>sizeof</th><th>类型</th><th>sizeof</th></tr>
+                            <tr><td><code>char</code></td><td>1</td><td><code>short</code></td><td>2</td></tr>
+                            <tr><td><code>int</code></td><td>4</td><td><code>long</code></td><td>4</td></tr>
+                            <tr><td><code>long long</code></td><td>8</td><td><code>float</code></td><td>4</td></tr>
+                            <tr><td><code>double</code></td><td>8</td><td><code>指针(*)</code></td><td>4</td></tr>
+                        </table>
+                        <p>考试中所有涉及 sizeof 的计算题，均以上表为准。不要按自己电脑（可能是64位）来算！</p>
                     </div>
                 </div>
             </div>
@@ -874,6 +889,33 @@ if (fabs(a - b) < 0.000001) {
                         </ul>
                     </div>
 
+                    <div class="callout-tip">
+                        <strong>ASCII码速查表（二级必背）：</strong>
+                        <table>
+                            <tr><th>字符范围</th><th>ASCII值</th><th>说明</th></tr>
+                            <tr><td><code>'0' ~ '9'</code></td><td>48 ~ 57</td><td>数字字符，<code>'0'</code>是48</td></tr>
+                            <tr><td><code>'A' ~ 'Z'</code></td><td>65 ~ 90</td><td>大写字母，<code>'A'</code>是65</td></tr>
+                            <tr><td><code>'a' ~ 'z'</code></td><td>97 ~ 122</td><td>小写字母，<code>'a'</code>是97</td></tr>
+                            <tr><td>大写转小写</td><td>+32</td><td><code>'A' + 32 = 'a'</code></td></tr>
+                            <tr><td>小写转大写</td><td>-32</td><td><code>'a' - 32 = 'A'</code></td></tr>
+                            <tr><td><code>' '</code>（空格）</td><td>32</td><td>空格字符</td></tr>
+                            <tr><td><code>'\n'</code>（换行）</td><td>10</td><td>换行符</td></tr>
+                            <tr><td><code>'\0'</code>（空字符）</td><td>0</td><td>字符串结束标记</td></tr>
+                        </table>
+                        <p><strong>记忆口诀：</strong>数字48起，大写65起，小写97起，大小写差32。</p>
+                    </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>signed char 溢出陷阱（二级考点）：</strong>
+                        <p>signed char 的范围是 -128 到 127（不是 -127 到 127！）。当赋值超出范围时，会发生溢出：</p>
+                        <pre><code>signed char c = 200;   // 200 超出127，溢出！实际值 = 200 - 256 = -56
+signed char c = 128;   // 128 超出127，溢出！实际值 = 128 - 256 = -128
+signed char c = 255;   // 溢出！实际值 = 255 - 256 = -1
+unsigned char c = -1;  // -1 转无符号：实际值 = 256 - 1 = 255</code></pre>
+                        <p>原理：char 只有1字节（8位），存不下就丢弃高位，按补码解释结果。</p>
+                    </div>
+
                     <div class="code-block">
                         <div class="code-block-title">字符型基本使用</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
@@ -1131,6 +1173,40 @@ if (fabs(a - b) < 0.000001) {
                             <li>转换方向：char → short → int → long → float → double</li>
                             <li>从低精度到高精度：安全，不会丢失数据</li>
                             <li>从高精度到低精度：可能丢失数据（如 double → int 会截断小数）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">赋值语句中的隐式类型转换（高频考点）</h3>
+                <div class="subsection-content">
+                    <p>当把一个值赋给不同类型的变量时，C语言会自动进行类型转换。<strong>注意：转换发生在赋值时，不是运算时。</strong>这是二级考试的高频考点。</p>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>二级考试经典陷阱题：</strong>
+                        <table>
+                            <tr><th>代码</th><th>结果</th><th>原因</th></tr>
+                            <tr><td><code>int a = 3.14;</code></td><td>a = 3</td><td>浮点转整数：截断小数（不是四舍五入）</td></tr>
+                            <tr><td><code>int a = 3.99;</code></td><td>a = 3</td><td>同样是截断，不是四舍五入</td></tr>
+                            <tr><td><code>float f = 3 / 2;</code></td><td>f = 1.0</td><td>先做整数除法得1，再转float赋值</td></tr>
+                            <tr><td><code>float f = 3.0 / 2;</code></td><td>f = 1.5</td><td>3.0是double，浮点除法得1.5</td></tr>
+                            <tr><td><code>float f = (float)3 / 2;</code></td><td>f = 1.5</td><td>强制转换后做浮点除法</td></tr>
+                            <tr><td><code>int a = 'A';</code></td><td>a = 65</td><td>字符'A'的ASCII值是65</td></tr>
+                            <tr><td><code>char c = 65;</code></td><td>c = 'A'</td><td>65对应字符'A'</td></tr>
+                            <tr><td><code>unsigned u = -1;</code></td><td>u = 4294967295</td><td>-1的补码全1，按无符号解释是最大值</td></tr>
+                            <tr><td><code>int a = 1.5 + 2.5;</code></td><td>a = 4</td><td>1.5+2.5=4.0，赋值给int截断为4</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>记忆技巧：</strong>
+                        <ul>
+                            <li>整数 → 浮点数：安全，加 .0 即可（如 3 → 3.0）</li>
+                            <li>浮点数 → 整数：截断小数部分，绝不四舍五入</li>
+                            <li>两个整数相除：结果是整数（丢弃小数），如 5/2 = 2</li>
+                            <li>只要有一个操作数是浮点数：结果是浮点数，如 5.0/2 = 2.5</li>
                         </ul>
                     </div>
                 </div>

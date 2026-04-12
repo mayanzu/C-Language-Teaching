@@ -221,6 +221,42 @@
                             </tr>
                             <tr>
                                 <td><span class="c-operator">%%</span></td>
+                            <tr>
+                                <td><span class="c-operator">%o</span></td>
+                                <td>八进制整数</td>
+                                <td><code>printf("%o", 10);</code></td>
+                                <td>12</td>
+                            </tr>
+                            <tr>
+                                <td><span class="c-operator">%x</span></td>
+                                <td>十六进制整数（小写）</td>
+                                <td><code>printf("%x", 255);</code></td>
+                                <td>ff</td>
+                            </tr>
+                            <tr>
+                                <td><span class="c-operator">%u</span></td>
+                                <td>无符号十进制整数</td>
+                                <td><code>printf("%u", -1);</code></td>
+                                <td>4294967295</td>
+                            </tr>
+                            <tr>
+                                <td><span class="c-operator">%5d</span></td>
+                                <td>宽度5，右对齐</td>
+                                <td><code>printf("%5d", 42);</code></td>
+                                <td><span style="letter-spacing:3px">___42</span>（3个空格+42）</td>
+                            </tr>
+                            <tr>
+                                <td><span class="c-operator">%-5d</span></td>
+                                <td>宽度5，左对齐</td>
+                                <td><code>printf("%-5d", 42);</code></td>
+                                <td>42<span style="letter-spacing:3px">___</span>（42+3个空格）</td>
+                            </tr>
+                            <tr>
+                                <td><span class="c-operator">%05d</span></td>
+                                <td>宽度5，补零</td>
+                                <td><code>printf("%05d", 42);</code></td>
+                                <td>00042</td>
+                            </tr>
                                 <td>输出百分号本身</td>
                                 <td><code>printf("100%%");</code></td>
                                 <td>100%</td>
@@ -487,6 +523,22 @@
 
                     <h4>常见问题：scanf 不能读取带空格的字符串</h4>
                     <p>scanf 遇到空格就会停止读取。如果要读取一整行，通常使用 <code>fgets()</code>。<code>gets()</code> 已被废弃，不建议使用。</p>
+
+                <div class="callout-warning">
+                    <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                    <strong>scanf 的返回值（二级考点）：</strong>
+                    <p><code>scanf</code> 返回成功读取的参数个数。读取失败或遇到文件末尾时返回 <code>EOF</code>（值为 -1）。</p>
+                    <pre><code>int a, b;
+int ret = scanf("%d%d", &a, &b);
+// 如果输入 "10 20"，ret = 2（成功读取2个）
+// 如果输入 "10 abc"，ret = 1（只成功读取1个）
+
+// 二级常见用法：循环读取直到文件末尾
+while (scanf("%d", &a) != EOF) {
+    printf("%d\n", a);
+}
+// 这种写法常出现在程序填空题中</code></pre>
+                </div>
                 </div>
 
                 <div class="code-block">
@@ -1116,6 +1168,27 @@
              ============================================================ -->
         <section id="nested" class="section">
             <h2 class="section-title">选择结构嵌套</h2>
+
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>悬空 else 问题（二级经典题）：</strong>
+                <p>当有多个 if 但只有一个 else 时，else 与<strong>最近的、尚未匹配的</strong> if 配对：</p>
+                <pre><code>if (a > 0)
+    if (b > 0)
+        printf("a>0且b>0\n");
+    else
+        printf("???\n");  // 这个else跟哪个if配对？
+// 答案：跟 if (b > 0) 配对（最近的if），不是跟 if (a > 0)
+// 虽然缩进暗示else属于外层if，但C语言不看缩进！
+
+// 正确写法：用大括号明确
+if (a > 0) {
+    if (b > 0)
+        printf("a>0且b>0\n");
+} else {
+    printf("a<=0\n");  // 现在else明确属于外层if
+}</code></pre>
+            </div>
 
             <!-- 嵌套if -->
             <div class="subsection">

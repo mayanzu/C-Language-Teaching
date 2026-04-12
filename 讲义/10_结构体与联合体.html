@@ -119,6 +119,37 @@
              ============================================================ -->
         <section id="struct-def" class="section">
             <h2 class="section-title">结构体定义与使用</h2>
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>typedef vs #define 声明指针的区别（二级考点）：</strong>
+                <pre><code>typedef int* PINT;
+#define PINT2 int*
+
+PINT a, b;     // a和b都是 int*（指针）
+PINT2 a, b;    // a是 int*（指针），b是 int（普通变量！）
+// 因为 #define 是文本替换：int* a, b → int *a, b</code></pre>
+            </div>
+
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>结构体字节对齐（二级选择题必考）：</strong>
+                <p>结构体的大小不一定是各成员大小之和。编译器会进行<strong>字节对齐</strong>（填充空白字节）：</p>
+                <p><strong>对齐规则：</strong>每个成员的起始地址必须是其类型大小的整数倍；整个结构体大小必须是最大成员类型大小的整数倍。</p>
+                <pre><code>struct {
+    char a;    // 1字节 + 3字节填充（下一个int要4字节对齐）
+    int b;     // 4字节
+    char c;    // 1字节 + 3字节填充（整体要4字节对齐）
+} s;
+sizeof(s) = 12（不是1+4+1=6！）
+
+struct {
+    char a;    // 1字节
+    char b;    // 1字节 + 2字节填充
+    int c;     // 4字节
+} s2;
+sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">定义结构体</h3>
@@ -725,7 +756,11 @@
              链表基础
              ============================================================ -->
         <section id="linked-list" class="section">
-            <h2 class="section-title">链表基础</h2>
+            <h2 class="section-title">链表基础<
+            <div class="callout-note">
+                <strong>注：链表不在二级考试范围内，以下内容供拓展学习。二级只考结构体的基本定义和使用。</strong>
+            </div>
+/h2>
 
             <div class="subsection">
                 <h3 class="subsection-title">什么是链表？</h3>

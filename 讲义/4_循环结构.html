@@ -396,6 +396,27 @@
                     </div>
 
                     <h4>三个表达式的含义</h4>
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>for 循环三个表达式的省略（二级考点）：</strong>
+                        <pre><code>// 省略初始化（在循环外已初始化）
+int i = 0;
+for (; i &lt; 10; i++) { }
+
+// 省略条件（死循环，必须在循环体内用break跳出）
+for (i = 0; ; i++) {
+    if (i &gt;= 10) break;
+}
+
+// 省略更新（在循环体内更新）
+for (i = 0; i &lt; 10; ) {
+    i++;
+}
+
+// 全部省略 = 死循环
+for (;;) { }  // 等价于 while(1) { }</code></pre>
+                    </div>
+
 
                     <div class="table-container">
                         <table>
@@ -755,12 +776,64 @@
              ============================================================ -->
         <section id="break-continue" class="section">
             <h2 class="section-title">break 与 continue</h2>
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>循环执行次数计算（二级选择题必考）：</strong>
+                <table>
+                    <tr><th>代码</th><th>执行次数</th><th>规律</th></tr>
+                    <tr><td><code>for(i=0; i&lt;10; i++)</code></td><td>10次</td><td>i=0,1,...,9</td></tr>
+                    <tr><td><code>for(i=1; i&lt;=10; i++)</code></td><td>10次</td><td>i=1,2,...,10</td></tr>
+                    <tr><td><code>for(i=1; i&lt;=10; i+=2)</code></td><td>5次</td><td>i=1,3,5,7,9</td></tr>
+                    <tr><td><code>for(i=10; i&gt;0; i--)</code></td><td>10次</td><td>i=10,9,...,1</td></tr>
+                    <tr><td><code>for(i=0; i&lt;n; i++)<br>&nbsp;&nbsp;for(j=0; j&lt;m; j++)</code></td><td>n*m次</td><td>外层n次×内层m次</td></tr>
+                </table>
+                <p><strong>速算技巧：</strong>执行次数 = (终值 - 初值 + 步长) / 步长，取整。for循环的三个部分：初始化只执行1次，条件每次循环前判断，更新每次循环后执行。</p>
+            </div>
+
 
             <!-- break -->
             <div class="subsection">
                 <h3 class="subsection-title">break：提前跳出循环</h3>
+                <div class="callout-warning">
+                    <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                    <strong>while vs do-while 对比（二级必考）：</strong>
+                    <pre><code>// 当条件一开始就不满足时：
+int i = 10;
+
+while (i &lt; 5) {        // 条件为假，循环体一次都不执行
+    printf("while\n");
+    i++;
+}
+// 输出：（无）
+
+int j = 10;
+do {
+    printf("do-while\n");  // 先执行一次，再判断条件
+    j++;
+} while (j &lt; 5);
+// 输出：do-while（执行了1次！）</code></pre>
+                    <p><strong>结论：</strong>while 可能一次都不执行，do-while 至少执行一次。这是两者最本质的区别。</p>
+                </div>
+
                 <div class="subsection-content">
-                    <p><code>break</code> 就像紧急刹车——不管循环条件是否满足，立刻跳出当前循环，执行循环后面的代码。</p>
+                    <p><code>break</code> 就像紧急刹车
+                <div class="callout-tip">
+                    <strong>break vs continue 同代码对比：</strong>
+                    <pre><code>// 用 break
+for (i = 1; i &lt;= 5; i++) {
+    if (i == 3) break;
+    printf("%d ", i);
+}
+// 输出: 1 2（遇到3直接跳出整个循环）
+
+// 用 continue
+for (i = 1; i &lt;= 5; i++) {
+    if (i == 3) continue;
+    printf("%d ", i);
+}
+// 输出: 1 2 4 5（跳过3，继续下一次循环）</code></pre>
+                </div>
+——不管循环条件是否满足，立刻跳出当前循环，执行循环后面的代码。</p>
 
                     <div class="callout-note">
                         <strong>生活类比：</strong>

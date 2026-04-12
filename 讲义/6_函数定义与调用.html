@@ -294,6 +294,12 @@
              ============================================================ -->
         <section id="declaration" class="section">
             <h2 class="section-title">函数声明</h2>
+            <div class="callout-tip">
+                <strong>声明可以省略参数名（二级考点）：</strong>
+                <pre><code>int add(int a, int b);   // 完整写法
+int add(int, int);       // 省略参数名，合法！</code></pre>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">为什么需要函数声明？</h3>
@@ -698,6 +704,16 @@
         <section id="return-value" class="section">
             <h2 class="section-title">返回值</h2>
 
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>没有 return 时返回值不确定（二级陷阱）：</strong>
+                <pre><code>int func(int x) {
+    int r = x * 2;
+    // 忘了 return r;  → 返回值是垃圾值！
+}</code></pre>
+            </div>
+
+
             <div class="subsection">
                 <h3 class="subsection-title">return语句</h3>
                 <div class="subsection-content">
@@ -773,6 +789,17 @@
              ============================================================ -->
         <section id="recursion" class="section">
             <h2 class="section-title">递归函数</h2>
+
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>手动模拟递归（二级程序题必备）：</strong>
+                <pre><code>int f(int n) {
+    if (n <= 1) return 1;
+    return n * f(n-1);
+}
+// f(4) = 4*f(3) = 4*3*f(2) = 4*3*2*f(1) = 4*3*2*1 = 24</code></pre>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">递归的思想</h3>

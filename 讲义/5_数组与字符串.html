@@ -114,6 +114,16 @@
         <section id="one-dimensional" class="section">
             <h2 class="section-title">一维数组</h2>
 
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>部分初始化补零规则（二级高频）：</strong>
+                <pre><code>int a[5] = {1, 2};       // {1,2,0,0,0}  剩余补0
+int a[5] = {0};          // {0,0,0,0,0}  全部为0
+int a[] = {1, 2, 3};     // 长度自动为3
+int a[5];                // 垃圾值，不是0！</code></pre>
+            </div>
+
+
             <div class="subsection">
                 <h3 class="subsection-title">声明与初始化</h3>
                 <div class="subsection-content">
@@ -307,6 +317,15 @@
              ============================================================ -->
         <section id="two-dimensional" class="section">
             <h2 class="section-title">二维数组</h2>
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>二维数组按行存储（二级必考）：</strong>
+                <p>二维数组在内存中是<strong>按行连续存储</strong>的：</p>
+                <pre><code>int a[2][3] = {{1,2,3}, {4,5,6}};
+// 内存排列：1 2 3 4 5 6（先第0行，再第1行）
+// a[1][0] = 4（第1行第0列）</code></pre>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">概念与声明</h3>
@@ -419,6 +438,16 @@
              ============================================================ -->
         <section id="string-basics" class="section">
             <h2 class="section-title">字符串基础</h2>
+
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>字符数组 vs 字符串（二级必考）：</strong>
+                <pre><code>char s1[] = "hello";               // 长度6，含'\0'
+char s2[] = {'h','e','l','l','o'};  // 长度5，无'\0'
+strlen(s1);  // 5
+strlen(s2);  // 不确定（越界！）</code></pre>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">字符串的本质</h3>

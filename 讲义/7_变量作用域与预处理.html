@@ -414,6 +414,30 @@
              ============================================================ -->
         <section id="macro" class="section">
             <h2 class="section-title">宏定义</h2>
+            <div class="callout-warning">
+                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                <strong>#define 宏替换陷阱（二级高频，几乎每次必考）：</strong>
+                <p>宏是<strong>纯文本替换</strong>，不是函数调用，不会自动加括号！</p>
+                <pre><code>#define S(a,b) a*b
+int r = S(1+2, 3+4);   // 1+2*3+4 = 11（不是 3*7=21！）
+
+#define SQUARE(x) x*x
+int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
+
+// 正确：参数和整体都加括号
+#define S(a,b) ((a)*(b))
+#define SQUARE(x) ((x)*(x))</code></pre>
+
+                <p style="margin-top:10px"><strong>#define vs const 区别：</strong></p>
+                <table>
+                    <tr><th>特性</th><th>#define</th><th>const</th></tr>
+                    <tr><td>本质</td><td>文本替换</td><td>有类型常量</td></tr>
+                    <tr><td>类型检查</td><td>无</td><td>有</td></tr>
+                    <tr><td>作用域</td><td>文件级</td><td>块作用域</td></tr>
+                    <tr><td>可调试</td><td>否</td><td>是</td></tr>
+                </table>
+            </div>
+
 
             <div class="subsection">
                 <h3 class="subsection-title">#define 宏定义</h3>
