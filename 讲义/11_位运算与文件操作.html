@@ -42,6 +42,22 @@
             <div class="subsection-content">
                 <p>本章是本课程的最后一章，我们将学习两个非常重要的主题：<strong>位运算</strong>和<strong>文件操作</strong>。位运算是直接操作二进制位的底层技术，文件操作则是实现数据持久化的关键能力。</p>
 
+                <h3>什么是位运算？</h3>
+                <p><strong>位运算</strong>是直接对整数在内存中的二进制位进行操作的运算。计算机内部所有数据都以二进制（0和1）存储，位运算让我们能够直接操作这些二进制位，实现高效的底层操作。</p>
+
+                <div class="callout-tip">
+                    <strong>生活类比——开关面板：</strong>
+                    <p>把位运算想象成控制一排开关：</p>
+                    <ul>
+                        <li><strong>按位与（&）</strong>：两个开关串联，都开才亮</li>
+                        <li><strong>按位或（|）</strong>：两个开关并联，有一个开就亮</li>
+                        <li><strong>按位异或（^）</strong>：状态不同时亮，相同时灭</li>
+                        <li><strong>按位取反（~）</strong>：所有开关反转</li>
+                        <li><strong>移位（<<, >>）</strong>：把开关整体左移或右移</li>
+                    </ul>
+                    <p>每个开关就是一个二进制位，位运算就是操作这些开关。</p>
+                </div>
+
                 <h3>位运算的价值</h3>
                 <ul>
                     <li><strong>高效性：</strong>位运算直接操作二进制位，是计算机最底层的运算，执行速度极快</li>
@@ -49,6 +65,21 @@
                     <li><strong>底层编程：</strong>硬件控制、驱动开发、嵌入式系统必备技能</li>
                     <li><strong>算法优化：</strong>许多高效算法都依赖位运算技巧</li>
                 </ul>
+
+                <h3>什么是文件操作？</h3>
+                <p><strong>文件操作</strong>是程序与外部存储设备交互的方式。程序运行时数据存储在内存中，一旦程序结束，数据就会丢失。通过文件操作，我们可以将数据永久保存到磁盘上，实现数据的持久化。</p>
+
+                <div class="callout-tip">
+                    <strong>生活类比——笔记本：</strong>
+                    <p>把文件操作想象成使用笔记本：</p>
+                    <ul>
+                        <li><strong>打开文件（fopen）</strong>：翻开笔记本</li>
+                        <li><strong>写入文件（fprintf等）</strong>：在笔记本上写字</li>
+                        <li><strong>读取文件（fscanf等）</strong>：阅读笔记本上的内容</li>
+                        <li><strong>关闭文件（fclose）</strong>：合上笔记本</li>
+                    </ul>
+                    <p>不翻开笔记本就没法写字，写完不盖上容易弄丢内容——文件操作也是这个道理。</p>
+                </div>
 
                 <h3>文件操作的重要性</h3>
                 <ul>

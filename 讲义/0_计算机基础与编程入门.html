@@ -96,6 +96,19 @@
                 <div class="subsection-content">
                     <p>计算机本质上是一个能够执行指令的电子设备。就像一个严格按照菜谱做菜的厨师——你给它指令（菜谱），它就一步一步地执行。</p>
 
+                    <div class="callout-note">
+                        <strong>生活化类比——计算机就像一家餐厅：</strong>
+                        <p>想象计算机是一家餐厅，各个部件就像餐厅里的不同岗位：</p>
+                        <ul>
+                            <li><strong>厨师（运算器）：</strong>负责切菜、炒菜等具体操作</li>
+                            <li><strong>店长（控制器）：</strong>协调各岗位工作，安排出菜顺序</li>
+                            <li><strong>工作台（存储器）：</strong>暂时存放切好的菜、调料等</li>
+                            <li><strong>采购员（输入设备）：</strong>从外面买来食材</li>
+                            <li><strong>服务员（输出设备）：</strong>把做好的菜端给顾客</li>
+                        </ul>
+                        <p>程序就像是菜谱，告诉计算机（餐厅）每一步该做什么。</p>
+                    </div>
+
                     <h4>计算机的五大组成部分</h4>
                     <div class="example-grid">
                         <div class="example-item">
@@ -141,17 +154,46 @@
                     </div>
 
                     <h4>内存的概念</h4>
-                    <p>内存是计算机中最重要的概念之一，理解内存对学习C语言至关重要：</p>
+                    <p>内存是计算机中最重要的概念之一，理解内存对学习C语言至关重要。可以把内存想象成计算机的"短期记忆"，它决定了计算机能同时处理多少信息。</p>
+                    
+                    <div class="callout-note">
+                        <strong>什么是内存？</strong>
+                        <p>内存（Memory），也叫主存或RAM（随机存取存储器），是计算机中用于临时存储数据和程序的地方。它的特点是：</p>
+                        <ul>
+                            <li><strong>速度快：</strong>比硬盘快成千上万倍</li>
+                            <li><strong>临时性：</strong>断电后数据会丢失</li>
+                            <li><strong>可读写：</strong>可以随时读取和修改数据</li>
+                        </ul>
+                    </div>
+
+                    <p>内存的基本工作单位是<strong>字节（Byte）</strong>，每个字节由8个二进制位（bit）组成：</p>
                     <ul>
-                        <li>内存由许多<strong>字节（Byte）</strong>组成，每个字节有唯一的<strong>地址</strong></li>
-                        <li>每个字节可以存储一个0-255之间的数字</li>
-                        <li>多个字节可以组合存储更大的数据（如 <code>int</code> 占用4个字节）</li>
-                        <li>程序运行时，变量就存储在内存中</li>
+                        <li>内存由许多<strong>字节（Byte）</strong>组成，每个字节有唯一的<strong>地址</strong>（就像每个房间都有门牌号）</li>
+                        <li>每个字节可以存储一个0-255之间的数字（8位二进制能表示256种状态）</li>
+                        <li>多个字节可以组合存储更大的数据（如 <code>int</code> 占用4个字节，就像4个房间打通成大房间）</li>
+                        <li>程序运行时，变量就存储在内存中（就像把东西放在工作台上）</li>
                     </ul>
 
                     <div class="callout-note">
-                        <strong>形象比喻：</strong>
-                        <p>想象内存是一排带编号的小盒子（地址），每个盒子可以存放一张写有数字的纸条。程序通过盒子编号（地址）来存取数据。</p>
+                        <strong>形象比喻——内存就像酒店：</strong>
+                        <p>想象内存是一家酒店：</p>
+                        <ul>
+                            <li><strong>房间（字节）：</strong>酒店有很多房间，每个房间可以住人（存储数据）</li>
+                            <li><strong>门牌号（地址）：</strong>每个房间有唯一的门牌号，方便找到特定的房间</li>
+                            <li><strong>房间大小：</strong>有的数据只需要1个房间（1字节），有的需要4个房间（4字节）</li>
+                            <li><strong>临时住宿：</strong>程序运行时才分配房间，程序结束就退房（释放内存）</li>
+                        </ul>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>实际例子：</strong>
+                        <p>当你在程序中写 <code>int age = 18;</code> 时：</p>
+                        <ol>
+                            <li>计算机在内存中找到4个连续的空房间（4字节）</li>
+                            <li>把这4个房间的门牌号（地址）记下来</li>
+                            <li>将数字18转换成二进制，存入这4个房间</li>
+                            <li>以后通过变量名 <code>age</code> 就能找到并修改这个值</li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -159,7 +201,19 @@
             <div class="subsection">
                 <h3 class="subsection-title">程序是如何运行的？</h3>
                 <div class="subsection-content">
-                    <p>从编写代码到程序运行，就像把中文翻译成外语再让外国人阅读一样，需要经历以下步骤：</p>
+                    <p>从编写代码到程序运行，就像把中文翻译成外语再让外国人阅读一样，需要经历多个步骤。理解这个过程对调试程序非常重要。</p>
+
+                    <div class="callout-note">
+                        <strong>生活化类比——写一本书的过程：</strong>
+                        <p>想象你要出版一本书：</p>
+                        <ol>
+                            <li><strong>写草稿（源代码）：</strong>你用中文写故事，这是人类能读懂的</li>
+                            <li><strong>翻译成英文（编译）：</strong>把中文翻译成外国人能看懂的语言</li>
+                            <li><strong>装订成书（链接）：</strong>把翻译好的内容、封面、目录等组合成完整的书</li>
+                            <li><strong>读者阅读（运行）：</strong>外国人拿到书，开始阅读</li>
+                        </ol>
+                        <p>程序开发也是类似的过程，只是把"人类语言"翻译成"计算机语言"。</p>
+                    </div>
 
                     <div class="flow-diagram execution-flow">
                         <div class="flow-step">1. 编写源代码 → 保存为 <code>.c</code> 文件</div>
@@ -168,24 +222,74 @@
                         <div class="flow-step">4. 运行（Run） → 加载到内存，CPU执行</div>
                     </div>
 
+                    <h4>详细说明每个步骤</h4>
                     <div class="callout-tip">
-                        <strong>详细说明：</strong>
+                        <strong>步骤1：编写源代码</strong>
+                        <p>程序员使用编程语言（如C语言）编写代码，保存为文本文件（.c文件）。</p>
+                        <p><strong>示例：</strong>就像厨师写菜谱，用人类语言描述每一步操作。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>步骤2：编译（Compile）</strong>
+                        <p>编译器将人类可读的源代码翻译成计算机可执行的二进制机器码。</p>
+                        <p><strong>什么是编译？</strong> 编译就像翻译，把C语言代码转换成计算机能理解的0和1组成的指令。</p>
+                        <p><strong>编译器的作用：</strong></p>
                         <ul>
-                            <li><strong>编写源代码：</strong>程序员使用编程语言（如C语言）编写代码，保存为文本文件</li>
-                            <li><strong>编译：</strong>编译器将人类可读的源代码翻译成计算机可执行的二进制机器码</li>
-                            <li><strong>链接：</strong>链接器将编译后的代码与系统库文件连接，生成可执行文件</li>
-                            <li><strong>运行：</strong>操作系统加载可执行文件到内存，CPU开始执行程序指令</li>
+                            <li>检查代码语法是否正确（就像检查作文有没有错别字）</li>
+                            <li>将代码翻译成机器语言（就像把中文翻译成机器语言）</li>
+                            <li>生成目标文件（.obj文件）</li>
                         </ul>
+                        <p><strong>常见编译错误：</strong>语法错误、缺少分号、变量未声明等。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>步骤3：链接（Link）</strong>
+                        <p>链接器将编译后的代码与系统库文件连接，生成可执行文件。</p>
+                        <p><strong>为什么需要链接？</strong> 程序经常需要使用系统提供的功能（如printf函数），这些功能存储在库文件中。链接器就像图书管理员，帮你找到需要的书籍并放在一起。</p>
+                        <p><strong>链接的作用：</strong></p>
+                        <ul>
+                            <li>将多个目标文件合并（如果你的程序有多个.c文件）</li>
+                            <li>连接系统库（如stdio库提供输入输出功能）</li>
+                            <li>生成最终的可执行文件（.exe文件）</li>
+                        </ul>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>步骤4：运行（Run）</strong>
+                        <p>操作系统加载可执行文件到内存，CPU开始执行程序指令。</p>
+                        <p><strong>运行过程：</strong></p>
+                        <ol>
+                            <li>操作系统将程序从硬盘加载到内存</li>
+                            <li>CPU从内存中读取指令</li>
+                            <li>CPU执行指令（计算、存储数据等）</li>
+                            <li>程序输出结果到屏幕</li>
+                        </ol>
                     </div>
 
                     <div class="callout-warning">
                         <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
-                        <strong>重要提示：</strong>
+                        <strong>重要提示——两种错误类型：</strong>
                         <p>编译错误和运行时错误是不同的：</p>
                         <ul>
-                            <li><strong>编译错误（Compile Error）：</strong>代码语法有问题，程序无法生成。需要修改代码后重新编译。</li>
-                            <li><strong>运行时错误（Runtime Error）：</strong>程序语法正确，但执行时出现问题（如除以零）。</li>
+                            <li><strong>编译错误（Compile Error）：</strong>代码语法有问题，程序无法生成。就像作文有语法错误，老师会直接打回来。需要修改代码后重新编译。
+                                <br><em>示例：忘记写分号、拼写错误、括号不匹配</em>
+                            </li>
+                            <li><strong>运行时错误（Runtime Error）：</strong>程序语法正确，但执行时出现问题。就像作文语法正确，但内容有问题（比如除以零）。
+                                <br><em>示例：除以零、数组越界、内存访问错误</em>
+                            </li>
                         </ul>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>实际开发中的流程：</strong>
+                        <p>在实际编程中，这四个步骤通常是：</p>
+                        <ol>
+                            <li>在编辑器中写代码（如VC++2010）</li>
+                            <li>点击"编译"按钮，编译器检查语法并生成目标文件</li>
+                            <li>点击"链接"或"生成"按钮，生成可执行文件</li>
+                            <li>点击"运行"按钮，程序开始执行</li>
+                        </ol>
+                        <p>现代IDE（集成开发环境）通常把这些步骤整合在一起，一键完成编译、链接和运行。</p>
                     </div>
                 </div>
             </div>
@@ -243,13 +347,47 @@
                     <p>计算机内部使用<strong>二进制（Binary）</strong>来表示所有数据。二进制只使用两个数字：<strong>0和1</strong>。就像电灯开关只有"开"和"关"两种状态一样。</p>
 
                     <h4>为什么使用二进制？</h4>
-                    <ul>
-                        <li>电子元件最容易表示两种状态：通电（1）和断电（0）</li>
-                        <li>二进制运算规则简单，易于硬件实现</li>
-                        <li>可靠性高，抗干扰能力强</li>
-                    </ul>
+                    <p>你可能好奇，为什么计算机不像人类一样使用十进制（0-9），而是使用只有0和1的二进制呢？</p>
+
+                    <div class="callout-note">
+                        <strong>生活化类比——开关灯：</strong>
+                        <p>想象你房间里的电灯开关：</p>
+                        <ul>
+                            <li>开关只有两种状态：<strong>开</strong>（灯亮）或<strong>关</strong>（灯灭）</li>
+                            <li>没有"半开半关"的状态</li>
+                            <li>计算机的电子元件就像无数个微型开关</li>
+                        </ul>
+                        <p>计算机使用二进制的原因是：</p>
+                        <ol>
+                            <li><strong>物理实现简单：</strong>电子元件最容易表示两种状态——高电压（1）和低电压（0），就像开关的"开"和"关"</li>
+                            <li><strong>运算规则简单：</strong>二进制只有0和1，运算规则比十进制简单得多。比如加法只有四种情况：0+0=0，0+1=1，1+0=1，1+1=10</li>
+                            <li><strong>可靠性高：</strong>两种状态容易区分，不容易出错。就像开关灯，你很容易判断灯是亮还是灭</li>
+                            <li><strong>抗干扰能力强：</strong>电压只要在一定范围内，就能正确识别为0或1</li>
+                        </ol>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>实际例子——硬盘存储：</strong>
+                        <p>硬盘表面有无数微小的磁性区域：</p>
+                        <ul>
+                            <li>某个方向磁化表示<strong>1</strong></li>
+                            <li>相反方向磁化表示<strong>0</strong></li>
+                        </ul>
+                        <p>通过改变磁化方向，就能存储二进制数据。1TB的硬盘大约可以存储8万亿个0或1！</p>
+                    </div>
 
                     <h4>二进制与十进制的转换</h4>
+                    <p>理解二进制和十进制的转换，就像学会两种语言的互译。这对理解计算机如何存储和处理数据非常重要。</p>
+
+                    <div class="callout-note">
+                        <strong>类比——不同进制的本质：</strong>
+                        <p>十进制使用10个符号（0-9），逢10进1。二进制使用2个符号（0-1），逢2进1。</p>
+                        <p>就像：</p>
+                        <ul>
+                            <li>十进制的"10"表示"满了10个，进1位"</li>
+                            <li>二进制的"10"表示"满了2个，进1位"（等于十进制的2）</li>
+                        </ul>
+                    </div>
                     <div class="callout-tip">
                         <strong>十进制转二进制（除2取余法）：</strong>
                         <p>以十进制数13为例：</p>

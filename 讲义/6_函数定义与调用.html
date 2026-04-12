@@ -48,6 +48,28 @@
 
                 <p><strong>函数</strong>就是解决这个问题的方式——把一段完成特定任务的代码封装起来，取个名字，需要时直接"调用"即可。就像家里的厨房：做饭的工具和步骤都放在厨房里，想做饭时走进去就行，不需要每次都重新找锅碗瓢盆。</p>
 
+                <h3>什么是函数？</h3>
+                <p><strong>函数</strong>是完成特定任务的独立代码块。它就像一个"小机器"：你给它输入（参数），它处理后给你输出（返回值）。函数的核心作用是<strong>代码复用</strong>和<strong>模块化</strong>。</p>
+
+                <div class="callout-tip">
+                    <strong>生活类比——洗衣机：</strong>
+                    <p>把函数想象成一台洗衣机：</p>
+                    <ul>
+                        <li><strong>输入（参数）</strong>：脏衣服、洗衣液</li>
+                        <li><strong>函数体</strong>：洗衣机内部的洗涤、漂洗、脱水过程</li>
+                        <li><strong>输出（返回值）</strong>：干净的衣服</li>
+                    </ul>
+                    <p>你不需要知道洗衣机内部怎么工作，只需要知道怎么用。函数也是这样——定义一次，到处使用。</p>
+                </div>
+
+                <h3>为什么要使用函数？</h3>
+                <p>使用函数有三个核心好处：</p>
+                <ul>
+                    <li><strong>代码复用</strong>：写一次，用多次。比如计算圆面积的代码，封装成函数后，任何地方需要计算圆面积都可以调用。</li>
+                    <li><strong>模块化</strong>：把大问题分解成小问题。就像组装家具，先把零件分成小组件，再组装成整体。</li>
+                    <li><strong>易于维护</strong>：修改功能只需改一处。如果计算公式变了，只需要修改函数内部的代码。</li>
+                </ul>
+
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
@@ -92,6 +114,18 @@
                 <div class="subsection-content">
                     <p>定义一个函数需要四个要素：<strong>返回类型</strong>、<strong>函数名</strong>、<strong>参数列表</strong>、<strong>函数体</strong>。</p>
 
+                    <div class="callout-tip">
+                        <strong>生活类比——菜谱的组成：</strong>
+                        <p>定义函数就像写一张菜谱：</p>
+                        <ul>
+                            <li><strong>返回类型</strong> = 菜品类别（主食、甜点、汤品...）</li>
+                            <li><strong>函数名</strong> = 菜名（宫保鸡丁、番茄炒蛋...）</li>
+                            <li><strong>参数列表</strong> = 食材清单（鸡肉、花生、辣椒...）</li>
+                            <li><strong>函数体</strong> = 烹饪步骤（切菜、炒制、调味...）</li>
+                        </ul>
+                        <p>有了完整的菜谱，任何人都能做出同样的菜。有了完整的函数定义，程序就能正确执行这个功能。</p>
+                    </div>
+
                     <div class="table-container">
                         <table>
                             <thead>
@@ -125,6 +159,35 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <h4>各部分详解</h4>
+
+                    <p><strong>1. 返回类型</strong></p>
+                    <p>返回类型决定了函数"产出"什么类型的数据。常见选择：</p>
+                    <ul>
+                        <li><code>int</code>：返回整数（如计算结果、状态码）</li>
+                        <li><code>float/double</code>：返回小数（如计算面积、平均值）</li>
+                        <li><code>char</code>：返回单个字符（如获取等级）</li>
+                        <li><code>void</code>：不返回任何值（如只打印信息的函数）</li>
+                    </ul>
+
+                    <p><strong>2. 函数名</strong></p>
+                    <p>函数名是调用函数的标识符，命名要有意义：</p>
+                    <ul>
+                        <li>好的命名：<code>calculateArea</code>、<code>printMenu</code>、<code>isPrime</code></li>
+                        <li>不好的命名：<code>func1</code>、<code>aaa</code>、<code>doSomething</code></li>
+                    </ul>
+
+                    <p><strong>3. 参数列表</strong></p>
+                    <p>参数是函数的"输入"，可以有零个或多个：</p>
+                    <ul>
+                        <li>无参数：<code>()</code> 或 <code>(void)</code></li>
+                        <li>一个参数：<code>(int x)</code></li>
+                        <li>多个参数：<code>(int a, int b, float c)</code>，用逗号分隔</li>
+                    </ul>
+
+                    <p><strong>4. 函数体</strong></p>
+                    <p>函数体是实现具体功能的代码，放在大括号内。如果函数有返回值，必须包含 <code>return</code> 语句。</p>
 
                     <div class="code-block">
                         <div class="code-block-title">函数定义的基本语法</div>

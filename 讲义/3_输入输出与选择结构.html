@@ -48,6 +48,17 @@
             <div class="subsection-content">
                 <p>C语言程序需要与用户进行交互，这主要通过输入输出函数实现。同时，程序需要根据不同条件执行不同操作，这就需要选择结构（条件判断语句）。</p>
 
+                <div class="callout-tip">
+                    <strong>生活类比——餐厅点餐：</strong>
+                    <p>把程序的输入输出想象成餐厅点餐：</p>
+                    <ul>
+                        <li><strong>输入（scanf）</strong>：顾客告诉服务员想要什么菜（用户向程序提供数据）</li>
+                        <li><strong>处理（选择结构）</strong>：厨师根据菜单决定怎么做（程序根据条件做判断）</li>
+                        <li><strong>输出（printf）</strong>：服务员把做好的菜端上来（程序把结果显示给用户）</li>
+                    </ul>
+                    <p>没有输入，程序就像没有顾客的餐厅；没有输出，就像做好了菜却不端上来。</p>
+                </div>
+
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
@@ -57,10 +68,18 @@
                     </ul>
                 </div>
 
-                <div class="callout-tip">
-                    <strong>重要提示：</strong>
-                    <p>掌握 printf 和 scanf 的格式控制，以及 if、switch 语句的逻辑判断，是 C 语言编程的基础。</p>
-                </div>
+                <h3 class="subsection-title">什么是输入输出？</h3>
+                <p><strong>输入（Input）</strong>是指程序从外部获取数据的过程。最常见的输入方式是用户通过键盘输入数据，程序用 <code>scanf</code> 函数读取这些数据。</p>
+                <p><strong>输出（Output）</strong>是指程序向外部展示数据的过程。最常见的输出方式是程序把结果显示在屏幕上，用 <code>printf</code> 函数实现。</p>
+
+                <h3 class="subsection-title">什么是选择结构？</h3>
+                <p><strong>选择结构</strong>（也叫条件判断）让程序能够根据不同的情况执行不同的代码。就像生活中的"如果...那么..."：</p>
+                <ul>
+                    <li>如果下雨，那么带伞</li>
+                    <li>如果成绩及格，那么显示"通过"，否则显示"不通过"</li>
+                    <li>如果是周末，那么可以睡懒觉</li>
+                </ul>
+                <p>选择结构让程序有了"思考"的能力，不再只是简单地从头执行到尾。</p>
 
                 <h3 class="subsection-title">学习目标与节奏</h3>
                 <div class="subsection-content">
@@ -89,12 +108,33 @@
                 <div class="subsection-content">
                     <p><code>printf</code> 是 C 语言中最常用的输出函数，用于向屏幕输出格式化的文本。它是 "print formatted" 的缩写，定义在 <code>stdio.h</code> 头文件中。</p>
 
+                    <div class="callout-tip">
+                        <strong>生活类比——填空题：</strong>
+                        <p>printf 就像做填空题：</p>
+                        <ul>
+                            <li><strong>格式字符串</strong>：题目中的句子，有若干空格需要填写</li>
+                            <li><strong>格式说明符</strong>：每个空格的类型标记（填数字、填文字等）</li>
+                            <li><strong>参数列表</strong>：你要填入空格的具体内容</li>
+                        </ul>
+                        <p>例如：<code>printf("我叫%s，今年%d岁", "小明", 18);</code></p>
+                        <p>就像题目："我叫____，今年____岁"，你填入"小明"和"18"。</p>
+                    </div>
+
                     <h4>基本语法</h4>
                     <p><code>printf("格式字符串", 参数列表);</code></p>
                     <ul>
                         <li><strong>格式字符串：</strong>包含要输出的文本和格式说明符（如 <code>%d</code>、<code>%f</code> 等）</li>
                         <li><strong>参数列表：</strong>要输出的变量，按照格式说明符的顺序提供</li>
                     </ul>
+
+                    <h4>printf的工作原理</h4>
+                    <p>printf 函数的工作过程可以理解为：</p>
+                    <ol>
+                        <li><strong>扫描格式字符串</strong>：从头到尾读取格式字符串</li>
+                        <li><strong>遇到普通字符</strong>：直接输出到屏幕</li>
+                        <li><strong>遇到格式说明符</strong>：从参数列表中取出对应的值，按照指定格式输出</li>
+                        <li><strong>重复以上步骤</strong>：直到格式字符串结束</li>
+                    </ol>
 
                     <div class="code-block">
                         <div class="code-block-title">printf基本示例</div>
@@ -559,6 +599,24 @@
                 <div class="subsection-content">
                     <p>if 语句用于根据条件执行不同的代码块，是程序实现"判断和选择"的基础。单分支 if 只有一个判断条件，满足条件时执行代码块。</p>
 
+                    <div class="callout-tip">
+                        <strong>生活类比——门禁系统：</strong>
+                        <p>单分支 if 就像小区的门禁：</p>
+                        <ul>
+                            <li><strong>条件</strong>：你是小区的业主吗？</li>
+                            <li><strong>满足条件</strong>：门打开，你可以进入</li>
+                            <li><strong>不满足条件</strong>：门不开，你只能站在外面（程序继续往下执行）</li>
+                        </ul>
+                        <p>不管门开不开，小区里的其他活动（程序后续代码）都会正常进行。</p>
+                    </div>
+
+                    <h4>语法格式</h4>
+                    <p><code>if (条件) { 语句块; }</code></p>
+                    <ul>
+                        <li><strong>条件</strong>：一个能产生真假值的表达式（关系表达式或逻辑表达式）</li>
+                        <li><strong>语句块</strong>：条件为真时要执行的代码，用大括号包围</li>
+                    </ul>
+
                     <div class="code-block">
                         <div class="code-block-title">单分支if示例</div>
                         <pre><code><span class="c-comment">// 单分支if：只有"满足条件执行"</span>
@@ -579,6 +637,17 @@
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
+
+                    <div class="callout-note">
+                        <strong>执行流程：</strong>
+                        <ol>
+                            <li>程序执行到 if 语句</li>
+                            <li>计算括号中条件的值</li>
+                            <li>如果条件为真（非0），执行大括号内的语句块</li>
+                            <li>如果条件为假（0），跳过大括号内的语句块</li>
+                            <li>继续执行 if 语句后面的代码</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
 
@@ -587,6 +656,25 @@
                 <h3 class="subsection-title">双分支if-else</h3>
                 <div class="subsection-content">
                     <p>双分支 if-else 有两个分支：条件满足执行 if 块，不满足执行 else 块。</p>
+
+                    <div class="callout-tip">
+                        <strong>生活类比——红绿灯：</strong>
+                        <p>双分支 if-else 就像过马路看红绿灯：</p>
+                        <ul>
+                            <li><strong>条件</strong>：灯是绿灯吗？</li>
+                            <li><strong>满足条件（绿灯）</strong>：过马路</li>
+                            <li><strong>不满足条件（红灯）</strong>：停下来等待</li>
+                        </ul>
+                        <p>两种情况必选其一，不可能同时发生。</p>
+                    </div>
+
+                    <h4>语法格式</h4>
+                    <p><code>if (条件) { 语句块1; } else { 语句块2; }</code></p>
+                    <ul>
+                        <li><strong>条件为真</strong>：执行语句块1，跳过语句块2</li>
+                        <li><strong>条件为假</strong>：跳过语句块1，执行语句块2</li>
+                        <li><strong>重要特点</strong>：两个语句块只会执行其中一个，不会都执行，也不会都不执行</li>
+                    </ul>
 
                     <div class="code-block">
                         <div class="code-block-title">双分支if-else示例</div>
@@ -607,6 +695,16 @@
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>常见应用场景：</strong>
+                        <ul>
+                            <li>判断奇偶数：<code>if (num % 2 == 0) ... else ...</code></li>
+                            <li>判断及格/不及格：<code>if (score >= 60) ... else ...</code></li>
+                            <li>判断正负数：<code>if (num > 0) ... else ...</code></li>
+                            <li>判断闰年：<code>if ((year%4==0 && year%100!=0) || year%400==0) ... else ...</code></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -724,13 +822,35 @@
                 <div class="subsection-content">
                     <p>switch 语句适用于多分支选择，特别是当分支较多且基于同一个表达式的不同值时。它比 if-else if 更清晰、更高效。</p>
 
+                    <div class="callout-tip">
+                        <strong>生活类比——自动售货机：</strong>
+                        <p>switch 就像自动售货机的按钮选择：</p>
+                        <ul>
+                            <li><strong>表达式</strong>：你按下的按钮编号</li>
+                            <li><strong>case</strong>：每个按钮对应的饮料</li>
+                            <li><strong>break</strong>：拿到饮料后离开</li>
+                            <li><strong>default</strong>：按下无效按钮，提示"请重新选择"</li>
+                        </ul>
+                        <p>你按哪个按钮，就得到对应的饮料。每个按钮对应一种结果，清晰明了。</p>
+                    </div>
+
                     <h4>语法格式</h4>
+                    <p><code>switch (表达式) { case 值1: 语句1; break; case 值2: 语句2; break; ... default: 默认语句; }</code></p>
                     <ul>
                         <li><strong>switch 表达式：</strong>必须是整数类型（int、char 等），不能是 float 或 double</li>
                         <li><strong>case 标签：</strong>必须是常量表达式，不能是变量</li>
                         <li><strong>break：</strong>跳出 switch 结构，防止"贯穿"执行</li>
                         <li><strong>default：</strong>所有 case 都不匹配时执行，类似于 if-else if 末尾的 else</li>
                     </ul>
+
+                    <h4>switch的执行流程</h4>
+                    <ol>
+                        <li>计算 switch 后面括号中表达式的值</li>
+                        <li>从上到下依次与每个 case 的值比较</li>
+                        <li>找到匹配的 case，执行该 case 后面的语句</li>
+                        <li>遇到 break，跳出整个 switch 结构</li>
+                        <li>如果没有匹配的 case，执行 default（如果有的话）</li>
+                    </ol>
 
                     <div class="code-block">
                         <div class="code-block-title">switch基本用法</div>

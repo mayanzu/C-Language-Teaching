@@ -48,6 +48,34 @@
 
                 <p>本章将帮助你理解：变量在哪些地方"可见"、能活多久，以及程序在编译前会经历怎样的"预处理"阶段。</p>
 
+                <h3>什么是变量作用域？</h3>
+                <p><strong>变量作用域</strong>（Scope）是指变量在程序中可以被访问的范围。就像现实生活中的"权限"——有些通知全公司都能看到，有些只有部门内部知道，有些只有你自己知道。</p>
+
+                <div class="callout-tip">
+                    <strong>生活类比——公司通知：</strong>
+                    <p>把变量作用域想象成公司里的通知范围：</p>
+                    <ul>
+                        <li><strong>全局变量</strong> = 全公司公告（所有人都能看到）</li>
+                        <li><strong>局部变量</strong> = 部门通知（只有本部门的人能看到）</li>
+                        <li><strong>块级变量</strong> = 个人笔记（只有你自己能看到）</li>
+                    </ul>
+                    <p>在部门外看部门通知？看不到。在函数外访问局部变量？访问不到。</p>
+                </div>
+
+                <h3>什么是预处理？</h3>
+                <p><strong>预处理</strong>是编译的第一个阶段，在正式编译代码之前执行。预处理器会处理所有以 <code>#</code> 开头的指令，比如 <code>#include</code>、<code>#define</code> 等。</p>
+
+                <div class="callout-tip">
+                    <strong>生活类比——出版前的编辑：</strong>
+                    <p>把预处理想象成书籍出版前的编辑工作：</p>
+                    <ul>
+                        <li><strong>#include</strong> = 把引用的文章插入正文（复制粘贴）</li>
+                        <li><strong>#define</strong> = 全文替换特定词汇（查找替换）</li>
+                        <li><strong>#ifdef</strong> = 根据版本删除某些内容（条件删减）</li>
+                    </ul>
+                    <p>编辑完成后，书稿才送去印刷（编译）。预处理就是编译前的"编辑"阶段。</p>
+                </div>
+
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>

@@ -81,21 +81,55 @@
             <div class="subsection">
                 <h3 class="subsection-title">什么是变量？</h3>
                 <div class="subsection-content">
-                    <p><strong>变量</strong>是程序中用来存储数据的容器。你可以把它想象成一个带标签的盒子：</p>
+                    <p><strong>变量</strong>是程序中用来存储数据的容器。在C语言中，变量是程序与内存交互的桥梁——程序通过变量名来操作内存中的数据。</p>
+
+                    <div class="callout-note">
+                        <strong>深入理解——为什么需要变量？</strong>
+                        <p>想象你在做一个计算：求圆的面积。如果没有变量，你需要这样写：</p>
+                        <pre><code>printf("%f", 3.14 * 5 * 5);  // 直接写死数字</code></pre>
+                        <p>但如果半径变了，你需要修改所有用到半径的地方。使用变量后：</p>
+                        <pre><code>float radius = 5;           // 定义半径变量
+float area = 3.14 * radius * radius;  // 使用变量计算
+printf("%f", area);</code></pre>
+                        <p>这样当半径改变时，只需修改一处即可！</p>
+                    </div>
+
+                    <p>你可以把变量想象成一个<strong>带标签的盒子</strong>：</p>
                     <ul>
-                        <li><strong>变量名</strong>就是盒子上的标签，用来找到这个盒子</li>
-                        <li><strong>变量的值</strong>就是盒子里装的东西</li>
-                        <li><strong>变量的类型</strong>决定了盒子的大小和能装什么样的东西</li>
+                        <li><strong>变量名</strong>就是盒子上的标签，用来找到这个盒子（如"age"、"score"）</li>
+                        <li><strong>变量的值</strong>就是盒子里装的东西（如25、95.5）</li>
+                        <li><strong>变量的类型</strong>决定了盒子的大小和能装什么样的东西（整数、小数、字符等）</li>
                     </ul>
 
                     <div class="callout-tip">
-                        <strong>生活类比：</strong>
-                        <p>想象你要存放不同物品：</p>
+                        <strong>生活类比——储物柜系统：</strong>
+                        <p>想象你去超市存包：</p>
                         <ul>
-                            <li>整数值（如年龄25）→ 用小盒子（<code>int</code>）</li>
-                            <li>小数值（如身高1.75）→ 用精度盒子（<code>float</code>/<code>double</code>）</li>
-                            <li>单个字符（如字母'A'）→ 用迷你盒子（<code>char</code>）</li>
+                            <li><strong>储物柜编号（变量名）：</strong>每个柜子都有唯一编号，如"A12"，你凭这个编号找到你的柜子</li>
+                            <li><strong>柜子里的物品（变量值）：</strong>你存放的包包、购物袋等</li>
+                            <li><strong>柜子大小（变量类型）：</strong>小柜放钱包，中柜放背包，大柜放行李箱</li>
                         </ul>
+                        <p>程序中的变量就像储物柜系统，通过名字找到存储的数据。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>另一个类比——快递包裹：</strong>
+                        <p>想象你收到一个快递：</p>
+                        <ul>
+                            <li>整数值（如年龄25）→ 用小盒子（<code>int</code>）装</li>
+                            <li>小数值（如身高1.75）→ 用精度盒子（<code>float</code>/<code>double</code>）装</li>
+                            <li>单个字符（如字母'A'）→ 用迷你盒子（<code>char</code>）装</li>
+                        </ul>
+                        <p>不同类型的数据需要不同类型的"盒子"来存放。</p>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>变量的三个要素：</strong>
+                        <ol>
+                            <li><strong>变量名（Name）：</strong>标识符，用于在程序中引用该变量。命名要有意义，如用"age"表示年龄，而不是"a"</li>
+                            <li><strong>变量类型（Type）：</strong>决定变量占用多少内存空间，以及可以存储什么类型的数据</li>
+                            <li><strong>变量值（Value）：</strong>实际存储的数据，可以在程序运行过程中改变（这就是为什么叫"变量"）</li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -103,7 +137,23 @@
             <div class="subsection">
                 <h3 class="subsection-title">变量的声明与初始化</h3>
                 <div class="subsection-content">
-                    <p>使用变量前，必须先<strong>声明</strong>它——告诉编译器变量的类型和名字。</p>
+                    <p>使用变量前，必须先<strong>声明</strong>它——告诉编译器变量的类型和名字。这就像在使用储物柜之前，先告诉管理员你要什么类型的柜子。</p>
+
+                    <div class="callout-note">
+                        <strong>声明 vs 初始化 vs 赋值：</strong>
+                        <p>这三个概念容易混淆，让我们搞清楚：</p>
+                        <ul>
+                            <li><strong>声明（Declaration）：</strong>告诉编译器变量的类型和名字，在内存中分配空间
+                                <br><code>int age;</code> —— 创建一个能装整数的"盒子"
+                            </li>
+                            <li><strong>初始化（Initialization）：</strong>在声明变量的同时给它一个初始值
+                                <br><code>int age = 18;</code> —— 创建盒子的同时放入初始值18
+                            </li>
+                            <li><strong>赋值（Assignment）：</strong>给已经存在的变量一个新值
+                                <br><code>age = 20;</code> —— 把盒子里的内容换成20
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="code-block">
                         <div class="code-block-title">变量声明与初始化</div>
@@ -133,8 +183,27 @@
 
                     <div class="callout-warning">
                         <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
-                        <strong>重要警告：</strong>
+                        <strong>重要警告——未初始化的变量：</strong>
                         <p>未初始化的局部变量包含<strong>垃圾值</strong>（不确定的随机值），使用前一定要初始化！</p>
+                        <p>为什么会这样？因为内存中的空间可能之前被其他程序使用过，里面残留着旧数据。如果不初始化就直接使用，就会读取到这些无意义的垃圾值。</p>
+                        <p><strong>最佳实践：</strong>声明变量的同时就初始化它，养成好习惯：</p>
+                        <pre><code>int count = 0;      // 好：声明时初始化
+float sum = 0.0;    // 好：声明时初始化
+int temp;           // 不好：未初始化</code></pre>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>实际应用场景：</strong>
+                        <p>假设你要统计班级学生的平均成绩：</p>
+                        <pre><code>int student_count = 0;      // 学生人数，初始为0
+float total_score = 0.0;    // 总成绩，初始为0.0
+float average = 0.0;        // 平均分，初始为0.0
+
+// 然后逐个添加学生成绩
+student_count = 5;
+total_score = 450.0;
+average = total_score / student_count;  // 计算平均分</code></pre>
+                        <p>初始化不仅避免了垃圾值，还让代码逻辑更清晰。</p>
                     </div>
                 </div>
             </div>
@@ -142,7 +211,18 @@
             <div class="subsection">
                 <h3 class="subsection-title">变量的命名规则</h3>
                 <div class="subsection-content">
-                    <p>C语言对变量名有严格的规则：</p>
+                    <p>C语言对变量名有严格的规则。好的变量名就像好的标签，能让你一眼就知道盒子里装的是什么。</p>
+
+                    <div class="callout-note">
+                        <strong>为什么需要命名规则？</strong>
+                        <p>想象一个图书馆，如果书籍可以随意命名：</p>
+                        <ul>
+                            <li>有的书叫"A"</li>
+                            <li>有的书叫"123"</li>
+                            <li>有的书叫"那本红色的书"</li>
+                        </ul>
+                        <p>你能快速找到想要的书吗？同样，程序中的变量如果没有规范命名，代码将难以理解和维护。</p>
+                    </div>
 
                     <div class="table-container">
                         <table>
@@ -184,12 +264,46 @@
                     </div>
 
                     <div class="callout-tip">
-                        <strong>命名建议：</strong>
+                        <strong>命名建议——如何起好变量名：</strong>
                         <ul>
-                            <li>变量名要有意义，见名知意（如 <code>student_age</code> 而非 <code>a</code>）</li>
-                            <li>使用下划线风格（<code>snake_case</code>）或小驼峰风格（<code>camelCase</code>）</li>
-                            <li>避免使用单字母变量名（循环变量 <code>i</code>、<code>j</code>、<code>k</code> 除外）</li>
+                            <li><strong>见名知意：</strong>变量名要有意义，一眼就能看出用途
+                                <br>✓ <code>student_age</code>、<code>total_score</code>
+                                <br>✗ <code>a</code>、<code>x</code>、<code>temp</code>（除非在特定上下文）
+                            </li>
+                            <li><strong>使用具体名词：</strong>避免模糊的词汇
+                                <br>✓ <code>customer_name</code>、<code>order_date</code>
+                                <br>✗ <code>name</code>、<code>date</code>（太笼统）
+                            </li>
+                            <li><strong>命名风格统一：</strong>
+                                <ul>
+                                    <li>下划线风格（snake_case）：<code>student_name</code>、<code>total_count</code></li>
+                                    <li>小驼峰风格（camelCase）：<code>studentName</code>、<code>totalCount</code></li>
+                                </ul>
+                                选择一种风格并在整个项目中保持一致
+                            </li>
+                            <li><strong>避免单字母变量：</strong>循环变量 <code>i</code>、<code>j</code>、<code>k</code> 除外，其他变量应有描述性名称</li>
+                            <li><strong>避免缩写：</strong>除非是众所周知的缩写（如max、min），否则使用完整单词
+                                <br>✓ <code>number_of_students</code>
+                                <br>✗ <code>num_stu</code>（难以理解的缩写）
+                            </li>
                         </ul>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>常见命名场景示例：</strong>
+                        <table>
+                            <tr><th>场景</th><th>不好的命名</th><th>好的命名</th></tr>
+                            <tr><td>学生年龄</td><td><code>a</code>、<code>age</code></td><td><code>student_age</code></td></tr>
+                            <tr><td>考试成绩</td><td><code>s</code>、<code>score</code></td><td><code>exam_score</code>、<code>test_result</code></td></tr>
+                            <tr><td>商品数量</td><td><code>n</code>、<code>num</code></td><td><code>product_count</code>、<code>item_quantity</code></td></tr>
+                            <tr><td>是否及格</td><td><code>f</code>、<code>flag</code></td><td><code>is_passed</code>、<code>has_passed</code></td></tr>
+                            <tr><td>最大分数</td><td><code>max</code>、<code>m</code></td><td><code>max_score</code>、<code>highest_score</code></td></tr>
+                        </table>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>关键字列表（不能使用这些作为变量名）：</strong>
+                        <p><code>auto</code> <code>break</code> <code>case</code> <code>char</code> <code>const</code> <code>continue</code> <code>default</code> <code>do</code> <code>double</code> <code>else</code> <code>enum</code> <code>extern</code> <code>float</code> <code>for</code> <code>goto</code> <code>if</code> <code>int</code> <code>long</code> <code>register</code> <code>return</code> <code>short</code> <code>signed</code> <code>sizeof</code> <code>static</code> <code>struct</code> <code>switch</code> <code>typedef</code> <code>union</code> <code>unsigned</code> <code>void</code> <code>volatile</code> <code>while</code></p>
                     </div>
                 </div>
             </div>
@@ -231,7 +345,29 @@
             <div class="subsection">
                 <h3 class="subsection-title">基本整型 int</h3>
                 <div class="subsection-content">
-                    <p><code>int</code> 是C语言中最常用的整数类型，用于存储没有小数部分的数值。</p>
+                    <p><code>int</code> 是C语言中最常用的整数类型，用于存储没有小数部分的数值。它是程序中最常用的数据类型之一。</p>
+
+                    <div class="callout-note">
+                        <strong>什么是整数？</strong>
+                        <p>整数就是数学中的整数，包括正整数、负整数和零。特点是没有小数部分：</p>
+                        <ul>
+                            <li>正整数：1, 2, 3, 100, 1000...</li>
+                            <li>负整数：-1, -2, -3, -100...</li>
+                            <li>零：0</li>
+                        </ul>
+                        <p>注意：整数不包含小数，所以3.14、-0.5等都不是整数。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>生活化类比——计数工具：</strong>
+                        <p>想象你在数东西：</p>
+                        <ul>
+                            <li>数教室里的人数：25人（整数）</li>
+                            <li>数书本的数量：10本（整数）</li>
+                            <li>记录温度：-5度（整数）</li>
+                        </ul>
+                        <p>只要是不涉及分割的计数，都可以用整数表示。</p>
+                    </div>
 
                     <div class="code-block">
                         <div class="code-block-title">int 类型示例</div>
@@ -249,13 +385,51 @@
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
+
+                    <div class="callout-note">
+                        <strong>int类型的实际应用场景：</strong>
+                        <table>
+                            <tr><th>应用场景</th><th>示例</th><th>说明</th></tr>
+                            <tr><td>年龄</td><td><code>int age = 20;</code></td><td>人的年龄都是整数</td></tr>
+                            <tr><td>数量统计</td><td><code>int count = 100;</code></td><td>商品库存、学生人数等</td></tr>
+                            <tr><td>序号索引</td><td><code>int index = 0;</code></td><td>数组下标、循环计数</td></tr>
+                            <tr><td>温度</td><td><code>int temp = -10;</code></td><td>摄氏度温度（整数部分）</td></tr>
+                            <tr><td>年份</td><td><code>int year = 2024;</code></td><td>年份是整数</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>整数溢出的危险：</strong>
+                        <p>int类型有范围限制（通常是-2147483648到2147483647）。如果计算结果超出这个范围，就会发生<strong>溢出</strong>，导致结果错误。</p>
+                        <pre><code>int a = 2000000000;
+int b = 2000000000;
+int c = a + b;  // 结果溢出！变成负数</code></pre>
+                        <p><strong>解决方法：</strong>使用更大范围的类型如<code>long long</code>，或在计算前检查数值范围。</p>
+                    </div>
                 </div>
             </div>
 
             <div class="subsection">
                 <h3 class="subsection-title">整型的分类</h3>
                 <div class="subsection-content">
-                    <p>C语言提供了多种整型，它们的主要区别是占用的内存大小和能表示的范围：</p>
+                    <p>C语言提供了多种整型，就像提供了不同大小的盒子来存放整数。它们的主要区别是占用的内存大小和能表示的数值范围。</p>
+
+                    <div class="callout-note">
+                        <strong>为什么需要不同的整型？</strong>
+                        <p>想象你要存放不同数量的物品：</p>
+                        <ul>
+                            <li>存放几本书 → 用小盒子（short）</li>
+                            <li>存放几百本书 → 用中盒子（int）</li>
+                            <li>存放几万本书 → 用大盒子（long）</li>
+                            <li>存放几亿本书 → 用超大盒子（long long）</li>
+                        </ul>
+                        <p>选择合适的类型可以：</p>
+                        <ol>
+                            <li><strong>节省内存：</strong>不需要用超大盒子装少量物品</li>
+                            <li><strong>避免溢出：</strong>确保盒子足够大，不会装不下</li>
+                            <li><strong>提高效率：</strong>小数据用小类型，处理更快</li>
+                        </ol>
+                    </div>
 
                     <div class="table-container">
                         <table>
@@ -303,11 +477,36 @@
                     </div>
 
                     <div class="callout-note">
+                        <strong>有符号 vs 无符号：</strong>
+                        <p>C语言的整数默认是<strong>有符号（signed）</strong>的，可以表示正数、负数和零。</p>
+                        <p>使用<strong>unsigned</strong>关键字可以声明无符号整数，只能表示非负数（0和正数）。</p>
+                        <p><strong>类比——温度计：</strong></p>
+                        <ul>
+                            <li><strong>有符号int：</strong>像普通温度计，可以显示零下（-10°C）和零上（+30°C）</li>
+                            <li><strong>无符号int：</strong>像只显示零上的温度计，范围从0°C到60°C</li>
+                        </ul>
+                        <p>无符号类型的优势：同样的存储空间，可以表示更大的正数范围。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>如何选择整型类型？</strong>
+                        <table>
+                            <tr><th>场景</th><th>推荐类型</th><th>原因</th></tr>
+                            <tr><td>年龄、月份、日期</td><td><code>int</code></td><td>范围足够，最常用</td></tr>
+                            <tr><td>数组下标、循环计数</td><td><code>int</code></td><td>标准做法</td></tr>
+                            <tr><td>人口、金额（分）</td><td><code>long long</code></td><td>防止溢出</td></tr>
+                            <tr><td>文件大小、内存地址</td><td><code>unsigned int</code>或<code>size_t</code></td><td>不会为负</td></tr>
+                            <tr><td>大量数据存储（如图像像素）</td><td><code>short</code></td><td>节省内存</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="callout-note">
                         <strong>新手注意：</strong>
                         <ul>
-                            <li>日常编程中使用 <code>int</code> 就足够了</li>
-                            <li><code>unsigned</code> 表示无符号，只能存非负数</li>
-                            <li>可以用 <code>sizeof</code> 运算符查看类型占用的字节数</li>
+                            <li>日常编程中使用 <code>int</code> 就足够了，它是C语言中最常用的整数类型</li>
+                            <li><code>unsigned</code> 表示无符号，只能存非负数，适合表示数量、索引等不会为负的值</li>
+                            <li>可以用 <code>sizeof</code> 运算符查看类型占用的字节数，这在不同平台上可能不同</li>
+                            <li>选择类型时要考虑数据范围和内存占用，不要一味使用最大类型</li>
                         </ul>
                     </div>
 
@@ -453,7 +652,27 @@
             <div class="subsection">
                 <h3 class="subsection-title">什么是浮点型？</h3>
                 <div class="subsection-content">
-                    <p>浮点型用于存储带小数部分的数值。C语言提供了两种浮点类型：</p>
+                    <p>浮点型用于存储带小数部分的数值。在数学中，我们称之为"实数"或"小数"。C语言提供了两种浮点类型来满足不同的精度需求。</p>
+
+                    <div class="callout-note">
+                        <strong>为什么叫"浮点"？</strong>
+                        <p>浮点数（Floating Point）的命名来源于科学计数法。在科学计数法中，小数点的位置是"浮动"的：</p>
+                        <ul>
+                            <li>123.45 可以写成 1.2345 × 10²</li>
+                            <li>0.00123 可以写成 1.23 × 10⁻³</li>
+                        </ul>
+                        <p>计算机存储浮点数时，也是用这种形式：一个有效数字（尾数）和一个指数（表示小数点位置）。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>生活化类比——尺子与游标卡尺：</strong>
+                        <p>想象测量物体的长度：</p>
+                        <ul>
+                            <li><strong>float（单精度）：</strong>像普通尺子，精确到毫米（6-7位有效数字）</li>
+                            <li><strong>double（双精度）：</strong>像游标卡尺，精确到0.02毫米（15-16位有效数字）</li>
+                        </ul>
+                        <p>对于日常测量，普通尺子就够了；但对于精密工程，需要游标卡尺。</p>
+                    </div>
 
                     <div class="table-container">
                         <table>
@@ -484,6 +703,28 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="callout-note">
+                        <strong>有效数字是什么？</strong>
+                        <p>有效数字是指一个数中从第一个非零数字开始的所有数字。它反映了数值的精确程度：</p>
+                        <ul>
+                            <li><code>float</code>的6-7位有效数字：123.456789 → 只能精确存储123.4568</li>
+                            <li><code>double</code>的15-16位有效数字：123.4567890123456789 → 能精确存储更多位</li>
+                        </ul>
+                        <p>就像用不同精度的相机拍照：float是普通相机，double是高清相机。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>如何选择float还是double？</strong>
+                        <table>
+                            <tr><th>场景</th><th>推荐类型</th><th>原因</th></tr>
+                            <tr><td>游戏开发（3D坐标）</td><td><code>float</code></td><td>精度足够，节省内存，计算更快</td></tr>
+                            <tr><td>科学计算、金融计算</td><td><code>double</code></td><td>需要高精度</td></tr>
+                            <tr><td>日常学习、一般应用</td><td><code>double</code></td><td>默认推荐，避免精度问题</td></tr>
+                            <tr><td>嵌入式系统、内存受限</td><td><code>float</code></td><td>节省内存空间</td></tr>
+                        </table>
+                        <p><strong>建议：</strong>如果不确定，使用 <code>double</code>。现代计算机内存充足，double的精度优势更重要。</p>
+                    </div>
                 </div>
             </div>
 
@@ -511,15 +752,58 @@
 }</code></pre>
                     </div>
 
+                    <div class="callout-note">
+                        <strong>科学计数法详解：</strong>
+                        <p>科学计数法用于表示非常大或非常小的数，格式为：<code>尾数e指数</code> 或 <code>尾数E指数</code></p>
+                        <ul>
+                            <li><code>1.5e8</code> 表示 1.5 × 10⁸ = 150,000,000（1.5亿）</li>
+                            <li><code>2.5e-3</code> 表示 2.5 × 10⁻³ = 0.0025</li>
+                            <li><code>6.022e23</code> 表示阿伏伽德罗常数（6.022 × 10²³）</li>
+                        </ul>
+                        <p><strong>为什么用科学计数法？</strong></p>
+                        <p>想象你要写光的速度：300000000 m/s，数0很费劲。用科学计数法：<code>3.0e8</code>，简洁明了！</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>printf格式化输出浮点数：</strong>
+                        <table>
+                            <tr><th>格式符</th><th>说明</th><th>示例</th></tr>
+                            <tr><td><code>%f</code></td><td>默认6位小数</td><td>3.141500</td></tr>
+                            <tr><td><code>%.2f</code></td><td>保留2位小数</td><td>3.14</td></tr>
+                            <tr><td><code>%.10f</code></td><td>保留10位小数</td><td>3.1415000000</td></tr>
+                            <tr><td><code>%e</code></td><td>科学计数法</td><td>3.141500e+00</td></tr>
+                            <tr><td><code>%g</code></td><td>自动选择%f或%e</td><td>根据数值大小自动选择</td></tr>
+                        </table>
+                    </div>
+
                     <div class="callout-warning">
                         <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
-                        <strong>浮点数精度问题：</strong>
+                        <strong>浮点数精度问题——必须知道的重要事实：</strong>
                         <ul>
-                            <li>浮点数在计算机中是近似存储的，不是精确值</li>
-                            <li><code>0.1 + 0.2</code> 的结果可能不是精确的 <code>0.3</code></li>
+                            <li>浮点数在计算机中是近似存储的，不是精确值。就像用分数近似表示1/3 = 0.333333...</li>
+                            <li><code>0.1 + 0.2</code> 的结果可能不是精确的 <code>0.3</code>，而是 <code>0.30000000000000004</code></li>
                             <li>需要高精度时使用 <code>double</code> 而非 <code>float</code></li>
-                            <li>不要用 <code>==</code> 直接比较两个浮点数是否相等</li>
+                            <li><strong>不要用 <code>==</code> 直接比较两个浮点数是否相等！</strong> 应该判断它们的差值是否小于某个很小的数（如0.000001）</li>
                         </ul>
+                        <p><strong>正确比较浮点数的方法：</strong></p>
+                        <pre><code>#include &lt;math.h&gt;  // 需要包含数学库
+
+// 判断两个浮点数是否相等
+if (fabs(a - b) < 0.000001) {
+    printf("a和b相等\n");
+}</code></pre>
+                    </div>
+
+                    <div class="callout-note">
+                        <strong>浮点数的实际应用场景：</strong>
+                        <table>
+                            <tr><th>场景</th><th>示例</th><th>说明</th></tr>
+                            <tr><td>身高体重</td><td><code>double height = 1.75;</code></td><td>人的身高通常有小数</td></tr>
+                            <tr><td>货币计算</td><td><code>double price = 19.99;</code></td><td>商品价格</td></tr>
+                            <tr><td>科学计算</td><td><code>double pi = 3.14159;</code></td><td>圆周率、物理常数</td></tr>
+                            <tr><td>地理坐标</td><td><code>double latitude = 39.9042;</code></td><td>经纬度</td></tr>
+                            <tr><td>百分比</td><td><code>double rate = 0.85;</code></td><td>85%的完成率</td></tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -560,7 +844,35 @@
             <div class="subsection">
                 <h3 class="subsection-title">什么是字符型？</h3>
                 <div class="subsection-content">
-                    <p><code>char</code> 类型用于存储单个字符。在C语言中，字符本质上是一个小整数，因为计算机用数字来表示字符（ASCII编码）。</p>
+                    <p><code>char</code> 类型用于存储单个字符。在C语言中，字符本质上是一个小整数（占用1个字节），因为计算机底层只能存储数字，所以用数字来编码表示各种字符（这就是ASCII编码）。</p>
+
+                    <div class="callout-note">
+                        <strong>深入理解——字符与数字的关系：</strong>
+                        <p>计算机内部只认识0和1，不认识ABC。为了让计算机能处理文字，人们制定了编码规则：</p>
+                        <ul>
+                            <li>用数字65表示字符'A'</li>
+                            <li>用数字97表示字符'a'</li>
+                            <li>用数字48表示字符'0'</li>
+                        </ul>
+                        <p>这套编码规则就是<strong>ASCII码</strong>（美国信息交换标准代码）。</p>
+                        <p>因为字符本质上就是数字，所以字符可以进行数学运算！比如 <code>'A' + 32</code> 的结果是 <code>'a'</code>（大写转小写）。</p>
+                    </div>
+
+                    <div class="callout-tip">
+                        <strong>生活化类比——邮政编码：</strong>
+                        <p>想象每个城市都有一个邮政编码：</p>
+                        <ul>
+                            <li>北京市 → 100000</li>
+                            <li>上海市 → 200000</li>
+                            <li>广州市 → 510000</li>
+                        </ul>
+                        <p>邮政编码就是城市的"数字代号"。同样，ASCII码就是字符的"数字代号"：</p>
+                        <ul>
+                            <li>字符'A' → 数字65</li>
+                            <li>字符'B' → 数字66</li>
+                            <li>字符'0' → 数字48</li>
+                        </ul>
+                    </div>
 
                     <div class="code-block">
                         <div class="code-block-title">字符型基本使用</div>
@@ -576,6 +888,21 @@
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
+                    </div>
+
+                    <div class="callout-warning">
+                        <strong>重要区分——字符'0'和数字0：</strong>
+                        <p>初学者最容易混淆的概念：</p>
+                        <ul>
+                            <li><code>'0'</code> 是字符，ASCII值是48，占1个字节</li>
+                            <li><code>0</code> 是数字整数，值就是0，通常占4个字节</li>
+                        </ul>
+                        <p>同样：</p>
+                        <ul>
+                            <li><code>'5'</code> 是字符，ASCII值是53</li>
+                            <li><code>5</code> 是数字整数，值就是5</li>
+                        </ul>
+                        <p><strong>记忆技巧：</strong>带单引号的是字符，不带引号的是数字！</p>
                     </div>
 
                     <h4>ASCII码表（常用部分）</h4>

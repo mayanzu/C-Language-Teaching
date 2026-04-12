@@ -48,6 +48,34 @@
 
                 <p><strong>结构体（struct）</strong>就是C语言提供的"自定义类型"工具，让你可以把多个不同类型的数据打包在一起，形成一个新的类型。</p>
 
+                <h3>什么是结构体？</h3>
+                <p><strong>结构体</strong>是一种用户自定义的数据类型，它可以将多个不同类型的变量组合成一个整体。结构体中的每个变量称为<strong>成员</strong>（member）或<strong>字段</strong>（field）。</p>
+
+                <div class="callout-tip">
+                    <strong>生活类比——学生档案：</strong>
+                    <p>把结构体想象成一张学生档案卡：</p>
+                    <ul>
+                        <li><strong>结构体</strong> = 整张档案卡</li>
+                        <li><strong>成员</strong> = 档案卡上的各个栏目（姓名、年龄、成绩）</li>
+                        <li><strong>结构体变量</strong> = 填好的一张具体档案卡</li>
+                    </ul>
+                    <p>档案卡把相关信息组织在一起，方便管理和传递。结构体也是这样——把相关数据打包成一个整体。</p>
+                </div>
+
+                <h3>结构体能解决什么问题？</h3>
+                <p>假设要管理学生信息，不用结构体时：</p>
+                <ul>
+                    <li>需要为每个学生声明多个变量：<code>name1</code>、<code>age1</code>、<code>score1</code>、<code>name2</code>、<code>age2</code>、<code>score2</code>...</li>
+                    <li>传递数据时要传多个参数</li>
+                    <li>变量之间的关系不明确</li>
+                </ul>
+                <p>使用结构体后：</p>
+                <ul>
+                    <li>一个结构体变量包含所有相关信息</li>
+                    <li>传递一个参数即可</li>
+                    <li>数据关系清晰明了</li>
+                </ul>
+
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
@@ -60,6 +88,27 @@
                 <div class="callout-tip">
                     <strong>生活类比：</strong>
                     <p>基本类型像单间，只能放一种东西；结构体像套房，有客厅、卧室、厨房，每个房间可以放不同类型的东西；联合体像变形房间，同一时间只能是客厅或卧室或厨房。</p>
+                </div>
+
+                <div class="example-grid">
+                    <div class="example-item">
+                        <strong>结构体类比：档案卡</strong>
+                        <ul>
+                            <li>档案卡模板 = 结构体定义</li>
+                            <li>填好的档案卡 = 结构体变量</li>
+                            <li>档案卡栏目 = 结构体成员</li>
+                            <li>栏目内容 = 成员值</li>
+                        </ul>
+                    </div>
+                    <div class="example-item">
+                        <strong>结构体类比：套房</strong>
+                        <ul>
+                            <li>套房设计图 = 结构体定义</li>
+                            <li>实际套房 = 结构体变量</li>
+                            <li>各个房间 = 结构体成员</li>
+                            <li>房间用途不同 = 成员类型不同</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>

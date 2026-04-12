@@ -47,6 +47,34 @@
 
                 <p><strong>数组</strong>就是解决这个问题的利器——它就像一排连续的储物柜，每个柜子大小相同，用编号来区分，可以高效地存储和访问多个同类型数据。</p>
 
+                <div class="callout-tip">
+                    <strong>生活类比——公寓楼信箱：</strong>
+                    <p>把数组想象成一栋公寓楼的信箱：</p>
+                    <ul>
+                        <li><strong>数组</strong>：整面信箱墙</li>
+                        <li><strong>数组元素</strong>：每个独立的信箱</li>
+                        <li><strong>下标</strong>：信箱编号（从0号开始）</li>
+                        <li><strong>元素值</strong>：信箱里的信件</li>
+                    </ul>
+                    <p>要找某封信，只需要知道信箱编号，就能快速定位。这就是数组的优势：通过编号（下标）快速访问任意元素。</p>
+                </div>
+
+                <h3>什么是数组？</h3>
+                <p><strong>数组</strong>是一种数据结构，它在内存中开辟一块连续的空间，用来存储多个相同类型的数据。数组的核心特点：</p>
+                <ul>
+                    <li><strong>类型统一</strong>：所有元素必须是同一种数据类型</li>
+                    <li><strong>连续存储</strong>：元素在内存中依次排列，没有间隔</li>
+                    <li><strong>下标访问</strong>：通过下标（索引）直接访问任意元素</li>
+                    <li><strong>大小固定</strong>：声明后大小不能改变</li>
+                </ul>
+
+                <h3>为什么需要数组？</h3>
+                <p>假设要存储100个学生的成绩：</p>
+                <ul>
+                    <li><strong>不用数组</strong>：需要声明100个变量 <code>score1, score2, score3, ...</code> —— 繁琐且难以管理</li>
+                    <li><strong>使用数组</strong>：只需声明 <code>int scores[100];</code> 一个变量搞定！</li>
+                </ul>
+
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
@@ -90,6 +118,25 @@
                 <h3 class="subsection-title">声明与初始化</h3>
                 <div class="subsection-content">
                     <p>一维数组是最基本的数组形式，就像一排连续的储物柜。声明时需要指定<strong>元素类型</strong>和<strong>数组大小</strong>。</p>
+
+                    <div class="callout-tip">
+                        <strong>生活类比——一排储物柜：</strong>
+                        <p>声明数组就像告诉管理员："我要一排储物柜"</p>
+                        <ul>
+                            <li><code>int arr[5];</code> → "我要5个放整数的柜子"</li>
+                            <li><code>float prices[10];</code> → "我要10个放小数的柜子"</li>
+                            <li><code>char name[20];</code> → "我要20个放字符的柜子"</li>
+                        </ul>
+                        <p>声明后，这排柜子就准备好了，可以往里面放东西（赋值）。</p>
+                    </div>
+
+                    <h4>数组声明的语法</h4>
+                    <p><code>数据类型 数组名[数组大小];</code></p>
+                    <ul>
+                        <li><strong>数据类型</strong>：数组中每个元素的类型，如 int、float、char</li>
+                        <li><strong>数组名</strong>：数组的标识符，命名规则和变量相同</li>
+                        <li><strong>数组大小</strong>：数组能存储的元素个数，必须是常量表达式</li>
+                    </ul>
 
                     <div class="table-container">
                         <table>
