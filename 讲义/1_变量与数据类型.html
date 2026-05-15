@@ -1,4 +1,4 @@
-，kuokuo<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -48,15 +48,15 @@
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
-                        <li>变量就像一个带标签的盒子，用来存放数据</li>
-                        <li>数据类型决定了盒子的大小和能存放什么样的数据</li>
-                        <li>使用变量前必须先声明（告诉编译器盒子的类型和名字）</li>
+                        <li>变量用于保存程序运行中的数据</li>
+                        <li>数据类型决定变量占用的空间、取值范围和参与运算的方式</li>
+                        <li>变量使用前必须先声明，建议声明时同时初始化</li>
                     </ul>
                 </div>
 
                 <div class="callout-tip">
                     <strong>重要提示：</strong>
-                    <p>掌握变量和数据类型是写好C程序的前提，就像认识字才能写文章一样。本章将介绍C语言的基本数据类型和变量的使用方法。</p>
+                    <p>本章重点不是背类型名，而是能根据数据特点选择合适类型，并能解释初始化、赋值和类型转换发生在什么时候。</p>
                 </div>
 
                 <h3 class="subsection-title">学习目标与节奏</h3>
@@ -84,43 +84,51 @@
                     <p><strong>变量</strong>是程序中用来存储数据的容器。在C语言中，变量是程序与内存交互的桥梁——程序通过变量名来操作内存中的数据。</p>
 
                     <div class="callout-note">
-                        <strong>深入理解——为什么需要变量？</strong>
-                        <p>想象你在做一个计算：求圆的面积。如果没有变量，你需要这样写：</p>
+                        <strong>变量让数据可复用、可修改：</strong>
                         <pre><code>printf("%f", 3.14 * 5 * 5);  // 直接写死数字</code></pre>
-                        <p>但如果半径变了，你需要修改所有用到半径的地方。使用变量后：</p>
+                        <p>上面代码把半径写死了。改成变量后，只要修改 <code>radius</code> 一处：</p>
                         <pre><code>float radius = 5;           // 定义半径变量
 float area = 3.14 * radius * radius;  // 使用变量计算
 printf("%f", area);</code></pre>
-                        <p>这样当半径改变时，只需修改一处即可！</p>
                     </div>
 
-                    <p>你可以把变量想象成一个<strong>带标签的盒子</strong>：</p>
+                    <p>理解变量时抓住三个要素：</p>
                     <ul>
-                        <li><strong>变量名</strong>就是盒子上的标签，用来找到这个盒子（如"age"、"score"）</li>
-                        <li><strong>变量的值</strong>就是盒子里装的东西（如25、95.5）</li>
-                        <li><strong>变量的类型</strong>决定了盒子的大小和能装什么样的东西（整数、小数、字符等）</li>
+                        <li><strong>变量名</strong>：在代码中引用这个变量，如 <code>age</code>、<code>score</code></li>
+                        <li><strong>变量值</strong>：当前保存的数据，如 <code>25</code>、<code>95.5</code></li>
+                        <li><strong>变量类型</strong>：决定能保存什么数据，如 <code>int</code>、<code>double</code>、<code>char</code></li>
                     </ul>
 
-                    <div class="callout-tip">
-                        <strong>生活类比——储物柜系统：</strong>
-                        <p>想象你去超市存包：</p>
-                        <ul>
-                            <li><strong>储物柜编号（变量名）：</strong>每个柜子都有唯一编号，如"A12"，你凭这个编号找到你的柜子</li>
-                            <li><strong>柜子里的物品（变量值）：</strong>你存放的包包、购物袋等</li>
-                            <li><strong>柜子大小（变量类型）：</strong>小柜放钱包，中柜放背包，大柜放行李箱</li>
-                        </ul>
-                        <p>程序中的变量就像储物柜系统，通过名字找到存储的数据。</p>
+                    <div class="concept-visual">
+                        <div class="visual-caption">变量在内存中的直观样子</div>
+                        <div class="memory-strip" aria-label="变量名、类型、地址和值的示意图">
+                            <div class="memory-cell">
+                                <span class="cell-name">age : int</span>
+                                <strong class="cell-value">18</strong>
+                                <span class="cell-address">地址 0x1000</span>
+                            </div>
+                            <div class="memory-cell">
+                                <span class="cell-name">height : double</span>
+                                <strong class="cell-value">1.75</strong>
+                                <span class="cell-address">地址 0x1008</span>
+                            </div>
+                            <div class="memory-cell">
+                                <span class="cell-name">grade : char</span>
+                                <strong class="cell-value">'A'</strong>
+                                <span class="cell-address">地址 0x1010</span>
+                            </div>
+                        </div>
+                        <p class="visual-note">变量名让程序找到这块空间，类型决定空间大小和解释方式，值是当前保存的内容。</p>
                     </div>
 
-                    <div class="callout-tip">
-                        <strong>另一个类比——快递包裹：</strong>
-                        <p>想象你收到一个快递：</p>
-                        <ul>
-                            <li>整数值（如年龄25）→ 用小盒子（<code>int</code>）装</li>
-                            <li>小数值（如身高1.75）→ 用精度盒子（<code>float</code>/<code>double</code>）装</li>
-                            <li>单个字符（如字母'A'）→ 用迷你盒子（<code>char</code>）装</li>
-                        </ul>
-                        <p>不同类型的数据需要不同类型的"盒子"来存放。</p>
+                    <div class="code-block">
+                        <div class="code-block-title">不同类型变量的基本用法</div>
+                        <pre><code><span class="c-keyword">int</span> age = <span class="c-number">18</span>;              <span class="c-comment">// 整数</span>
+<span class="c-keyword">double</span> height = <span class="c-number">1.75</span>;       <span class="c-comment">// 小数，默认推荐 double</span>
+<span class="c-keyword">char</span> grade = <span class="c-string">'A'</span>;          <span class="c-comment">// 单个字符</span>
+
+age = age + <span class="c-number">1</span>;              <span class="c-comment">// 变量的值可以改变</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d %.2f %c\n"</span>, age, height, grade);</code></pre>
                     </div>
 
                     <div class="callout-note">
@@ -137,20 +145,19 @@ printf("%f", area);</code></pre>
             <div class="subsection">
                 <h3 class="subsection-title">变量的声明与初始化</h3>
                 <div class="subsection-content">
-                    <p>使用变量前，必须先<strong>声明</strong>它——告诉编译器变量的类型和名字。这就像在使用储物柜之前，先告诉管理员你要什么类型的柜子。</p>
+                    <p>使用变量前，必须先<strong>声明</strong>它：告诉编译器变量的类型和名字。</p>
 
                     <div class="callout-note">
                         <strong>声明 vs 初始化 vs 赋值：</strong>
-                        <p>这三个概念容易混淆，让我们搞清楚：</p>
                         <ul>
                             <li><strong>声明（Declaration）：</strong>告诉编译器变量的类型和名字，在内存中分配空间
-                                <br><code>int age;</code> —— 创建一个能装整数的"盒子"
+                                <br><code>int age;</code>
                             </li>
                             <li><strong>初始化（Initialization）：</strong>在声明变量的同时给它一个初始值
-                                <br><code>int age = 18;</code> —— 创建盒子的同时放入初始值18
+                                <br><code>int age = 18;</code>
                             </li>
                             <li><strong>赋值（Assignment）：</strong>给已经存在的变量一个新值
-                                <br><code>age = 20;</code> —— 把盒子里的内容换成20
+                                <br><code>age = 20;</code>
                             </li>
                         </ul>
                     </div>
@@ -358,17 +365,6 @@ average = total_score / student_count;  // 计算平均分</code></pre>
                         <p>注意：整数不包含小数，所以3.14、-0.5等都不是整数。</p>
                     </div>
 
-                    <div class="callout-tip">
-                        <strong>生活化类比——计数工具：</strong>
-                        <p>想象你在数东西：</p>
-                        <ul>
-                            <li>数教室里的人数：25人（整数）</li>
-                            <li>数书本的数量：10本（整数）</li>
-                            <li>记录温度：-5度（整数）</li>
-                        </ul>
-                        <p>只要是不涉及分割的计数，都可以用整数表示。</p>
-                    </div>
-
                     <div class="code-block">
                         <div class="code-block-title">int 类型示例</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
@@ -412,21 +408,14 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
             <div class="subsection">
                 <h3 class="subsection-title">整型的分类</h3>
                 <div class="subsection-content">
-                    <p>C语言提供了多种整型，就像提供了不同大小的盒子来存放整数。它们的主要区别是占用的内存大小和能表示的数值范围。</p>
+                    <p>C语言提供多种整型，它们的主要区别是占用字节数和取值范围。</p>
 
                     <div class="callout-note">
                         <strong>为什么需要不同的整型？</strong>
-                        <p>想象你要存放不同数量的物品：</p>
-                        <ul>
-                            <li>存放几本书 → 用小盒子（short）</li>
-                            <li>存放几百本书 → 用中盒子（int）</li>
-                            <li>存放几万本书 → 用大盒子（long）</li>
-                            <li>存放几亿本书 → 用超大盒子（long long）</li>
-                        </ul>
                         <p>选择合适的类型可以：</p>
                         <ol>
-                            <li><strong>节省内存：</strong>不需要用超大盒子装少量物品</li>
-                            <li><strong>避免溢出：</strong>确保盒子足够大，不会装不下</li>
+                            <li><strong>节省内存：</strong>数据范围很小时不必使用最大类型</li>
+                            <li><strong>避免溢出：</strong>确保类型范围能覆盖可能结果</li>
                             <li><strong>提高效率：</strong>小数据用小类型，处理更快</li>
                         </ol>
                     </div>
@@ -680,13 +669,12 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
                     </div>
 
                     <div class="callout-tip">
-                        <strong>生活化类比——尺子与游标卡尺：</strong>
-                        <p>想象测量物体的长度：</p>
+                        <strong>float 与 double：</strong>
                         <ul>
-                            <li><strong>float（单精度）：</strong>像普通尺子，精确到毫米（6-7位有效数字）</li>
-                            <li><strong>double（双精度）：</strong>像游标卡尺，精确到0.02毫米（15-16位有效数字）</li>
+                            <li><code>float</code>：单精度，通常约 6-7 位有效数字</li>
+                            <li><code>double</code>：双精度，通常约 15-16 位有效数字</li>
+                            <li>不确定时优先使用 <code>double</code>，精度更稳</li>
                         </ul>
-                        <p>对于日常测量，普通尺子就够了；但对于精密工程，需要游标卡尺。</p>
                     </div>
 
                     <div class="table-container">
@@ -726,7 +714,6 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
                             <li><code>float</code>的6-7位有效数字：123.456789 → 只能精确存储123.4568</li>
                             <li><code>double</code>的15-16位有效数字：123.4567890123456789 → 能精确存储更多位</li>
                         </ul>
-                        <p>就像用不同精度的相机拍照：float是普通相机，double是高清相机。</p>
                     </div>
 
                     <div class="callout-tip">
@@ -873,20 +860,14 @@ if (fabs(a - b) < 0.000001) {
                         <p>因为字符本质上就是数字，所以字符可以进行数学运算！比如 <code>'A' + 32</code> 的结果是 <code>'a'</code>（大写转小写）。</p>
                     </div>
 
-                    <div class="callout-tip">
-                        <strong>生活化类比——邮政编码：</strong>
-                        <p>想象每个城市都有一个邮政编码：</p>
-                        <ul>
-                            <li>北京市 → 100000</li>
-                            <li>上海市 → 200000</li>
-                            <li>广州市 → 510000</li>
-                        </ul>
-                        <p>邮政编码就是城市的"数字代号"。同样，ASCII码就是字符的"数字代号"：</p>
-                        <ul>
-                            <li>字符'A' → 数字65</li>
-                            <li>字符'B' → 数字66</li>
-                            <li>字符'0' → 数字48</li>
-                        </ul>
+                    <div class="code-block">
+                        <div class="code-block-title">字符与 ASCII 数值</div>
+                        <pre><code><span class="c-keyword">char</span> upper = <span class="c-string">'A'</span>;
+<span class="c-keyword">char</span> lower = upper + <span class="c-number">32</span>;
+<span class="c-keyword">int</span> digit = <span class="c-string">'7'</span> - <span class="c-string">'0'</span>;
+
+<span class="c-function">printf</span>(<span class="c-string">"%d %c %d\n"</span>, upper, lower, digit);
+<span class="c-comment">// 输出：65 a 7</span></code></pre>
                     </div>
 
                     <div class="callout-tip">

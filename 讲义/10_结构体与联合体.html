@@ -51,15 +51,16 @@
                 <h3>什么是结构体？</h3>
                 <p><strong>结构体</strong>是一种用户自定义的数据类型，它可以将多个不同类型的变量组合成一个整体。结构体中的每个变量称为<strong>成员</strong>（member）或<strong>字段</strong>（field）。</p>
 
-                <div class="callout-tip">
-                    <strong>生活类比——学生档案：</strong>
-                    <p>把结构体想象成一张学生档案卡：</p>
-                    <ul>
-                        <li><strong>结构体</strong> = 整张档案卡</li>
-                        <li><strong>成员</strong> = 档案卡上的各个栏目（姓名、年龄、成绩）</li>
-                        <li><strong>结构体变量</strong> = 填好的一张具体档案卡</li>
-                    </ul>
-                    <p>档案卡把相关信息组织在一起，方便管理和传递。结构体也是这样——把相关数据打包成一个整体。</p>
+                <div class="code-block">
+                    <div class="code-block-title">结构体把相关数据打包</div>
+                    <pre><code><span class="c-keyword">struct</span> Student {
+    <span class="c-keyword">char</span> name[<span class="c-number">20</span>];
+    <span class="c-keyword">int</span> age;
+    <span class="c-keyword">double</span> score;
+};
+
+<span class="c-keyword">struct</span> Student stu = {<span class="c-string">"Li Ming"</span>, <span class="c-number">18</span>, <span class="c-number">92.5</span>};
+<span class="c-function">printf</span>(<span class="c-string">"%s %.1f\n"</span>, stu.name, stu.score);</code></pre>
                 </div>
 
                 <h3>结构体能解决什么问题？</h3>
@@ -79,36 +80,15 @@
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
-                        <li>结构体就像一个"信息卡片"，可以包含不同类型的字段</li>
+                        <li>结构体可以包含不同类型的字段</li>
                         <li>联合体（union）看起来和结构体很像，但它在同一时刻只能存储一个成员的值</li>
                         <li>枚举（enum）用于定义一组有名字的整数常量</li>
                     </ul>
                 </div>
 
                 <div class="callout-tip">
-                    <strong>生活类比：</strong>
-                    <p>基本类型像单间，只能放一种东西；结构体像套房，有客厅、卧室、厨房，每个房间可以放不同类型的东西；联合体像变形房间，同一时间只能是客厅或卧室或厨房。</p>
-                </div>
-
-                <div class="example-grid">
-                    <div class="example-item">
-                        <strong>结构体类比：档案卡</strong>
-                        <ul>
-                            <li>档案卡模板 = 结构体定义</li>
-                            <li>填好的档案卡 = 结构体变量</li>
-                            <li>档案卡栏目 = 结构体成员</li>
-                            <li>栏目内容 = 成员值</li>
-                        </ul>
-                    </div>
-                    <div class="example-item">
-                        <strong>结构体类比：套房</strong>
-                        <ul>
-                            <li>套房设计图 = 结构体定义</li>
-                            <li>实际套房 = 结构体变量</li>
-                            <li>各个房间 = 结构体成员</li>
-                            <li>房间用途不同 = 成员类型不同</li>
-                        </ul>
-                    </div>
+                    <strong>结构体 vs 联合体：</strong>
+                    <p><code>struct</code> 的每个成员都有独立存储空间；<code>union</code> 的成员共用同一块存储空间，同一时间通常只保存一个成员的有效值。</p>
                 </div>
             </div>
         </section>
@@ -756,11 +736,10 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
              链表基础
              ============================================================ -->
         <section id="linked-list" class="section">
-            <h2 class="section-title">链表基础<
+            <h2 class="section-title">链表基础</h2>
             <div class="callout-note">
                 <strong>注：链表不在二级考试范围内，以下内容供拓展学习。二级只考结构体的基本定义和使用。</strong>
             </div>
-/h2>
 
             <div class="subsection">
                 <h3 class="subsection-title">什么是链表？</h3>
@@ -943,34 +922,39 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                 <div class="practice-box-title">边学边练 - 联合体</div>
 
 <div class="question-item">
-                    <p><strong>练习3：</strong> 定义一个枚举表示季节（春、夏、秋、冬），编写函数根据月份返回对应的季节。</p>
+                    <p><strong>练习3：</strong> 使用联合体实现一个"万能数据容器"，可以存储 int、float 或字符串，并用枚举记录当前存储的数据类型。</p>
                     <details>
                         <summary>参考答案</summary>
                         <div class="code-block">
-                            <div class="code-block-title">月份判断季节</div>
+                            <div class="code-block-title">万能数据容器</div>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
 
-<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { SPRING, SUMMER, AUTUMN, WINTER } <span class="c-variable">Season</span>;
+<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { TYPE_INT, TYPE_FLOAT, TYPE_STRING } <span class="c-variable">DataType</span>;
 
-<span class="c-variable">Season</span> <span class="c-function">get_season</span>(<span class="c-keyword">int</span> month) {
-    <span class="c-keyword">if</span> (month >= <span class="c-number">3</span> && month <= <span class="c-number">5</span>)  <span class="c-keyword">return</span> SPRING;
-    <span class="c-keyword">if</span> (month >= <span class="c-number">6</span> && month <= <span class="c-number">8</span>)  <span class="c-keyword">return</span> SUMMER;
-    <span class="c-keyword">if</span> (month >= <span class="c-number">9</span> && month <= <span class="c-number">11</span>) <span class="c-keyword">return</span> AUTUMN;
-    <span class="c-keyword">return</span> WINTER;
-}
+<span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
+    <span class="c-variable">DataType</span> type;
+    <span class="c-keyword">union</span> {
+        <span class="c-keyword">int</span> i_val;
+        <span class="c-keyword">float</span> f_val;
+        <span class="c-keyword">char</span> str[<span class="c-number">50</span>];
+    } data;
+} <span class="c-variable">Value</span>;
 
-<span class="c-keyword">const</span> <span class="c-keyword">char</span> <span class="c-operator">*</span><span class="c-function">season_name</span>(<span class="c-variable">Season</span> s) {
-    <span class="c-keyword">static</span> <span class="c-keyword">const</span> <span class="c-keyword">char</span> <span class="c-operator">*</span>names[] = {<span class="c-string">"春天"</span>, <span class="c-string">"夏天"</span>, <span class="c-string">"秋天"</span>, <span class="c-string">"冬天"</span>};
-    <span class="c-keyword">return</span> names[s];
+<span class="c-keyword">void</span> <span class="c-function">print_value</span>(<span class="c-keyword">const</span> <span class="c-variable">Value</span> <span class="c-operator">*</span>v) {
+    <span class="c-keyword">switch</span> (v->type) {
+        <span class="c-keyword">case</span> TYPE_INT:    <span class="c-function">printf</span>(<span class="c-string">"int: %d\n"</span>, v->data.i_val); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> TYPE_FLOAT:  <span class="c-function">printf</span>(<span class="c-string">"float: %.2f\n"</span>, v->data.f_val); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> TYPE_STRING: <span class="c-function">printf</span>(<span class="c-string">"string: %s\n"</span>, v->data.str); <span class="c-keyword">break</span>;
+    }
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> month;
-    <span class="c-function">printf</span>(<span class="c-string">"输入月份(1-12): "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>month);
+    <span class="c-variable">Value</span> v;
 
-    <span class="c-variable">Season</span> s = <span class="c-function">get_season</span>(month);
-    <span class="c-function">printf</span>(<span class="c-string">"%d月是%s\n"</span>, month, <span class="c-function">season_name</span>(s));
+    v.type = TYPE_STRING;
+    <span class="c-function">strcpy</span>(v.data.str, <span class="c-string">"hello union"</span>);
+    <span class="c-function">print_value</span>(&v);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -1029,6 +1013,42 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                 </div>
             </div>
         </section>
+
+            <div class="practice-box">
+                <div class="practice-box-title">边学边练 - 枚举类型</div>
+
+                <div class="question-item">
+                    <p><strong>练习4：</strong> 定义一个枚举表示季节（春、夏、秋、冬），编写函数根据月份返回对应的季节。</p>
+                    <details>
+                        <summary>参考答案</summary>
+                        <div class="code-block">
+                            <div class="code-block-title">月份判断季节</div>
+                            <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
+
+<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { SPRING, SUMMER, AUTUMN, WINTER } <span class="c-variable">Season</span>;
+
+<span class="c-variable">Season</span> <span class="c-function">get_season</span>(<span class="c-keyword">int</span> month) {
+    <span class="c-keyword">if</span> (month >= <span class="c-number">3</span> && month <= <span class="c-number">5</span>)  <span class="c-keyword">return</span> SPRING;
+    <span class="c-keyword">if</span> (month >= <span class="c-number">6</span> && month <= <span class="c-number">8</span>)  <span class="c-keyword">return</span> SUMMER;
+    <span class="c-keyword">if</span> (month >= <span class="c-number">9</span> && month <= <span class="c-number">11</span>) <span class="c-keyword">return</span> AUTUMN;
+    <span class="c-keyword">return</span> WINTER;
+}
+
+<span class="c-keyword">const</span> <span class="c-keyword">char</span> *<span class="c-function">season_name</span>(<span class="c-variable">Season</span> s) {
+    <span class="c-keyword">static</span> <span class="c-keyword">const</span> <span class="c-keyword">char</span> *names[] = {<span class="c-string">"春天"</span>, <span class="c-string">"夏天"</span>, <span class="c-string">"秋天"</span>, <span class="c-string">"冬天"</span>};
+    <span class="c-keyword">return</span> names[s];
+}
+
+<span class="c-keyword">int</span> <span class="c-function">main</span>() {
+    <span class="c-keyword">int</span> month = <span class="c-number">10</span>;
+    <span class="c-variable">Season</span> s = <span class="c-function">get_season</span>(month);
+    <span class="c-function">printf</span>(<span class="c-string">"%d月是%s\n"</span>, month, <span class="c-function">season_name</span>(s));
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}</code></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
 
 
         <!-- ============================================================
@@ -1099,48 +1119,28 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                 <div class="practice-box-title">边学边练 - typedef</div>
 
 <div class="question-item">
-                    <p><strong>练习4：</strong> 使用联合体实现一个"万能数据容器"，可以存储 int、float 或字符串，并用枚举记录当前存储的数据类型。</p>
+                    <p><strong>练习5：</strong> 使用 <code>typedef</code> 为结构体 <code>Book</code> 定义别名，包含书名、作者和价格，并编写函数输出图书信息。</p>
                     <details>
                         <summary>参考答案</summary>
                         <div class="code-block">
-                            <div class="code-block-title">万能数据容器</div>
+                            <div class="code-block-title">typedef 简化结构体</div>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
-<span class="c-keyword">#include</span> <span class="c-string">&lt;string.h&gt;</span>
-
-<span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { TYPE_INT, TYPE_FLOAT, TYPE_STRING } <span class="c-variable">DataType</span>;
 
 <span class="c-keyword">typedef</span> <span class="c-keyword">struct</span> {
-    <span class="c-variable">DataType</span> type;
-    <span class="c-keyword">union</span> {
-        <span class="c-keyword">int</span> i_val;
-        <span class="c-keyword">float</span> f_val;
-        <span class="c-keyword">char</span> str[<span class="c-number">50</span>];
-    } data;
-} <span class="c-variable">Value</span>;
+    <span class="c-keyword">char</span> title[<span class="c-number">50</span>];
+    <span class="c-keyword">char</span> author[<span class="c-number">30</span>];
+    <span class="c-keyword">double</span> price;
+} <span class="c-variable">Book</span>;
 
-<span class="c-keyword">void</span> <span class="c-function">print_value</span>(<span class="c-keyword">const</span> <span class="c-variable">Value</span> <span class="c-operator">*</span>v) {
-    <span class="c-keyword">switch</span> (v->type) {
-        <span class="c-keyword">case</span> TYPE_INT:    <span class="c-function">printf</span>(<span class="c-string">"int: %d\n"</span>, v->data.i_val); <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> TYPE_FLOAT:  <span class="c-function">printf</span>(<span class="c-string">"float: %.2f\n"</span>, v->data.f_val); <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> TYPE_STRING: <span class="c-function">printf</span>(<span class="c-string">"string: %s\n"</span>, v->data.str); <span class="c-keyword">break</span>;
-    }
+<span class="c-keyword">void</span> <span class="c-function">print_book</span>(<span class="c-variable">Book</span> book) {
+    <span class="c-function">printf</span>(<span class="c-string">"书名: %s\n"</span>, book.title);
+    <span class="c-function">printf</span>(<span class="c-string">"作者: %s\n"</span>, book.author);
+    <span class="c-function">printf</span>(<span class="c-string">"价格: %.2f\n"</span>, book.price);
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-variable">Value</span> v1, v2, v3;
-
-    v1.type = TYPE_INT;
-    v1.data.i_val = <span class="c-number">42</span>;
-
-    v2.type = TYPE_FLOAT;
-    v2.data.f_val = <span class="c-number">3.14</span>;
-
-    v3.type = TYPE_STRING;
-    <span class="c-function">strcpy</span>(v3.data.str, <span class="c-string">"Hello"</span>);
-
-    <span class="c-function">print_value</span>(<span class="c-operator">&</span>v1);
-    <span class="c-function">print_value</span>(<span class="c-operator">&</span>v2);
-    <span class="c-function">print_value</span>(<span class="c-operator">&</span>v3);
+    <span class="c-variable">Book</span> book = {<span class="c-string">"C语言程序设计"</span>, <span class="c-string">"谭浩强"</span>, <span class="c-number">45.5</span>};
+    <span class="c-function">print_book</span>(book);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>

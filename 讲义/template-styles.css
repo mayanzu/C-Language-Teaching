@@ -94,19 +94,33 @@
        - .flow-step
        - .flow-decision
 
-   14. 辅助组件
+   14. 知识点可视化组件
+       - .concept-visual
+       - .memory-strip / .memory-cell
+       - .pointer-flow / .pointer-link
+       - .bit-visual / .bit-row / .bit-cell
+       - .call-stack / .stack-frame
+       - .heap-flow / .heap-block
+
+   15. 辅助组件
        - .pointer-step
        - .array-pointer-details / .file-modes / .mode-table
        - .svg-sprite / .icon
 
-   15. 响应式设计
+   16. 教学场景优化
+       - 投影可读性
+       - 当前章节提示
+       - 知识点可视化
+       - 练习与代码展示强化
+
+   17. 响应式设计
        - 2K/大屏优化
        - 平板适配
        - 手机适配
        - 小屏适配
        - 打印样式
 
-   16. 工具类
+   18. 工具类
        - ::focus-visible
        - ::selection
 
@@ -119,27 +133,30 @@
 
 :root {
     /* --- 基准字号（可通过媒体查询缩放整个页面） --- */
-    --base-font-size: clamp(26px, 1.65vw + 15px, 33px);
+    --base-font-size: 18px;
 
     /* --- 颜色系统 --- */
-    --color-text-primary: #1D1D1F;
-    --color-text-secondary: #6E6E73;
-    --color-text-tertiary: #86868B;
-    --color-accent-blue: #0066CC;
-    --color-accent-blue-hover: #0055B3;
-    --color-background: #FBFBFD;
+    --color-text-primary: #111827;
+    --color-text-secondary: #374151;
+    --color-text-tertiary: #6B7280;
+    --color-accent-blue: #0B63CE;
+    --color-accent-blue-hover: #084A9B;
+    --color-accent-green: #047857;
+    --color-background: #F6F8FB;
     --color-surface: #FFFFFF;
-    --color-border: #E5E5E7;
-    --color-code-bg: #FAFAFA;
-    --color-code-border: #E8E8ED;
+    --color-border: #D8DEE8;
+    --color-code-bg: #F8FAFC;
+    --color-code-border: #CBD5E1;
 
     /* Callout 颜色 */
-    --color-info-bg: #F5F5F7;
-    --color-info-border: #86868B;
-    --color-warning-bg: #F5F5F7;
-    --color-warning-border: #86868B;
-    --color-success-bg: #F5F5F7;
-    --color-success-border: #86868B;
+    --color-info-bg: #EFF6FF;
+    --color-info-border: #2563EB;
+    --color-warning-bg: #FFF7ED;
+    --color-warning-border: #C2410C;
+    --color-note-bg: #F8FAFC;
+    --color-note-border: #64748B;
+    --color-success-bg: #ECFDF5;
+    --color-success-border: #047857;
 
     /* --- 字体系统 --- */
     --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
@@ -156,13 +173,24 @@
 
     /* --- 圆角 --- */
     --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
 
     /* --- 阴影 --- */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+
+    /* --- 教学场景 --- */
+    --nav-width: 248px;
+    --content-max-width: 1080px;
+    --content-padding-x: clamp(24px, 3vw, 44px);
+    --reading-width: 78ch;
+    --code-font-size: 0.92rem;
+    --scroll-progress: 0%;
+    --knowledge-border: #D8E4F4;
+    --knowledge-bg: #FFFFFF;
+    --knowledge-label-bg: #EAF3FF;
 }
 
 
@@ -170,7 +198,9 @@
    2. 全局基础样式
    ============================================ */
 
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -185,6 +215,7 @@ body {
     color: var(--color-text-primary);
     line-height: 1.6;
     font-size: var(--base-font-size);
+    overflow-x: hidden;
 }
 
 html {
@@ -209,8 +240,11 @@ html {
 /* 页面容器 */
 .tutorial-container {
     display: flex;
+    width: 100%;
     min-height: 100vh;
     background: var(--color-background);
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 /* 侧边导航栏 - 固定左侧 */
@@ -252,7 +286,7 @@ html {
 }
 
 .tutorial-nav li {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
 }
 
 .tutorial-nav a {
@@ -279,9 +313,10 @@ html {
 /* 主内容区域 */
 .tutorial-content {
     flex: 1;
+    min-width: 0;
     margin-left: 220px;
     padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-3xl) var(--spacing-xl);
-    max-width: 1100px;
+    max-width: 1000px;
 }
 
 /* 页面标题头部 */
@@ -294,7 +329,7 @@ html {
 .tutorial-header h1 {
     font-size: 2.35rem;
     font-weight: 700;
-    letter-spacing: -0.015em;
+    letter-spacing: 0;
     color: var(--color-text-primary);
     margin-bottom: var(--spacing-sm);
     line-height: 1.15;
@@ -321,7 +356,7 @@ html {
 .section-title {
     font-size: 1.88rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     color: var(--color-text-primary);
     margin-bottom: var(--spacing-lg);
     line-height: 1.25;
@@ -335,7 +370,7 @@ html {
 .subsection-title {
     font-size: 1.41rem;
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: 0;
     color: var(--color-text-primary);
     margin-bottom: var(--spacing-md);
     line-height: 1.4;
@@ -345,7 +380,7 @@ html {
 .subsection-content h3:not(.subsection-title) {
     font-size: 22px;
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: 0;
     color: var(--color-text-primary);
     margin: var(--spacing-lg) 0 var(--spacing-sm);
     line-height: 1.45;
@@ -362,7 +397,7 @@ html {
 /* 段落与文本 */
 .subsection-content,
 .subsection-content p {
-    font-size: 17px;
+    font-size: 1rem;
     line-height: 1.7;
     color: var(--color-text-secondary);
     margin-bottom: var(--spacing-md);
@@ -467,11 +502,11 @@ ol ol {
 /* 行内代码 - 基础样式 */
 code {
     font-family: var(--font-mono);
-    font-size: 22px;
+    font-size: 0.9em;
     background: var(--color-code-bg);
     color: #AD3DA4;
     font-weight: 500;
-    padding: 3px 8px;
+    padding: 2px 7px;
     border-radius: 5px;
     border: 1px solid var(--color-code-border);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -547,6 +582,17 @@ pre {
     word-wrap: normal;
 }
 
+.subsection-content > pre,
+.callout > pre,
+.callout-tip > pre,
+.callout-warning > pre,
+.callout-note > pre,
+.callout-success > pre,
+.question-item > pre {
+    background: var(--color-code-bg);
+    overflow: hidden;
+}
+
 pre:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.08);
     transform: translateY(-1px);
@@ -559,13 +605,23 @@ pre code {
     background: #FFFFFF;
     overflow-x: auto;
     font-family: var(--font-mono);
-    font-size: 21px;
+    font-size: 14px;
     line-height: 1.8;
     color: var(--color-text-primary);
     letter-spacing: 0.3px;
     white-space: pre;
     word-break: normal;
     word-wrap: normal;
+}
+
+.subsection-content > pre code,
+.callout > pre code,
+.callout-tip > pre code,
+.callout-warning > pre code,
+.callout-note > pre code,
+.callout-success > pre code,
+.question-item > pre code {
+    overflow-x: auto;
 }
 
 pre::-webkit-scrollbar {
@@ -607,7 +663,7 @@ pre::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(to bottom, #FAFAFA, #F5F5F7);
     padding: var(--spacing-md) var(--spacing-lg);
     border-bottom: 1px solid var(--color-code-border);
-    font-size: 21px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--color-text-secondary);
     display: flex;
@@ -666,7 +722,7 @@ pre::-webkit-scrollbar-thumb:hover {
     background: #FFFFFF;
     overflow-x: auto;
     font-family: var(--font-mono);
-    font-size: 21px;
+    font-size: 14px;
     line-height: 1.8;
     color: var(--color-text-primary);
     letter-spacing: 0.3px;
@@ -783,8 +839,8 @@ pre::-webkit-scrollbar-thumb:hover {
 .callout-warning,
 .callout-note,
 .callout-success {
-    background: var(--color-info-bg);
-    border-left: 3px solid var(--color-info-border);
+    background: var(--color-note-bg);
+    border-left: 4px solid var(--color-note-border);
     border-radius: var(--radius-sm);
     padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
     margin: var(--spacing-md) 0;
@@ -793,7 +849,7 @@ pre::-webkit-scrollbar-thumb:hover {
 
 .callout-tip {
     background: var(--color-info-bg);
-    border-left-color: var(--color-accent-blue);
+    border-left-color: var(--color-info-border);
 }
 
 .callout-warning {
@@ -802,8 +858,8 @@ pre::-webkit-scrollbar-thumb:hover {
 }
 
 .callout-note {
-    background: var(--color-info-bg);
-    border-left-color: var(--color-info-border);
+    background: var(--color-note-bg);
+    border-left-color: var(--color-note-border);
 }
 
 .callout-success {
@@ -819,9 +875,21 @@ pre::-webkit-scrollbar-thumb:hover {
 .callout-success strong {
     display: block;
     color: var(--color-text-primary);
-    font-size: 22px;
+    font-size: 15px;
     font-weight: 600;
     margin-bottom: var(--spacing-xs);
+}
+
+.callout-tip > strong:first-child {
+    color: var(--color-info-border);
+}
+
+.callout-warning > strong:first-child {
+    color: #8A5A12;
+}
+
+.callout-success > strong:first-child {
+    color: var(--color-success-border);
 }
 
 /* 提示框内容 */
@@ -912,11 +980,25 @@ pre::-webkit-scrollbar-thumb:hover {
     border-radius: var(--radius-md);
 }
 
+.subsection-content > table,
+.callout > table,
+.callout-tip > table,
+.callout-warning > table,
+.callout-note > table,
+.callout-success > table,
+.question-item > table {
+    display: block;
+    overflow-x: auto;
+    margin: var(--spacing-md) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     background: var(--color-surface);
-    font-size: 22px;
+    font-size: 15px;
 }
 
 thead {
@@ -929,9 +1011,8 @@ th {
     border-bottom: 2px solid var(--color-border);
     font-weight: 600;
     color: var(--color-text-primary);
-    font-size: 21px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    letter-spacing: 0;
 }
 
 td {
@@ -953,14 +1034,13 @@ td code {
     background: var(--color-code-bg);
     padding: 3px 7px;
     border-radius: 4px;
-    font-size: 21px;
-    white-space: nowrap;
+    font-size: 14px;
 }
 
 .table-note {
     margin-top: var(--spacing-sm);
     color: var(--color-text-secondary);
-    font-size: 22px;
+    font-size: 15px;
 }
 
 .comparison-table {
@@ -1234,7 +1314,254 @@ td code {
 
 
 /* ============================================
-   14. 辅助组件
+   14. 知识点可视化组件
+   ============================================ */
+
+.concept-visual {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
+    overflow-x: auto;
+    max-width: 100%;
+    background:
+        linear-gradient(135deg, rgba(239, 246, 255, 0.88), rgba(255, 255, 255, 0.96) 48%),
+        var(--color-surface);
+    border: 1px solid #C7D9FF;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.visual-caption {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-primary);
+    font-size: 0.98rem;
+    font-weight: 700;
+}
+
+.visual-note {
+    margin-top: var(--spacing-md);
+    margin-bottom: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
+}
+
+.memory-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+    max-width: 100%;
+}
+
+.memory-cell {
+    display: flex;
+    flex: 1 1 92px;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 92px;
+    min-height: 84px;
+    padding: 10px;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+}
+
+.memory-cell.is-highlight {
+    background: #EFF6FF;
+    border-color: #60A5FA;
+}
+
+.memory-cell.is-pointer {
+    background: #ECFDF5;
+    border-color: #34D399;
+}
+
+.memory-cell.is-empty {
+    background: #F8FAFC;
+    border-style: dashed;
+    color: var(--color-text-tertiary);
+}
+
+.memory-cell.is-terminator {
+    background: #FFF7ED;
+    border-color: #FDBA74;
+}
+
+.cell-name,
+.cell-index,
+.cell-address {
+    color: var(--color-text-tertiary);
+    font-size: 0.74rem;
+    line-height: 1.25;
+}
+
+.cell-value {
+    display: block;
+    margin: 8px 0;
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.visual-sequence {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    gap: var(--spacing-md);
+    min-width: 560px;
+}
+
+.visual-step {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.visual-step-title,
+.stack-state-title,
+.heap-title {
+    color: var(--color-text-primary);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.pointer-flow,
+.heap-flow {
+    display: grid;
+    grid-template-columns: minmax(140px, 1fr) auto minmax(180px, 1.2fr);
+    gap: var(--spacing-md);
+    align-items: center;
+    min-width: 560px;
+}
+
+.pointer-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 4px 12px;
+    color: #075985;
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: #E0F2FE;
+    border: 1px solid #7DD3FC;
+    border-radius: 999px;
+}
+
+.pointer-link::after {
+    content: '→';
+    margin-left: 8px;
+    font-size: 1.05rem;
+}
+
+.bit-visual {
+    min-width: 640px;
+}
+
+.bit-row {
+    display: grid;
+    grid-template-columns: 92px repeat(8, minmax(34px, 1fr)) 72px;
+    gap: 6px;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.bit-label,
+.bit-decimal {
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.bit-decimal {
+    text-align: right;
+}
+
+.bit-cell {
+    display: grid;
+    place-items: center;
+    min-height: 34px;
+    color: #475569;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: var(--radius-sm);
+}
+
+.bit-cell.is-one {
+    color: #14532D;
+    background: #DCFCE7;
+    border-color: #86EFAC;
+}
+
+.bit-row.is-result .bit-cell {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #1E3A8A;
+}
+
+.bit-row.is-result .bit-cell.is-one {
+    background: #DBEAFE;
+    border-color: #60A5FA;
+}
+
+.call-stack {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    gap: var(--spacing-md);
+    min-width: 640px;
+}
+
+.stack-state {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.stack-frame {
+    min-height: 74px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-left: 5px solid #94A3B8;
+    border-radius: var(--radius-sm);
+}
+
+.stack-frame.is-active {
+    background: #ECFDF5;
+    border-left-color: var(--color-accent-green);
+}
+
+.stack-frame strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+}
+
+.stack-frame span {
+    display: block;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.heap-block {
+    display: grid;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: #F8FAFC;
+    border: 1px dashed #94A3B8;
+    border-radius: var(--radius-sm);
+}
+
+
+/* ============================================
+   15. 辅助组件
    ============================================ */
 
 .pointer-step {
@@ -1264,7 +1591,436 @@ td code {
 
 
 /* ============================================
-   15. 响应式设计
+   16. 教学场景优化
+   ============================================ */
+
+body {
+    line-height: 1.72;
+    background:
+        linear-gradient(180deg, rgba(239, 246, 255, 0.82) 0, rgba(246, 248, 251, 0) 280px),
+        var(--color-background);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    width: var(--scroll-progress);
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-green));
+    box-shadow: 0 1px 4px rgba(11, 99, 206, 0.24);
+    transition: width 0.12s linear;
+}
+
+.tutorial-nav {
+    width: var(--nav-width);
+    padding: var(--spacing-lg) 0;
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.tutorial-nav::before {
+    content: 'C语言教程';
+    display: block;
+    padding: 0 var(--spacing-lg) var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tutorial-nav ul {
+    padding: 0 var(--spacing-md);
+}
+
+.tutorial-nav a {
+    border: 1px solid transparent;
+    line-height: 1.28;
+}
+
+.tutorial-nav a:hover {
+    background: #EEF4FF;
+    border-color: #C7D9FF;
+    color: var(--color-accent-blue-hover);
+}
+
+.tutorial-nav a.active {
+    background: var(--color-accent-blue);
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 8px 18px rgba(11, 99, 206, 0.22);
+}
+
+.tutorial-content {
+    width: calc(100% - var(--nav-width));
+    max-width: var(--content-max-width);
+    margin-left: var(--nav-width);
+    padding: var(--spacing-2xl) var(--content-padding-x) var(--spacing-3xl);
+}
+
+.tutorial-header {
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-xl);
+}
+
+.tutorial-header::before {
+    content: 'C语言教学讲义';
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 3px 10px;
+    margin-bottom: var(--spacing-md);
+    border: 1px solid #BFDBFE;
+    border-radius: 999px;
+    background: #EFF6FF;
+    color: var(--color-accent-blue-hover);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.tutorial-header h1 {
+    font-size: clamp(2.05rem, 1.2vw + 1.65rem, 2.55rem);
+}
+
+.tutorial-header p {
+    max-width: var(--reading-width);
+    color: var(--color-text-secondary);
+}
+
+.section {
+    margin-bottom: var(--spacing-3xl);
+    counter-reset: knowledge-point;
+}
+
+.section + .section {
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid rgba(216, 222, 232, 0.8);
+}
+
+.section-title {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+    color: var(--color-text-primary);
+}
+
+.section-title::before {
+    content: '';
+    flex: 0 0 6px;
+    width: 6px;
+    height: 1.12em;
+    margin-top: 0.14em;
+    border-radius: 999px;
+    background: var(--color-accent-blue);
+}
+
+.section.is-current > .section-title {
+    color: var(--color-accent-blue-hover);
+}
+
+.subsection {
+    counter-increment: knowledge-point;
+    position: relative;
+    margin: var(--spacing-xl) 0 var(--spacing-2xl);
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
+    background:
+        linear-gradient(90deg, rgba(11, 99, 206, 0.08), rgba(11, 99, 206, 0) 160px),
+        var(--knowledge-bg);
+    border: 1px solid var(--knowledge-border);
+    border-left: 6px solid var(--color-accent-blue);
+    border-radius: var(--radius-md);
+}
+
+.subsection + .subsection {
+    margin-top: var(--spacing-2xl);
+}
+
+.subsection::before {
+    content: '知识点 ' counter(knowledge-point);
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-lg);
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 2px 10px;
+    border: 1px solid #BFDBFE;
+    border-radius: 999px;
+    background: var(--knowledge-label-bg);
+    color: var(--color-accent-blue-hover);
+    font-size: 0.76rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.subsection-title {
+    min-height: 32px;
+    padding: 0 116px var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.36);
+    color: var(--color-text-primary);
+}
+
+.subsection-content > p,
+.subsection-content > ul,
+.subsection-content > ol,
+.subsection-content > h3:not(.subsection-title),
+.subsection-content > h4 {
+    max-width: var(--reading-width);
+}
+
+.subsection-content,
+.subsection-content p,
+.subsection-content li {
+    color: var(--color-text-secondary);
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: auto;
+}
+
+.subsection-content > *:first-child {
+    margin-top: 0;
+}
+
+.subsection-content > *:last-child {
+    margin-bottom: 0;
+}
+
+.subsection-content h3:not(.subsection-title),
+.subsection-content h4 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-text-primary);
+    scroll-margin-top: var(--spacing-lg);
+}
+
+.subsection-content h3:not(.subsection-title)::before,
+.subsection-content h4::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--color-accent-blue);
+    border-radius: 50%;
+    background: var(--color-surface);
+}
+
+.subsection-content h4 {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-md);
+    border-top: 1px dashed rgba(100, 116, 139, 0.32);
+}
+
+code {
+    color: #9A3412;
+    background: #FFF7ED;
+    border-color: #FED7AA;
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+
+pre,
+.code-block {
+    border-color: var(--color-code-border);
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+}
+
+pre:hover,
+.code-block:hover,
+.example-item:hover {
+    transform: none;
+}
+
+pre code,
+.code-block code {
+    color: inherit;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    white-space: pre;
+    overflow-wrap: normal;
+}
+
+pre code,
+.code-block pre {
+    tab-size: 4;
+    font-size: var(--code-font-size);
+    line-height: 1.78;
+}
+
+.code-block-title {
+    min-height: 46px;
+    background: #F1F5F9;
+    color: #334155;
+    font-size: 0.86rem;
+}
+
+.copy-button {
+    min-width: 64px;
+    min-height: 32px;
+}
+
+.callout,
+.callout-tip,
+.callout-warning,
+.callout-note,
+.callout-success {
+    border: 1px solid var(--color-note-border);
+    border-left-width: 5px;
+    box-shadow: none;
+    margin: var(--spacing-lg) 0;
+}
+
+.callout-tip {
+    border-color: #BFDBFE;
+    border-left-color: var(--color-info-border);
+}
+
+.callout-warning {
+    border-color: #FDBA74;
+    border-left-color: var(--color-warning-border);
+}
+
+.callout-note {
+    border-color: #CBD5E1;
+    border-left-color: var(--color-note-border);
+}
+
+.callout-success {
+    border-color: #A7F3D0;
+    border-left-color: var(--color-success-border);
+}
+
+.callout p + p,
+.callout-tip p + p,
+.callout-warning p + p,
+.callout-note p + p,
+.callout-success p + p {
+    margin-top: var(--spacing-sm);
+}
+
+.callout strong + ul,
+.callout-tip strong + ul,
+.callout-warning strong + ul,
+.callout-note strong + ul,
+.callout-success strong + ul,
+.callout strong + ol,
+.callout-tip strong + ol,
+.callout-warning strong + ol,
+.callout-note strong + ol,
+.callout-success strong + ol {
+    margin-top: var(--spacing-sm);
+}
+
+.example-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.example-item {
+    border-top: 3px solid rgba(11, 99, 206, 0.32);
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    background: #FCFDFF;
+}
+
+.example-item:hover {
+    border-color: #BFDBFE;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.table-container,
+.subsection-content > table,
+.callout > table,
+.callout-tip > table,
+.callout-warning > table,
+.callout-note > table,
+.callout-success > table,
+.question-item > table {
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    margin: var(--spacing-lg) 0;
+}
+
+table {
+    min-width: 640px;
+}
+
+thead {
+    background: #EEF2F7;
+}
+
+td:first-child,
+th:first-child {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.practice-box {
+    background: #F7FBFF;
+    border: 1px solid #C7D9FF;
+    border-left: 6px solid var(--color-accent-blue);
+    box-shadow: 0 4px 18px rgba(11, 99, 206, 0.08);
+    margin: var(--spacing-2xl) 0;
+}
+
+.practice-box-title {
+    color: var(--color-text-primary);
+    font-size: 1.05rem;
+    border-bottom-color: #C7D9FF;
+}
+
+.practice-box-title::before {
+    background-color: var(--color-accent-blue);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E");
+}
+
+.question-item p {
+    line-height: 1.72;
+}
+
+.question-item details {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.question-item summary {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+.question-item summary:hover {
+    background: rgba(11, 99, 206, 0.08);
+}
+
+.flow-diagram,
+.execution-flow {
+    border-left: 5px solid var(--color-accent-blue);
+}
+
+.flow-step {
+    background: #EFF6FF;
+    color: #1E3A8A;
+    border: 1px solid #BFDBFE;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* ============================================
+   17. 响应式设计
    ============================================ */
 
 /* 2K/大屏优化 */
@@ -1274,6 +2030,9 @@ td code {
         --font-size-h1: 34px;
         --font-size-h2: 26px;
         --line-height-base: 1.8;
+        --nav-width: 280px;
+        --content-max-width: 1100px;
+        --content-padding-x: 36px;
     }
 
     body {
@@ -1282,8 +2041,8 @@ td code {
     }
 
     .tutorial-content {
-        max-width: 1100px;
-        padding: 28px 36px;
+        max-width: var(--content-max-width);
+        padding: 28px var(--content-padding-x);
     }
 
     .tutorial-header h1 {
@@ -1296,28 +2055,27 @@ td code {
     }
 
     .tutorial-nav {
-        width: 280px;
+        width: var(--nav-width);
     }
 
     .tutorial-content {
-        margin-left: 280px;
+        margin-left: var(--nav-width);
     }
 
     .tutorial-nav ul li a,
     .tutorial-nav a {
         padding: 10px 14px;
-        font-size: 22px;
+        font-size: 15px;
     }
 
     .code-block pre {
-        font-size: 22px;
+        font-size: 15px;
         line-height: 1.9;
         max-height: none;
     }
 
     .code-block {
         margin: 18px 0 24px;
-        padding: 16px 18px;
     }
 
     .callout-tip, .callout-warning, .callout-note, .callout-success {
@@ -1327,20 +2085,23 @@ td code {
 
 @media screen and (min-width: 2560px) {
     :root {
-        --base-font-size: 22px;
+        --base-font-size: 18px;
+        --nav-width: 320px;
+        --content-max-width: 1400px;
+        --content-padding-x: 48px;
     }
 
     .tutorial-content {
-        max-width: 1400px;
-        padding: 40px 48px;
+        max-width: var(--content-max-width);
+        padding: 40px var(--content-padding-x);
     }
 
     .tutorial-nav {
-        width: 320px;
+        width: var(--nav-width);
     }
 
     .tutorial-content {
-        margin-left: 320px;
+        margin-left: var(--nav-width);
     }
 
     .tutorial-nav a {
@@ -1349,89 +2110,40 @@ td code {
 }
 
 /* ============================================
-   高分屏核心优化 - 整体缩放
+   高分屏核心优化 - 渲染清晰度
    ============================================ */
 
-/* 2x Retina (MacBook, 高分显示器) - 整体放大1.2倍 */
+/* 高分屏不改变字号，避免桌面缩放和手机 DPR 造成版面过大。 */
 @media (-webkit-min-device-pixel-ratio: 2) and (max-width: 2559px) {
-    :root {
-        --base-font-size: 20px;    /* 原17px → 20px */
-    }
-
     .tutorial-content {
-        max-width: 1100px;         /* 内容区更宽 */
-    }
-
-    .tutorial-nav {
-        width: 240px;              /* 侧边栏更宽 */
-    }
-
-    .tutorial-content {
-        margin-left: 240px;
+        max-width: 1100px;
     }
 }
 
-/* 3x 高分屏 (部分手机/显示器) - 放大1.4倍 */
 @media (-webkit-min-device-pixel-ratio: 3) {
-    :root {
-        --base-font-size: 24px;
-    }
-
     .tutorial-content {
         max-width: 1200px;
-    }
-
-    .tutorial-nav {
-        width: 280px;
-    }
-
-    .tutorial-content {
-        margin-left: 280px;
     }
 }
 
 /* Windows 150% 缩放 */
 @media (min-resolution: 120dpi) and (max-resolution: 159dpi) {
-    :root {
-        --base-font-size: 19px;
+    body {
+        text-rendering: optimizeLegibility;
     }
 }
 
 /* Windows 175%-200% 缩放 */
 @media (min-resolution: 160dpi) and (max-resolution: 220dpi) {
-    :root {
-        --base-font-size: 22px;
-    }
-
     .tutorial-content {
         max-width: 1100px;
-    }
-
-    .tutorial-nav {
-        width: 260px;
-    }
-
-    .tutorial-content {
-        margin-left: 260px;
     }
 }
 
 /* Windows 250%+ 缩放 */
 @media (min-resolution: 221dpi) {
-    :root {
-        --base-font-size: 26px;
-    }
-
     .tutorial-content {
         max-width: 1200px;
-    }
-
-    .tutorial-nav {
-        width: 300px;
-    }
-
-    .tutorial-content {
-        margin-left: 300px;
     }
 }
 
@@ -1508,14 +2220,15 @@ td code {
 @media (max-width: 1024px) {
     :root {
         --base-font-size: 16px;
+        --nav-width: 200px;
     }
 
     .tutorial-nav {
-        width: 200px;
+        width: var(--nav-width);
     }
 
     .tutorial-content {
-        margin-left: 200px;
+        margin-left: var(--nav-width);
         padding: var(--spacing-xl) var(--spacing-md);
     }
 }
@@ -1524,20 +2237,85 @@ td code {
 @media (max-width: 768px) {
     :root {
         --base-font-size: 16px;
+        --content-padding-x: var(--spacing-md);
     }
 
     .tutorial-nav {
-        position: static;
+        position: sticky;
+        top: 0;
         width: 100%;
+        max-width: 100vw;
         height: auto;
         border-right: none;
         border-bottom: 1px solid var(--color-border);
-        padding: var(--spacing-md) 0;
+        padding: var(--spacing-sm) 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .tutorial-nav ul {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--spacing-xs);
+        padding: 0 var(--spacing-md);
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .tutorial-nav li {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+    }
+
+    .tutorial-nav a {
+        white-space: nowrap;
+        padding: var(--spacing-sm) var(--spacing-md);
     }
 
     .tutorial-content {
         margin-left: 0;
         padding: var(--spacing-lg) var(--spacing-md);
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .tutorial-header,
+    .section,
+    .subsection,
+    .subsection-content,
+    .concept-visual,
+    .callout,
+    .callout-tip,
+    .callout-warning,
+    .callout-note,
+    .callout-success,
+    .practice-box,
+    .practice-questions {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .tutorial-header p,
+    .subsection-content,
+    .subsection-content p,
+    .subsection-content li,
+    .callout p,
+    .callout-tip p,
+    .callout-warning p,
+    .callout-note p,
+    .callout-success p,
+    .callout li,
+    .callout-tip li,
+    .callout-warning li,
+    .callout-note li,
+    .callout-success li {
+        width: 100%;
+        max-width: calc(100vw - (2 * var(--spacing-md)));
+        word-break: normal;
+        line-break: auto;
+        overflow-wrap: break-word;
     }
 
     .tutorial-container {
@@ -1546,6 +2324,86 @@ td code {
 
     .example-grid {
         grid-template-columns: 1fr;
+    }
+
+    .tutorial-header h1 {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.65rem;
+    }
+
+    .subsection-title {
+        font-size: 1.28rem;
+        padding-right: 0;
+    }
+
+    .subsection {
+        padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+    }
+
+    .subsection::before {
+        position: static;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .concept-visual {
+        padding: var(--spacing-md);
+    }
+
+    .bit-visual {
+        min-width: 0;
+    }
+
+    .bit-row {
+        grid-template-columns: 46px repeat(8, minmax(20px, 1fr));
+        gap: 4px;
+    }
+
+    .bit-cell {
+        min-height: 30px;
+        font-size: 0.78rem;
+    }
+
+    .bit-label,
+    .bit-decimal {
+        font-size: 0.74rem;
+    }
+
+    .bit-decimal {
+        display: none;
+    }
+
+    .visual-sequence,
+    .call-stack {
+        grid-template-columns: 1fr;
+        min-width: 0;
+    }
+
+    .pointer-flow,
+    .heap-flow {
+        grid-template-columns: 1fr;
+        min-width: 0;
+    }
+
+    .pointer-link {
+        justify-self: start;
+    }
+
+    .pointer-link::after {
+        content: '↓';
+    }
+
+    code {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    pre code,
+    .code-block code {
+        white-space: pre;
+        overflow-wrap: normal;
     }
 }
 
@@ -1559,6 +2417,14 @@ td code {
         padding: var(--spacing-lg) var(--spacing-md);
     }
 
+    .tutorial-header h1 {
+        font-size: 1.86rem;
+    }
+
+    .tutorial-header p {
+        font-size: 1rem;
+    }
+
     .code-block pre {
         padding: var(--spacing-md);
     }
@@ -1566,12 +2432,17 @@ td code {
 
 /* 打印样式 */
 @media print {
+    body::before {
+        display: none;
+    }
+
     .tutorial-nav {
         display: none;
     }
 
     .tutorial-content {
         margin-left: 0;
+        width: 100%;
         max-width: 100%;
     }
 

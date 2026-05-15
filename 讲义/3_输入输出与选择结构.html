@@ -48,15 +48,17 @@
             <div class="subsection-content">
                 <p>C语言程序需要与用户进行交互，这主要通过输入输出函数实现。同时，程序需要根据不同条件执行不同操作，这就需要选择结构（条件判断语句）。</p>
 
-                <div class="callout-tip">
-                    <strong>生活类比——餐厅点餐：</strong>
-                    <p>把程序的输入输出想象成餐厅点餐：</p>
-                    <ul>
-                        <li><strong>输入（scanf）</strong>：顾客告诉服务员想要什么菜（用户向程序提供数据）</li>
-                        <li><strong>处理（选择结构）</strong>：厨师根据菜单决定怎么做（程序根据条件做判断）</li>
-                        <li><strong>输出（printf）</strong>：服务员把做好的菜端上来（程序把结果显示给用户）</li>
-                    </ul>
-                    <p>没有输入，程序就像没有顾客的餐厅；没有输出，就像做好了菜却不端上来。</p>
+                <div class="code-block">
+                    <div class="code-block-title">输入、判断、输出的完整流程</div>
+                    <pre><code><span class="c-keyword">int</span> score;
+
+<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;score);          <span class="c-comment">// 输入</span>
+
+<span class="c-keyword">if</span> (score &gt;= <span class="c-number">60</span>) {          <span class="c-comment">// 判断</span>
+    <span class="c-function">printf</span>(<span class="c-string">"通过\n"</span>);       <span class="c-comment">// 输出</span>
+} <span class="c-keyword">else</span> {
+    <span class="c-function">printf</span>(<span class="c-string">"未通过\n"</span>);
+}</code></pre>
                 </div>
 
                 <div class="callout-note">
@@ -73,13 +75,12 @@
                 <p><strong>输出（Output）</strong>是指程序向外部展示数据的过程。最常见的输出方式是程序把结果显示在屏幕上，用 <code>printf</code> 函数实现。</p>
 
                 <h3 class="subsection-title">什么是选择结构？</h3>
-                <p><strong>选择结构</strong>（也叫条件判断）让程序能够根据不同的情况执行不同的代码。就像生活中的"如果...那么..."：</p>
+                <p><strong>选择结构</strong>（也叫条件判断）让程序根据条件执行不同代码：</p>
                 <ul>
-                    <li>如果下雨，那么带伞</li>
-                    <li>如果成绩及格，那么显示"通过"，否则显示"不通过"</li>
-                    <li>如果是周末，那么可以睡懒觉</li>
+                    <li><code>if</code>：满足条件才执行</li>
+                    <li><code>if-else</code>：二选一执行</li>
+                    <li><code>switch</code>：根据固定取值选择分支</li>
                 </ul>
-                <p>选择结构让程序有了"思考"的能力，不再只是简单地从头执行到尾。</p>
 
                 <h3 class="subsection-title">学习目标与节奏</h3>
                 <div class="subsection-content">
@@ -108,24 +109,23 @@
                 <div class="subsection-content">
                     <p><code>printf</code> 是 C 语言中最常用的输出函数，用于向屏幕输出格式化的文本。它是 "print formatted" 的缩写，定义在 <code>stdio.h</code> 头文件中。</p>
 
-                    <div class="callout-tip">
-                        <strong>生活类比——填空题：</strong>
-                        <p>printf 就像做填空题：</p>
-                        <ul>
-                            <li><strong>格式字符串</strong>：题目中的句子，有若干空格需要填写</li>
-                            <li><strong>格式说明符</strong>：每个空格的类型标记（填数字、填文字等）</li>
-                            <li><strong>参数列表</strong>：你要填入空格的具体内容</li>
-                        </ul>
-                        <p>例如：<code>printf("我叫%s，今年%d岁", "小明", 18);</code></p>
-                        <p>就像题目："我叫____，今年____岁"，你填入"小明"和"18"。</p>
-                    </div>
-
                     <h4>基本语法</h4>
                     <p><code>printf("格式字符串", 参数列表);</code></p>
                     <ul>
                         <li><strong>格式字符串：</strong>包含要输出的文本和格式说明符（如 <code>%d</code>、<code>%f</code> 等）</li>
                         <li><strong>参数列表：</strong>要输出的变量，按照格式说明符的顺序提供</li>
                     </ul>
+
+                    <div class="code-block">
+                        <div class="code-block-title">printf 常用格式</div>
+                        <pre><code><span class="c-keyword">int</span> age = <span class="c-number">18</span>;
+<span class="c-keyword">double</span> height = <span class="c-number">1.756</span>;
+<span class="c-keyword">char</span> level = <span class="c-string">'A'</span>;
+
+<span class="c-function">printf</span>(<span class="c-string">"年龄：%d\n"</span>, age);
+<span class="c-function">printf</span>(<span class="c-string">"身高：%.2f\n"</span>, height);  <span class="c-comment">// 保留2位小数</span>
+<span class="c-function">printf</span>(<span class="c-string">"等级：%c\n"</span>, level);</code></pre>
+                    </div>
 
                     <h4>printf的工作原理</h4>
                     <p>printf 函数的工作过程可以理解为：</p>
@@ -652,14 +652,8 @@ while (scanf("%d", &a) != EOF) {
                     <p>if 语句用于根据条件执行不同的代码块，是程序实现"判断和选择"的基础。单分支 if 只有一个判断条件，满足条件时执行代码块。</p>
 
                     <div class="callout-tip">
-                        <strong>生活类比——门禁系统：</strong>
-                        <p>单分支 if 就像小区的门禁：</p>
-                        <ul>
-                            <li><strong>条件</strong>：你是小区的业主吗？</li>
-                            <li><strong>满足条件</strong>：门打开，你可以进入</li>
-                            <li><strong>不满足条件</strong>：门不开，你只能站在外面（程序继续往下执行）</li>
-                        </ul>
-                        <p>不管门开不开，小区里的其他活动（程序后续代码）都会正常进行。</p>
+                        <strong>执行特点：</strong>
+                        <p>单分支 if 只处理"条件成立"这一种情况；条件不成立时，直接跳过语句块，继续执行后面的代码。</p>
                     </div>
 
                     <h4>语法格式</h4>
@@ -710,14 +704,8 @@ while (scanf("%d", &a) != EOF) {
                     <p>双分支 if-else 有两个分支：条件满足执行 if 块，不满足执行 else 块。</p>
 
                     <div class="callout-tip">
-                        <strong>生活类比——红绿灯：</strong>
-                        <p>双分支 if-else 就像过马路看红绿灯：</p>
-                        <ul>
-                            <li><strong>条件</strong>：灯是绿灯吗？</li>
-                            <li><strong>满足条件（绿灯）</strong>：过马路</li>
-                            <li><strong>不满足条件（红灯）</strong>：停下来等待</li>
-                        </ul>
-                        <p>两种情况必选其一，不可能同时发生。</p>
+                        <strong>执行特点：</strong>
+                        <p>if-else 是二选一结构：条件为真执行 if 块，条件为假执行 else 块，两个分支不会同时执行。</p>
                     </div>
 
                     <h4>语法格式</h4>
@@ -875,15 +863,13 @@ while (scanf("%d", &a) != EOF) {
                     <p>switch 语句适用于多分支选择，特别是当分支较多且基于同一个表达式的不同值时。它比 if-else if 更清晰、更高效。</p>
 
                     <div class="callout-tip">
-                        <strong>生活类比——自动售货机：</strong>
-                        <p>switch 就像自动售货机的按钮选择：</p>
+                        <strong>核心组成：</strong>
                         <ul>
-                            <li><strong>表达式</strong>：你按下的按钮编号</li>
-                            <li><strong>case</strong>：每个按钮对应的饮料</li>
-                            <li><strong>break</strong>：拿到饮料后离开</li>
-                            <li><strong>default</strong>：按下无效按钮，提示"请重新选择"</li>
+                            <li><strong>表达式</strong>：参与匹配的整数或字符值</li>
+                            <li><strong>case</strong>：某个固定取值对应的分支</li>
+                            <li><strong>break</strong>：结束当前 switch，防止继续执行后续 case</li>
+                            <li><strong>default</strong>：没有任何 case 匹配时执行</li>
                         </ul>
-                        <p>你按哪个按钮，就得到对应的饮料。每个按钮对应一种结果，清晰明了。</p>
                     </div>
 
                     <h4>语法格式</h4>

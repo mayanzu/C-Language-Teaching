@@ -44,31 +44,31 @@
         <section id="intro" class="section">
             <h2 class="section-title">表达式基础</h2>
             <div class="subsection-content">
-                <p>在第1章中，我们学习了如何用变量来存储数据。但光有数据还不够，我们还需要对数据进行各种操作——就像有了食材还需要烹饪方法一样。<strong>运算符</strong>就是对数据进行操作的"厨具"，而<strong>表达式</strong>就是用运算符把数据组合起来的"菜谱"。</p>
+                <p>在第1章中，我们学习了如何用变量存储数据。本章开始学习如何对数据进行计算、比较和赋值：<strong>运算符</strong>负责指定操作，<strong>表达式</strong>负责把变量、常量和运算符组合成一个结果。</p>
 
                 <h3>什么是表达式？</h3>
                 <p><strong>表达式（Expression）</strong>是C语言中最基本的计算单位。简单来说，表达式就是"能够计算出一个值的代码片段"。它可以很简单，比如一个数字 <code>42</code>；也可以很复杂，比如 <code>(a + b) * c / d - e</code>。</p>
 
-                <div class="callout-tip">
-                    <strong>生活类比——做菜：</strong>
-                    <p>把表达式想象成做一道菜：</p>
-                    <ul>
-                        <li><strong>食材</strong> = 操作数（变量、常量）</li>
-                        <li><strong>烹饪方法</strong> = 运算符（切、炒、煮）</li>
-                        <li><strong>成品菜</strong> = 表达式的结果</li>
-                    </ul>
-                    <p>比如：<code>鸡蛋 + 西红柿 + 油 + 盐 = 西红柿炒蛋</code></p>
-                    <p>在代码中：<code>a + b * c</code> 就是用变量 a、b、c 通过加法和乘法运算，得到一个数值结果。</p>
-                </div>
-
                 <div class="callout-note">
                     <strong>新手注意：</strong>
                     <ul>
-                        <li>表达式就像数学中的算式，由<strong>操作数</strong>（数据）和<strong>运算符</strong>（操作符号）组成</li>
+                        <li>表达式由<strong>操作数</strong>（数据）和<strong>运算符</strong>（操作符号）组成</li>
                         <li>每个表达式都会计算出一个确定的结果</li>
                         <li>运算符的<strong>优先级</strong>决定了计算的先后顺序</li>
                         <li>C语言中 <code>=</code> 是赋值，<code>==</code> 才是判断相等，不要混淆！</li>
                     </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-block-title">表达式快速示例</div>
+                    <pre><code><span class="c-keyword">int</span> a = <span class="c-number">8</span>, b = <span class="c-number">3</span>;
+
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a + b);      <span class="c-comment">// 11：算术表达式</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a > b);      <span class="c-comment">// 1：关系表达式，真为1</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a % b);      <span class="c-comment">// 2：取余</span>
+
+a += <span class="c-number">2</span>;                       <span class="c-comment">// 等价于 a = a + 2</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a);          <span class="c-comment">// 10</span></code></pre>
                 </div>
 
                 <h3>表达式的组成</h3>
@@ -155,13 +155,6 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
 
             <div class="example-grid">
                 <div class="example-item">
-                    <strong>生活类比</strong>
-                    <ul>
-                        <li>把表达式想成做蛋糕的配方：材料（变量）+ 操作（运算符）</li>
-                        <li>先准备好材料，再按步骤混合，否则味道就会怪怪的</li>
-                    </ul>
-                </div>
-                <div class="example-item">
                     <strong>检查清单</strong>
                     <ul>
                         <li>每个变量是否有初始值？</li>
@@ -190,31 +183,28 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
             <div class="subsection">
                 <h3 class="subsection-title">五种基本算术运算符</h3>
                 <div class="subsection-content">
-                    <p>算术运算符是我们最熟悉的运算符，和数学中的加减乘除几乎一样——不过C语言多了一个"取模"运算符。这些运算符让计算机能够进行基本的数学计算。</p>
+                    <p>算术运算符用于完成加、减、乘、除和取余。重点掌握两个差异：C语言用 <code>*</code> 表示乘法，整数除法会丢弃小数部分。</p>
 
                     <div class="callout-note">
                         <strong>什么是运算符？</strong>
-                        <p>运算符是告诉计算机执行特定操作的符号。就像交通信号灯告诉司机何时停车、何时通行一样，运算符告诉计算机何时加、何时减、何时比较。</p>
-                        <p>在C语言中，运算符连接<strong>操作数</strong>（变量或常量），形成<strong>表达式</strong>，最终产生一个结果。</p>
+                        <p>运算符连接<strong>操作数</strong>（变量或常量），形成<strong>表达式</strong>，最终产生一个结果。</p>
                     </div>
 
-                    <div class="callout-tip">
-                        <strong>生活化类比——计算器：</strong>
-                        <p>想象你使用一个计算器：</p>
-                        <ul>
-                            <li>按下数字键（输入操作数）</li>
-                            <li>按下 + - × ÷（选择运算符）</li>
-                            <li>再按数字键（输入另一个操作数）</li>
-                            <li>按 = 得到结果</li>
-                        </ul>
-                        <p>C语言中的算术运算就像使用计算器，只是用代码的方式表达：<code>result = a + b;</code></p>
+                    <div class="code-block">
+                        <div class="code-block-title">五种算术运算符</div>
+                        <pre><code><span class="c-keyword">int</span> a = <span class="c-number">17</span>, b = <span class="c-number">5</span>;
+
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a + b);  <span class="c-comment">// 22</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a - b);  <span class="c-comment">// 12</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a * b);  <span class="c-comment">// 85</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a / b);  <span class="c-comment">// 3，整数除法</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a % b);  <span class="c-comment">// 2，余数</span></code></pre>
                     </div>
 
                     <h4>算术运算符详解</h4>
-                    <p>让我们逐一了解每个算术运算符：</p>
+                    <p>常用规则如下：</p>
 
                     <p><strong>1. 加法运算符 +</strong></p>
-                    <p>加法运算符将两个数相加，得到它们的和。这是最基础的运算之一。</p>
                     <ul>
                         <li><strong>语法：</strong><code>a + b</code></li>
                         <li><strong>结果：</strong>返回 a 和 b 的和</li>
@@ -223,7 +213,6 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
                     <p>示例：<code>3 + 5 = 8</code>，<code>price + tax = total</code></p>
 
                     <p><strong>2. 减法运算符 -</strong></p>
-                    <p>减法运算符用第一个数减去第二个数，得到它们的差。</p>
                     <ul>
                         <li><strong>语法：</strong><code>a - b</code></li>
                         <li><strong>结果：</strong>返回 a 减去 b 的差</li>
@@ -232,7 +221,6 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
                     <p>示例：<code>10 - 3 = 7</code>，<code>total - discount = finalPrice</code></p>
 
                     <p><strong>3. 乘法运算符 *</strong></p>
-                    <p>乘法运算符将两个数相乘。注意在C语言中用 <code>*</code> 表示乘法，而不是数学中的 <code>×</code>。</p>
                     <ul>
                         <li><strong>语法：</strong><code>a * b</code></li>
                         <li><strong>结果：</strong>返回 a 和 b 的积</li>
@@ -241,7 +229,6 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
                     <p>示例：<code>4 * 5 = 20</code>，<code>price * quantity = total</code></p>
 
                     <p><strong>4. 除法运算符 /</strong></p>
-                    <p>除法运算符用第一个数除以第二个数。这是最容易出错的运算符，因为整数除法和浮点除法结果不同！</p>
                     <ul>
                         <li><strong>语法：</strong><code>a / b</code></li>
                         <li><strong>结果：</strong>返回 a 除以 b 的商</li>
@@ -251,7 +238,6 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
                     <p>示例：<code>10 / 3 = 3</code>（整数除法），<code>10.0 / 3 = 3.33...</code>（浮点除法）</p>
 
                     <p><strong>5. 取模运算符 %</strong></p>
-                    <p>取模运算符返回两个整数相除后的<strong>余数</strong>。这是C语言特有的运算符，数学中不常见。</p>
                     <ul>
                         <li><strong>语法：</strong><code>a % b</code></li>
                         <li><strong>结果：</strong>返回 a 除以 b 的余数</li>
@@ -314,12 +300,6 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
                 <div class="callout-tip">
                     <strong>取模运算符 % 详解：</strong>
                     <p>取模运算符可能是最不熟悉的，但它非常实用。<code>a % b</code> 计算的是 a 除以 b 后的<strong>余数</strong>。</p>
-                    <p><strong>生活类比——分苹果：</strong></p>
-                    <p>你有17个苹果，要平均分给5个小朋友：</p>
-                    <ul>
-                        <li>每个小朋友得到 <code>17 / 5 = 3</code> 个苹果（整数除法）</li>
-                        <li>还剩下 <code>17 % 5 = 2</code> 个苹果（取模运算）</li>
-                    </ul>
                     <p><strong>常见应用：</strong></p>
                     <ul>
                         <li>判断奇偶：<code>n % 2 == 0</code> 表示n是偶数</li>
@@ -335,29 +315,13 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
                     <p>在C语言中，<strong>两个整数相除，结果还是整数</strong>，小数部分会被直接丢弃（不是四舍五入！）。这是初学者最容易犯错的地方，也是面试中经常考察的知识点。</p>
 
                     <div class="callout-note">
-                        <strong>深入理解——为什么整数除法会截断？</strong>
-                        <p>C语言设计整数除法时，遵循了"类型一致性"原则：整数运算的结果应该还是整数。这样可以确保：</p>
-                        <ol>
-                            <li><strong>效率：</strong>整数运算比浮点运算快得多</li>
-                            <li><strong>内存：</strong>整数只占4字节，浮点数占8字节</li>
-                            <li><strong>语义清晰：</strong>程序员明确知道自己在做整数运算</li>
-                        </ol>
+                        <strong>整数除法规则：</strong>
+                        <p>两个整数相除，结果仍按整数处理。</p>
                         <p>小数部分被<strong>直接截断</strong>（向零取整），不是四舍五入！</p>
                         <ul>
                             <li><code>7 / 2 = 3</code>（不是4）</li>
                             <li><code>-7 / 2 = -3</code>（不是-4）</li>
                         </ul>
-                    </div>
-
-                    <div class="callout-note">
-                        <strong>生活类比：分糖果</strong>
-                        <p>想象你是幼儿园老师，要把糖果分给小朋友：</p>
-                        <ul>
-                            <li>10块糖分给3个小朋友 → 每人3块（余1块，余的不管）</li>
-                            <li>7块糖分给2个小朋友 → 每人3块（余1块，余的不管）</li>
-                            <li>结果总是整数，小数部分直接丢弃</li>
-                        </ul>
-                        <p>这就是整数除法的本质——只关心完整的份数，不关心余数。</p>
                     </div>
 
                     <div class="code-block">
@@ -510,18 +474,7 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
             <div class="subsection">
                 <h3 class="subsection-title">关系运算符——做判断的基础</h3>
                 <div class="subsection-content">
-                    <p>关系运算符用于<strong>比较两个值的大小关系</strong>，结果是"真"（1）或"假"（0）。就像老师批改试卷，判断对还是错。</p>
-
-                    <div class="callout-tip">
-                        <strong>生活类比——考试评分：</strong>
-                        <p>想象老师批改试卷：</p>
-                        <ul>
-                            <li><strong>题目：</strong>学生的分数是否及格？</li>
-                            <li><strong>判断：</strong><code>score >= 60</code></li>
-                            <li><strong>结果：</strong>如果分数是85，判断结果为"真"（1）；如果分数是55，判断结果为"假"（0）</li>
-                        </ul>
-                        <p>关系运算符就是让计算机做这种"判断题"的工具。</p>
-                    </div>
+                    <p>关系运算符用于<strong>比较两个值的大小关系</strong>，结果是"真"（1）或"假"（0）。</p>
 
                     <h4>什么是真和假？</h4>
                     <p>在C语言中，"真"和"假"用数字表示：</p>
@@ -538,12 +491,12 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 关系表达式的结果是0或1</span>
     <span class="c-function">printf</span>(<span class="c-string">"5 > 3 = %d\n"</span>, <span class="c-number">5</span> > <span class="c-number">3</span>);    <span class="c-comment">// 输出: 1（真）</span>
-    <span class="c-function">printf</span>(<span class="c-string">"5 < 3 = %d\n"</span>, <span class="c-number">5</span> < <span class="c-number">3</span>);    <span class="c-comment">// 输出: 0（假）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"5 &lt; 3 = %d\n"</span>, <span class="c-number">5</span> &lt; <span class="c-number">3</span>);    <span class="c-comment">// 输出: 0（假）</span>
     
     <span class="c-comment">// 任何非0值都是"真"</span>
-    <span class="c-keyword">if</span> (<span class="c-number">5</span>) <span class="c-function">printf</span>(<span class="c-string">"5是真\n"</span>;        <span class="c-comment">// 会输出</span>
-    <span class="c-keyword">if</span> (<span class="c-number">-1</span>) <span class="c-function">printf</span>(<span class="c-string">"-1也是真\n"</span>;     <span class="c-comment">// 会输出</span>
-    <span class="c-keyword">if</span> (<span class="c-number">0</span>) <span class="c-function">printf</span>(<span class="c-string">"0是假\n"</span>;        <span class="c-comment">// 不会输出</span>
+    <span class="c-keyword">if</span> (<span class="c-number">5</span>) <span class="c-function">printf</span>(<span class="c-string">"5是真\n"</span>);        <span class="c-comment">// 会输出</span>
+    <span class="c-keyword">if</span> (<span class="c-number">-1</span>) <span class="c-function">printf</span>(<span class="c-string">"-1也是真\n"</span>);     <span class="c-comment">// 会输出</span>
+    <span class="c-keyword">if</span> (<span class="c-number">0</span>) <span class="c-function">printf</span>(<span class="c-string">"0是假\n"</span>);        <span class="c-comment">// 不会输出</span>
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -616,27 +569,17 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
             <div class="subsection">
                 <h3 class="subsection-title">逻辑运算符——组合判断条件</h3>
                 <div class="subsection-content">
-                    <p>逻辑运算符用于将多个条件组合在一起，就像生活中的"并且"和"或者"：</p>
+                    <p>逻辑运算符用于组合多个条件：</p>
                     <ul>
                         <li>"考试及格<strong>并且</strong>出勤达标" → 用 <code>&amp;&amp;</code>（逻辑与）</li>
                         <li>"周六<strong>或者</strong>周日" → 用 <code>||</code>（逻辑或）</li>
                         <li>"<strong>不</strong>是会员" → 用 <code>!</code>（逻辑非）</li>
                     </ul>
 
-                    <div class="callout-tip">
-                        <strong>生活类比——游乐场入场条件：</strong>
-                        <p>想象游乐场的入场规则：</p>
-                        <ul>
-                            <li><strong>逻辑与（&&）：</strong>"身高超过120cm <strong>并且</strong> 年龄超过6岁"才能玩过山车。两个条件都要满足。</li>
-                            <li><strong>逻辑或（||）：</strong>"持有年卡 <strong>或者</strong> 购买门票"就能入场。满足任意一个条件即可。</li>
-                            <li><strong>逻辑非（!）：</strong>"<strong>不</strong>是雨天"才能开园。反转原来的条件。</li>
-                        </ul>
-                    </div>
-
                     <h4>三种逻辑运算符详解</h4>
 
                     <p><strong>1. 逻辑与 &&</strong></p>
-                    <p>逻辑与要求<strong>所有条件都为真</strong>，结果才为真。就像串联电路——所有开关都闭合，灯才会亮。</p>
+                    <p>逻辑与要求<strong>所有条件都为真</strong>，结果才为真。</p>
                     <ul>
                         <li><strong>语法：</strong><code>条件1 && 条件2</code></li>
                         <li><strong>规则：</strong>只有两个条件都为真，结果才为真</li>
@@ -645,7 +588,7 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
                     <p>示例：<code>(score >= 60) && (score <= 100)</code> 判断分数是否在有效范围内</p>
 
                     <p><strong>2. 逻辑或 ||</strong></p>
-                    <p>逻辑或只要求<strong>至少一个条件为真</strong>，结果就为真。就像并联电路——任意一个开关闭合，灯就会亮。</p>
+                    <p>逻辑或只要求<strong>至少一个条件为真</strong>，结果就为真。</p>
                     <ul>
                         <li><strong>语法：</strong><code>条件1 || 条件2</code></li>
                         <li><strong>规则：</strong>只要有一个条件为真，结果就为真</li>
@@ -928,14 +871,13 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
                 <div class="subsection-content">
                     <p>自增 <code>++</code> 和自减 <code>--</code> 是C语言的特色运算符，让变量自身加1或减1。关键要搞清楚<strong>前缀</strong>和<strong>后缀</strong>的区别。</p>
 
-                    <div class="callout-tip">
-                        <strong>生活类比——先付钱还是先吃饭：</strong>
-                        <p>想象你在餐厅用餐：</p>
-                        <ul>
-                            <li><strong>前缀自增 <code>++i</code></strong>：像"先付钱再吃饭"——先把账结了（i加1），再享受服务（使用i的新值）</li>
-                            <li><strong>后缀自增 <code>i++</code></strong>：像"先吃饭再付钱"——先享受服务（使用i的旧值），吃完再结账（i加1）</li>
-                        </ul>
-                        <p>无论哪种方式，最后你都付了钱，i都加了1。区别在于"使用值"的时机不同。</p>
+                    <div class="code-block">
+                        <div class="code-block-title">前缀与后缀的值不同</div>
+                        <pre><code><span class="c-keyword">int</span> i = <span class="c-number">5</span>;
+<span class="c-keyword">int</span> a = ++i;    <span class="c-comment">// i先变成6，再赋给a：a=6, i=6</span>
+
+i = <span class="c-number">5</span>;
+<span class="c-keyword">int</span> b = i++;    <span class="c-comment">// 先把5赋给b，i再变成6：b=5, i=6</span></code></pre>
                     </div>
 
                     <h4>自增自减的本质</h4>
@@ -1043,6 +985,24 @@ i++;   <span class="c-comment">// i变为6</span>
                         <strong>新手建议：</strong>
                         <p>在复杂表达式中避免使用自增自减，容易出错。尽量单独使用，让代码更清晰。</p>
                     </div>
+
+                    <div class="callout-warning">
+                        <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
+                        <strong>自增自减经典陷阱题（二级高频）：</strong>
+                        <pre><code>int i = 1;
+// 前置++：先加再用
+printf("%d", ++i);  // 输出: 2（i先变成2，再使用）
+
+// 后置++：先用再加
+int j = 1;
+printf("%d", j++);  // 输出: 1（先使用j=1，j再变成2）
+
+// 在赋值中的区别
+int a = 5;
+int b = a++;  // b = 5，a = 6（先赋值后自增）
+int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
+                        <p><strong>记忆技巧：</strong>++在前先加后用，++在后先用后加。同一表达式中多次修改同一变量是未定义行为，二级不考。</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1066,29 +1026,6 @@ i++;   <span class="c-comment">// i变为6</span>
                     </details>
                 </div>
             </div>
-
-
-                    <div class="callout-warning">
-                <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
-                <strong>自增自减经典陷阱题（二级高频）：</strong>
-                <pre><code>int i = 1;
-// 前置++：先加再用
-printf("%d", ++i);  // 输出: 2（i先变成2，再使用）
-
-// 后置++：先用再加
-int j = 1;
-printf("%d", j++);  // 输出: 1（先使用j=1，j再变成2）
-
-// 在赋值中的区别
-int a = 5;
-int b = a++;  // b = 5，a = 6（先赋值后自增）
-int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
-                <p><strong>记忆技巧：</strong>++在前先加后用，++在后先用后加。同一表达式中多次修改同一变量是未定义行为，二级不考。</p>
-            </div>
-
-        </section>
-
-
         <!-- ============================================================
              三元运算符
              ============================================================ -->
@@ -1109,11 +1046,8 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
                     </div>
 
                     <div class="callout-tip">
-                        <strong>生活类比：</strong>
-                        <p>就像餐厅的"满减规则"——消费满100元？打8折：原价。</p>
-                        <ul>
-                            <li><code>条件 ? 满足时 : 不满足时</code></li>
-                        </ul>
+                        <strong>读法：</strong>
+                        <p><code>条件 ? 表达式1 : 表达式2</code> 可以读作：如果条件成立，取表达式1；否则取表达式2。</p>
                     </div>
                 </div>
             </div>
@@ -1555,20 +1489,21 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
                 <div class="practice-box-title">边学边练 - 短路求值与未定义行为</div>
 
 <div class="question-item">
-                    <p><strong>练习4：</strong> 编写程序，演示正确的自增运算。要求：初始化i=3，先让a=i++，然后让a加上i++，最后输出a和i的值。</p>
+                    <p><strong>练习4：</strong> 编写程序，演示短路求值如何避免除零错误。要求：当 <code>x = 0</code> 时，使用 <code>x != 0 && 10 / x > 1</code> 判断并输出说明。</p>
                     <details>
                         <summary>参考答案</summary>
                         <div class="code-block">
-                            <div class="code-block-title">正确的自增运算</div>
+                            <div class="code-block-title">短路求值避免除零</div>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">int</span> i = <span class="c-number">3</span>;
-    <span class="c-keyword">int</span> a = i++;   <span class="c-comment">// a = 3, i = 4</span>
-    a += i++;      <span class="c-comment">// a = 3 + 4 = 7, i = 5</span>
-    
-    <span class="c-function">printf</span>(<span class="c-string">"a = %d\n"</span>, a);
-    <span class="c-function">printf</span>(<span class="c-string">"i = %d\n"</span>, i);
+    <span class="c-keyword">int</span> x = <span class="c-number">0</span>;
+
+    <span class="c-keyword">if</span> (x != <span class="c-number">0</span> && <span class="c-number">10</span> / x > <span class="c-number">1</span>) {
+        <span class="c-function">printf</span>(<span class="c-string">"条件成立\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-function">printf</span>(<span class="c-string">"x为0，&&右侧表达式不会执行，因此不会除零。\n"</span>);
+    }
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
