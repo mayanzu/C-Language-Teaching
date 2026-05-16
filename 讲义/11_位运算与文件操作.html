@@ -152,45 +152,9 @@
   0001  (1)</pre>
                     </div>
 
-                    <div class="concept-visual bit-visual">
+                    <div class="concept-visual interactive-visual" data-visual="bitwise-playground" data-a="12" data-b="10" data-op="&">
                         <div class="visual-caption"><code>12 &amp; 10</code>：逐位对齐后运算</div>
-                        <div class="bit-row" aria-label="12 的二进制位">
-                            <span class="bit-label">12</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-decimal">00001100</span>
-                        </div>
-                        <div class="bit-row" aria-label="10 的二进制位">
-                            <span class="bit-label">&amp; 10</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-decimal">00001010</span>
-                        </div>
-                        <div class="bit-row is-result" aria-label="按位与结果 8 的二进制位">
-                            <span class="bit-label">结果</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-decimal">8</span>
-                        </div>
-                        <p class="visual-note">只有同一列都是 1，结果位才是 1；这就是按位与常用于“保留指定位置”的原因。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="code-block">
@@ -398,33 +362,9 @@
                 <div class="subsection-content">
                     <p><strong>运算规则：</strong>将二进制位向左移动指定的位数，右边补0。左移n位相当于乘以2的n次方。</p>
 
-                    <div class="concept-visual bit-visual">
+                    <div class="concept-visual interactive-visual" data-visual="shift-playground" data-a="5" data-b="2">
                         <div class="visual-caption"><code>5 &lt;&lt; 2</code>：整体左移两位，右侧补 0</div>
-                        <div class="bit-row" aria-label="5 左移前的二进制位">
-                            <span class="bit-label">5</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-decimal">00000101</span>
-                        </div>
-                        <div class="bit-row is-result" aria-label="5 左移两位后的二进制位">
-                            <span class="bit-label">&lt;&lt; 2</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell is-one">1</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-cell">0</span>
-                            <span class="bit-decimal">20</span>
-                        </div>
-                        <p class="visual-note">左移 2 位相当于乘以 <code>2²</code>，所以 <code>5 &lt;&lt; 2</code> 得到 <code>20</code>。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="code-block">

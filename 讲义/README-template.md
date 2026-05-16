@@ -189,11 +189,14 @@
 | 类名 | 用途 | 说明 |
 |------|------|------|
 | `.concept-visual` | 可视化容器 | 用于内存、指针、位运算、调用栈等图示 |
+| `.interactive-visual` + `data-visual` | 交互动画容器 | 由 `tutorial.js` 自动渲染播放、单步、输入控件 |
 | `.memory-strip` / `.memory-cell` | 内存单元图 | 展示变量、数组元素、地址和值 |
 | `.pointer-flow` / `.pointer-link` | 指针关系图 | 展示指针变量指向目标内存 |
 | `.bit-visual` / `.bit-row` / `.bit-cell` | 位运算图 | 展示二进制位逐列运算 |
 | `.call-stack` / `.stack-frame` | 调用栈图 | 展示函数调用前、中、后的栈帧 |
 | `.heap-flow` / `.heap-block` | 动态内存图 | 展示栈上指针和堆区内存的关系 |
+
+常用交互类型：`array-access`、`string-scan`、`bubble-sort`、`selection-sort`、`linear-search`、`binary-search`、`pointer-deref`、`array-pointer`、`call-stack`、`heap-lifecycle`、`bitwise-playground`、`shift-playground`。
 
 ### 表格
 

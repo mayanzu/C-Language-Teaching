@@ -367,22 +367,9 @@
                         <p>指针里存的是地址，就像房卡上写的房间号。<code>*ptr</code> 就是"去打开房卡上写的那个房间，告诉我里面有什么"。</p>
                     </div>
 
-                    <div class="concept-visual">
+                    <div class="concept-visual interactive-visual" data-visual="pointer-deref">
                         <div class="visual-caption"><code>int a = 100; int *p = &a;</code> 的指向关系</div>
-                        <div class="pointer-flow" aria-label="指针变量保存普通变量地址的示意图">
-                            <div class="memory-cell is-pointer">
-                                <span class="cell-name">p : int *</span>
-                                <strong class="cell-value">0x1000</strong>
-                                <span class="cell-address">指针自己的地址 0x2000</span>
-                            </div>
-                            <span class="pointer-link">保存 a 的地址</span>
-                            <div class="memory-cell is-highlight">
-                                <span class="cell-name">a : int</span>
-                                <strong class="cell-value">100</strong>
-                                <span class="cell-address">地址 0x1000</span>
-                            </div>
-                        </div>
-                        <p class="visual-note"><code>p</code> 的值是 <code>a</code> 的地址，<code>*p</code> 才是地址处保存的整数值。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="code-block">
@@ -491,34 +478,9 @@ p[i]       // 指针下标法
                 <div class="subsection-content">
                     <p>在C语言中，<strong>数组名就是数组首元素的地址</strong>。这是指针与数组紧密联系的基础。</p>
 
-                    <div class="concept-visual">
+                    <div class="concept-visual interactive-visual" data-visual="array-pointer">
                         <div class="visual-caption"><code>int *p = arr;</code> 后，指针按元素大小移动</div>
-                        <div class="pointer-flow" aria-label="指针指向数组首元素并按元素大小偏移的示意图">
-                            <div class="memory-cell is-pointer">
-                                <span class="cell-name">p</span>
-                                <strong class="cell-value">arr</strong>
-                                <span class="cell-address">等价于 &amp;arr[0]</span>
-                            </div>
-                            <span class="pointer-link">p + 2</span>
-                            <div class="memory-strip">
-                                <div class="memory-cell">
-                                    <span class="cell-index">arr[0]</span>
-                                    <strong class="cell-value">10</strong>
-                                    <span class="cell-address">0x3000</span>
-                                </div>
-                                <div class="memory-cell">
-                                    <span class="cell-index">arr[1]</span>
-                                    <strong class="cell-value">20</strong>
-                                    <span class="cell-address">0x3004</span>
-                                </div>
-                                <div class="memory-cell is-highlight">
-                                    <span class="cell-index">arr[2]</span>
-                                    <strong class="cell-value">30</strong>
-                                    <span class="cell-address">0x3008</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="visual-note"><code>p + 2</code> 不是地址加 2，而是跳过 2 个 <code>int</code> 元素；<code>*(p + 2)</code> 访问 <code>arr[2]</code>。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="code-block">

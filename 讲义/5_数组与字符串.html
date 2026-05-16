@@ -68,36 +68,9 @@
                         <li><strong>大小固定</strong>：声明后大小不能改变</li>
                     </ul>
 
-                    <div class="concept-visual">
+                    <div class="concept-visual interactive-visual" data-visual="array-access">
                         <div class="visual-caption"><code>int scores[5]</code> 的连续内存</div>
-                        <div class="memory-strip" aria-label="一维数组下标、值和地址的连续存储示意图">
-                            <div class="memory-cell is-highlight">
-                                <span class="cell-index">scores[0]</span>
-                                <strong class="cell-value">90</strong>
-                                <span class="cell-address">0x2000</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">scores[1]</span>
-                                <strong class="cell-value">86</strong>
-                                <span class="cell-address">0x2004</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">scores[2]</span>
-                                <strong class="cell-value">78</strong>
-                                <span class="cell-address">0x2008</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">scores[3]</span>
-                                <strong class="cell-value">95</strong>
-                                <span class="cell-address">0x200C</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">scores[4]</span>
-                                <strong class="cell-value">88</strong>
-                                <span class="cell-address">0x2010</span>
-                            </div>
-                        </div>
-                        <p class="visual-note">每个 <code>int</code> 假设占 4 字节，所以下一个元素地址增加 4；数组名 <code>scores</code> 指向第一个元素。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <h3>为什么需要数组？</h3>
@@ -475,41 +448,9 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                         <p>字符串就像一串珍珠，最后一颗珍珠是特殊的标记珠（<code>\0</code>），表示"到此为止"。没有这颗标记珠，程序就不知道字符串在哪结束，会继续往后读取，产生乱码或错误。</p>
                     </div>
 
-                    <div class="concept-visual">
+                    <div class="concept-visual interactive-visual" data-visual="string-scan">
                         <div class="visual-caption"><code>char str[] = "Hello";</code> 的结束标记</div>
-                        <div class="memory-strip" aria-label="字符串字符数组和结束符的示意图">
-                            <div class="memory-cell">
-                                <span class="cell-index">str[0]</span>
-                                <strong class="cell-value">'H'</strong>
-                                <span class="cell-address">字符</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">str[1]</span>
-                                <strong class="cell-value">'e'</strong>
-                                <span class="cell-address">字符</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">str[2]</span>
-                                <strong class="cell-value">'l'</strong>
-                                <span class="cell-address">字符</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">str[3]</span>
-                                <strong class="cell-value">'l'</strong>
-                                <span class="cell-address">字符</span>
-                            </div>
-                            <div class="memory-cell">
-                                <span class="cell-index">str[4]</span>
-                                <strong class="cell-value">'o'</strong>
-                                <span class="cell-address">字符</span>
-                            </div>
-                            <div class="memory-cell is-terminator">
-                                <span class="cell-index">str[5]</span>
-                                <strong class="cell-value">'\0'</strong>
-                                <span class="cell-address">结束</span>
-                            </div>
-                        </div>
-                        <p class="visual-note"><code>printf("%s", str)</code> 会从 <code>str[0]</code> 开始读，读到 <code>'\0'</code> 就停止。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="code-block">
@@ -1098,6 +1039,11 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                 <div class="subsection-content">
                     <p><strong>冒泡排序</strong>是最简单的排序算法，通过相邻元素的比较和交换，将最大的元素"冒泡"到末尾。</p>
 
+                    <div class="concept-visual interactive-visual" data-visual="bubble-sort">
+                        <div class="visual-caption">冒泡排序：相邻比较、交换与右侧有序区</div>
+                        <div class="visual-host" data-visual-host></div>
+                    </div>
+
                     <div class="code-block">
                         <div class="code-block-title">冒泡排序实现</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
@@ -1142,6 +1088,11 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                 <div class="subsection-content">
                     <p><strong>选择排序</strong>每轮从未排序部分找到最小元素，放到已排序部分的末尾。</p>
 
+                    <div class="concept-visual interactive-visual" data-visual="selection-sort">
+                        <div class="visual-caption">选择排序：扫描未排序区、维护 min_idx、交换到左侧</div>
+                        <div class="visual-host" data-visual-host></div>
+                    </div>
+
                     <div class="code-block">
                         <div class="code-block-title">选择排序实现</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
@@ -1178,6 +1129,12 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                 <div class="subsection-content">
                     <h4>线性查找</h4>
                     <p>从头到尾逐个比较，适用于任何数组：</p>
+
+                    <div class="concept-visual interactive-visual" data-visual="linear-search" data-target="42">
+                        <div class="visual-caption">线性查找：逐个比较直到命中或遍历结束</div>
+                        <div class="visual-host" data-visual-host></div>
+                    </div>
+
                     <div class="code-block">
                         <div class="code-block-title">线性查找</div>
                         <pre><code><span class="c-comment">// 在数组中查找目标值，返回下标（找不到返回-1）</span>
@@ -1191,6 +1148,12 @@ strlen(s2);  // 不确定（越界！）</code></pre>
 
                     <h4>二分查找</h4>
                     <p>要求数组<strong>已排序</strong>，每次排除一半，效率远高于线性查找：</p>
+
+                    <div class="concept-visual interactive-visual" data-visual="binary-search" data-target="23">
+                        <div class="visual-caption">二分查找：left / mid / right 与折半排除</div>
+                        <div class="visual-host" data-visual-host></div>
+                    </div>
+
                     <div class="code-block">
                         <div class="code-block-title">二分查找</div>
                         <pre><code><span class="c-comment">// 在已排序数组中查找，返回下标（找不到返回-1）</span>

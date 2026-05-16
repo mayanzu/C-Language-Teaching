@@ -473,40 +473,9 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 <span class="c-comment">// 程序结束</span></code></pre>
                     </div>
 
-                    <div class="concept-visual">
+                    <div class="concept-visual interactive-visual" data-visual="call-stack">
                         <div class="visual-caption">函数调用时的栈帧变化</div>
-                        <div class="call-stack" aria-label="main 调用 doubleIt 前中后的调用栈示意图">
-                            <div class="stack-state">
-                                <div class="stack-state-title">1. 调用前</div>
-                                <div class="stack-frame is-active">
-                                    <strong>main()</strong>
-                                    <span>a = 5</span>
-                                    <span>b 尚未创建</span>
-                                </div>
-                            </div>
-                            <div class="stack-state">
-                                <div class="stack-state-title">2. 执行 doubleIt(a)</div>
-                                <div class="stack-frame is-active">
-                                    <strong>doubleIt(x)</strong>
-                                    <span>x = 5</span>
-                                    <span>result = 10</span>
-                                </div>
-                                <div class="stack-frame">
-                                    <strong>main()</strong>
-                                    <span>a = 5</span>
-                                    <span>等待返回值</span>
-                                </div>
-                            </div>
-                            <div class="stack-state">
-                                <div class="stack-state-title">3. 返回后</div>
-                                <div class="stack-frame is-active">
-                                    <strong>main()</strong>
-                                    <span>a = 5</span>
-                                    <span>b = 10</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="visual-note">形参 <code>x</code> 是 <code>a</code> 的副本，函数结束后 <code>doubleIt</code> 的栈帧销毁，返回值赋给 <code>b</code>。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="callout-tip">

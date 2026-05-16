@@ -589,32 +589,9 @@
                 <div class="subsection-content">
                     <p><code>malloc</code> 用于分配指定字节数的内存，<code>free</code> 用于释放之前分配的内存。两者必须配对使用！</p>
 
-                    <div class="concept-visual">
+                    <div class="concept-visual interactive-visual" data-visual="heap-lifecycle">
                         <div class="visual-caption">动态内存的生命周期</div>
-                        <div class="heap-flow" aria-label="malloc 分配堆内存、使用、free 释放的示意图">
-                            <div class="memory-cell is-pointer">
-                                <span class="cell-name">栈上指针 p</span>
-                                <strong class="cell-value">0x5000</strong>
-                                <span class="cell-address">保存堆地址</span>
-                            </div>
-                            <span class="pointer-link">malloc</span>
-                            <div class="heap-block">
-                                <div class="heap-title">堆区内存</div>
-                                <div class="memory-strip">
-                                    <div class="memory-cell is-highlight">
-                                        <span class="cell-name">*p</span>
-                                        <strong class="cell-value">42</strong>
-                                        <span class="cell-address">0x5000</span>
-                                    </div>
-                                    <div class="memory-cell is-empty">
-                                        <span class="cell-name">free(p) 后</span>
-                                        <strong class="cell-value">已释放</strong>
-                                        <span class="cell-address">不能再解引用</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="visual-note">指针变量 <code>p</code> 在栈上，<code>malloc</code> 申请到的空间在堆上；<code>free(p)</code> 释放堆空间后，建议立刻写 <code>p = NULL;</code>。</p>
+                        <div class="visual-host" data-visual-host></div>
                     </div>
 
                     <div class="code-block">
