@@ -76,7 +76,7 @@
                     <strong>新手注意：</strong>
                     <ul>
                         <li>指针存储的是<strong>地址</strong>，不是数据本身</li>
-                        <li><code>&</code> 取地址，<code>*</code> 解引用（取地址处的值）</li>
+                        <li><code>&amp;</code> 取地址，<code>*</code> 解引用（取地址处的值）</li>
                         <li>指针需要初始化，否则可能指向未知内存（野指针）</li>
                         <li>指针的大小取决于系统：32位系统4字节，64位系统8字节</li>
                     </ul>
@@ -296,7 +296,7 @@
             <div class="subsection">
                 <h3 class="subsection-title">&运算符</h3>
                 <div class="subsection-content">
-                    <p><code>&</code> 是一元运算符，放在变量前面，返回该变量的<strong>内存地址</strong>。</p>
+                    <p><code>&amp;</code> 是一元运算符，放在变量前面，返回该变量的<strong>内存地址</strong>。</p>
 
                     <div class="code-block">
                         <div class="code-block-title">&运算符使用</div>
@@ -307,9 +307,9 @@
     <span class="c-keyword">int</span> *p = &a;  <span class="c-comment">// &a 取得变量a的地址，赋值给指针p</span>
 
     <span class="c-function">printf</span>(<span class="c-string">"变量a的值: %d\n"</span>, a);
-    <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, &a);
-    <span class="c-function">printf</span>(<span class="c-string">"指针p的值(存的地址): %p\n"</span>, p);
-    <span class="c-function">printf</span>(<span class="c-string">"指针p的地址: %p\n"</span>, &p);
+    <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&a);
+    <span class="c-function">printf</span>(<span class="c-string">"指针p的值(存的地址): %p\n"</span>, (<span class="c-keyword">void</span> *)p);
+    <span class="c-function">printf</span>(<span class="c-string">"指针p的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&p);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -329,7 +329,7 @@
                 <div class="practice-box-title">边学边练 - 取地址运算符 &</div>
 
 <div class="question-item">
-                    <p><strong>练习2：</strong> 声明一个int变量，使用 <code>&</code> 获取它的地址，定义指针保存该地址，并输出变量值、变量地址、指针值和解引用结果。</p>
+                    <p><strong>练习2：</strong> 声明一个int变量，使用 <code>&amp;</code> 获取它的地址，定义指针保存该地址，并输出变量值、变量地址、指针值和解引用结果。</p>
                     <details>
                         <summary>参考答案</summary>
                         <div class="code-block">
@@ -368,7 +368,7 @@
                     </div>
 
                     <div class="concept-visual interactive-visual" data-visual="pointer-deref">
-                        <div class="visual-caption"><code>int a = 100; int *p = &a;</code> 的指向关系</div>
+                        <div class="visual-caption"><code>int a = 100; int *p = &amp;a;</code> 的指向关系</div>
                         <div class="visual-host" data-visual-host></div>
                     </div>
 
@@ -413,7 +413,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><code>&a</code></td>
+                                    <td><code>&amp;a</code></td>
                                     <td>取变量a的地址</td>
                                     <td>指针（如 <code>int *</code>）</td>
                                 </tr>
@@ -423,12 +423,12 @@
                                     <td>指针指向的类型（如 <code>int</code>）</td>
                                 </tr>
                                 <tr>
-                                    <td><code>*&a</code></td>
+                                    <td><code>*&amp;a</code></td>
                                     <td>取地址再解引用 = 原值</td>
                                     <td><code>int</code>（等于a）</td>
                                 </tr>
                                 <tr>
-                                    <td><code>&*p</code></td>
+                                    <td><code>&amp;*p</code></td>
                                     <td>解引用再取地址 = 原地址</td>
                                     <td><code>int *</code>（等于p）</td>
                                 </tr>
@@ -445,7 +445,7 @@
     <span class="c-keyword">int</span> *p = &a;
 
     <span class="c-function">printf</span>(<span class="c-string">"*&a = %d\n"</span>, *&a);  <span class="c-comment">// 等于a的值：10</span>
-    <span class="c-function">printf</span>(<span class="c-string">"&*p = %p\n"</span>, &*p);   <span class="c-comment">// 等于p的值：a的地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"&*p = %p\n"</span>, (<span class="c-keyword">void</span> *)&*p);   <span class="c-comment">// 等于p的值：a的地址</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -490,8 +490,8 @@ p[i]       // 指针下标法
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
 
-    <span class="c-function">printf</span>(<span class="c-string">"arr = %p\n"</span>, arr);        <span class="c-comment">// 数组首地址</span>
-    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] = %p\n"</span>, &arr[<span class="c-number">0</span>]);  <span class="c-comment">// 第一个元素的地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"arr = %p\n"</span>, (<span class="c-keyword">void</span> *)arr);        <span class="c-comment">// 数组首地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] = %p\n"</span>, (<span class="c-keyword">void</span> *)&arr[<span class="c-number">0</span>]);  <span class="c-comment">// 第一个元素的地址</span>
     <span class="c-comment">// 两者相等！</span>
 
     <span class="c-comment">// 指针p指向数组首元素</span>
@@ -521,17 +521,17 @@ p[i]       // 指针下标法
                                 <tr>
                                     <td><code>p + n</code></td>
                                     <td>指向下n个元素</td>
-                                    <td><code>&arr[n]</code></td>
+                                    <td><code>&amp;arr[n]</code></td>
                                 </tr>
                                 <tr>
                                     <td><code>p - n</code></td>
                                     <td>指向上n个元素</td>
-                                    <td><code>&arr[-n]</code></td>
+                                    <td><code>&amp;arr[-n]</code></td>
                                 </tr>
                                 <tr>
                                     <td><code>p++</code></td>
                                     <td>指向下一个元素</td>
-                                    <td><code>&arr[i+1]</code></td>
+                                    <td><code>&amp;arr[i+1]</code></td>
                                 </tr>
                                 <tr>
                                     <td><code>*(p + n)</code></td>
@@ -1202,7 +1202,7 @@ p[i]       // 指针下标法
                 <h3>重点回顾</h3>
                 <ul>
                     <li><strong>指针</strong>是存储内存地址的变量，通过它可以间接访问和修改数据</li>
-                    <li><code>&</code> 取地址运算符，返回变量的内存地址</li>
+                    <li><code>&amp;</code> 取地址运算符，返回变量的内存地址</li>
                     <li><code>*</code> 解引用运算符，返回指针指向的变量的值</li>
                     <li><strong>数组名就是首元素地址</strong>，<code>arr[i]</code> 等价于 <code>*(arr + i)</code></li>
                     <li><strong>指针作为函数参数</strong>可以实现"引用传递"，让函数修改外部变量</li>

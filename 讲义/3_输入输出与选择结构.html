@@ -221,6 +221,10 @@
                             </tr>
                             <tr>
                                 <td><span class="c-operator">%%</span></td>
+                                <td>输出百分号本身</td>
+                                <td><code>printf("100%%");</code></td>
+                                <td>100%</td>
+                            </tr>
                             <tr>
                                 <td><span class="c-operator">%o</span></td>
                                 <td>八进制整数</td>
@@ -256,10 +260,6 @@
                                 <td>宽度5，补零</td>
                                 <td><code>printf("%05d", 42);</code></td>
                                 <td>00042</td>
-                            </tr>
-                                <td>输出百分号本身</td>
-                                <td><code>printf("100%%");</code></td>
-                                <td>100%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -376,10 +376,10 @@
                     <p><code>scanf</code> 是 C 语言中最常用的输入函数，用于从键盘读取用户输入。它是 "scan formatted" 的缩写，定义在 <code>stdio.h</code> 头文件中。</p>
 
                     <h4>基本语法</h4>
-                    <p><code>scanf("格式字符串", &变量1, &变量2, ...);</code></p>
+                    <p><code>scanf("格式字符串", &amp;变量1, &amp;变量2, ...);</code></p>
                     <ul>
                         <li><strong>格式字符串：</strong>指定输入数据的类型和格式</li>
-                        <li><strong>&变量：</strong>取地址运算符 <code>&</code> 后跟变量名，表示变量的内存地址</li>
+                        <li><strong>&变量：</strong>取地址运算符 <code>&amp;</code> 后跟变量名，表示变量的内存地址</li>
                     </ul>
 
                     <div class="code-block">
@@ -403,7 +403,7 @@
     <span class="c-function">scanf</span>(<span class="c-string">" %c"</span>, &grade);  <span class="c-comment">// 注意%c前面的空格</span>
 
     <span class="c-function">printf</span>(<span class="c-string">"请输入姓名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);  <span class="c-comment">// 字符串不需要&</span>
+    <span class="c-function">scanf</span>(<span class="c-string">"%49s"</span>, name);  <span class="c-comment">// 最多读49个字符，字符串不需要&</span>
 
     <span class="c-function">printf</span>(<span class="c-string">"\n输入信息:\n"</span>);
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, age);
@@ -421,10 +421,10 @@
             <div class="subsection">
                 <h3 class="subsection-title">地址运算符&amp;</h3>
                 <div class="subsection-content">
-                    <p><code>&</code> 是取地址运算符，scanf 需要知道变量在内存中的地址才能把数据存进去。</p>
+                    <p><code>&amp;</code> 是取地址运算符，scanf 需要知道变量在内存中的地址才能把数据存进去。</p>
 
                     <h4>为什么需要 & ？</h4>
-                    <p>scanf 要"存"数据，需要知道"存"在哪里，所以要用 <code>&</code> 获取地址。printf 只是"读"数据，不需要地址。</p>
+                    <p>scanf 要"存"数据，需要知道"存"在哪里，所以要用 <code>&amp;</code> 获取地址。printf 只是"读"数据，不需要地址。</p>
 
                     <div class="callout-note">
                         <strong>重要提醒：</strong>
@@ -451,9 +451,9 @@
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num);
     <span class="c-function">printf</span>(<span class="c-string">"输入的数字是: %d\n"</span>, num);
 
-    <span class="c-comment">// 字符串数组名本身就是地址，不需要&</span>
+    <span class="c-comment">// 字符串数组名本身就是地址，不需要&；宽度99为'\0'留位置</span>
     <span class="c-keyword">char</span> str[<span class="c-number">100</span>];
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, str);  <span class="c-comment">// 正确</span>
+    <span class="c-function">scanf</span>(<span class="c-string">"%99s"</span>, str);  <span class="c-comment">// 正确且更安全</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -484,27 +484,27 @@
                             <tr>
                                 <td><code>%d</code></td>
                                 <td>读取整数</td>
-                                <td><code>scanf("%d", &num);</code></td>
+                                <td><code>scanf("%d", &amp;num);</code></td>
                             </tr>
                             <tr>
                                 <td><code>%f</code></td>
                                 <td>读取 float 浮点数</td>
-                                <td><code>scanf("%f", &height);</code></td>
+                                <td><code>scanf("%f", &amp;height);</code></td>
                             </tr>
                             <tr>
                                 <td><code>%lf</code></td>
                                 <td>读取 double 浮点数</td>
-                                <td><code>scanf("%lf", &money);</code></td>
+                                <td><code>scanf("%lf", &amp;money);</code></td>
                             </tr>
                             <tr>
                                 <td><code>%c</code></td>
                                 <td>读取单个字符</td>
-                                <td><code>scanf(" %c", &grade);</code></td>
+                                <td><code>scanf(" %c", &amp;grade);</code></td>
                             </tr>
                             <tr>
                                 <td><code>%s</code></td>
                                 <td>读取字符串（遇空格停止）</td>
-                                <td><code>scanf("%s", name);</code></td>
+                                <td><code>scanf("%49s", name);</code></td>
                             </tr>
                         </tbody>
                     </table>
@@ -519,7 +519,7 @@
 
                     <h4>常见问题：读取整数后再读字符</h4>
                     <p>scanf 读取整数后，输入缓冲区会残留换行符 <code>\n</code>，导致下一个 <code>%c</code> 直接读到换行符。</p>
-                    <p><strong>解决方法：</strong>在 <code>%c</code> 前加空格：<code>scanf(" %c", &ch);</code></p>
+                    <p><strong>解决方法：</strong>在 <code>%c</code> 前加空格：<code>scanf(" %c", &amp;ch);</code></p>
 
                     <h4>常见问题：scanf 不能读取带空格的字符串</h4>
                     <p>scanf 遇到空格就会停止读取。如果要读取一整行，通常使用 <code>fgets()</code>。<code>gets()</code> 已被废弃，不建议使用。</p>
@@ -581,7 +581,7 @@ while (scanf("%d", &a) != EOF) {
                 <div class="practice-box-title">边学边练 - 输入输出</div>
 
 <div class="question-item">
-                    <p><strong>练习1：</strong>编写程序，让用户输入姓名、年龄和身高，然后格式化输出这些信息。姓名用 <code>%s</code>，年龄用 <code>%d</code>，身高用 <code>%.2f</code>。</p>
+                    <p><strong>练习1：</strong>编写程序，让用户输入姓名、年龄和身高，然后格式化输出这些信息。姓名用带宽度限制的 <code>%s</code>，年龄用 <code>%d</code>，身高用 <code>%.2f</code>。</p>
                     <details>
                         <summary>参考答案</summary>
                         <div class="code-block">
@@ -594,7 +594,7 @@ while (scanf("%d", &a) != EOF) {
     <span class="c-keyword">float</span> height;
 
     <span class="c-function">printf</span>(<span class="c-string">"请输入姓名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, name);
+    <span class="c-function">scanf</span>(<span class="c-string">"%49s"</span>, name);
 
     <span class="c-function">printf</span>(<span class="c-string">"请输入年龄: "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &age);
@@ -741,9 +741,9 @@ while (scanf("%d", &a) != EOF) {
                         <strong>常见应用场景：</strong>
                         <ul>
                             <li>判断奇偶数：<code>if (num % 2 == 0) ... else ...</code></li>
-                            <li>判断及格/不及格：<code>if (score >= 60) ... else ...</code></li>
-                            <li>判断正负数：<code>if (num > 0) ... else ...</code></li>
-                            <li>判断闰年：<code>if ((year%4==0 && year%100!=0) || year%400==0) ... else ...</code></li>
+                            <li>判断及格/不及格：<code>if (score &gt;= 60) ... else ...</code></li>
+                            <li>判断正负数：<code>if (num &gt; 0) ... else ...</code></li>
+                            <li>判断闰年：<code>if ((year%4==0 &amp;&amp; year%100!=0) || year%400==0) ... else ...</code></li>
                         </ul>
                     </div>
                 </div>
@@ -785,6 +785,12 @@ while (scanf("%d", &a) != EOF) {
                         <strong>执行顺序：</strong>
                         <p>if-else if 结构从上到下依次检查条件，一旦找到满足的条件就执行对应代码块，然后跳过所有剩余分支。即使后面还有满足的条件也不会再执行。</p>
                     </div>
+
+                    <div class="concept-visual interactive-visual" data-visual="branch-flow" data-score="76">
+                        <div class="visual-caption">多分支判断路径动画</div>
+                        <div class="visual-host" data-visual-host></div>
+                        <p class="visual-note">拖动成绩，观察程序如何从上到下检查条件，并在第一个成立的分支处停止。</p>
+                    </div>
                 </div>
             </div>
 
@@ -794,20 +800,20 @@ while (scanf("%d", &a) != EOF) {
                 <div class="subsection-content">
                     <p>if 语句的条件可以是任何能产生真（非0）或假（0）的表达式。</p>
                     <ul>
-                        <li><strong>比较运算：</strong><code>a > b</code>, <code>a == b</code>, <code>a != b</code></li>
-                        <li><strong>逻辑运算：</strong><code>a > 0 && b < 10</code>, <code>a == 0 || b == 0</code>（逻辑运算符详见第2章）</li>
+                        <li><strong>比较运算：</strong><code>a &gt; b</code>, <code>a == b</code>, <code>a != b</code></li>
+                        <li><strong>逻辑运算：</strong><code>a &gt; 0 &amp;&amp; b &lt; 10</code>, <code>a == 0 || b == 0</code>（逻辑运算符详见第2章）</li>
                         <li><strong>直接判断：</strong><code>if (num)</code> 等价于 <code>if (num != 0)</code></li>
                     </ul>
 
                     <div class="callout-note">
                         <strong>知识点回顾：</strong>
-                        <p>逻辑运算符 <code>&&</code>（逻辑与）、<code>||</code>（逻辑或）、<code>!</code>（逻辑非）及其真值表已在第2章详细介绍，此处不再重复。在条件表达式中最常用的是 <code>&&</code> 和 <code>||</code>，用于组合多个条件。</p>
+                        <p>逻辑运算符 <code>&amp;&amp;</code>（逻辑与）、<code>||</code>（逻辑或）、<code>!</code>（逻辑非）及其真值表已在第2章详细介绍，此处不再重复。在条件表达式中最常用的是 <code>&amp;&amp;</code> 和 <code>||</code>，用于组合多个条件。</p>
                     </div>
                 </div>
 
                 <div class="callout-tip">
                     <strong>短路特性：</strong>
-                    <p><code>&&</code>：左边为假时，右边不执行。<code>||</code>：左边为真时，右边不执行。利用这个特性可以避免一些错误，例如：<code>if (x != 0 && 10 / x > 1)</code> 不会产生除零错误。</p>
+                    <p><code>&amp;&amp;</code>：左边为假时，右边不执行。<code>||</code>：左边为真时，右边不执行。利用这个特性可以避免一些错误，例如：<code>if (x != 0 &amp;&amp; 10 / x &gt; 1)</code> 不会产生除零错误。</p>
                 </div>
             </div>
         </section>
@@ -1317,9 +1323,9 @@ if (a > 0) {
                     <div class="example-item">
                         <strong>错误1：忘记scanf的&amp;</strong>
                         <ul>
-                            <li>读取整数、浮点数、字符时忘记加 <code>&</code></li>
+                            <li>读取整数、浮点数、字符时忘记加 <code>&amp;</code></li>
                             <li>会导致程序崩溃或读取到随机值</li>
-                            <li>只有字符串（数组名）不需要 <code>&</code></li>
+                            <li>只有字符串（数组名）不需要 <code>&amp;</code></li>
                         </ul>
                     </div>
                     <div class="example-item">
@@ -1439,7 +1445,7 @@ if (a > 0) {
                         <strong>与scanf的区别：</strong>
                         <ul>
                             <li><code>getchar()</code> 一次只读一个字符，不需要格式字符串</li>
-                            <li><code>scanf("%c", &ch)</code> 也能读字符，但 <code>getchar()</code> 更简洁</li>
+                            <li><code>scanf("%c", &amp;ch)</code> 也能读字符，但 <code>getchar()</code> 更简洁</li>
                             <li><code>putchar(ch)</code> 比 <code>printf("%c", ch)</code> 更高效，因为不需要解析格式字符串</li>
                         </ul>
                     </div>

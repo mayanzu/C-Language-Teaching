@@ -465,6 +465,12 @@ for (;;) { }  // 等价于 while(1) { }</code></pre>
                     <div class="flow-decision">条件为假？</div>
                     <div class="flow-step">退出循环</div>
                 </div>
+
+                <div class="concept-visual interactive-visual" data-visual="loop-flow" data-limit="5">
+                    <div class="visual-caption">for 循环执行顺序动画</div>
+                    <div class="visual-host" data-visual-host></div>
+                    <p class="visual-note">单步播放可以清楚看到初始化只执行一次，随后每轮按“条件判断 → 循环体 → 更新”重复。</p>
+                </div>
             </div>
 
             <!-- 基本示例 -->
@@ -1325,7 +1331,7 @@ for (i = 1; i &lt;= 5; i++) {
                             </thead>
                             <tbody>
                                 <tr><td><strong>初始化</strong></td><td>循环开始前的准备工作</td><td><code>int sum = 0, i = 1;</code></td></tr>
-                                <tr><td><strong>循环条件</strong></td><td>什么时候继续循环</td><td><code>i <= 100</code></td></tr>
+                                <tr><td><strong>循环条件</strong></td><td>什么时候继续循环</td><td><code>i &lt;= 100</code></td></tr>
                                 <tr><td><strong>循环体</strong></td><td>每次循环做什么</td><td><code>sum += i;</code></td></tr>
                                 <tr><td><strong>更新</strong></td><td>让循环趋向结束</td><td><code>i++;</code></td></tr>
                             </tbody>
@@ -1338,7 +1344,7 @@ for (i = 1; i &lt;= 5; i++) {
                         <p>确保循环条件最终会变为假。常见死循环原因：</p>
                         <ul>
                             <li>忘记更新循环变量</li>
-                            <li>更新方向与条件矛盾（如 <code>while (i < 100)</code> 但 <code>i--</code>）</li>
+                            <li>更新方向与条件矛盾（如 <code>while (i &lt; 100)</code> 但 <code>i--</code>）</li>
                             <li>浮点数做循环条件（精度问题导致永远不等）</li>
                         </ul>
                     </div>

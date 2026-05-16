@@ -144,8 +144,8 @@
 
                     <div class="callout-tip">
                         <strong>真值表：</strong>
-                        <p><code>0 & 0 = 0</code>，<code>0 & 1 = 0</code>，<code>1 & 0 = 0</code>，<code>1 & 1 = 1</code></p>
-                        <p><strong>示例：</strong><code>5 & 3</code> 的计算过程</p>
+                        <p><code>0 &amp; 0 = 0</code>，<code>0 &amp; 1 = 0</code>，<code>1 &amp; 0 = 0</code>，<code>1 &amp; 1 = 1</code></p>
+                        <p><strong>示例：</strong><code>5 &amp; 3</code> 的计算过程</p>
                         <pre>  0101  (5)
 & 0011  (3)
 --------
@@ -294,9 +294,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><code>&</code></td>
+                                    <td><code>&amp;</code></td>
                                     <td>按位与</td>
-                                    <td><code>5 & 3</code></td>
+                                    <td><code>5 &amp; 3</code></td>
                                     <td><code>1</code></td>
                                     <td>清零、检查位</td>
                                 </tr>
@@ -322,16 +322,16 @@
                                     <td>构造掩码</td>
                                 </tr>
                                 <tr>
-                                    <td><code><<</code></td>
+                                    <td><code>&lt;&lt;</code></td>
                                     <td>左移</td>
-                                    <td><code>5 << 2</code></td>
+                                    <td><code>5 &lt;&lt; 2</code></td>
                                     <td><code>20</code></td>
                                     <td>乘2的幂</td>
                                 </tr>
                                 <tr>
-                                    <td><code>>></code></td>
+                                    <td><code>&gt;&gt;</code></td>
                                     <td>右移</td>
-                                    <td><code>5 >> 1</code></td>
+                                    <td><code>5 &gt;&gt; 1</code></td>
                                     <td><code>2</code></td>
                                     <td>除2的幂</td>
                                 </tr>
@@ -342,8 +342,8 @@
                     <div class="callout-warning">
                         <strong>常见混淆：</strong>
                         <ul>
-                            <li>不要混淆位运算符（<code>&</code>, <code>|</code>）和逻辑运算符（<code>&&</code>, <code>||</code>）</li>
-                            <li>位运算的优先级较低，使用时建议加括号：<code>if ((x & mask) != 0)</code></li>
+                            <li>不要混淆位运算符（<code>&amp;</code>, <code>|</code>）和逻辑运算符（<code>&amp;&amp;</code>, <code>||</code>）</li>
+                            <li>位运算的优先级较低，使用时建议加括号：<code>if ((x &amp; mask) != 0)</code></li>
                         </ul>
                     </div>
                 </div>
@@ -474,32 +474,32 @@
                             <tbody>
                                 <tr>
                                     <td>设置第n位为1</td>
-                                    <td><code>x |= (1 << n)</code></td>
+                                    <td><code>x |= (1 &lt;&lt; n)</code></td>
                                     <td>将指定位置1</td>
                                 </tr>
                                 <tr>
                                     <td>清除第n位为0</td>
-                                    <td><code>x &= ~(1 << n)</code></td>
+                                    <td><code>x &amp;= ~(1 &lt;&lt; n)</code></td>
                                     <td>将指定位清0</td>
                                 </tr>
                                 <tr>
                                     <td>翻转第n位</td>
-                                    <td><code>x ^= (1 << n)</code></td>
+                                    <td><code>x ^= (1 &lt;&lt; n)</code></td>
                                     <td>0变1，1变0</td>
                                 </tr>
                                 <tr>
                                     <td>检查第n位</td>
-                                    <td><code>(x >> n) & 1</code></td>
+                                    <td><code>(x &gt;&gt; n) &amp; 1</code></td>
                                     <td>获取第n位的值</td>
                                 </tr>
                                 <tr>
                                     <td>判断奇偶</td>
-                                    <td><code>x & 1</code></td>
+                                    <td><code>x &amp; 1</code></td>
                                     <td>结果1为奇数，0为偶数</td>
                                 </tr>
                                 <tr>
                                     <td>判断2的幂</td>
-                                    <td><code>x & (x-1) == 0</code></td>
+                                    <td><code>x &amp; (x-1) == 0</code></td>
                                     <td>2的幂只有一个1</td>
                                 </tr>
                             </tbody>
@@ -900,7 +900,7 @@ while ((ch = fgetc(fp)) != EOF) { }
     <span class="c-keyword">int</span> age;
     <span class="c-keyword">float</span> score;
 
-    <span class="c-keyword">while</span> (<span class="c-function">fscanf</span>(fp, <span class="c-string">"%s %d %f"</span>, name, &amp;age, &amp;score) == <span class="c-number">3</span>) {
+    <span class="c-keyword">while</span> (<span class="c-function">fscanf</span>(fp, <span class="c-string">"%19s %d %f"</span>, name, &amp;age, &amp;score) == <span class="c-number">3</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"姓名: %s, 年龄: %d, 成绩: %.1f\n"</span>, name, age, score);
     }
     <span class="c-function">fclose</span>(fp);
@@ -925,9 +925,9 @@ while ((ch = fgetc(fp)) != EOF) { }
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">char</span> src[<span class="c-number">100</span>], dst[<span class="c-number">100</span>];
     <span class="c-function">printf</span>(<span class="c-string">"输入源文件名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, src);
+    <span class="c-function">scanf</span>(<span class="c-string">"%99s"</span>, src);
     <span class="c-function">printf</span>(<span class="c-string">"输入目标文件名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, dst);
+    <span class="c-function">scanf</span>(<span class="c-string">"%99s"</span>, dst);
 
     <span class="c-keyword">FILE</span> *fin = <span class="c-function">fopen</span>(src, <span class="c-string">"r"</span>);
     <span class="c-keyword">if</span> (!fin) {
@@ -1178,7 +1178,7 @@ fclose(fp);</code></pre>
     <span class="c-keyword">unsigned char</span> key;
 
     <span class="c-function">printf</span>(<span class="c-string">"输入文件名: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, filename);
+    <span class="c-function">scanf</span>(<span class="c-string">"%99s"</span>, filename);
     <span class="c-function">printf</span>(<span class="c-string">"输入密钥(0-255): "</span>);
     <span class="c-function">scanf</span>(<span class="c-string">"%hhu"</span>, &amp;key);
 
@@ -1217,8 +1217,8 @@ fclose(fp);</code></pre>
             <div class="subsection-content">
                 <h3>重点回顾</h3>
                 <ul>
-                    <li><strong>位运算符：</strong><code>&</code>（按位与）、<code>|</code>（按位或）、<code>^</code>（按位异或）、<code>~</code>（按位取反）、<code><<</code>（左移）、<code>>></code>（右移）</li>
-                    <li><strong>位操作技巧：</strong>设置位（<code>|=</code>）、清除位（<code>&= ~</code>）、翻转位（<code>^=</code>）、检查位（<code>>&</code>）</li>
+                    <li><strong>位运算符：</strong><code>&amp;</code>（按位与）、<code>|</code>（按位或）、<code>^</code>（按位异或）、<code>~</code>（按位取反）、<code>&lt;&lt;</code>（左移）、<code>&gt;&gt;</code>（右移）</li>
+                    <li><strong>位操作技巧：</strong>设置位（<code>|=</code>）、清除位（<code>&amp;= ~</code>）、翻转位（<code>^=</code>）、检查位（<code>(x &gt;&gt; n) &amp; 1</code>）</li>
                     <li><strong>移位运算：</strong>左移n位相当于乘以2ⁿ，右移n位相当于除以2ⁿ</li>
                     <li><strong>文件操作三步曲：</strong>打开（<code>fopen</code>）→ 读写 → 关闭（<code>fclose</code>）</li>
                     <li><strong>位操作技巧：</strong>设置位用OR、清除位用AND+取反、翻转位用XOR、检查位用右移+AND</li>

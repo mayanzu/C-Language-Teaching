@@ -121,6 +121,12 @@ printf("%f", area);</code></pre>
                         <p class="visual-note">变量名让程序找到这块空间，类型决定空间大小和解释方式，值是当前保存的内容。</p>
                     </div>
 
+                    <div class="concept-visual interactive-visual" data-visual="variable-lifecycle" data-kind="int">
+                        <div class="visual-caption">变量生命周期动画：声明、赋值、修改、读取</div>
+                        <div class="visual-host" data-visual-host></div>
+                        <p class="visual-note">课堂演示时可切换 <code>int</code>、<code>double</code>、<code>char</code>，观察类型大小、字节内容和当前值如何同步变化。</p>
+                    </div>
+
                     <div class="code-block">
                         <div class="code-block-title">不同类型变量的基本用法</div>
                         <pre><code><span class="c-keyword">int</span> age = <span class="c-number">18</span>;              <span class="c-comment">// 整数</span>
@@ -1633,13 +1639,13 @@ unsigned char c = -1;  // -1 转无符号：实际值 = 256 - 1 = 255</code></pr
                             <tr><td><code>%lld</code></td><td>输出long long</td><td><code>printf("%lld", 999999LL);</code></td></tr>
                             <tr><td><code>%u</code></td><td>输出unsigned int</td><td><code>printf("%u", 42U);</code></td></tr>
                             <tr><td><code>%f</code></td><td>输出float/double</td><td><code>printf("%f", 3.14);</code></td></tr>
-                            <tr><td><code>%lf</code></td><td>scanf读double</td><td><code>scanf("%lf", &d);</code></td></tr>
+                            <tr><td><code>%lf</code></td><td>scanf读double</td><td><code>scanf("%lf", &amp;d);</code></td></tr>
                             <tr><td><code>%.nf</code></td><td>保留n位小数</td><td><code>printf("%.2f", 3.14);</code></td></tr>
                             <tr><td><code>%c</code></td><td>输出char</td><td><code>printf("%c", 'A');</code></td></tr>
                             <tr><td><code>%s</code></td><td>输出字符串</td><td><code>printf("%s", "Hi");</code></td></tr>
                             <tr><td><code>%o</code></td><td>八进制输出</td><td><code>printf("%o", 42);</code></td></tr>
                             <tr><td><code>%x</code></td><td>十六进制输出</td><td><code>printf("%x", 42);</code></td></tr>
-                            <tr><td><code>%p</code></td><td>输出地址</td><td><code>printf("%p", &a);</code></td></tr>
+                            <tr><td><code>%p</code></td><td>输出地址</td><td><code>printf("%p", (void *)&amp;a);</code></td></tr>
                         </tbody>
                     </table>
                 </div>

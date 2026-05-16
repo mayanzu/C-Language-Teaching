@@ -894,7 +894,7 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
                         <div class="callout-tip">
                             <p><strong>两个错误：</strong></p>
                             <ul>
-                                <li><strong>越界访问：</strong>循环条件 <code>i <= 5</code> 应该是 <code>i < 5</code>。分配了5个元素（下标0-4），访问 <code>p[5]</code> 是越界。</li>
+                                <li><strong>越界访问：</strong>循环条件 <code>i &lt;= 5</code> 应该是 <code>i &lt; 5</code>。分配了5个元素（下标0-4），访问 <code>p[5]</code> 是越界。</li>
                                 <li><strong>重复释放：</strong>对 <code>p</code> 调用了两次 <code>free</code>，会导致程序崩溃。应该在第一次 <code>free</code> 后将 <code>p</code> 置为 <code>NULL</code>。</li>
                             </ul>
                         </div>

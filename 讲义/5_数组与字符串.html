@@ -256,8 +256,8 @@ int a[5];                // 垃圾值，不是0！</code></pre>
     <span class="c-keyword">int</span> arr[<span class="c-number">3</span>] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>};
 
     <span class="c-comment">// 数组名就是首元素的地址</span>
-    <span class="c-function">printf</span>(<span class="c-string">"arr 的地址: %p\n"</span>, arr);
-    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] 的地址: %p\n"</span>, &arr[<span class="c-number">0</span>]);
+    <span class="c-function">printf</span>(<span class="c-string">"arr 的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)arr);
+    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] 的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&arr[<span class="c-number">0</span>]);
     <span class="c-comment">// 两者输出相同！</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -497,10 +497,10 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                                     <td>遇到<code>\0</code>停止输出</td>
                                 </tr>
                                 <tr>
-                                    <td><code>scanf("%s", str)</code></td>
+                                    <td><code>scanf("%99s", str)</code></td>
                                     <td>输入字符串</td>
-                                    <td><code>scanf("%s", name);</code></td>
-                                    <td>遇空格结束，不需要加<code>&</code></td>
+                                    <td><code>scanf("%99s", name);</code></td>
+                                    <td>遇空格结束，宽度要比数组容量少1，不需要加<code>&amp;</code></td>
                                 </tr>
                                 <tr>
                                     <td><code>fgets(str, n, stdin)</code></td>
@@ -515,7 +515,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                     <div class="callout-warning">
                         <strong>安全警告：</strong>
                         <ul>
-                            <li><code>scanf("%s", str)</code> 不检查数组边界，输入过长会导致缓冲区溢出</li>
+                            <li>裸写 <code>scanf("%s", str)</code> 不检查数组边界，输入过长会导致缓冲区溢出</li>
                             <li>推荐使用 <code>fgets()</code> 来读取字符串，更安全</li>
                             <li>就像往杯子里倒水：杯子容量有限，倒太多会溢出</li>
                         </ul>
@@ -610,7 +610,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     <span class="c-keyword">char</span> temp[<span class="c-number">50</span>];
 
     <span class="c-comment">// strlen: 获取字符串长度</span>
-    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %d\n"</span>, <span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str1长度: %d\n"</span>, (<span class="c-keyword">int</span>)<span class="c-function">strlen</span>(str1));  <span class="c-comment">// 5</span>
 
     <span class="c-comment">// strcpy: 复制字符串</span>
     <span class="c-function">strcpy</span>(temp, str1);

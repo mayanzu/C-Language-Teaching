@@ -170,6 +170,37 @@ document.addEventListener('DOMContentLoaded', function () {
         return `<div class="iv-progress" style="--iv-progress:${percent}%"><span></span></div>`;
     }
 
+    const playbackSpeeds = [
+        { key: 'slow', label: '慢速', factor: 1.45 },
+        { key: 'normal', label: '标准', factor: 1 },
+        { key: 'fast', label: '快速', factor: 0.68 }
+    ];
+
+    function getPlaybackDelay(baseDelay, speed) {
+        const option = playbackSpeeds.find(item => item.key === speed) || playbackSpeeds[1];
+        return Math.round(baseDelay * option.factor);
+    }
+
+    function renderStepBadge(current, total, label) {
+        return `<div class="iv-step-badge" aria-label="当前演示进度">第 ${Math.min(current + 1, total)} / ${total} ${label || '步'}</div>`;
+    }
+
+    function renderTeachingNote(text) {
+        return `<div class="iv-teaching-note">${text}</div>`;
+    }
+
+    function renderPlaybackSpeed(speed) {
+        return `<div class="iv-control-group iv-speed-control" aria-label="播放速度">
+            ${playbackSpeeds.map(item => `<button class="iv-tab${item.key === speed ? ' is-active' : ''}" data-speed="${item.key}">${item.label}</button>`).join('')}
+        </div>`;
+    }
+
+    function bindPlaybackSpeed(host, onChange) {
+        host.querySelectorAll('[data-speed]').forEach(button => {
+            button.addEventListener('click', () => onChange(button.getAttribute('data-speed')));
+        });
+    }
+
     function renderMemoryCard(options) {
         const classes = ['iv-memory-card'];
         if (options.kind) classes.push(`is-${options.kind}`);
@@ -188,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const host = element.querySelector('[data-visual-host]') || element;
         let step = 0;
         let timer = null;
+        let speed = 'normal';
 
         function stop() {
             if (timer) {
@@ -209,23 +241,269 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 setStep(step + 1);
-            }, 900);
+            }, getPlaybackDelay(900, speed));
         }
 
         function draw() {
             host.innerHTML = renderer(step, {
-                progress: renderProgress(step, stepsLength),
+                progress: `${renderProgress(step, stepsLength)}${renderStepBadge(step, stepsLength)}${renderPlaybackSpeed(speed)}`,
             });
 
             const prevButton = host.querySelector('[data-action="prev"]');
             const nextButton = host.querySelector('[data-action="next"]');
             const playButton = host.querySelector('[data-action="play"]');
+            if (playButton && !host.querySelector('[data-action="pause"]')) {
+                playButton.insertAdjacentHTML('afterend', '<button class="iv-button" data-action="pause">暂停</button>');
+            }
+            const pauseButton = host.querySelector('[data-action="pause"]');
             const resetButton = host.querySelector('[data-action="reset"]');
 
             if (prevButton) prevButton.addEventListener('click', () => { stop(); setStep(step - 1); });
             if (nextButton) nextButton.addEventListener('click', () => { stop(); setStep(step + 1); });
             if (playButton) playButton.addEventListener('click', play);
+            if (pauseButton) pauseButton.addEventListener('click', stop);
             if (resetButton) resetButton.addEventListener('click', () => { stop(); setStep(0); });
+            bindPlaybackSpeed(host, nextSpeed => {
+                speed = nextSpeed;
+                stop();
+                draw();
+            });
+        }
+
+        draw();
+    }
+
+    function initCompilePipeline(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        const scenarios = {
+            success: {
+                label: '成功运行',
+                tone: 'green',
+                artifact: 'hello.exe',
+                output: 'Hello, C!',
+                steps: [
+                    { phase: 'source', line: 0, title: '源代码', file: 'hello.c', state: 'ready', text: '先把人能读懂的 C 代码保存成源文件。此时还不能直接交给 CPU 执行。' },
+                    { phase: 'compile', line: 1, title: '编译', file: 'hello.obj', state: 'ready', text: '编译器检查语法，并把每条 C 语句翻译成目标文件中的机器指令片段。' },
+                    { phase: 'link', line: 2, title: '链接', file: 'hello.exe', state: 'ready', text: '链接器把目标文件和库函数连接起来，补齐 printf 等外部函数的位置。' },
+                    { phase: 'load', line: 3, title: '加载', file: '内存', state: 'ready', text: '操作系统把可执行程序加载到内存，准备让 CPU 从入口处开始执行。' },
+                    { phase: 'run', line: 4, title: '运行', file: '控制台', state: 'ready', text: 'CPU 按指令顺序执行，控制台最终显示程序输出。' }
+                ]
+            },
+            compileError: {
+                label: '编译错误',
+                tone: 'red',
+                artifact: '未生成',
+                output: 'error: expected ;',
+                steps: [
+                    { phase: 'source', line: 0, title: '源代码', file: 'hello.c', state: 'ready', text: '源文件已经写好，但其中一行语句末尾少了分号。' },
+                    { phase: 'compile', line: 1, title: '编译', file: '错误信息', state: 'error', text: '编译器在语法检查阶段发现错误，目标文件不会生成。先看错误行号，再回源代码修改。' },
+                    { phase: 'link', line: 2, title: '链接', file: '跳过', state: 'blocked', text: '没有目标文件，链接步骤无法继续。编译错误必须先修。' },
+                    { phase: 'load', line: 3, title: '加载', file: '跳过', state: 'blocked', text: '可执行文件没有生成，所以操作系统没有程序可加载。' }
+                ]
+            },
+            linkError: {
+                label: '链接错误',
+                tone: 'amber',
+                artifact: '未生成',
+                output: 'unresolved symbol',
+                steps: [
+                    { phase: 'source', line: 0, title: '源代码', file: 'main.c', state: 'ready', text: '源代码语法正确，例如声明了一个函数，却没有提供函数定义。' },
+                    { phase: 'compile', line: 1, title: '编译', file: 'main.obj', state: 'ready', text: '单个源文件能编译成目标文件，说明这一阶段的语法检查已经通过。' },
+                    { phase: 'link', line: 2, title: '链接', file: '错误信息', state: 'error', text: '链接器找不到某个函数或库，常见原因是少写函数定义、少加源文件或库配置错误。' },
+                    { phase: 'load', line: 3, title: '加载', file: '跳过', state: 'blocked', text: '链接失败时不会生成最终可执行文件，因此不能运行。' }
+                ]
+            },
+            runtimeError: {
+                label: '运行时错误',
+                tone: 'red',
+                artifact: 'app.exe',
+                output: '除以零 / 越界',
+                steps: [
+                    { phase: 'source', line: 0, title: '源代码', file: 'app.c', state: 'ready', text: '代码语法看起来没问题，但逻辑中可能藏着危险输入。' },
+                    { phase: 'compile', line: 1, title: '编译', file: 'app.obj', state: 'ready', text: '编译器只检查语法和类型，不能提前知道所有运行时输入。' },
+                    { phase: 'link', line: 2, title: '链接', file: 'app.exe', state: 'ready', text: '链接成功，程序已经可以启动。' },
+                    { phase: 'run', line: 4, title: '运行', file: '中断', state: 'error', text: '执行过程中出现除以零、数组越界等问题。调试时要看变量值和当前执行语句。' }
+                ]
+            }
+        };
+        const lanes = [
+            { key: 'source', label: '编写', detail: '.c 源文件' },
+            { key: 'compile', label: '编译', detail: '.obj 目标文件' },
+            { key: 'link', label: '链接', detail: '.exe 可执行文件' },
+            { key: 'load', label: '加载', detail: '进入内存' },
+            { key: 'run', label: '运行', detail: 'CPU 执行' }
+        ];
+        let key = element.getAttribute('data-scenario') || 'success';
+        let visual;
+
+        function createVisual() {
+            const scenario = scenarios[key] || scenarios.success;
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放流程',
+                interval: 940,
+                getLength: () => scenario.steps.length,
+                render(step, helpers) {
+                    const current = scenario.steps[step];
+                    const currentIndex = lanes.findIndex(item => item.key === current.phase);
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            ${helpers.controls}
+                            <div class="iv-control-group">
+                                ${Object.entries(scenarios).map(([scenarioKey, item]) => `<button class="iv-tab${scenarioKey === key ? ' is-active' : ''}" data-scenario="${scenarioKey}">${item.label}</button>`).join('')}
+                            </div>
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage is-wide">
+                            <div class="iv-panel">
+                                <div class="iv-algo-head">
+                                    <strong>程序构建流水线</strong>
+                                    <span>${scenario.label} · 当前产物 ${scenario.artifact}</span>
+                                </div>
+                                <div class="iv-pipeline" aria-label="程序从源代码到运行的流程">
+                                    ${lanes.map((lane, index) => {
+                                        const isPast = index < currentIndex;
+                                        const isActive = lane.key === current.phase;
+                                        const state = isActive ? current.state : isPast ? 'done' : 'waiting';
+                                        return `<div class="iv-pipeline-card is-${state}${isActive ? ' is-active' : ''}">
+                                            <span>${lane.label}</span>
+                                            <strong>${isActive ? current.file : lane.detail}</strong>
+                                            <em>${isPast ? '已完成' : isActive ? current.title : '等待'}</em>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: '阶段', value: current.title, hot: true },
+                                    { label: '文件/结果', value: current.file },
+                                    { label: '最终输出', value: scenario.output }
+                                ])}
+                                ${renderTeachingNote('课堂提示：让学生先判断错误停在哪一层，再决定该看语法、库配置还是运行时变量。')}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind() {
+                    host.querySelectorAll('[data-scenario]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            if (visual) visual.stop();
+                            key = button.getAttribute('data-scenario');
+                            createVisual();
+                            visual.draw();
+                        });
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function initBinaryWeights(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        let value = Math.max(0, Math.min(255, Number(element.getAttribute('data-value') || 13)));
+        let step = 0;
+        let timer = null;
+        let speed = 'normal';
+        const weights = [128, 64, 32, 16, 8, 4, 2, 1];
+
+        function stop() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+
+        function setStep(nextStep) {
+            step = Math.max(0, Math.min(7, nextStep));
+            draw();
+        }
+
+        function sumThrough(bits, activeUntil) {
+            return bits.reduce((sum, bit, index) => index <= activeUntil && bit ? sum + weights[index] : sum, 0);
+        }
+
+        function draw() {
+            const bits = toBits(value);
+            const partial = sumThrough(bits, step);
+            host.innerHTML = `<div class="iv-shell">
+                <div class="iv-control-bar">
+                    <label class="iv-field">十进制值
+                        <input type="range" min="0" max="255" value="${value}" data-role="binary-value">
+                        <input type="number" min="0" max="255" value="${value}" data-role="binary-number">
+                    </label>
+                    <div class="iv-control-group">
+                        <button class="iv-button" data-action="prev"${step === 0 ? ' disabled' : ''}>上一位</button>
+                        <button class="iv-button is-primary" data-action="play">播放位权</button>
+                        <button class="iv-button" data-action="pause">暂停</button>
+                        <button class="iv-button" data-action="next"${step === 7 ? ' disabled' : ''}>下一位</button>
+                        <button class="iv-button" data-action="reset">重置</button>
+                    </div>
+                    ${renderPlaybackSpeed(speed)}
+                    ${renderStepBadge(step, 8, '位')}
+                </div>
+                <div class="iv-stage is-wide">
+                    <div class="iv-panel">
+                        <div class="iv-algo-head">
+                            <strong>${value} 的二进制表示</strong>
+                            <span>${formatBinary(value)} · 当前累计 ${partial}</span>
+                        </div>
+                        <div class="iv-weight-board">
+                            ${bits.map((bit, index) => {
+                                const isActive = index === step;
+                                const isDone = index < step;
+                                return `<button class="iv-weight-cell${isActive ? ' is-active' : ''}${isDone ? ' is-done' : ''}${bit ? ' is-one' : ''}" data-bit-index="${index}">
+                                    <span>2<sup>${7 - index}</sup></span>
+                                    <strong>${bit}</strong>
+                                    <em>${bit ? `+${weights[index]}` : '+0'}</em>
+                                </button>`;
+                            }).join('')}
+                        </div>
+                        ${renderVariableStrip([
+                            { label: '二进制', value: formatBinary(value), hot: true },
+                            { label: '当前位权', value: weights[step] },
+                            { label: '累计值', value: partial }
+                        ])}
+                        ${renderTeachingNote('课堂提示：高亮某一位时，让学生说出“这一位是 1 才加对应位权，是 0 就加 0”。')}
+                    </div>
+                </div>
+                <div class="iv-status" aria-live="polite">当前查看第 ${step + 1} 位：位权是 ${weights[step]}，这一位是 ${bits[step]}，所以贡献 ${bits[step] ? weights[step] : 0}。从左到右累计到这里得到 ${partial}。</div>
+            </div>`;
+
+            const applyValue = nextValue => {
+                value = Math.max(0, Math.min(255, Number(nextValue) || 0));
+                stop();
+                step = 0;
+                draw();
+            };
+            host.querySelector('[data-role="binary-value"]').addEventListener('input', event => applyValue(event.target.value));
+            host.querySelector('[data-role="binary-number"]').addEventListener('change', event => applyValue(event.target.value));
+            host.querySelector('[data-action="prev"]').addEventListener('click', () => { stop(); setStep(step - 1); });
+            host.querySelector('[data-action="next"]').addEventListener('click', () => { stop(); setStep(step + 1); });
+            host.querySelector('[data-action="reset"]').addEventListener('click', () => { stop(); setStep(0); });
+            host.querySelector('[data-action="play"]').addEventListener('click', () => {
+                stop();
+                timer = setInterval(() => {
+                    if (step >= 7) {
+                        stop();
+                        return;
+                    }
+                    setStep(step + 1);
+                }, getPlaybackDelay(620, speed));
+            });
+            host.querySelector('[data-action="pause"]').addEventListener('click', stop);
+            bindPlaybackSpeed(host, nextSpeed => {
+                speed = nextSpeed;
+                stop();
+                draw();
+            });
+            host.querySelectorAll('[data-bit-index]').forEach(button => {
+                button.addEventListener('click', () => {
+                    stop();
+                    setStep(Number(button.getAttribute('data-bit-index')));
+                });
+            });
         }
 
         draw();
@@ -412,6 +690,896 @@ document.addEventListener('DOMContentLoaded', function () {
                 <strong>${item.value}</strong>
             </div>`).join('')}
         </div>`;
+    }
+
+    function renderPlaybackControls(step, total, playLabel, speed) {
+        return `<div class="iv-control-group">
+            <button class="iv-button" data-action="prev"${step === 0 ? ' disabled' : ''}>上一步</button>
+            <button class="iv-button is-primary" data-action="play">${playLabel || '播放'}</button>
+            <button class="iv-button" data-action="pause">暂停</button>
+            <button class="iv-button" data-action="next"${step === total - 1 ? ' disabled' : ''}>下一步</button>
+            <button class="iv-button" data-action="reset">重置</button>
+        </div>${renderPlaybackSpeed(speed || 'normal')}${renderStepBadge(step, total)}`;
+    }
+
+    function initSteppedVisual(options) {
+        const host = options.host;
+        let step = 0;
+        let timer = null;
+        let speed = options.speed || 'normal';
+
+        function stop() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+
+        function setStep(nextStep) {
+            step = Math.max(0, Math.min(options.getLength() - 1, nextStep));
+            draw();
+        }
+
+        function play() {
+            stop();
+            timer = setInterval(() => {
+                if (step >= options.getLength() - 1) {
+                    stop();
+                    return;
+                }
+                setStep(step + 1);
+            }, getPlaybackDelay(options.interval || 820, speed));
+        }
+
+        function bindCommonControls() {
+            const prevButton = host.querySelector('[data-action="prev"]');
+            const nextButton = host.querySelector('[data-action="next"]');
+            const playButton = host.querySelector('[data-action="play"]');
+            const pauseButton = host.querySelector('[data-action="pause"]');
+            const resetButton = host.querySelector('[data-action="reset"]');
+
+            if (prevButton) prevButton.addEventListener('click', () => { stop(); setStep(step - 1); });
+            if (nextButton) nextButton.addEventListener('click', () => { stop(); setStep(step + 1); });
+            if (playButton) playButton.addEventListener('click', play);
+            if (pauseButton) pauseButton.addEventListener('click', stop);
+            if (resetButton) resetButton.addEventListener('click', () => { stop(); setStep(0); });
+            bindPlaybackSpeed(host, nextSpeed => {
+                speed = nextSpeed;
+                stop();
+                draw();
+            });
+        }
+
+        function draw() {
+            host.innerHTML = options.render(step, {
+                controls: renderPlaybackControls(step, options.getLength(), options.playLabel, speed),
+                progress: renderProgress(step, options.getLength()),
+                setStep,
+                stop
+            });
+            bindCommonControls();
+            if (options.bind) options.bind({ step, setStep, stop, draw });
+        }
+
+        return {
+            draw,
+            stop,
+            reset() {
+                stop();
+                step = 0;
+                draw();
+            },
+            getStep() {
+                return step;
+            }
+        };
+    }
+
+    function initVariableLifecycle(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        const configs = {
+            int: {
+                label: 'int age',
+                name: 'age',
+                type: 'int',
+                size: 4,
+                address: '0x1000',
+                code: ['int age;', 'age = 18;', 'age = age + 1;', 'printf("%d", age);'],
+                states: [
+                    { line: 0, value: '未定义', bytes: ['??', '??', '??', '??'], active: [0, 1, 2, 3], text: '声明变量时，编译器为 age 分配 4 个字节，但里面原有内容不能当作有效值使用。' },
+                    { line: 1, value: '18', bytes: ['12', '00', '00', '00'], active: [0, 1, 2, 3], text: '赋值 18 后，内存中的 4 个字节共同表示这个 int 值。这里按常见小端序展示。' },
+                    { line: 2, value: '19', bytes: ['13', '00', '00', '00'], active: [0], text: '执行 age = age + 1 时，先读取旧值 18，计算 19，再写回同一块内存。' },
+                    { line: 3, value: '19', bytes: ['13', '00', '00', '00'], active: [0, 1, 2, 3], text: 'printf 只读取变量的当前值，不会改变这块内存。' }
+                ]
+            },
+            double: {
+                label: 'double height',
+                name: 'height',
+                type: 'double',
+                size: 8,
+                address: '0x1008',
+                code: ['double height;', 'height = 1.5;', 'height = height + 1.0;', 'printf("%.1f", height);'],
+                states: [
+                    { line: 0, value: '未定义', bytes: ['??', '??', '??', '??', '??', '??', '??', '??'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: 'double 通常占 8 个字节，未初始化时同样不能直接读取。' },
+                    { line: 1, value: '1.5', bytes: ['00', '00', '00', '00', '00', '00', 'F8', '3F'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: '小数会按浮点格式编码，不是把字符 1、点和 5 直接放进内存。' },
+                    { line: 2, value: '2.5', bytes: ['00', '00', '00', '00', '00', '00', '04', '40'], active: [6, 7], text: '浮点加法先在 CPU 中计算，再把新的二进制表示写回变量空间。' },
+                    { line: 3, value: '2.5', bytes: ['00', '00', '00', '00', '00', '00', '04', '40'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: '格式 %.1f 决定显示一位小数，变量本身仍以 double 的二进制格式保存。' }
+                ]
+            },
+            char: {
+                label: 'char grade',
+                name: 'grade',
+                type: 'char',
+                size: 1,
+                address: '0x1010',
+                code: ['char grade;', "grade = 'A';", "grade = grade + 1;", 'printf("%c", grade);'],
+                states: [
+                    { line: 0, value: '未定义', bytes: ['??'], active: [0], text: 'char 只占 1 个字节，适合保存一个字符编码。' },
+                    { line: 1, value: "'A'", bytes: ['41'], active: [0], text: "字符 'A' 保存的是编码值 65，十六进制就是 0x41。" },
+                    { line: 2, value: "'B'", bytes: ['42'], active: [0], text: "grade + 1 实际是在字符编码上加 1，于是 'A' 变成 'B'。" },
+                    { line: 3, value: "'B'", bytes: ['42'], active: [0], text: 'printf("%c") 会把编码 0x42 按字符形式显示为 B。' }
+                ]
+            }
+        };
+        let kind = element.getAttribute('data-kind') || 'int';
+        let visual;
+
+        function drawByteGrid(config, current) {
+            return `<div class="iv-byte-grid" style="--byte-count:${config.size}">
+                ${current.bytes.map((byte, index) => `<div class="iv-byte-cell${current.active.includes(index) ? ' is-active' : ''}${byte === '??' ? ' is-unknown' : ''}">
+                    <strong>${byte}</strong>
+                    <span>+${index}</span>
+                </div>`).join('')}
+            </div>`;
+        }
+
+        function createVisual() {
+            const config = configs[kind] || configs.int;
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放生命周期',
+                interval: 940,
+                getLength: () => config.states.length,
+                render(step, helpers) {
+                    const current = config.states[step];
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            ${helpers.controls}
+                            <div class="iv-control-group">
+                                ${Object.entries(configs).map(([key, item]) => `<button class="iv-tab${key === kind ? ' is-active' : ''}" data-kind="${key}">${item.label}</button>`).join('')}
+                            </div>
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage">
+                            <div class="iv-code-panel">${renderCode(config.code, current.line)}</div>
+                            <div class="iv-panel">
+                                <div class="iv-algo-head">
+                                    <strong>${config.label} 的内存状态</strong>
+                                    <span>${config.size} 字节 · 起始地址 ${config.address}</span>
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: '变量名', value: config.name },
+                                    { label: '类型', value: config.type },
+                                    { label: '当前值', value: current.value, hot: true },
+                                    { label: 'sizeof', value: `${config.size}B` }
+                                ])}
+                                ${drawByteGrid(config, current)}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind() {
+                    host.querySelectorAll('[data-kind]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            if (visual) visual.stop();
+                            kind = button.getAttribute('data-kind');
+                            createVisual();
+                            visual.draw();
+                        });
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function initExpressionTrace(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        const examples = {
+            arithmetic: {
+                label: '算术优先级',
+                expression: 'a + b * c',
+                tokens: ['a', '+', 'b', '*', 'c'],
+                vars: { a: 1, b: 2, c: 3 },
+                steps: [
+                    { active: [2, 3, 4], result: 'b * c = 6', text: '乘法优先级高于加法，所以先计算 b * c，得到 6。', values: { a: 1, b: 2, c: 3, result: '-' } },
+                    { active: [0, 1, 2, 3, 4], result: 'a + 6 = 7', text: '再把 a 的值 1 与刚才的结果 6 相加，整个表达式的值是 7。', values: { a: 1, b: 2, c: 3, result: 7 } }
+                ]
+            },
+            logic: {
+                label: '关系与逻辑',
+                expression: 'a + b > c && c != 0',
+                tokens: ['a', '+', 'b', '>', 'c', '&&', 'c', '!=', '0'],
+                vars: { a: 1, b: 2, c: 3 },
+                steps: [
+                    { active: [0, 1, 2], result: 'a + b = 3', text: '先按算术优先级计算 a + b，得到 3。', values: { a: 1, b: 2, c: 3, left: '-', right: '-', result: '-' } },
+                    { active: [0, 1, 2, 3, 4], result: '3 > 3 = 0', text: '关系运算得到真假值，3 > 3 为假，所以结果是 0。', values: { a: 1, b: 2, c: 3, left: 0, right: '-', result: '-' } },
+                    { active: [6, 7, 8], result: 'c != 0 = 1', text: '右侧关系表达式 c != 0 为真，结果是 1。', values: { a: 1, b: 2, c: 3, left: 0, right: 1, result: '-' } },
+                    { active: [0, 1, 2, 3, 4, 5, 6, 7, 8], result: '0 && 1 = 0', text: '逻辑与要求两边都为真。左边已经是 0，所以整个表达式为 0。', values: { a: 1, b: 2, c: 3, left: 0, right: 1, result: 0 } }
+                ]
+            },
+            assignment: {
+                label: '右结合赋值',
+                expression: 'a = b = c = 5',
+                tokens: ['a', '=', 'b', '=', 'c', '=', '5'],
+                vars: { a: '?', b: '?', c: '?' },
+                steps: [
+                    { active: [4, 5, 6], result: 'c = 5', text: '赋值运算符右结合，先执行最右侧的 c = 5。', values: { a: '?', b: '?', c: 5, result: 5 } },
+                    { active: [2, 3, 4, 5, 6], result: 'b = 5', text: '表达式 c = 5 的值也是 5，所以 b 接着得到 5。', values: { a: '?', b: 5, c: 5, result: 5 } },
+                    { active: [0, 1, 2, 3, 4, 5, 6], result: 'a = 5', text: '最后 a 得到 5，整个赋值表达式的值仍然是 5。', values: { a: 5, b: 5, c: 5, result: 5 } }
+                ]
+            }
+        };
+        let key = element.getAttribute('data-example') || 'arithmetic';
+        let visual;
+
+        function createVisual() {
+            const example = examples[key] || examples.arithmetic;
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放求值',
+                interval: 980,
+                getLength: () => example.steps.length,
+                render(step, helpers) {
+                    const current = example.steps[step];
+                    const activeSet = new Set(current.active);
+                    const varItems = Object.entries(current.values).map(([label, value]) => ({
+                        label,
+                        value,
+                        hot: label === 'result'
+                    }));
+
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            ${helpers.controls}
+                            <div class="iv-control-group">
+                                ${Object.entries(examples).map(([exampleKey, item]) => `<button class="iv-tab${exampleKey === key ? ' is-active' : ''}" data-example="${exampleKey}">${item.label}</button>`).join('')}
+                            </div>
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage is-wide">
+                            <div class="iv-panel">
+                                <div class="iv-algo-head">
+                                    <strong>${example.expression}</strong>
+                                    <span>第 ${step + 1} / ${example.steps.length} 步</span>
+                                </div>
+                                <div class="iv-token-row" aria-label="表达式 token">
+                                    ${example.tokens.map((token, index) => `<span class="iv-token${activeSet.has(index) ? ' is-active' : ''}">${token}</span>`).join('')}
+                                </div>
+                                <div class="iv-eval-board">
+                                    ${example.steps.map((item, index) => `<div class="iv-eval-step${index === step ? ' is-active' : ''}${index < step ? ' is-done' : ''}">
+                                        <span>步骤 ${index + 1}</span>
+                                        <strong>${item.result}</strong>
+                                    </div>`).join('')}
+                                </div>
+                                ${renderVariableStrip(varItems)}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind() {
+                    host.querySelectorAll('[data-example]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            if (visual) visual.stop();
+                            key = button.getAttribute('data-example');
+                            createVisual();
+                            visual.draw();
+                        });
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function buildBranchSteps(score) {
+        const branches = [
+            { label: 'score >= 90', pass: score >= 90, output: '优秀' },
+            { label: 'score >= 80', pass: score >= 80, output: '良好' },
+            { label: 'score >= 60', pass: score >= 60, output: '及格' }
+        ];
+        const steps = [{
+            active: -1,
+            selected: -1,
+            done: [],
+            output: '等待判断',
+            text: `输入 score = ${score}，程序将从上到下检查 if / else if 条件。`
+        }];
+
+        for (let index = 0; index < branches.length; index += 1) {
+            const branch = branches[index];
+            steps.push({
+                active: index,
+                selected: branch.pass ? index : -1,
+                done: rangeIndexes(0, index - 1),
+                output: branch.pass ? branch.output : '继续向下',
+                text: `检查 ${branch.label}：${branch.pass ? `成立，执行“${branch.output}”分支，然后跳过后面所有 else if。` : '不成立，继续检查下一条分支。'}`
+            });
+
+            if (branch.pass) {
+                steps.push({
+                    active: -1,
+                    selected: index,
+                    done: rangeIndexes(0, index),
+                    output: branch.output,
+                    text: `分支选择结束，最终输出：${branch.output}。`
+                });
+                return { branches, steps };
+            }
+        }
+
+        steps.push({
+            active: 3,
+            selected: 3,
+            done: rangeIndexes(0, branches.length - 1),
+            output: '不及格',
+            text: '所有条件都不成立，进入最后的 else 分支。'
+        });
+        steps.push({
+            active: -1,
+            selected: 3,
+            done: rangeIndexes(0, branches.length - 1),
+            output: '不及格',
+            text: '分支选择结束，最终输出：不及格。'
+        });
+
+        return { branches, steps };
+    }
+
+    function initBranchFlow(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        let score = Number(element.getAttribute('data-score') || 76);
+        let model = buildBranchSteps(score);
+        let visual;
+
+        function createVisual() {
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放判断',
+                interval: 900,
+                getLength: () => model.steps.length,
+                render(step, helpers) {
+                    const current = model.steps[step];
+                    const rows = model.branches.concat([{ label: 'else', pass: true, output: '不及格' }]);
+
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            <label class="iv-field">score
+                                <input type="range" min="0" max="100" value="${score}" data-role="score-range">
+                                <input type="number" min="0" max="100" value="${score}" data-role="score-number">
+                            </label>
+                            ${helpers.controls}
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage">
+                            <div class="iv-code-panel">${renderCode([
+                                'if (score &gt;= 90) printf("优秀");',
+                                'else if (score &gt;= 80) printf("良好");',
+                                'else if (score &gt;= 60) printf("及格");',
+                                'else printf("不及格");'
+                            ], current.active < 0 ? current.selected : current.active)}</div>
+                            <div class="iv-panel">
+                                <div class="iv-branch-board">
+                                    ${rows.map((row, index) => {
+                                        const isSelected = current.selected === index;
+                                        const isActive = current.active === index;
+                                        const isDone = current.done.includes(index);
+                                        return `<div class="iv-branch-row${isSelected ? ' is-selected' : ''}${isActive ? ' is-active' : ''}${isDone ? ' is-done' : ''}">
+                                            <span>${row.label}</span>
+                                            <strong>${row.output}</strong>
+                                            <em>${index === 3 ? '兜底' : (row.pass ? '真' : '假')}</em>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: 'score', value: score, hot: true },
+                                    { label: '输出', value: current.output }
+                                ])}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind({ stop }) {
+                    const rangeInput = host.querySelector('[data-role="score-range"]');
+                    const numberInput = host.querySelector('[data-role="score-number"]');
+                    const applyScore = value => {
+                        if (visual) visual.stop();
+                        score = Math.max(0, Math.min(100, Number(value) || 0));
+                        model = buildBranchSteps(score);
+                        stop();
+                        createVisual();
+                        visual.draw();
+                    };
+                    rangeInput.addEventListener('input', event => applyScore(event.target.value));
+                    numberInput.addEventListener('change', event => applyScore(event.target.value));
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function buildLoopSteps(limit) {
+        const steps = [{
+            phase: 'init',
+            line: 0,
+            i: 1,
+            output: [],
+            text: '先执行初始化表达式 int i = 1，只执行这一次。'
+        }];
+        const output = [];
+
+        for (let i = 1; i <= limit; i += 1) {
+            steps.push({
+                phase: 'condition',
+                line: 0,
+                i,
+                output: output.slice(),
+                text: `判断 i <= ${limit}：${i} <= ${limit} 为真，进入循环体。`
+            });
+            output.push(i);
+            steps.push({
+                phase: 'body',
+                line: 1,
+                i,
+                output: output.slice(),
+                text: `执行循环体，printf 输出当前 i 的值 ${i}。`
+            });
+            steps.push({
+                phase: 'update',
+                line: 2,
+                i: i + 1,
+                output: output.slice(),
+                text: `执行更新表达式 i++，下一次判断时 i 变为 ${i + 1}。`
+            });
+        }
+
+        steps.push({
+            phase: 'condition',
+            line: 0,
+            i: limit + 1,
+            output: output.slice(),
+            text: `再次判断 i <= ${limit}：${limit + 1} <= ${limit} 为假，循环结束。`
+        });
+        steps.push({
+            phase: 'done',
+            line: 3,
+            i: limit + 1,
+            output: output.slice(),
+            text: `循环退出，最终输出序列为：${output.join(' ')}。`
+        });
+
+        return steps;
+    }
+
+    function initLoopFlow(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        let limit = Number(element.getAttribute('data-limit') || 5);
+        let steps = buildLoopSteps(limit);
+        let visual;
+        const phases = [
+            { key: 'init', label: '初始化', detail: '只执行一次' },
+            { key: 'condition', label: '条件判断', detail: '每轮开始前' },
+            { key: 'body', label: '循环体', detail: '条件为真执行' },
+            { key: 'update', label: '更新', detail: '循环体之后' }
+        ];
+
+        function createVisual() {
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放循环',
+                interval: 760,
+                getLength: () => steps.length,
+                render(step, helpers) {
+                    const current = steps[step];
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            <label class="iv-field">上限 n
+                                <input type="number" min="0" max="8" value="${limit}" data-role="limit">
+                            </label>
+                            ${helpers.controls}
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage">
+                            <div class="iv-code-panel">${renderCode([
+                                `for (int i = 1; i &lt;= ${limit}; i++) {`,
+                                'printf("%d ", i);',
+                                '}',
+                                '继续执行循环后的代码'
+                            ], current.line)}</div>
+                            <div class="iv-panel">
+                                <div class="iv-loop-track">
+                                    ${phases.map(phase => `<div class="iv-phase-card${current.phase === phase.key ? ' is-active' : ''}${current.phase === 'done' ? ' is-muted' : ''}">
+                                        <span>${phase.label}</span>
+                                        <strong>${phase.detail}</strong>
+                                    </div>`).join('')}
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: 'i', value: current.i, hot: current.phase === 'condition' || current.phase === 'update' },
+                                    { label: 'n', value: limit },
+                                    { label: '已输出个数', value: current.output.length }
+                                ])}
+                                <div class="iv-output-strip">
+                                    ${current.output.length ? current.output.map(value => `<span>${value}</span>`).join('') : '<em>尚未输出</em>'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind({ stop }) {
+                    const applyLimit = value => {
+                        if (visual) visual.stop();
+                        limit = Math.max(0, Math.min(8, Number(value) || 0));
+                        steps = buildLoopSteps(limit);
+                        stop();
+                        createVisual();
+                        visual.draw();
+                    };
+                    host.querySelector('[data-role="limit"]').addEventListener('change', event => {
+                        applyLimit(event.target.value);
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function initScopeLookup(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        const queries = {
+            block: {
+                label: '块内 value',
+                title: '在内层块读取 value',
+                layers: [
+                    { name: '内层块', vars: ['value = 300', 'temp = 1'], result: 'value = 300' },
+                    { name: 'test 函数', vars: ['value = 200'], result: '被隐藏' },
+                    { name: '全局区', vars: ['value = 100'], result: '被隐藏' }
+                ],
+                steps: [
+                    { active: 0, found: 0, text: '查找从当前所在的最内层作用域开始。这里已经找到 value = 300。' },
+                    { active: 1, found: 0, text: '外层函数里也有 value，但已经被内层块的同名变量隐藏。' },
+                    { active: 2, found: 0, text: '全局 value 同样存在，但在这个位置不会被使用。' }
+                ]
+            },
+            function: {
+                label: '函数内 value',
+                title: '离开内层块后读取 value',
+                layers: [
+                    { name: '内层块', vars: ['已销毁'], result: '不可见' },
+                    { name: 'test 函数', vars: ['value = 200'], result: 'value = 200' },
+                    { name: '全局区', vars: ['value = 100'], result: '被隐藏' }
+                ],
+                steps: [
+                    { active: 0, found: -1, text: '离开大括号后，块级变量生命周期结束，不能再访问。' },
+                    { active: 1, found: 1, text: '继续向外查找，在函数作用域找到 value = 200。' },
+                    { active: 2, found: 1, text: '全局 value 仍被函数内的同名局部变量隐藏。' }
+                ]
+            },
+            missing: {
+                label: '块外 b',
+                title: '在块外读取 b',
+                layers: [
+                    { name: '内层块', vars: ['b 已销毁'], result: '不可见' },
+                    { name: 'main 函数', vars: ['a = 10'], result: '没有 b' },
+                    { name: '全局区', vars: ['无 b'], result: '没有 b' }
+                ],
+                steps: [
+                    { active: 0, found: -1, text: 'b 只在内层块里定义，离开块后已经不可见。' },
+                    { active: 1, found: -1, text: 'main 函数作用域中没有 b 这个名字。' },
+                    { active: 2, found: -1, text: '全局区也没有 b，编译器会报“未声明的标识符”。' }
+                ]
+            }
+        };
+        let key = 'block';
+        let visual;
+
+        function createVisual() {
+            const query = queries[key] || queries.block;
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放查找',
+                interval: 920,
+                getLength: () => query.steps.length,
+                render(step, helpers) {
+                    const current = query.steps[step];
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            ${helpers.controls}
+                            <div class="iv-control-group">
+                                ${Object.entries(queries).map(([queryKey, item]) => `<button class="iv-tab${queryKey === key ? ' is-active' : ''}" data-query="${queryKey}">${item.label}</button>`).join('')}
+                            </div>
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage">
+                            <div class="iv-code-panel">${renderCode([
+                                'int value = 100;',
+                                'void test() { int value = 200;',
+                                '    { int value = 300; int temp = 1; }',
+                                '    printf("%d", value);',
+                                '}'
+                            ], key === 'block' ? 2 : key === 'function' ? 3 : 4)}</div>
+                            <div class="iv-panel">
+                                <div class="iv-algo-head">
+                                    <strong>${query.title}</strong>
+                                    <span>从内向外查找名字</span>
+                                </div>
+                                <div class="iv-scope-map">
+                                    ${query.layers.map((layer, index) => `<div class="iv-scope-layer${current.active === index ? ' is-active' : ''}${current.found === index ? ' is-found' : ''}${current.found >= 0 && index > current.found ? ' is-shadowed' : ''}">
+                                        <strong>${layer.name}</strong>
+                                        ${layer.vars.map(variable => `<span>${variable}</span>`).join('')}
+                                        <em>${layer.result}</em>
+                                    </div>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind() {
+                    host.querySelectorAll('[data-query]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            if (visual) visual.stop();
+                            key = button.getAttribute('data-query');
+                            createVisual();
+                            visual.draw();
+                        });
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function initMacroExpansion(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        let mode = 'bad';
+        let a = Number(element.getAttribute('data-a') || 2);
+        let visual;
+
+        function buildSteps() {
+            const badResult = a + 1 * a + 1;
+            const goodResult = (a + 1) * (a + 1);
+            if (mode === 'good') {
+                return [
+                    { title: '宏定义', code: '#define SQR(x) ((x) * (x))', text: '给参数和整体都加括号，宏展开后能保持原本的运算边界。', result: '-' },
+                    { title: '调用位置', code: 'SQR(a + 1)', text: `令 a = ${a}，调用 SQR(a + 1)。`, result: '-' },
+                    { title: '预处理展开', code: '((a + 1) * (a + 1))', text: '预处理器只是做文本替换，但括号保护了 a + 1 这个整体。', result: '-' },
+                    { title: '最终求值', code: `(${a} + 1) * (${a} + 1) = ${goodResult}`, text: `最终结果是 ${goodResult}，这才符合“平方”的含义。`, result: goodResult }
+                ];
+            }
+            return [
+                { title: '宏定义', code: '#define SQR(x) x * x', text: '没有括号的宏看起来像函数，实际上只是文本替换。', result: '-' },
+                { title: '调用位置', code: 'SQR(a + 1)', text: `令 a = ${a}，我们期望得到 (a + 1) 的平方。`, result: '-' },
+                { title: '预处理展开', code: 'a + 1 * a + 1', text: '预处理后不是 (a + 1) * (a + 1)，而是 a + 1 * a + 1。', result: '-' },
+                { title: '最终求值', code: `${a} + 1 * ${a} + 1 = ${badResult}`, text: `乘法优先，最终结果是 ${badResult}，与真正平方 ${(a + 1) * (a + 1)} 不同。`, result: badResult }
+            ];
+        }
+
+        let steps = buildSteps();
+
+        function createVisual() {
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放展开',
+                interval: 980,
+                getLength: () => steps.length,
+                render(step, helpers) {
+                    const current = steps[step];
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            <label class="iv-field">a
+                                <input type="number" min="1" max="9" value="${a}" data-role="macro-a">
+                            </label>
+                            ${helpers.controls}
+                            <div class="iv-control-group">
+                                <button class="iv-tab${mode === 'bad' ? ' is-active' : ''}" data-macro-mode="bad">无括号宏</button>
+                                <button class="iv-tab${mode === 'good' ? ' is-active' : ''}" data-macro-mode="good">安全写法</button>
+                            </div>
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage is-wide">
+                            <div class="iv-panel">
+                                <div class="iv-macro-pipeline">
+                                    ${steps.map((item, index) => `<div class="iv-macro-step${index === step ? ' is-active' : ''}${index < step ? ' is-done' : ''}">
+                                        <span>${item.title}</span>
+                                        <strong>${item.code}</strong>
+                                    </div>`).join('')}
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: 'a', value: a, hot: true },
+                                    { label: '当前结果', value: current.result }
+                                ])}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind({ stop }) {
+                    host.querySelector('[data-role="macro-a"]').addEventListener('change', event => {
+                        if (visual) visual.stop();
+                        a = Math.max(1, Math.min(9, Number(event.target.value) || 1));
+                        steps = buildSteps();
+                        stop();
+                        createVisual();
+                        visual.draw();
+                    });
+                    host.querySelectorAll('[data-macro-mode]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            if (visual) visual.stop();
+                            mode = button.getAttribute('data-macro-mode');
+                            steps = buildSteps();
+                            stop();
+                            createVisual();
+                            visual.draw();
+                        });
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
+    }
+
+    function calculateStructLayout(members) {
+        let offset = 0;
+        const maxAlign = Math.max(...members.map(member => member.align));
+        const segments = [];
+
+        members.forEach(member => {
+            const padding = (member.align - (offset % member.align)) % member.align;
+            if (padding > 0) {
+                segments.push({ kind: 'padding', name: '填充', size: padding, start: offset });
+                offset += padding;
+            }
+            segments.push({ kind: 'member', name: member.name, type: member.type, size: member.size, start: offset });
+            offset += member.size;
+        });
+
+        const tailPadding = (maxAlign - (offset % maxAlign)) % maxAlign;
+        if (tailPadding > 0) {
+            segments.push({ kind: 'padding', name: '尾部填充', size: tailPadding, start: offset });
+            offset += tailPadding;
+        }
+
+        return { segments, size: offset, align: maxAlign, padding: segments.filter(item => item.kind === 'padding').reduce((sum, item) => sum + item.size, 0) };
+    }
+
+    function initStructLayout(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        const layouts = {
+            a: {
+                label: 'struct A',
+                members: [
+                    { name: 'c', type: 'char', size: 1, align: 1 },
+                    { name: 'i', type: 'int', size: 4, align: 4 }
+                ]
+            },
+            bad: {
+                label: 'Bad',
+                members: [
+                    { name: 'a', type: 'char', size: 1, align: 1 },
+                    { name: 'b', type: 'int', size: 4, align: 4 },
+                    { name: 'c', type: 'char', size: 1, align: 1 }
+                ]
+            },
+            good: {
+                label: 'Good',
+                members: [
+                    { name: 'b', type: 'int', size: 4, align: 4 },
+                    { name: 'a', type: 'char', size: 1, align: 1 },
+                    { name: 'c', type: 'char', size: 1, align: 1 }
+                ]
+            },
+            test: {
+                label: 'Test',
+                members: [
+                    { name: 'a', type: 'char', size: 1, align: 1 },
+                    { name: 'b', type: 'double', size: 8, align: 8 },
+                    { name: 'c', type: 'int', size: 4, align: 4 }
+                ]
+            }
+        };
+        let key = element.getAttribute('data-layout') || 'bad';
+        let visual;
+
+        function createVisual() {
+            const layout = layouts[key] || layouts.bad;
+            const result = calculateStructLayout(layout.members);
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放布局',
+                interval: 860,
+                getLength: () => result.segments.length,
+                render(step, helpers) {
+                    const activeSegment = result.segments[step];
+                    const cells = [];
+                    result.segments.forEach((segment, segmentIndex) => {
+                        for (let byte = 0; byte < segment.size; byte += 1) {
+                            cells.push({
+                                segmentIndex,
+                                label: segment.kind === 'padding' ? 'pad' : segment.name,
+                                offset: segment.start + byte,
+                                kind: segment.kind
+                            });
+                        }
+                    });
+
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            ${helpers.controls}
+                            <div class="iv-control-group">
+                                ${Object.entries(layouts).map(([layoutKey, item]) => `<button class="iv-tab${layoutKey === key ? ' is-active' : ''}" data-layout="${layoutKey}">${item.label}</button>`).join('')}
+                            </div>
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage">
+                            <div class="iv-code-panel">${renderCode([
+                                `struct ${layout.label} {`,
+                                ...layout.members.map(member => `${member.type} ${member.name};`),
+                                '};'
+                            ], Math.min(step + 1, layout.members.length))}</div>
+                            <div class="iv-panel">
+                                <div class="iv-algo-head">
+                                    <strong>${layout.label} 内存布局</strong>
+                                    <span>总大小 ${result.size}B，对齐单位 ${result.align}B</span>
+                                </div>
+                                <div class="iv-byte-grid is-struct" style="--byte-count:${Math.min(result.size, 12)}">
+                                    ${cells.map(cell => `<div class="iv-byte-cell${cell.kind === 'padding' ? ' is-padding' : ''}${cell.segmentIndex === step ? ' is-active' : ''}${cell.segmentIndex > step ? ' is-muted' : ''}">
+                                        <strong>${cell.label}</strong>
+                                        <span>+${cell.offset}</span>
+                                    </div>`).join('')}
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: '当前片段', value: `${activeSegment.name} ${activeSegment.size}B`, hot: true },
+                                    { label: '填充字节', value: `${result.padding}B` },
+                                    { label: '成员字节', value: `${layout.members.reduce((sum, member) => sum + member.size, 0)}B` }
+                                ])}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${activeSegment.kind === 'padding'
+                            ? `为了让下一个成员满足对齐要求，编译器在偏移 ${activeSegment.start} 处插入 ${activeSegment.size} 个填充字节。`
+                            : `${activeSegment.type} ${activeSegment.name} 从偏移 ${activeSegment.start} 开始，占 ${activeSegment.size} 个字节。`}</div>
+                    </div>`;
+                },
+                bind() {
+                    host.querySelectorAll('[data-layout]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            if (visual) visual.stop();
+                            key = button.getAttribute('data-layout');
+                            createVisual();
+                            visual.draw();
+                        });
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
     }
 
     function rangeIndexes(start, end) {
@@ -710,6 +1878,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let step = 0;
         let timer = null;
         let steps = config.build(datasets[0].values);
+        let speed = 'normal';
 
         function stop() {
             if (timer) {
@@ -740,7 +1909,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 setStep(step + 1);
-            }, 760);
+            }, getPlaybackDelay(760, speed));
         }
 
         function draw() {
@@ -761,13 +1930,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="iv-control-group">
                         <button class="iv-button" data-action="prev"${step === 0 ? ' disabled' : ''}>上一步</button>
                         <button class="iv-button is-primary" data-action="play">${config.playLabel}</button>
+                        <button class="iv-button" data-action="pause">暂停</button>
                         <button class="iv-button" data-action="next"${step === steps.length - 1 ? ' disabled' : ''}>下一步</button>
                         <button class="iv-button" data-action="reset">重置</button>
                     </div>
                     <div class="iv-control-group">
                         ${datasets.map(dataset => `<button class="iv-tab${dataset.key === datasetKey ? ' is-active' : ''}" data-dataset="${dataset.key}">${dataset.label}</button>`).join('')}
                     </div>
+                    ${renderPlaybackSpeed(speed)}
                     ${renderProgress(step, steps.length)}
+                    ${renderStepBadge(step, steps.length, '帧')}
                 </div>
                 <div class="iv-stage is-algorithm">
                     <div class="iv-code-panel">${renderCode(config.code, current.line)}</div>
@@ -802,7 +1974,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (prevButton) prevButton.addEventListener('click', () => { stop(); setStep(step - 1); });
             if (nextButton) nextButton.addEventListener('click', () => { stop(); setStep(step + 1); });
             host.querySelector('[data-action="play"]').addEventListener('click', play);
+            host.querySelector('[data-action="pause"]').addEventListener('click', stop);
             host.querySelector('[data-action="reset"]').addEventListener('click', () => { stop(); setStep(0); });
+            bindPlaybackSpeed(host, nextSpeed => {
+                speed = nextSpeed;
+                stop();
+                draw();
+            });
             host.querySelectorAll('[data-dataset]').forEach(button => {
                 button.addEventListener('click', () => rebuild(button.getAttribute('data-dataset')));
             });
@@ -984,6 +2162,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let step = 0;
         let timer = null;
         let steps = mode === 'binary' ? buildBinarySearchSteps(values, target) : buildLinearSearchSteps(values, target);
+        let speed = 'normal';
 
         function stop() {
             if (timer) {
@@ -1013,7 +2192,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 setStep(step + 1);
-            }, 820);
+            }, getPlaybackDelay(820, speed));
         }
 
         function draw() {
@@ -1043,10 +2222,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="iv-control-group">
                         <button class="iv-button" data-action="prev"${step === 0 ? ' disabled' : ''}>上一步</button>
                         <button class="iv-button is-primary" data-action="play">${mode === 'binary' ? '播放二分' : '播放线性'}</button>
+                        <button class="iv-button" data-action="pause">暂停</button>
                         <button class="iv-button" data-action="next"${step === steps.length - 1 ? ' disabled' : ''}>下一步</button>
                         <button class="iv-button" data-action="reset">重置</button>
                     </div>
+                    ${renderPlaybackSpeed(speed)}
                     ${renderProgress(step, steps.length)}
+                    ${renderStepBadge(step, steps.length)}
                 </div>
                 <div class="iv-stage is-algorithm">
                     <div class="iv-code-panel">${renderCode(code, current.line)}</div>
@@ -1095,13 +2277,150 @@ document.addEventListener('DOMContentLoaded', function () {
             if (prevButton) prevButton.addEventListener('click', () => { stop(); setStep(step - 1); });
             if (nextButton) nextButton.addEventListener('click', () => { stop(); setStep(step + 1); });
             host.querySelector('[data-action="play"]').addEventListener('click', play);
+            host.querySelector('[data-action="pause"]').addEventListener('click', stop);
             host.querySelector('[data-action="reset"]').addEventListener('click', () => { stop(); setStep(0); });
+            bindPlaybackSpeed(host, nextSpeed => {
+                speed = nextSpeed;
+                stop();
+                draw();
+            });
             host.querySelectorAll('[data-target]').forEach(button => {
                 button.addEventListener('click', () => rebuild(button.getAttribute('data-target')));
             });
         }
 
         draw();
+    }
+
+    function buildRecursionSteps(n) {
+        const steps = [{
+            phase: 'start',
+            line: 0,
+            stack: [],
+            results: [],
+            text: `准备计算 factorial(${n})。递归会先不断调用更小的 factorial，直到遇到 n <= 1。`
+        }];
+        const stack = [];
+
+        for (let current = n; current >= 1; current -= 1) {
+            stack.push({ n: current, waiting: current > 1 ? `${current} * factorial(${current - 1})` : 'return 1' });
+            steps.push({
+                phase: current > 1 ? 'call' : 'base',
+                line: current > 1 ? 3 : 1,
+                stack: stack.map(item => ({ ...item })),
+                results: [],
+                activeN: current,
+                text: current > 1
+                    ? `进入 factorial(${current})：还不能得到结果，需要先计算 factorial(${current - 1})。`
+                    : '进入 factorial(1)：满足终止条件，直接返回 1，递归开始回溯。'
+            });
+        }
+
+        let returned = 1;
+        const results = [{ n: 1, value: 1 }];
+        for (let current = 2; current <= n; current += 1) {
+            returned *= current;
+            stack.pop();
+            results.push({ n: current, value: returned });
+            steps.push({
+                phase: 'return',
+                line: 3,
+                stack: stack.map(item => ({ ...item })),
+                results: results.map(item => ({ ...item })),
+                activeN: current,
+                text: `回到 factorial(${current})：已知 factorial(${current - 1}) = ${Math.floor(returned / current)}，所以返回 ${current} * ${Math.floor(returned / current)} = ${returned}。`
+            });
+        }
+
+        steps.push({
+            phase: 'done',
+            line: 4,
+            stack: [],
+            results: results.map(item => ({ ...item })),
+            text: `递归全部返回，factorial(${n}) = ${returned}。`
+        });
+
+        return steps;
+    }
+
+    function initRecursionTree(element) {
+        const host = element.querySelector('[data-visual-host]') || element;
+        let n = Math.max(1, Math.min(7, Number(element.getAttribute('data-n') || 5)));
+        let steps = buildRecursionSteps(n);
+        let visual;
+        const code = [
+            'int factorial(int n) {',
+            'if (n &lt;= 1) return 1;',
+            '/* 递归出口以上会停止继续调用 */',
+            'return n * factorial(n - 1);',
+            '}'
+        ];
+
+        function createVisual() {
+            visual = initSteppedVisual({
+                host,
+                playLabel: '播放递归',
+                interval: 880,
+                getLength: () => steps.length,
+                render(step, helpers) {
+                    const current = steps[step];
+                    const stackItems = current.stack.length ? current.stack : [];
+                    return `<div class="iv-shell">
+                        <div class="iv-control-bar">
+                            <label class="iv-field">n
+                                <input type="number" min="1" max="7" value="${n}" data-role="recursion-n">
+                            </label>
+                            ${helpers.controls}
+                            ${helpers.progress}
+                        </div>
+                        <div class="iv-stage">
+                            <div class="iv-code-panel">${renderCode(code, current.line)}</div>
+                            <div class="iv-panel">
+                                <div class="iv-algo-head">
+                                    <strong>factorial(${n}) 调用栈</strong>
+                                    <span>${current.phase === 'return' ? '返回回溯' : current.phase === 'done' ? '完成' : '调用展开'}</span>
+                                </div>
+                                <div class="iv-recursion-scene">
+                                    <div class="iv-recursion-stack">
+                                        ${stackItems.length ? stackItems.map((frame, index) => `<div class="iv-recursion-frame${frame.n === current.activeN ? ' is-active' : ''}">
+                                            <span>第 ${index + 1} 层</span>
+                                            <strong>factorial(${frame.n})</strong>
+                                            <em>${frame.waiting}</em>
+                                        </div>`).join('') : '<div class="iv-recursion-empty">调用栈已清空</div>'}
+                                    </div>
+                                    <div class="iv-return-ladder">
+                                        ${current.results.length ? current.results.map(item => `<div class="iv-return-step${item.n === current.activeN ? ' is-active' : ''}">
+                                            <span>factorial(${item.n})</span>
+                                            <strong>${item.value}</strong>
+                                        </div>`).join('') : '<div class="iv-recursion-empty">等待第一个返回值</div>'}
+                                    </div>
+                                </div>
+                                ${renderVariableStrip([
+                                    { label: '当前 n', value: current.activeN || '-' },
+                                    { label: '栈帧数', value: current.stack.length, hot: current.phase === 'call' || current.phase === 'base' },
+                                    { label: '已返回层数', value: current.results.length }
+                                ])}
+                                ${renderTeachingNote('课堂提示：递归不是“同时算完”，而是先压栈等答案，再从出口开始逐层把答案带回去。')}
+                            </div>
+                        </div>
+                        <div class="iv-status" aria-live="polite">${current.text}</div>
+                    </div>`;
+                },
+                bind({ stop }) {
+                    host.querySelector('[data-role="recursion-n"]').addEventListener('change', event => {
+                        if (visual) visual.stop();
+                        n = Math.max(1, Math.min(7, Number(event.target.value) || 1));
+                        steps = buildRecursionSteps(n);
+                        stop();
+                        createVisual();
+                        visual.draw();
+                    });
+                }
+            });
+        }
+
+        createVisual();
+        visual.draw();
     }
 
     function initCallStack(element) {
@@ -1202,8 +2521,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let a = Number(element.getAttribute('data-a') || 12);
         let b = Number(element.getAttribute('data-b') || 10);
         let op = element.getAttribute('data-op') || '&';
-        let step = 7;
+        let step = 0;
         let timer = null;
+        let speed = 'normal';
 
         function calculate() {
             if (mode === 'shift') {
@@ -1258,7 +2578,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         <button class="iv-button" data-action="reset">重置</button>
                         <button class="iv-button" data-action="next">下一列</button>
                         <button class="iv-button is-primary" data-action="play">逐位播放</button>
+                        <button class="iv-button" data-action="pause">暂停</button>
                     </div>
+                    ${renderPlaybackSpeed(speed)}
+                    ${renderStepBadge(activeUntil, 8, '列')}
                 </div>
                 <div class="iv-panel">
                     <div class="iv-status"><strong>${title}</strong>：当前高亮第 ${activeUntil + 1} 列，结果位会随播放逐列显现。</div>
@@ -1311,7 +2634,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     step += 1;
                     draw();
-                }, 420);
+                }, getPlaybackDelay(420, speed));
+            });
+            host.querySelector('[data-action="pause"]').addEventListener('click', stop);
+            bindPlaybackSpeed(host, nextSpeed => {
+                speed = nextSpeed;
+                stop();
+                draw();
             });
         }
 
@@ -1320,11 +2649,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('[data-visual]').forEach(element => {
         const type = element.getAttribute('data-visual');
+        if (type === 'compile-pipeline') initCompilePipeline(element);
+        if (type === 'binary-weights') initBinaryWeights(element);
         if (type === 'pointer-deref') initPointerDeref(element);
         if (type === 'array-pointer') initArrayPointer(element);
         if (type === 'array-access') initArrayAccess(element);
         if (type === 'string-scan') initStringScan(element);
         if (type === 'call-stack') initCallStack(element);
+        if (type === 'recursion-tree') initRecursionTree(element);
         if (type === 'heap-lifecycle') initHeap(element);
         if (type === 'bitwise-playground') initBitwise(element, 'bitwise');
         if (type === 'shift-playground') initBitwise(element, 'shift');
@@ -1332,6 +2664,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (type === 'selection-sort') initSortVisual(element, 'selection');
         if (type === 'linear-search') initSearchVisual(element, 'linear');
         if (type === 'binary-search') initSearchVisual(element, 'binary');
+        if (type === 'variable-lifecycle') initVariableLifecycle(element);
+        if (type === 'expression-trace') initExpressionTrace(element);
+        if (type === 'branch-flow') initBranchFlow(element);
+        if (type === 'loop-flow') initLoopFlow(element);
+        if (type === 'scope-lookup') initScopeLookup(element);
+        if (type === 'macro-expansion') initMacroExpansion(element);
+        if (type === 'struct-layout') initStructLayout(element);
     });
 
 });

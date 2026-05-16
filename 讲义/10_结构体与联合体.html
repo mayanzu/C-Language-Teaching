@@ -228,9 +228,9 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                                     <td>变量是"实体"，用实心点</td>
                                 </tr>
                                 <tr>
-                                    <td><code>-></code>（箭头）</td>
+                                    <td><code>-&gt;</code>（箭头）</td>
                                     <td>通过结构体<strong>指针</strong>访问</td>
-                                    <td><code>p->age</code></td>
+                                    <td><code>p-&gt;age</code></td>
                                     <td>指针是"方向"，用箭头</td>
                                 </tr>
                             </tbody>
@@ -265,7 +265,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
                     <div class="callout-tip">
                         <strong>等价关系：</strong>
-                        <p><code>p->member</code> 等价于 <code>(*p).member</code>。箭头运算符是简化写法，更直观也更常用。</p>
+                        <p><code>p-&gt;member</code> 等价于 <code>(*p).member</code>。箭头运算符是简化写法，更直观也更常用。</p>
                     </div>
                 </div>
             </div>
@@ -334,8 +334,8 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
     <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d本书:\n"</span>, i + <span class="c-number">1</span>);
-        <span class="c-function">printf</span>(<span class="c-string">"  书名: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, books[i].title);
-        <span class="c-function">printf</span>(<span class="c-string">"  作者: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%s"</span>, books[i].author);
+        <span class="c-function">printf</span>(<span class="c-string">"  书名: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%49s"</span>, books[i].title);
+        <span class="c-function">printf</span>(<span class="c-string">"  作者: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%29s"</span>, books[i].author);
         <span class="c-function">printf</span>(<span class="c-string">"  价格: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, <span class="c-operator">&</span>books[i].price);
         <span class="c-function">printf</span>(<span class="c-string">"  页数: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>books[i].pages);
     }
@@ -680,6 +680,12 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                         <strong>为什么要对齐？</strong>
                         <p>CPU访问对齐的内存更快。虽然浪费了一点空间，但换取了更高的运行速度。这是典型的"空间换时间"策略。</p>
                     </div>
+
+                    <div class="concept-visual interactive-visual" data-visual="struct-layout" data-layout="bad">
+                        <div class="visual-caption">结构体内存布局动画</div>
+                        <div class="visual-host" data-visual-host></div>
+                        <p class="visual-note">切换不同成员顺序，逐字节观察成员和填充字节如何组成最终的 <code>sizeof</code> 结果。</p>
+                    </div>
                 </div>
             </div>
 
@@ -823,7 +829,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                         <strong>关键要点：</strong>
                         <ul>
                             <li>链表的最后一个节点，<code>next</code> 必须为 <code>NULL</code>，表示"后面没有了"</li>
-                            <li>遍历时用 <code>p = p->next</code> 走到下一个节点</li>
+                            <li>遍历时用 <code>p = p-&gt;next</code> 走到下一个节点</li>
                             <li>遍历条件 <code>p != NULL</code> 确保不会访问空指针</li>
                             <li>链表节点用 <code>malloc</code> 动态分配，用完必须 <code>free</code></li>
                         </ul>
@@ -1159,7 +1165,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                 <h3>重点回顾</h3>
                 <ul>
                     <li><strong>结构体定义：</strong>用 <code>struct</code> 将多个不同类型的数据组合在一起</li>
-                    <li><strong>成员访问：</strong>变量用 <code>.</code>，指针用 <code>-></code></li>
+                    <li><strong>成员访问：</strong>变量用 <code>.</code>，指针用 <code>-&gt;</code></li>
                     <li><strong>结构体数组：</strong>存储多个同类型结构体，可排序</li>
                     <li><strong>结构体指针：</strong>高效传递，避免复制整个结构体</li>
                     <li><strong>内存对齐：</strong>编译器会在成员间插入填充字节，按大小降序排列可节省空间</li>
@@ -1176,8 +1182,8 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                         <strong>访问方式速查</strong>
                         <ul>
                             <li>结构体变量：<code>stu.name</code></li>
-                            <li>结构体指针：<code>p->name</code></li>
-                            <li>等价关系：<code>p->name ≡ (*p).name</code></li>
+                            <li>结构体指针：<code>p-&gt;name</code></li>
+                            <li>等价关系：<code>p-&gt;name ≡ (*p).name</code></li>
                         </ul>
                     </div>
                     <div class="example-item">
