@@ -868,11 +868,11 @@ pre::-webkit-scrollbar-thumb:hover {
 }
 
 /* 提示框标题 */
-.callout strong,
-.callout-tip strong,
-.callout-warning strong,
-.callout-note strong,
-.callout-success strong {
+.callout > strong,
+.callout-tip > strong,
+.callout-warning > strong,
+.callout-note > strong,
+.callout-success > strong {
     display: block;
     color: var(--color-text-primary);
     font-size: 15px;

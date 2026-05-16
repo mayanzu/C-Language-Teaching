@@ -162,9 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (playButton && !playButton.disabled) {
                     playButton.classList.add('is-pulse-guide');
                     setTimeout(() => playButton.classList.remove('is-pulse-guide'), 5000);
-                    setTimeout(() => {
-                        if (playButton.isConnected) playButton.click();
-                    }, 600);
                 }
 
                 visualObserver.unobserve(visual);
