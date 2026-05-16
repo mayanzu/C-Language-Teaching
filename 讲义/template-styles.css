@@ -1325,23 +1325,25 @@ td code {
     background:
         linear-gradient(135deg, rgba(239, 246, 255, 0.88), rgba(255, 255, 255, 0.96) 48%),
         var(--color-surface);
-    border: 1px solid #C7D9FF;
-    border-radius: var(--radius-md);
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    border: 1.5px solid #C7D9FF;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.07);
 }
 
 .visual-caption {
     margin-bottom: var(--spacing-md);
     color: var(--color-text-primary);
-    font-size: 0.98rem;
+    font-size: 1.02rem;
     font-weight: 700;
+    line-height: 1.45;
 }
 
 .visual-note {
     margin-top: var(--spacing-md);
     margin-bottom: 0;
     color: var(--color-text-secondary);
-    font-size: 0.92rem;
+    font-size: 0.94rem;
+    line-height: 1.55;
 }
 
 .memory-strip {
@@ -1354,36 +1356,45 @@ td code {
 
 .memory-cell {
     display: flex;
-    flex: 1 1 92px;
+    flex: 1 1 100px;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 92px;
-    min-height: 84px;
-    padding: 10px;
+    min-width: 100px;
+    min-height: 88px;
+    padding: 12px;
     background: #FFFFFF;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-sm);
     color: var(--color-text-primary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.memory-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .memory-cell.is-highlight {
-    background: #EFF6FF;
+    background: linear-gradient(135deg, #EFF6FF, #F5F9FF);
     border-color: #60A5FA;
+    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
 }
 
 .memory-cell.is-pointer {
-    background: #ECFDF5;
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
     border-color: #34D399;
+    box-shadow: 0 2px 8px rgba(52, 211, 153, 0.2);
 }
 
 .memory-cell.is-empty {
     background: #F8FAFC;
     border-style: dashed;
+    border-color: #CBD5E1;
     color: var(--color-text-tertiary);
 }
 
 .memory-cell.is-terminator {
-    background: #FFF7ED;
+    background: linear-gradient(135deg, #FFF7ED, #FFFBEB);
     border-color: #FDBA74;
 }
 
@@ -1391,8 +1402,8 @@ td code {
 .cell-index,
 .cell-address {
     color: var(--color-text-tertiary);
-    font-size: 0.74rem;
-    line-height: 1.25;
+    font-size: 0.78rem;
+    line-height: 1.3;
 }
 
 .cell-value {
@@ -1400,9 +1411,9 @@ td code {
     margin: 8px 0;
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.3;
 }
 
 .visual-sequence {
@@ -1565,6 +1576,45 @@ td code {
     background:
         radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 34%),
         linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(239, 246, 255, 0.86));
+    transition: box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+.interactive-visual.is-first-seen {
+    border-color: #60A5FA;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.25), 0 8px 32px rgba(37, 99, 235, 0.14);
+    animation: ivSpotlight 0.6s ease;
+}
+
+@keyframes ivSpotlight {
+    0% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.6), 0 4px 14px rgba(15, 23, 42, 0.06); }
+    50% { box-shadow: 0 0 0 8px rgba(96, 165, 250, 0.15), 0 12px 36px rgba(37, 99, 235, 0.2); }
+    100% { box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.25), 0 8px 32px rgba(37, 99, 235, 0.14); }
+}
+
+.iv-button.is-pulse-guide {
+    animation: ivPulseGuide 0.8s ease 3;
+    position: relative;
+}
+
+.iv-button.is-pulse-guide::after {
+    content: '点击开始';
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1px 6px;
+    color: #1E40AF;
+    font-size: 0.68rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: #DBEAFE;
+    border: 1px solid #60A5FA;
+    border-radius: 4px;
+}
+
+@keyframes ivPulseGuide {
+    0%, 100% { box-shadow: 0 8px 18px rgba(11, 99, 206, 0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(11, 99, 206, 0.1), 0 12px 28px rgba(11, 99, 206, 0.35); }
 }
 
 .interactive-visual::after {
@@ -1607,17 +1657,17 @@ td code {
 
 .iv-button,
 .iv-tab {
-    min-height: 36px;
-    padding: 6px 12px;
+    min-height: 38px;
+    padding: 7px 14px;
     color: #0F172A;
     font: inherit;
-    font-size: 0.84rem;
+    font-size: 0.86rem;
     font-weight: 700;
     background: #FFFFFF;
-    border: 1px solid #C7D9FF;
+    border: 1.5px solid #C7D9FF;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .iv-button:hover,
@@ -1745,45 +1795,74 @@ td code {
     align-items: start;
     min-height: 30px;
     padding: 5px 8px;
-    color: #334155;
+    color: #475569;
     font-family: var(--font-mono);
-    font-size: 0.82rem;
-    line-height: 1.45;
+    font-size: 0.84rem;
+    line-height: 1.5;
     border-radius: var(--radius-sm);
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .iv-code-line::before {
     content: attr(data-line);
     color: #94A3B8;
+    font-weight: 500;
 }
 
 .iv-code-line.is-active {
     color: #0F172A;
-    background: #E0F2FE;
-    box-shadow: inset 3px 0 0 #0EA5E9;
+    font-weight: 600;
+    background: linear-gradient(135deg, #E0F2FE, #DBEAFE);
+    box-shadow: inset 3px 0 0 #0EA5E9, 0 2px 8px rgba(14, 165, 233, 0.12);
+    border-radius: var(--radius-sm);
+}
+
+.iv-code-line.is-active::before {
+    color: #0EA5E9;
+    font-weight: 700;
+}
+
+/* 代码文本容器：将高亮 span 包裹在内，防止 grid 布局拆散 tokens */
+.iv-code-text {
+    display: block;
+    overflow: hidden;
 }
 
 .iv-status {
-    min-height: 48px;
-    padding: var(--spacing-sm) var(--spacing-md);
-    color: #1E3A8A;
-    font-size: 0.92rem;
-    line-height: 1.55;
-    background: #EFF6FF;
-    border: 1px solid #BFDBFE;
+    min-height: 52px;
+    padding: var(--spacing-md) var(--spacing-md);
+    color: #0F172A;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.65;
+    background: linear-gradient(135deg, #EFF6FF, #F0F9FF);
+    border: 1.5px solid #93C5FD;
     border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
+}
+
+.iv-status code {
+    font-size: 0.95rem;
+    padding: 2px 6px;
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 4px;
 }
 
 .iv-teaching-note {
     margin-top: var(--spacing-sm);
-    padding: 9px 12px;
-    color: #0F766E;
-    font-size: 0.84rem;
-    font-weight: 700;
-    line-height: 1.55;
-    background: #ECFDF5;
-    border: 1px solid #99F6E4;
+    padding: 10px 14px;
+    color: #065F46;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
+    border: 1px solid #A7F3D0;
     border-radius: var(--radius-sm);
+    position: relative;
+}
+
+.iv-teaching-note::before {
+    content: '💡 ';
 }
 
 .iv-progress {
@@ -1813,21 +1892,21 @@ td code {
 }
 
 .iv-memory-card {
-    min-height: 118px;
+    min-height: 120px;
     padding: var(--spacing-md);
     background: #FFFFFF;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-md);
     transition: transform 0.24s ease, border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease;
 }
 
 .iv-memory-card.is-pointer {
-    background: #ECFDF5;
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
     border-color: #34D399;
 }
 
 .iv-memory-card.is-target {
-    background: #EFF6FF;
+    background: linear-gradient(135deg, #EFF6FF, #F5F9FF);
     border-color: #60A5FA;
 }
 
@@ -1835,7 +1914,7 @@ td code {
 .iv-memory-card.is-hot {
     transform: translateY(-3px);
     border-color: #2563EB;
-    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.18);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
 }
 
 .iv-memory-card.is-invalid {
@@ -1846,7 +1925,7 @@ td code {
 
 .iv-memory-title {
     color: var(--color-text-tertiary);
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 700;
 }
 
@@ -1855,8 +1934,15 @@ td code {
     margin: 10px 0 8px;
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.iv-memory-meta {
+    color: var(--color-text-tertiary);
+    font-size: 0.78rem;
+    line-height: 1.4;
 }
 
 .iv-memory-meta {
@@ -1929,26 +2015,26 @@ td code {
 
 .iv-array-cell {
     position: relative;
-    min-height: 100px;
-    padding: 10px;
+    min-height: 104px;
+    padding: 12px;
     background: #FFFFFF;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-md);
-    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
 }
 
 .iv-array-cell.is-selected {
     transform: translateY(-5px);
-    background: #EFF6FF;
+    background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
     border-color: #2563EB;
-    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.16);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
 }
 
 .iv-array-cell::before {
     content: attr(data-index);
     display: block;
     color: var(--color-text-tertiary);
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-weight: 700;
 }
 
@@ -1956,12 +2042,13 @@ td code {
     display: block;
     margin: 9px 0;
     font-family: var(--font-mono);
-    font-size: 1.16rem;
+    font-size: 1.22rem;
+    font-weight: 700;
 }
 
 .iv-array-cell span {
     color: var(--color-text-tertiary);
-    font-size: 0.74rem;
+    font-size: 0.76rem;
 }
 
 .iv-algo-head {
@@ -1978,7 +2065,7 @@ td code {
 
 .iv-algo-head strong {
     color: var(--color-text-primary);
-    font-size: 0.98rem;
+    font-size: 1rem;
 }
 
 .iv-var-strip {
@@ -2012,7 +2099,7 @@ td code {
 
 .iv-var-chip span {
     color: var(--color-text-tertiary);
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 800;
 }
 
@@ -2020,6 +2107,7 @@ td code {
     overflow: hidden;
     color: var(--color-text-primary);
     font-family: var(--font-mono);
+    font-size: 0.9rem;
     font-size: 1rem;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2145,12 +2233,13 @@ td code {
 .iv-bar-value {
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 0.94rem;
+    font-size: 1rem;
+    font-weight: 700;
 }
 
 .iv-bar-index {
     color: var(--color-text-tertiary);
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 800;
 }
 
@@ -2299,8 +2388,8 @@ td code {
 .iv-stack-frame span {
     color: var(--color-text-secondary);
     font-family: var(--font-mono);
-    font-size: 0.82rem;
-    line-height: 1.5;
+    font-size: 0.86rem;
+    line-height: 1.55;
 }
 
 .iv-console {
@@ -2377,7 +2466,7 @@ td code {
 .iv-recursion-frame span,
 .iv-return-step span {
     color: var(--color-text-tertiary);
-    font-size: 0.72rem;
+    font-size: 0.76rem;
     font-weight: 800;
 }
 
@@ -2385,13 +2474,14 @@ td code {
 .iv-return-step strong {
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 0.86rem;
+    font-size: 0.92rem;
+    font-weight: 600;
 }
 
 .iv-recursion-frame em {
     color: var(--color-text-secondary);
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: 0.78rem;
     font-style: normal;
 }
 
@@ -2490,11 +2580,11 @@ td code {
 .iv-byte-cell {
     display: grid;
     gap: 4px;
-    min-height: 88px;
+    min-height: 90px;
     padding: 10px 8px;
     color: var(--color-text-primary);
     background: #F8FAFC;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-sm);
     transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, opacity 0.22s ease;
 }
@@ -2509,20 +2599,25 @@ td code {
 
 .iv-byte-cell strong {
     font-family: var(--font-mono);
-    font-size: 0.84rem;
+    font-size: 0.92rem;
+    font-weight: 700;
 }
 
 .iv-byte-cell span {
     color: var(--color-text-tertiary);
-    font-size: 0.7rem;
+    font-size: 0.74rem;
     font-weight: 700;
 }
 
 .iv-byte-cell.is-active {
     transform: translateY(-4px);
-    background: #EFF6FF;
+    background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
     border-color: #2563EB;
-    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.14);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.16);
+}
+
+.iv-byte-cell.is-active strong {
+    color: #1E40AF;
 }
 
 .iv-byte-cell.is-padding {
@@ -2589,19 +2684,19 @@ td code {
 
 .iv-pipeline-card span {
     color: var(--color-text-tertiary);
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 800;
 }
 
 .iv-pipeline-card strong {
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 0.86rem;
+    font-size: 0.9rem;
 }
 
 .iv-pipeline-card em {
     color: var(--color-text-secondary);
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-style: normal;
     font-weight: 700;
 }
@@ -2738,36 +2833,37 @@ td code {
 .iv-eval-step {
     display: grid;
     gap: 4px;
-    min-height: 78px;
+    min-height: 82px;
     padding: 10px 12px;
     background: #F8FAFC;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-sm);
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .iv-eval-step span {
     color: var(--color-text-tertiary);
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 800;
 }
 
 .iv-eval-step strong {
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 0.88rem;
+    font-size: 0.94rem;
+    font-weight: 600;
     line-height: 1.5;
 }
 
 .iv-eval-step.is-active {
     transform: translateY(-3px);
-    background: #EFF6FF;
+    background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
     border-color: #2563EB;
-    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.14);
 }
 
 .iv-eval-step.is-done {
-    background: #ECFDF5;
+    background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
     border-color: #86EFAC;
 }
 
@@ -2782,10 +2878,10 @@ td code {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) auto;
     gap: 10px;
     align-items: center;
-    min-height: 54px;
-    padding: 10px 12px;
+    min-height: 56px;
+    padding: 11px 12px;
     background: #F8FAFC;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-sm);
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -2840,31 +2936,31 @@ td code {
 .iv-phase-card {
     display: grid;
     gap: 4px;
-    min-height: 72px;
+    min-height: 74px;
     padding: 10px 12px;
     background: #F8FAFC;
-    border: 1px solid #CBD5E1;
+    border: 1.5px solid #CBD5E1;
     border-radius: var(--radius-sm);
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
 }
 
 .iv-phase-card span {
     color: var(--color-text-tertiary);
-    font-size: 0.72rem;
+    font-size: 0.76rem;
     font-weight: 800;
 }
 
 .iv-phase-card strong {
     color: var(--color-text-primary);
-    font-size: 0.84rem;
-    line-height: 1.45;
+    font-size: 0.88rem;
+    line-height: 1.5;
 }
 
 .iv-phase-card.is-active {
     transform: translateY(-2px);
-    background: #EFF6FF;
+    background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
     border-color: #2563EB;
-    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.14);
 }
 
 .iv-phase-card.is-muted {
@@ -2921,14 +3017,14 @@ td code {
 
 .iv-scope-layer strong {
     color: var(--color-text-primary);
-    font-size: 0.84rem;
+    font-size: 0.9rem;
 }
 
 .iv-scope-layer span,
 .iv-scope-layer em {
     color: var(--color-text-secondary);
     font-family: var(--font-mono);
-    font-size: 0.76rem;
+    font-size: 0.8rem;
     font-style: normal;
 }
 
@@ -2968,15 +3064,16 @@ td code {
 
 .iv-macro-step span {
     color: var(--color-text-tertiary);
-    font-size: 0.72rem;
+    font-size: 0.76rem;
     font-weight: 800;
 }
 
 .iv-macro-step strong {
     color: var(--color-text-primary);
     font-family: var(--font-mono);
-    font-size: 0.82rem;
-    line-height: 1.45;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.5;
 }
 
 .iv-macro-step.is-active {

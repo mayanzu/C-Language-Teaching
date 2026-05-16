@@ -139,6 +139,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ============================================
+       2.5 可视化首次出现引导
+       - 首次滚动到可视化组件时添加高亮动画
+       - 自动播放首轮，引导用户理解交互方式
+       ============================================ */
+    (function initFirstSeenGuidance() {
+        const seenVisuals = new Set();
+        const visualObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const visual = entry.target;
+                if (seenVisuals.has(visual)) return;
+                seenVisuals.add(visual);
+
+                visual.classList.add('is-first-seen');
+                setTimeout(() => visual.classList.remove('is-first-seen'), 800);
+
+                const host = visual.querySelector('[data-visual-host]');
+                if (!host || !host.children.length) return;
+
+                const playButton = visual.querySelector('[data-action="play"]');
+                if (playButton && !playButton.disabled) {
+                    playButton.classList.add('is-pulse-guide');
+                    setTimeout(() => playButton.classList.remove('is-pulse-guide'), 5000);
+                    setTimeout(() => {
+                        if (playButton.isConnected) playButton.click();
+                    }, 600);
+                }
+
+                visualObserver.unobserve(visual);
+            });
+        }, { threshold: 0.25 });
+
+        document.querySelectorAll('.interactive-visual').forEach(visual => {
+            visualObserver.observe(visual);
+        });
+    })();
+
+    /* ============================================
        3. 交互式知识点可视化
        - 通过 data-visual 自动渲染动画组件
        ============================================ */
@@ -160,9 +198,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderCode(lines, activeIndex) {
-        return lines.map((line, index) => (
-            `<div class="iv-code-line${index === activeIndex ? ' is-active' : ''}" data-line="${index + 1}">${line}</div>`
-        )).join('');
+        return lines.map((line, index) => {
+            let highlighted = line;
+            // 1. 转义裸 &（如 &a）→ &amp;，但保留已是实体的 &lt; &gt; &amp; &#NN; 等
+            highlighted = highlighted.replace(/&(?!(?:[a-z]{2,}|#\d+);)/g, '&amp;');
+            // 2. 注释（// ...）
+            highlighted = highlighted.replace(/(\/\/.*$)/gm, '<span class="c-comment">$1</span>');
+            // 3. 关键字
+            highlighted = highlighted.replace(/\b(int|char|double|float|void|return|if|else|for|while|struct|sizeof|NULL)\b/g, '<span class="c-keyword">$1</span>');
+            // 4. 函数名
+            highlighted = highlighted.replace(/\b(printf|scanf|malloc|free|main)(?=\s*\()/g, '<span class="c-function">$1</span>');
+            // 5. 字符字面量 'X'（支持转义字符）
+            highlighted = highlighted.replace(/('(?:\\[\\'nt0]|[^'\\])')/g, '<span class="c-string">$1</span>');
+            // 6. 独立数字
+            highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="c-number">$1</span>');
+            return `<div class="iv-code-line${index === activeIndex ? ' is-active' : ''}" data-line="${index + 1}"><span class="iv-code-text">${highlighted}</span></div>`;
+        }).join('');
     }
 
     function renderProgress(current, total) {
@@ -282,11 +333,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 artifact: 'hello.exe',
                 output: 'Hello, C!',
                 steps: [
-                    { phase: 'source', line: 0, title: '源代码', file: 'hello.c', state: 'ready', text: '先把人能读懂的 C 代码保存成源文件。此时还不能直接交给 CPU 执行。' },
-                    { phase: 'compile', line: 1, title: '编译', file: 'hello.obj', state: 'ready', text: '编译器检查语法，并把每条 C 语句翻译成目标文件中的机器指令片段。' },
-                    { phase: 'link', line: 2, title: '链接', file: 'hello.exe', state: 'ready', text: '链接器把目标文件和库函数连接起来，补齐 printf 等外部函数的位置。' },
-                    { phase: 'load', line: 3, title: '加载', file: '内存', state: 'ready', text: '操作系统把可执行程序加载到内存，准备让 CPU 从入口处开始执行。' },
-                    { phase: 'run', line: 4, title: '运行', file: '控制台', state: 'ready', text: 'CPU 按指令顺序执行，控制台最终显示程序输出。' }
+                    { phase: 'source', line: 0, title: '源代码', file: 'hello.c', state: 'ready', text: '第一步：编写人类能读懂的 C 代码，保存为 .c 源文件。此时还只是一段文本，CPU 不认识。' },
+                    { phase: 'compile', line: 1, title: '编译', file: 'hello.obj', state: 'ready', text: '第二步：编译器检查语法，将 C 语句翻译成机器指令片段，生成 .obj 目标文件。如果语法有错，编译就此卡住。' },
+                    { phase: 'link', line: 2, title: '链接', file: 'hello.exe', state: 'ready', text: '第三步：链接器把目标文件和 printf 所在的库文件拼接成完整的 .exe 可执行程序。' },
+                    { phase: 'load', line: 3, title: '加载', file: '内存', state: 'ready', text: '第四步：操作系统把 .exe 加载到内存，准备好 CPU 运行所需的一切。' },
+                    { phase: 'run', line: 4, title: '运行', file: '控制台', state: 'ready', text: '第五步：CPU 从入口开始逐条执行指令，最终在控制台输出 "Hello, C!"。' }
                 ]
             },
             compileError: {
@@ -295,10 +346,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 artifact: '未生成',
                 output: 'error: expected ;',
                 steps: [
-                    { phase: 'source', line: 0, title: '源代码', file: 'hello.c', state: 'ready', text: '源文件已经写好，但其中一行语句末尾少了分号。' },
-                    { phase: 'compile', line: 1, title: '编译', file: '错误信息', state: 'error', text: '编译器在语法检查阶段发现错误，目标文件不会生成。先看错误行号，再回源代码修改。' },
-                    { phase: 'link', line: 2, title: '链接', file: '跳过', state: 'blocked', text: '没有目标文件，链接步骤无法继续。编译错误必须先修。' },
-                    { phase: 'load', line: 3, title: '加载', file: '跳过', state: 'blocked', text: '可执行文件没有生成，所以操作系统没有程序可加载。' }
+                    { phase: 'source', line: 0, title: '源代码', file: 'hello.c', state: 'ready', text: '源文件写好了，但有一行末尾漏掉了分号——C 语言用分号来分隔语句，少一个都不行。' },
+                    { phase: 'compile', line: 1, title: '编译', file: '错误信息', state: 'error', text: '编译器扫描到语法错误，无法生成目标文件。看错误提示里的行号，回到源代码那一行修正就好。' },
+                    { phase: 'link', line: 2, title: '链接', file: '跳过', state: 'blocked', text: '没有 .obj 目标文件，链接无法进行。编译错误是第一步关卡，必须先修好才能继续。' },
+                    { phase: 'load', line: 3, title: '加载', file: '跳过', state: 'blocked', text: '可执行文件根本没生成，操作系统没有程序可加载。修好编译错误是唯一的出路。' }
                 ]
             },
             linkError: {
@@ -307,10 +358,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 artifact: '未生成',
                 output: 'unresolved symbol',
                 steps: [
-                    { phase: 'source', line: 0, title: '源代码', file: 'main.c', state: 'ready', text: '源代码语法正确，例如声明了一个函数，却没有提供函数定义。' },
-                    { phase: 'compile', line: 1, title: '编译', file: 'main.obj', state: 'ready', text: '单个源文件能编译成目标文件，说明这一阶段的语法检查已经通过。' },
-                    { phase: 'link', line: 2, title: '链接', file: '错误信息', state: 'error', text: '链接器找不到某个函数或库，常见原因是少写函数定义、少加源文件或库配置错误。' },
-                    { phase: 'load', line: 3, title: '加载', file: '跳过', state: 'blocked', text: '链接失败时不会生成最终可执行文件，因此不能运行。' }
+                    { phase: 'source', line: 0, title: '源代码', file: 'main.c', state: 'ready', text: '代码语法正确，编译能通过。但比如你声明了一个函数却忘了写它的实现，链接时就找不到它了。' },
+                    { phase: 'compile', line: 1, title: '编译', file: 'main.obj', state: 'ready', text: '单独编译通过，说明语法没问题。编译只检查单个文件内部，不关心外部函数在哪。' },
+                    { phase: 'link', line: 2, title: '链接', file: '错误信息', state: 'error', text: '链接器在拼接时找不到某个函数的具体实现。常见原因：忘了写函数体、少加了源文件、库没配置对。' },
+                    { phase: 'load', line: 3, title: '加载', file: '跳过', state: 'blocked', text: '链接失败 = 没有可执行文件，自然无法运行。解决办法是补上缺少的函数定义或源文件。' }
                 ]
             },
             runtimeError: {
@@ -319,10 +370,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 artifact: 'app.exe',
                 output: '除以零 / 越界',
                 steps: [
-                    { phase: 'source', line: 0, title: '源代码', file: 'app.c', state: 'ready', text: '代码语法看起来没问题，但逻辑中可能藏着危险输入。' },
-                    { phase: 'compile', line: 1, title: '编译', file: 'app.obj', state: 'ready', text: '编译器只检查语法和类型，不能提前知道所有运行时输入。' },
-                    { phase: 'link', line: 2, title: '链接', file: 'app.exe', state: 'ready', text: '链接成功，程序已经可以启动。' },
-                    { phase: 'run', line: 4, title: '运行', file: '中断', state: 'error', text: '执行过程中出现除以零、数组越界等问题。调试时要看变量值和当前执行语句。' }
+                    { phase: 'source', line: 0, title: '源代码', file: 'app.c', state: 'ready', text: '代码语法和链接都没问题，程序可以跑起来——但这不代表逻辑一定正确。' },
+                    { phase: 'compile', line: 1, title: '编译', file: 'app.obj', state: 'ready', text: '编译器只检查语法和类型配对，无法预知运行时会发生什么（比如用户输入了 0 做除数）。' },
+                    { phase: 'link', line: 2, title: '链接', file: 'app.exe', state: 'ready', text: '链接顺利通过，.exe 文件已生成，双击就能运行。' },
+                    { phase: 'run', line: 4, title: '运行', file: '中断', state: 'error', text: '程序跑到一半崩了——可能是除以零、数组越界、空指针。这类错误最难找，需要逐行排查变量值和执行路径。' }
                 ]
             }
         };
@@ -377,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     { label: '文件/结果', value: current.file },
                                     { label: '最终输出', value: scenario.output }
                                 ])}
-                                ${renderTeachingNote('课堂提示：让学生先判断错误停在哪一层，再决定该看语法、库配置还是运行时变量。')}
+                                ${renderTeachingNote('试试切换不同场景，观察错误分别卡在编译、链接还是运行阶段。学会判断"错误发生在哪一步"是调试的关键技能。')}
                             </div>
                         </div>
                         <div class="iv-status" aria-live="polite">${current.text}</div>
@@ -465,10 +516,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             { label: '当前位权', value: weights[step] },
                             { label: '累计值', value: partial }
                         ])}
-                        ${renderTeachingNote('课堂提示：高亮某一位时，让学生说出“这一位是 1 才加对应位权，是 0 就加 0”。')}
+                        ${renderTeachingNote('点击每一位观察：该位是 1 就加上对应的位权值，是 0 就加 0。8 位全部处理完就得到了十进制结果。')}
                     </div>
                 </div>
-                <div class="iv-status" aria-live="polite">当前查看第 ${step + 1} 位：位权是 ${weights[step]}，这一位是 ${bits[step]}，所以贡献 ${bits[step] ? weights[step] : 0}。从左到右累计到这里得到 ${partial}。</div>
+                <div class="iv-status" aria-live="polite">第 ${step + 1} 位（位权 ${weights[step]}）：这一位是 <strong>${bits[step]}</strong> → 贡献 ${bits[step] ? weights[step] : 0}。累计到当前位得到 ${partial}。${bits[step] ? `<span class="iv-teaching-note" style="display:inline;margin:0 0 0 8px;">位是 1，加上 ${weights[step]}</span>` : `<span class="iv-teaching-note" style="display:inline;margin:0 0 0 8px;">位是 0，不累加</span>`}</div>
             </div>`;
 
             const applyValue = nextValue => {
@@ -511,11 +562,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initPointerDeref(element) {
         const steps = [
-            '先创建普通变量 a，值是 100。',
-            '执行 int *p = &a，p 保存 a 的地址。',
-            '读取 *p 时，程序沿着 p 保存的地址找到 a。',
-            '执行 *p = 200，真正被修改的是 a 这块内存。',
-            'p = NULL 后，p 不再指向有效内存，不能解引用。'
+            '第一步：创建普通变量 a，存入值 100。',
+            '第二步：执行 int *p = &a，p 拿到 a 的内存地址。',
+            '第三步：用 *p 读取时，程序沿着 p 里的地址找到 a，取出 100。',
+            '第四步：执行 *p = 200，表面在改 *p，实际修改的是 a 那块内存。',
+            '第五步：p = NULL 后，p 不再指向任何有效位置，此时 *p 会导致程序崩溃。'
         ];
         const code = ['int a = 100;', 'int *p = &a;', 'printf("%d", *p);', '*p = 200;', 'p = NULL;'];
 
@@ -649,12 +700,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initStringScan(element) {
         const steps = [
-            { index: 0, output: 'H', text: '从 str[0] 开始读取，输出 H。' },
-            { index: 1, output: 'He', text: '继续读取 str[1]，输出 e。' },
-            { index: 2, output: 'Hel', text: '继续读取 str[2]，输出 l。' },
-            { index: 3, output: 'Hell', text: '继续读取 str[3]，输出 l。' },
-            { index: 4, output: 'Hello', text: '继续读取 str[4]，输出 o。' },
-            { index: 5, output: 'Hello', text: '遇到 str[5] 的 \\0，字符串读取停止。' }
+            { index: 0, output: 'H', text: '从 str[0] 开始逐字符输出，首先打印 H。' },
+            { index: 1, output: 'He', text: '继续下一个字符 str[1]，打印 e。每次只前进一格。' },
+            { index: 2, output: 'Hel', text: 'str[2] 是 l，打印后屏幕显示 Hel。' },
+            { index: 3, output: 'Hell', text: 'str[3] 也是 l，字符串还没结束，继续前进。' },
+            { index: 4, output: 'Hello', text: 'str[4] 是 o，此时屏幕显示完整的 Hello。' },
+            { index: 5, output: 'Hello', text: '读到 str[5] 的 \\0（空字符）——这是字符串的"终点标记"。printf 识别到它后停止输出，不会再往后读。' }
         ];
         const chars = ['H', 'e', 'l', 'l', 'o', '\\0'];
 
@@ -786,10 +837,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 address: '0x1000',
                 code: ['int age;', 'age = 18;', 'age = age + 1;', 'printf("%d", age);'],
                 states: [
-                    { line: 0, value: '未定义', bytes: ['??', '??', '??', '??'], active: [0, 1, 2, 3], text: '声明变量时，编译器为 age 分配 4 个字节，但里面原有内容不能当作有效值使用。' },
-                    { line: 1, value: '18', bytes: ['12', '00', '00', '00'], active: [0, 1, 2, 3], text: '赋值 18 后，内存中的 4 个字节共同表示这个 int 值。这里按常见小端序展示。' },
-                    { line: 2, value: '19', bytes: ['13', '00', '00', '00'], active: [0], text: '执行 age = age + 1 时，先读取旧值 18，计算 19，再写回同一块内存。' },
-                    { line: 3, value: '19', bytes: ['13', '00', '00', '00'], active: [0, 1, 2, 3], text: 'printf 只读取变量的当前值，不会改变这块内存。' }
+                    { line: 0, value: '未定义', bytes: ['??', '??', '??', '??'], active: [0, 1, 2, 3], text: '声明变量 age 后，系统分配了 4 字节空间，但里面是随机残留数据，不能直接使用——就像拿到一个空白笔记本，翻开可能是别人写过的东西。' },
+                    { line: 1, value: '18', bytes: ['12', '00', '00', '00'], active: [0, 1, 2, 3], text: '赋值 age = 18 后，4 个字节按小端序存入了 18 的二进制表示（0x12 = 18）。' },
+                    { line: 2, value: '19', bytes: ['13', '00', '00', '00'], active: [0], text: '执行 age = age + 1：先读出旧值 18，加 1 得到 19，再把新值写回去。只有第一个字节从 0x12 变成了 0x13。' },
+                    { line: 3, value: '19', bytes: ['13', '00', '00', '00'], active: [0, 1, 2, 3], text: 'printf 只是"看一眼"变量的值并打印出来，不会修改内存里的内容。' }
                 ]
             },
             double: {
@@ -800,10 +851,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 address: '0x1008',
                 code: ['double height;', 'height = 1.5;', 'height = height + 1.0;', 'printf("%.1f", height);'],
                 states: [
-                    { line: 0, value: '未定义', bytes: ['??', '??', '??', '??', '??', '??', '??', '??'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: 'double 通常占 8 个字节，未初始化时同样不能直接读取。' },
-                    { line: 1, value: '1.5', bytes: ['00', '00', '00', '00', '00', '00', 'F8', '3F'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: '小数会按浮点格式编码，不是把字符 1、点和 5 直接放进内存。' },
-                    { line: 2, value: '2.5', bytes: ['00', '00', '00', '00', '00', '00', '04', '40'], active: [6, 7], text: '浮点加法先在 CPU 中计算，再把新的二进制表示写回变量空间。' },
-                    { line: 3, value: '2.5', bytes: ['00', '00', '00', '00', '00', '00', '04', '40'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: '格式 %.1f 决定显示一位小数，变量本身仍以 double 的二进制格式保存。' }
+                    { line: 0, value: '未定义', bytes: ['??', '??', '??', '??', '??', '??', '??', '??'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: 'double 占 8 个字节，比 int 大一倍。未初始化时同样充满随机数据，不能读取。' },
+                    { line: 1, value: '1.5', bytes: ['00', '00', '00', '00', '00', '00', 'F8', '3F'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: '注意：1.5 不是存成"1"和"5"两个字符，而是按 IEEE 754 浮点标准编码成一串二进制。这就是浮点数的存储方式。' },
+                    { line: 2, value: '2.5', bytes: ['00', '00', '00', '00', '00', '00', '04', '40'], active: [6, 7], text: '加 1.0 后，CPU 按浮点规则算出新值 2.5，编码变化主要体现在最后两个字节。' },
+                    { line: 3, value: '2.5', bytes: ['00', '00', '00', '00', '00', '00', '04', '40'], active: [0, 1, 2, 3, 4, 5, 6, 7], text: '"%.1f" 只是控制显示格式（保留一位小数），变量在内存里的 double 编码不受影响。' }
                 ]
             },
             char: {
@@ -814,10 +865,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 address: '0x1010',
                 code: ['char grade;', "grade = 'A';", "grade = grade + 1;", 'printf("%c", grade);'],
                 states: [
-                    { line: 0, value: '未定义', bytes: ['??'], active: [0], text: 'char 只占 1 个字节，适合保存一个字符编码。' },
-                    { line: 1, value: "'A'", bytes: ['41'], active: [0], text: "字符 'A' 保存的是编码值 65，十六进制就是 0x41。" },
-                    { line: 2, value: "'B'", bytes: ['42'], active: [0], text: "grade + 1 实际是在字符编码上加 1，于是 'A' 变成 'B'。" },
-                    { line: 3, value: "'B'", bytes: ['42'], active: [0], text: 'printf("%c") 会把编码 0x42 按字符形式显示为 B。' }
+                    { line: 0, value: '未定义', bytes: ['??'], active: [0], text: 'char 只占 1 个字节，刚好存一个字符的编码。' },
+                    { line: 1, value: "'A'", bytes: ['41'], active: [0], text: "字符 'A' 存的是 ASCII 编码 65，十六进制就是 0x41——电脑不认识字母，只认识数字。" },
+                    { line: 2, value: "'B'", bytes: ['42'], active: [0], text: "grade + 1 让编码 65 变成 66，对应字符 'B'。这就是为什么字符也能做加减运算。" },
+                    { line: 3, value: "'B'", bytes: ['42'], active: [0], text: 'printf 用 "%c" 格式时，把编码 66（0x42）转回字符显示，屏幕就出现了 B。' }
                 ]
             }
         };
@@ -1561,8 +1612,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         </div>
                         <div class="iv-status" aria-live="polite">${activeSegment.kind === 'padding'
-                            ? `为了让下一个成员满足对齐要求，编译器在偏移 ${activeSegment.start} 处插入 ${activeSegment.size} 个填充字节。`
-                            : `${activeSegment.type} ${activeSegment.name} 从偏移 ${activeSegment.start} 开始，占 ${activeSegment.size} 个字节。`}</div>
+                            ? `填充字节：偏移 ${activeSegment.start} 处，编译器插入 ${activeSegment.size} 个字节的"空洞"，让下一个成员满足对齐要求。这些字节被浪费了——这就是为什么成员排列顺序会影响结构体总大小。`
+                            : `成员 ${activeSegment.type} ${activeSegment.name}：从偏移 ${activeSegment.start} 开始存放，占用 ${activeSegment.size} 个字节。`}</div>
                     </div>`;
                 },
                 bind() {
@@ -2400,7 +2451,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     { label: '栈帧数', value: current.stack.length, hot: current.phase === 'call' || current.phase === 'base' },
                                     { label: '已返回层数', value: current.results.length }
                                 ])}
-                                ${renderTeachingNote('课堂提示：递归不是“同时算完”，而是先压栈等答案，再从出口开始逐层把答案带回去。')}
+                                ${renderTeachingNote('递归的关键理解：函数不断调用自己，每次调用都”暂停”等下一层的结果。到达终止条件后，答案从最底层逐层传回来。就像传话游戏——最后一棒往回传，第一棒才能说出最终答案。')}
                             </div>
                         </div>
                         <div class="iv-status" aria-live="polite">${current.text}</div>
@@ -2425,11 +2476,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initCallStack(element) {
         const steps = [
-            { text: '程序进入 main，调用栈里只有 main 的栈帧。', activeLine: 0, frames: [{ name: 'main()', vars: ['a 尚未创建'], active: true }], console: ['程序开始'] },
-            { text: '创建局部变量 a，值为 5。', activeLine: 1, frames: [{ name: 'main()', vars: ['a = 5', 'b 尚未创建'], active: true }], console: ['程序开始', '调用前: a = 5'] },
-            { text: '调用 doubleIt(a)：main 暂停，x 得到 a 的副本。', activeLine: 2, frames: [{ name: 'main()', vars: ['a = 5', '等待返回值'], active: false }, { name: 'doubleIt(x)', vars: ['x = 5', 'result 尚未创建'], active: true }], console: ['程序开始', '调用前: a = 5', '进入函数: x = 5'] },
-            { text: 'doubleIt 内部计算 result = x * 2，得到 10。', activeLine: 3, frames: [{ name: 'main()', vars: ['a = 5', '等待返回值'], active: false }, { name: 'doubleIt(x)', vars: ['x = 5', 'result = 10'], active: true }], console: ['程序开始', '调用前: a = 5', '进入函数: x = 5', '函数返回: 10'] },
-            { text: '函数返回后 doubleIt 栈帧销毁，返回值赋给 b。', activeLine: 4, frames: [{ name: 'main()', vars: ['a = 5', 'b = 10'], active: true }], console: ['程序开始', '调用前: a = 5', '进入函数: x = 5', '函数返回: 10', '调用后: a = 5, b = 10', '程序结束'] }
+            { text: '程序从 main 开始执行，栈上压入 main 的栈帧——就像打开一本书的第一页。', activeLine: 0, frames: [{ name: 'main()', vars: ['a 尚未创建'], active: true }], console: ['程序开始'] },
+            { text: '在 main 中创建变量 a，赋值为 5。', activeLine: 1, frames: [{ name: 'main()', vars: ['a = 5', 'b 尚未创建'], active: true }], console: ['程序开始', '调用前: a = 5'] },
+            { text: '调用 doubleIt(a)：main 暂停，系统在栈顶为 doubleIt 创建新栈帧，参数 x 得到 a 的副本 5。这就是"传值调用"。', activeLine: 2, frames: [{ name: 'main()', vars: ['a = 5', '等待返回值'], active: false }, { name: 'doubleIt(x)', vars: ['x = 5', 'result 尚未创建'], active: true }], console: ['程序开始', '调用前: a = 5', '进入函数: x = 5'] },
+            { text: 'doubleIt 计算 result = x * 2 = 10。变量 result 只在 doubleIt 的栈帧里存在。', activeLine: 3, frames: [{ name: 'main()', vars: ['a = 5', '等待返回值'], active: false }, { name: 'doubleIt(x)', vars: ['x = 5', 'result = 10'], active: true }], console: ['程序开始', '调用前: a = 5', '进入函数: x = 5', '函数返回: 10'] },
+            { text: 'doubleIt 返回 10，它的栈帧被销毁。返回值赋给 main 中的 b。栈又只剩 main 一帧——就像合上了子函数这一页。', activeLine: 4, frames: [{ name: 'main()', vars: ['a = 5', 'b = 10'], active: true }], console: ['程序开始', '调用前: a = 5', '进入函数: x = 5', '函数返回: 10', '调用后: a = 5, b = 10', '程序结束'] }
         ];
         const code = ['int a = 5;', 'printf("调用前: a = %d", a);', 'int b = doubleIt(a);', 'return x * 2;', 'printf("调用后: a = %d, b = %d", a, b);'];
 
@@ -2466,12 +2517,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initHeap(element) {
         const steps = [
-            { text: '声明指针变量 p，此时还没有可用的堆空间。', line: 0, p: '未初始化', heap: 'none' },
-            { text: 'malloc 在堆区申请 sizeof(int) 字节，并把起始地址返回给 p。', line: 1, p: '0x5000', heap: 'garbage' },
-            { text: '检查 p 是否为 NULL，确认分配成功后才能继续使用。', line: 2, p: '0x5000', heap: 'garbage' },
-            { text: '执行 *p = 42，沿着地址写入堆区那块内存。', line: 3, p: '0x5000', heap: 'value' },
-            { text: 'free(p) 释放堆区空间；此时 p 仍保存旧地址，但旧地址已经不能再用。', line: 4, p: '0x5000', heap: 'freed' },
-            { text: '把 p 置为 NULL，避免后续误用已经释放的地址。', line: 5, p: 'NULL', heap: 'freed' }
+            { text: '声明指针 p，它现在还是"野指针"——没有指向任何合法位置，不能解引用。', line: 0, p: '未初始化', heap: 'none' },
+            { text: 'malloc 在堆区申请了 4 字节空间，返回这块空间的起始地址 0x5000 存进 p。此时堆里的内容是随机垃圾值。', line: 1, p: '0x5000', heap: 'garbage' },
+            { text: '用 if (p == NULL) 检查分配是否成功——如果内存不够，malloc 会返回 NULL。', line: 2, p: '0x5000', heap: 'garbage' },
+            { text: '*p = 42：通过 p 里的地址找到堆区空间，写入 42，垃圾值被覆盖。', line: 3, p: '0x5000', heap: 'value' },
+            { text: 'free(p) 把堆空间还给系统。p 仍然存着 0x5000，但这块内存已经不属于你了——再用就是"悬空指针"。', line: 4, p: '0x5000', heap: 'freed' },
+            { text: 'p = NULL：主动把指针清空，避免之后不小心使用已释放的地址。这是好习惯。', line: 5, p: 'NULL', heap: 'freed' }
         ];
         const code = ['int *p;', 'p = malloc(sizeof(int));', 'if (p == NULL) return 1;', '*p = 42;', 'free(p);', 'p = NULL;'];
 
@@ -2591,7 +2642,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         ${mode === 'shift' ? '' : renderBits('结果', rBits, activeUntil, true)}
                     </div>
                 </div>
-                <p class="visual-note">可以修改数字和运算符，再播放观察每一列如何决定结果。输入按 8 位无符号数显示。</p>
+                <p class="visual-note">修改数字或运算符，观察每一位如何决定最终结果。输入数字按 8 位无符号数处理（0~255）。</p>
             </div>`;
 
             host.querySelector('[data-role="a"]').addEventListener('input', event => {
