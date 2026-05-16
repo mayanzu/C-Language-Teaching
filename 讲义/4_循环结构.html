@@ -770,7 +770,7 @@ for (;;) { }  // 等价于 while(1) { }</code></pre>
                     <tr><td><code>for(i=1; i&lt;=10; i++)</code></td><td>10次</td><td>i=1,2,...,10</td></tr>
                     <tr><td><code>for(i=1; i&lt;=10; i+=2)</code></td><td>5次</td><td>i=1,3,5,7,9</td></tr>
                     <tr><td><code>for(i=10; i&gt;0; i--)</code></td><td>10次</td><td>i=10,9,...,1</td></tr>
-                    <tr><td><code>for(i=0; i&lt;n; i++)<br>&nbsp;&nbsp;for(j=0; j&lt;m; j++)</code></td><td>n*m次</td><td>外层n次×内层m次</td></tr>
+                    <tr><td><code>for(i=0; i&lt;n; i++)</code><br><code>&nbsp;&nbsp;for(j=0; j&lt;m; j++)</code></td><td>n*m次</td><td>外层n次×内层m次</td></tr>
                 </table>
                 <p><strong>速算技巧：</strong>执行次数 = (终值 - 初值 + 步长) / 步长，取整。for循环的三个部分：初始化只执行1次，条件每次循环前判断，更新每次循环后执行。</p>
             </div>

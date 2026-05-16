@@ -3617,18 +3617,18 @@ th:first-child {
 /* 2K/大屏优化 */
 @media screen and (min-width: 1440px) {
     :root {
-        --font-size-base: 18px;
+        --base-font-size: 18px;
         --font-size-h1: 34px;
         --font-size-h2: 26px;
-        --line-height-base: 1.8;
+        --line-height: 1.8;
         --nav-width: 280px;
         --content-max-width: 1100px;
         --content-padding-x: 36px;
     }
 
     body {
-        font-size: var(--font-size-base);
-        line-height: var(--line-height-base);
+        font-size: var(--base-font-size);
+        line-height: var(--line-height);
     }
 
     .tutorial-content {
