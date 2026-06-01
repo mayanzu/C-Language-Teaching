@@ -986,7 +986,7 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
                 <div class="practice-box-title">边学边练 - 指针知识体系</div>
 
                 <div class="question-item">
-                    <p><strong>练习1：</strong> 编写程序，使用指针数组存储5个字符串（"C", "C++", "Java", "Python", "Go"），然后遍历输出每个字符串。</p>
+                    <p><strong>练习1：</strong> 请说明下列指针声明的含义，分清"数组指针""指针数组"和"函数指针"。</p>
                     <ul>
                         <li><code>int (*arr)[10];</code></li>
                         <li><code>int *arr[10];</code></li>
@@ -1019,13 +1019,13 @@ p3 = <span class="c-keyword">NULL</span>;</code></pre>
     <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &n);
 
     <span class="c-keyword">int</span> *arr = (<span class="c-keyword">int</span> *)<span class="c-function">malloc</span>(n * <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-keyword">if</span> (arr == <span class="c-number">0</span>) { <span class="c-function">printf</span>(<span class="c-string">"分配失败\n"</span>); <span class="c-keyword">return</span> <span class="c-number">1</span>; }
+    <span class="c-keyword">if</span> (arr == <span class="c-keyword">NULL</span>) { <span class="c-function">printf</span>(<span class="c-string">"分配失败\n"</span>); <span class="c-keyword">return</span> <span class="c-number">1</span>; }
 
     <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
     <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
 
     <span class="c-function">free</span>(arr);
-    arr = <span class="c-number">0</span>;
+    arr = <span class="c-keyword">NULL</span>;
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                             </div>

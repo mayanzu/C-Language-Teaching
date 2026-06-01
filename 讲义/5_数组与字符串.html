@@ -468,7 +468,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     <span class="c-function">printf</span>(<span class="c-string">"%s\n"</span>, str2);  <span class="c-comment">// Hello</span>
 
     <span class="c-comment">// 注意："Hello"占6个字节：H e l l o \0</span>
-    <span class="c-function">printf</span>(<span class="c-string">"str2的大小: %d\n"</span>, <span class="c-keyword">sizeof</span>(str2));  <span class="c-comment">// 6</span>
+    <span class="c-function">printf</span>(<span class="c-string">"str2的大小: %d\n"</span>, (<span class="c-keyword">int</span>)<span class="c-keyword">sizeof</span>(str2));  <span class="c-comment">// 6</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>

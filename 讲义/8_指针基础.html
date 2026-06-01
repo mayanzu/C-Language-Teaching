@@ -617,8 +617,8 @@ p[i]       // 指针下标法
     <span class="c-keyword">int</span> arr[<span class="c-number">5</span>];
     <span class="c-keyword">int</span> *p = arr;
 
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(arr) = %d\n"</span>, <span class="c-keyword">sizeof</span>(arr));  <span class="c-comment">// 20 (5个int × 4字节)</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(p) = %d\n"</span>, <span class="c-keyword">sizeof</span>(p));        <span class="c-comment">// 8 (指针大小，64位系统)</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(arr) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(arr));  <span class="c-comment">// 20 (5个int × 4字节)</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(p) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(p));        <span class="c-comment">// 8 (指针大小，64位系统)</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>

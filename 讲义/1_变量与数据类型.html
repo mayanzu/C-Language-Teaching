@@ -510,10 +510,10 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"short: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"int: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"long: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"long long: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long long</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"short: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"int: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long long: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long long</span>));
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -827,12 +827,12 @@ if (fabs(a - b) < 0.000001) {
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"char:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"short:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"int:    %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"long:   %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"float:  %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">float</span>));
-    <span class="c-function">printf</span>(<span class="c-string">"double: %d 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"char:   %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"short:  %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">short</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"int:    %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"long:   %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">long</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"float:  %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">float</span>));
+    <span class="c-function">printf</span>(<span class="c-string">"double: %zu 字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>

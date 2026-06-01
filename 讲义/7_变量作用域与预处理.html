@@ -734,7 +734,7 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
 <span class="c-preprocessor">#ifdef</span> WINDOWS
     <span class="c-function">printf</span>(<span class="c-string">"运行在 Windows 系统上\n"</span>);
-<span class="c-preprocessor">#elifdef</span> LINUX
+<span class="c-preprocessor">#elif</span> <span class="c-keyword">defined</span>(LINUX)
     <span class="c-function">printf</span>(<span class="c-string">"运行在 Linux 系统上\n"</span>);
 <span class="c-preprocessor">#else</span>
     <span class="c-function">printf</span>(<span class="c-string">"运行在其他系统上\n"</span>);

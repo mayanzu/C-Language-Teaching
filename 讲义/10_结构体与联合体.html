@@ -661,8 +661,8 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 };
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-function">printf</span>(<span class="c-string">"struct A: %d字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> <span class="c-variable">A</span>));  <span class="c-comment">// 8字节（不是5！）</span>
-    <span class="c-function">printf</span>(<span class="c-string">"struct B: %d字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> <span class="c-variable">B</span>));  <span class="c-comment">// 8字节</span>
+    <span class="c-function">printf</span>(<span class="c-string">"struct A: %zu字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> <span class="c-variable">A</span>));  <span class="c-comment">// 8字节（不是5！）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"struct B: %zu字节\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> <span class="c-variable">B</span>));  <span class="c-comment">// 8字节</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -862,7 +862,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">union</span> <span class="c-variable">Data</span> data;
 
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(union Data) = %lu\n"</span>, <span class="c-keyword">sizeof</span>(data));
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(union Data) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(data));
     <span class="c-comment">// 输出: 20（最大成员 str[20] 的大小）</span>
 
     <span class="c-comment">// 只能使用一个成员</span>

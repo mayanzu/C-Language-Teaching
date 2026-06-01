@@ -750,7 +750,6 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
                     <div class="callout-note">
                         <strong>重要概念：</strong>
                         <p>C语言中的 <code>=</code> 不是数学中的"等于"，而是"赋值"——就像把水倒进杯子里，把右边的值"倒进"左边的变量。</p>
-                    </ul>
                     </div>
                 </div>
                 <div class="table-container">
@@ -1322,13 +1321,13 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 不同类型的字节大小</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(int)    = %u\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));      <span class="c-comment">// 4</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(double) = %u\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));   <span class="c-comment">// 8</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(char)   = %u\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));     <span class="c-comment">// 1</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(int)    = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">int</span>));      <span class="c-comment">// 4</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(double) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">double</span>));   <span class="c-comment">// 8</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(char)   = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-keyword">char</span>));     <span class="c-comment">// 1</span>
 
     <span class="c-comment">// 表达式的类型由操作数决定</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5/2)     = %u\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-number">5</span>/<span class="c-number">2</span>));      <span class="c-comment">// 4 (int)</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5.0/2)   = %u\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-number">5.0</span>/<span class="c-number">2</span>));    <span class="c-comment">// 8 (double)</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5/2)     = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-number">5</span>/<span class="c-number">2</span>));      <span class="c-comment">// 4 (int)</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(5.0/2)   = %zu\n"</span>, <span class="c-keyword">sizeof</span>(<span class="c-number">5.0</span>/<span class="c-number">2</span>));    <span class="c-comment">// 8 (double)</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
