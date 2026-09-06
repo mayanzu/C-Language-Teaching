@@ -7,7 +7,6 @@ class TemplateLoader {
     // 加载题库数据
     async loadQuestions() {
         try {
-            // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
             // 打乱题库顺序
             this.shuffleQuestions();
@@ -15,10 +14,9 @@ class TemplateLoader {
             this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
-            console.warn('加载题库失败:', error.message);
+            console.error('[TemplateLoader] 加载题库失败:', error);
             return [];
         }
     }
@@ -45,24 +43,37 @@ class TemplateLoader {
         
         this.questions = questions.map(q => {
             if (!q || !q.options) return q;
-            // 已经是数组格式，跳过
-            if (Array.isArray(q.options)) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
 
-            // 对象格式：按 A/B/C/D 顺序转为数组
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
             const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
             const arr = [];
             for (const k of letters) {
-                if (k in optsObj) arr.push(optsObj[k]);
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
             }
             if (arr.length === 0) {
-                Object.values(optsObj).forEach(v => arr.push(v));
+                Object.values(norm).forEach(v => arr.push(String(v)));
             }
 
             // 正确答案字母转为索引
             let correct = q.correctAnswer;
             if (typeof correct === 'string') {
-                const up = correct.toUpperCase();
-                const idx = letters.indexOf(up);
+                const idx = letters.indexOf(correct.trim().toUpperCase());
                 correct = idx !== -1 ? idx : 0;
             }
 
@@ -70,7 +81,7 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库数据（用于 file:// 协议支持）
+// 获取内置题库数据（用于 file:// 协议支持）
     getBuiltInQuestions() {
         return [
   {
@@ -131,7 +142,7 @@ class TemplateLoader {
   },
   {
     "id": 8,
-    "question": "以下代码的输出结果是什么？\n\n<C>\nchar str[] = \"Hello\\\\0World\";\nprintf(\"%zu %zu\", strlen(str), sizeof(str));\n</C>",
+    "question": "以下代码的输出结果是什么？\n\n<C>\nchar str[] = \"Hello\\0World\";\nprintf(\"%zu %zu\", strlen(str), sizeof(str));\n</C>",
     "options": ["`5 12`", "`11 12`", "`5 6`", "`11 11`"],
     "correctAnswer": 0,
     "explanation": "这是「strlen与sizeof对含\\\\0字符串的处理」的陷阱！`strlen`遇到第一个`\\0`就停止计数，所以只计算`Hello`的长度5。`sizeof`计算整个数组大小，包括所有字符和末尾的`\\0`：`H,e,l,l,o,\\0,W,o,r,l,d,\\0`共12字节。「易错点」：1) `strlen`统计的是`\\0`之前的字符数；2) `sizeof`统计的是整个数组占用的字节数（含末尾自动添加的`\\0`）；3) 中间的`\\0`是字符串的一部分，但`strlen`不会统计它之后的字符。",
@@ -389,9 +400,8 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
-            this.normalizeQuestions(this.questions);
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
             console.error('导入题库失败:', error);
         }

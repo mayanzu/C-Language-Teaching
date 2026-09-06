@@ -8,13 +8,15 @@ class TemplateLoader {
     async loadQuestions() {
         try {
             this.questions = this.getBuiltInQuestions();
+            // 打乱题库顺序
             this.shuffleQuestions();
+            // 重新分配题目ID（保持1到n的顺序）
             this.reassignQuestionIds();
+            // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
-            console.warn('加载题库失败:', error.message);
+            console.error('[TemplateLoader] 加载题库失败:', error);
             return [];
         }
     }
@@ -34,7 +36,52 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库数据
+    // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引
+    normalizeQuestions(questions) {
+        if (!Array.isArray(questions)) return;
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        
+        this.questions = questions.map(q => {
+            if (!q || !q.options) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
+
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
+            const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
+            const arr = [];
+            for (const k of letters) {
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
+            }
+            if (arr.length === 0) {
+                Object.values(norm).forEach(v => arr.push(String(v)));
+            }
+
+            // 正确答案字母转为索引
+            let correct = q.correctAnswer;
+            if (typeof correct === 'string') {
+                const idx = letters.indexOf(correct.trim().toUpperCase());
+                correct = idx !== -1 ? idx : 0;
+            }
+
+            return Object.assign({}, q, { options: arr, correctAnswer: correct });
+        });
+    }
+
+// 获取内置题库数据
     getBuiltInQuestions() {
         return [
             {
@@ -81,8 +128,8 @@ class TemplateLoader {
     "id": 6,
     "question": "以下代码的输出结果是什么？\n\n<C>\nstruct Data {\n    char *name;\n    int value;\n};\n\nint main() {\n    struct Data a = {\"Hello\", 10};\n    struct Data b = a;\n    b.name[0] = 'h';\n    printf(\"%s\", a.name);\n    return 0;\n}\n</C>",
     "options": ["`hello`", "`Hello`", "未定义行为", "编译错误"],
-    "correctAnswer": 0,
-    "explanation": "这是「结构体浅拷贝」的陷阱！结构体赋值是浅拷贝，指针成员只复制地址，不复制指向的内容。`a.name`和`b.name`指向同一个字符串常量`\"Hello\"`。`b.name[0]='h'`尝试修改字符串常量，这是未定义行为，但如果字符串存储在可修改区域，则`a.name`也会变为`hello`。「易错点」：1) 结构体拷贝只复制指针值，两个指针指向同一内存；2) 修改指针指向的内容会影响所有副本；3) 这称为「浅拷贝问题」，需要深拷贝来解决。",
+    "correctAnswer": 2,
+    "explanation": "这是「结构体浅拷贝」的陷阱！结构体赋值是浅拷贝，指针成员只复制地址，不复制指向的内容。`a.name`和`b.name`指向同一个字符串常量`\"Hello\"`。`b.name[0]='h'`尝试修改字符串常量，这是未定义行为（实测多半崩溃），绝不能选定值`hello`。只有当指针指向可修改数组（如`char str[]=\"Hello\"`，见代码示例）时，修改才合法且`a.name`同步变为`hello`。「易错点」：1) 结构体拷贝只复制指针值，两个指针指向同一内存；2) 修改指针指向的内容会影响所有副本；3) 这称为「浅拷贝问题」，需要深拷贝来解决。",
     "codeExample": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\nstruct Data {\n    char *name;\n    int value;\n};\n\nint main() {\n    /* 浅拷贝问题 */\n    char str[] = \"Hello\";  /* 可修改的数组 */\n    struct Data a = {str, 10};\n    struct Data b = a;  /* 浅拷贝：b.name也指向str */\n    b.name[0] = 'h';   /* 修改了str，a.name也受影响 */\n    printf(\"a.name = %s\\n\", a.name);  /* hello */\n    \n    /* 深拷贝：为b分配独立内存 */\n    char str2[] = \"World\";\n    struct Data c = {str2, 20};\n    struct Data d;\n    d.name = malloc(strlen(c.name) + 1);\n    strcpy(d.name, c.name);  /* 独立副本 */\n    d.value = c.value;\n    d.name[0] = 'w';\n    printf(\"c.name = %s\\n\", c.name);  /* World(不受影响) */\n    free(d.name);\n    return 0;\n}"
 },
             {
@@ -389,12 +436,10 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
-            return true;
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }

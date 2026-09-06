@@ -7,7 +7,6 @@ class TemplateLoader {
     // 加载题库数据
     async loadQuestions() {
         try {
-            // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
             // 打乱题库顺序
             this.shuffleQuestions();
@@ -15,10 +14,9 @@ class TemplateLoader {
             this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
-            console.warn('加载题库失败:', error.message);
+            console.error('[TemplateLoader] 加载题库失败:', error);
             return [];
         }
     }
@@ -45,24 +43,37 @@ class TemplateLoader {
         
         this.questions = questions.map(q => {
             if (!q || !q.options) return q;
-            // 已经是数组格式，跳过
-            if (Array.isArray(q.options)) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
 
-            // 对象格式：按 A/B/C/D 顺序转为数组
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
             const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
             const arr = [];
             for (const k of letters) {
-                if (k in optsObj) arr.push(optsObj[k]);
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
             }
             if (arr.length === 0) {
-                Object.values(optsObj).forEach(v => arr.push(v));
+                Object.values(norm).forEach(v => arr.push(String(v)));
             }
 
             // 正确答案字母转为索引
             let correct = q.correctAnswer;
             if (typeof correct === 'string') {
-                const up = correct.toUpperCase();
-                const idx = letters.indexOf(up);
+                const idx = letters.indexOf(correct.trim().toUpperCase());
                 correct = idx !== -1 ? idx : 0;
             }
 
@@ -70,7 +81,7 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库数据（用于 file:// 协议支持）
+// 获取内置题库数据（用于 file:// 协议支持）
     getBuiltInQuestions() {
         return [
     {
@@ -82,9 +93,9 @@ class TemplateLoader {
             "`5`",
             "`7`"
         ],
-        "correctAnswer": 1,
-        "explanation": "位运算优先级：`^ > & > |`。计算过程：`c ^ d = 3 ^ 4 = 7`，`b & 7 = 2 & 7 = 2`，`a | 2 = 1 | 2 = 3`。",
-        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3, d = 4;\n    int result = a | b & c ^ d;\n    printf(\"%d\\n\", result);  /* 输出: 3 */\n    /* 详细分析: c^d=3^4=7, b&7=2&7=2, a|2=1|2=3 */\n    return 0;\n}"
+        "correctAnswer": 3,
+        "explanation": "位运算优先级：`& > ^ > |`。计算过程：`b & c = 2 & 3 = 2`，`2 ^ d = 2 ^ 4 = 6`，`a | 6 = 1 | 6 = 7`。",
+        "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 1, b = 2, c = 3, d = 4;\n    int result = a | b & c ^ d;\n    printf(\"%d\\n\", result);  /* 输出: 7 */\n    /* 详细分析: b&c=2&3=2, 2^d=2^4=6, a|6=1|6=7 */\n    return 0;\n}"
     },
     {
         "id": 2,
@@ -132,10 +143,10 @@ class TemplateLoader {
             "`num % 2 == 0`",
             "`num / 2 == 0`",
             "`num & 1 == 0`",
-            "`!(num % 2)`"
+            "`num % 2 == 1`"
         ],
         "correctAnswer": 0,
-        "explanation": "`num % 2 == 0` 可以正确判断偶数。注意选项C由于运算符优先级问题，实际是 `num & (1 == 0)`，这是错误的。",
+        "explanation": "`num % 2 == 0` 可以正确判断偶数。注意选项C由于运算符优先级问题，实际是 `num & (1 == 0)`，这是错误的；选项D `num % 2 == 1` 对偶数恒为假（负偶数余0），不能用作偶数判断。",
         "codeExample": "#include <stdio.h>\n\nint main() {\n    int num = 4;\n    if (num % 2 == 0) {\n        printf(\"%d 是偶数\\n\", num);\n    } else {\n        printf(\"%d 是奇数\\n\", num);\n    }\n    return 0;\n}"
     },
     {
@@ -555,12 +566,10 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
-            return true;
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }

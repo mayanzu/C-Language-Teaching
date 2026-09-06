@@ -7,7 +7,6 @@ class TemplateLoader {
     // 加载题库数据
     async loadQuestions() {
         try {
-            // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
             // 打乱题库顺序
             this.shuffleQuestions();
@@ -15,10 +14,9 @@ class TemplateLoader {
             this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
-            console.warn('加载题库失败:', error.message);
+            console.error('[TemplateLoader] 加载题库失败:', error);
             return [];
         }
     }
@@ -38,7 +36,52 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库数据
+    // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引
+    normalizeQuestions(questions) {
+        if (!Array.isArray(questions)) return;
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        
+        this.questions = questions.map(q => {
+            if (!q || !q.options) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
+
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
+            const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
+            const arr = [];
+            for (const k of letters) {
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
+            }
+            if (arr.length === 0) {
+                Object.values(norm).forEach(v => arr.push(String(v)));
+            }
+
+            // 正确答案字母转为索引
+            let correct = q.correctAnswer;
+            if (typeof correct === 'string') {
+                const idx = letters.indexOf(correct.trim().toUpperCase());
+                correct = idx !== -1 ? idx : 0;
+            }
+
+            return Object.assign({}, q, { options: arr, correctAnswer: correct });
+        });
+    }
+
+// 获取内置题库数据
     getBuiltInQuestions() {
         return [
             {
@@ -165,8 +208,8 @@ class TemplateLoader {
     "id": 16,
     "question": "以下代码的输出结果是什么？\n\n<C>\nint arr[] = {10, 20, 30};\nint *p = arr;\nchar *cp = (char*)p;\nprintf(\"%td %td\", p+1 - p, cp+1 - cp);\n</C>",
     "options": ["`1 1`", "`1 4`", "`4 1`", "`4 4`"],
-    "correctAnswer": 1,
-    "explanation": "这是「指针类型决定步长」的陷阱！`p+1-p`中p是`int*`，步长为4字节，差值为1（1个int）。`cp+1-cp`中cp是`char*`，步长为1字节，差值为1（1个char）。但注意：`p+1-p`和`cp+1-cp`的结果类型都是`ptrdiff_t`，值都是1，但含义不同。「易错点」：1) 指针加减以「指向类型的大小」为单位；2) `int*`步长4字节，`char*`步长1字节；3) 同一地址用不同类型指针运算，结果不同。",
+    "correctAnswer": 0,
+    "explanation": "指针相减的结果是元素个数差，与步长无关：`p+1-p`是1个int之差得1，`cp+1-cp`是1个char之差得1，所以输出1 1。想看字节差要用 `(char*)(p+1)-(char*)p` 才得4。",
     "codeExample": "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30};\n    int *p = arr;\n    char *cp = (char*)p;\n    \n    printf(\"p+1 = %p, p = %p\\n\", (void*)(p+1), (void*)p);\n    printf(\"cp+1 = %p, cp = %p\\n\", (void*)(cp+1), (void*)cp);\n    \n    /* int*步长4字节 */\n    printf(\"(char*)(p+1) - (char*)p = %td字节\\n\", \n           (char*)(p+1) - (char*)p);  /* 4 */\n    \n    /* char*步长1字节 */\n    printf(\"cp+1 - cp = %td字节\\n\", cp+1 - cp);  /* 1 */\n    return 0;\n}"
 },
             {
@@ -397,12 +440,10 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
-            return true;
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }

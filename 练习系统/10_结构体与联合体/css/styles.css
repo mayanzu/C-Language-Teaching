@@ -252,6 +252,16 @@ body {
     color: white;
 }
 
+.question-item-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--font-size-sm);
+    color: inherit;
+}
+
 .action-buttons {
     display: flex;
     flex-direction: column;
@@ -797,6 +807,17 @@ body {
     letter-spacing: -0.3px;
 }
 
+.code-language-label {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--color-accent);
+    background: rgba(0, 113, 227, 0.08);
+    border: 1px solid rgba(0, 113, 227, 0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+}
+
 .feedback-section {
     display: flex;
     flex-direction: column;
@@ -1050,7 +1071,7 @@ body {
         --font-size-3xl: 36px;
     }
     
-    .question-text {
+    .question-title {
         font-size: 20px;
         line-height: 1.7;
     }
@@ -1073,7 +1094,7 @@ body {
         --font-size-3xl: 40px;
     }
     
-    .question-text {
+    .question-title {
         font-size: 22px;
         line-height: 1.8;
     }
@@ -1151,9 +1172,9 @@ body {
     }
 }
 
-/* Enhanced 3D Glass Effects */
+/* Enhanced 3D Glass Effects（复用已定义的 elegantFloat，避免引用不存在的关键帧） */
 .option.selected {
-    animation: glassFloat 4s ease-in-out infinite, glassSelectedPulse 3s ease-in-out infinite;
+    animation: elegantFloat 4s ease-in-out infinite;
 }
 
 

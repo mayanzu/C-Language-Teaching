@@ -7,25 +7,17 @@ class TemplateLoader {
 
     // 加载题库数据
     async loadQuestions() {
-        console.log('[TemplateLoader] loadQuestions 被调用');
         try {
-            // 直接使用内置题库数据
-            console.log('[TemplateLoader] 调用 getBuiltInQuestions...');
             this.questions = this.getBuiltInQuestions();
-            console.log('[TemplateLoader] getBuiltInQuestions 返回了', this.questions.length, '题');
             // 打乱题库顺序
-            console.log('[TemplateLoader] 打乱题库顺序...');
             this.shuffleQuestions();
             // 重新分配题目ID（保持1到n的顺序）
             this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
-            console.log('[TemplateLoader] 开始规范化题目...');
             this.normalizeQuestions(this.questions);
-            console.log(`[TemplateLoader] 成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
             console.error('[TemplateLoader] 加载题库失败:', error);
-            console.error('错误堆栈:', error.stack);
             return [];
         }
     }
@@ -52,24 +44,37 @@ class TemplateLoader {
         
         this.questions = questions.map(q => {
             if (!q || !q.options) return q;
-            // 已经是数组格式，跳过
-            if (Array.isArray(q.options)) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
 
-            // 对象格式：按 A/B/C/D 顺序转为数组
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
             const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
             const arr = [];
             for (const k of letters) {
-                if (k in optsObj) arr.push(optsObj[k]);
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
             }
             if (arr.length === 0) {
-                Object.values(optsObj).forEach(v => arr.push(v));
+                Object.values(norm).forEach(v => arr.push(String(v)));
             }
 
             // 正确答案字母转为索引
             let correct = q.correctAnswer;
             if (typeof correct === 'string') {
-                const up = correct.toUpperCase();
-                const idx = letters.indexOf(up);
+                const idx = letters.indexOf(correct.trim().toUpperCase());
                 correct = idx !== -1 ? idx : 0;
             }
 
@@ -77,7 +82,7 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库数据（用于 file:// 协议支持）
+// 获取内置题库数据（用于 file:// 协议支持）
     getBuiltInQuestions() {
         console.log('[TemplateLoader] getBuiltInQuestions 被调用');
         const questions = [
@@ -246,8 +251,8 @@ class TemplateLoader {
                     "编译错误",
                     "未定义行为"
                 ],
-                correctAnswer: 2,
-                explanation: "宏展开后变成：`if (x < y) { int t = x; x = y; y = t; };`，注意 `if` 后面跟的是代码块，然后是分号。这会导致编译错误。正确的宏应该使用 `do { ... } while(0)` 包装。",
+                correctAnswer: 0,
+                explanation: "宏展开为 `if (x < y) { int t = x; x = y; y = t; };`，多余的分号是空语句，编译通过，交换后输出10 5。但这种写法在 `if...else` 中会悬空else而编译错误，所以规范宏必须用 `do { ... } while(0)` 包装。",
                 codeExample: "#include <stdio.h>\n\n// 错误的宏定义\n// #define SWAP_WRONG(a, b) { int t = a; a = b; b = t; }\n\n// 正确的宏定义\n#define SWAP_RIGHT(a, b) do { int t = a; a = b; b = t; } while(0)\n\nint main() {\n    int x = 5, y = 10;\n    \n    if (x < y)\n        SWAP_RIGHT(x, y);  // 正确\n    \n    printf(\"%d %d\\n\", x, y);  // 10 5\n    \n    return 0;\n}"
             },
             {
@@ -352,14 +357,14 @@ class TemplateLoader {
                 ],
                 correctAnswer: 1,
                 explanation: "这是**static局部变量生命周期**的陷阱！`static int count=0`「只在第一次调用时初始化」，之后保持值。「执行过程」：1)第一次调用：count初始化为0，不重置，count++得1，输出1；2)第二次：count保持1（不重新初始化），不重置，count++得2，输出2；3)第三次：count保持2，reset为真执行count = 0，然后count++得1，输出1；4)第四次：count保持1，不重置，count++得2，输出2。「关键知识」：static变量初始化语句只执行一次。「易错点」：误以为每次调用都会执行`static int count=0`。",
-                codeExample: "#include <stdio.h>\n\nvoid func(int reset) {\n    static int count = 0;  /* 只初始化一次 */\n    printf(\"进入时count=%d, \", count);\n    \n    if (reset) {\n        count = 0;\n        printf(\"重置, \");\n    }\n    \n    count++;\n    printf(\"输出count=%d\\n\", count);\n}\n\nint main() {\n    printf(\"第1次: \"); func(0);  /* 1 */\n    printf(\"第2次: \"); func(0);  /* 2 */\n    printf(\"第3次: \"); func(1);  /* 重置后1 */\n    printf(\"第4次: \"); func(0);  /* 2 */\n    \n    /* 对比：非static变量 */\n    void func2() {\n        int count = 0;  /* 每次都初始化 */\n        count++;\n        printf(\"%d \", count);  /* 总是1 */\n    }\n    \n    return 0;\n}"
+                codeExample: "#include <stdio.h>\n\nvoid func(int reset) {\n    static int count = 0;  /* 只初始化一次 */\n    printf(\"进入时count=%d, \", count);\n    \n    if (reset) {\n        count = 0;\n        printf(\"重置, \");\n    }\n    \n    count++;\n    printf(\"输出count=%d\\n\", count);\n}\n\nint main() {\n    printf(\"第1次: \"); func(0);  /* 1 */\n    printf(\"第2次: \"); func(0);  /* 2 */\n    printf(\"第3次: \"); func(1);  /* 重置后1 */\n    printf(\"第4次: \"); func(0);  /* 2 */\n    \n    /* 对比：非static变量（须定义在main之外，C不允许函数嵌套定义） */\n    func2();\n    func2();\n    \n    return 0;\n}\n\nvoid func2() {\n    int count = 0;  /* 每次都初始化 */\n    count++;\n    printf(\"%d \", count);  /* 总是1 */\n}",
             },
             {
                 id: 22,
                 question: "以下代码的输出结果是什么？\n\n<C>\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\n\nint main() {\n    int x = 5, y = 10;\n    int z = MAX(x++, y++);\n    printf(\"%d %d %d\", x, y, z);\n    return 0;\n}\n</C>",
                 options: [
                     "`6 11 10`",
-                    "`6 12 10`",
+                    "`6 12 11`",
                     "`7 11 10`",
                     "`6 11 11`"
                 ],
@@ -402,8 +407,8 @@ class TemplateLoader {
                     "`18`",
                     "`11`"
                 ],
-                correctAnswer: 1,
-                explanation: "宏展开为 `5 * (3) + (3)`，按优先级计算：`5 * 3 + 3 = 15 + 3 = 18`。等等，让我重新计算...应该是 `(5 * 3) + 3 = 15 + 6 = 21`。正确的宏应该整体加括号：`#define DOUBLE(x) ((x) + (x))`。",
+                correctAnswer: 2,
+                explanation: "宏展开为 `5 * (3) + (3)`，按优先级计算：`5 * 3 + 3 = 15 + 3 = 18`。正确的宏应该整体加括号：`#define DOUBLE(x) ((x) + (x))`，此时才是 `5 * ((3)+(3)) = 30`。",
                 codeExample: "#include <stdio.h>\n\n#define DOUBLE_WRONG(x) (x) + (x)\n#define DOUBLE_RIGHT(x) ((x) + (x))\n\nint main() {\n    // 错误宏: 5 * DOUBLE_WRONG(3) → 5 * (3) + (3)\n    //         → 5*3 + 3 = 15 + 3 = 18\n    printf(\"DOUBLE_WRONG: %d\\n\", 5 * DOUBLE_WRONG(3));  // 18\n    \n    // 正确宏: 5 * DOUBLE_RIGHT(3) → 5 * ((3) + (3))\n    //         → 5 * 6 = 30\n    printf(\"DOUBLE_RIGHT: %d\\n\", 5 * DOUBLE_RIGHT(3));  // 30\n    \n    return 0;\n}"
             },
             {
@@ -549,8 +554,8 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
             console.error('导入题库失败:', error);
         }

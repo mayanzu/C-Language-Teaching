@@ -7,7 +7,6 @@ class TemplateLoader {
     // 加载题库数据
     async loadQuestions() {
         try {
-            // 直接使用内置题库数据
             this.questions = this.getBuiltInQuestions();
             // 打乱题库顺序
             this.shuffleQuestions();
@@ -15,10 +14,9 @@ class TemplateLoader {
             this.reassignQuestionIds();
             // 规范化题目数据（统一为数组格式）
             this.normalizeQuestions(this.questions);
-            console.log(`成功加载 ${this.questions.length} 道题目（来自内置题库）`);
             return this.questions;
         } catch (error) {
-            console.warn('加载题库失败:', error.message);
+            console.error('[TemplateLoader] 加载题库失败:', error);
             return [];
         }
     }
@@ -38,7 +36,52 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库数据
+    // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引
+    normalizeQuestions(questions) {
+        if (!Array.isArray(questions)) return;
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        
+        this.questions = questions.map(q => {
+            if (!q || !q.options) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
+
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
+            const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
+            const arr = [];
+            for (const k of letters) {
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
+            }
+            if (arr.length === 0) {
+                Object.values(norm).forEach(v => arr.push(String(v)));
+            }
+
+            // 正确答案字母转为索引
+            let correct = q.correctAnswer;
+            if (typeof correct === 'string') {
+                const idx = letters.indexOf(correct.trim().toUpperCase());
+                correct = idx !== -1 ? idx : 0;
+            }
+
+            return Object.assign({}, q, { options: arr, correctAnswer: correct });
+        });
+    }
+
+// 获取内置题库数据
     getBuiltInQuestions() {
         return [
             {
@@ -51,15 +94,15 @@ class TemplateLoader {
             },
             {
         "id": 2,
-        "question": "以下代码的输出是什么？\n\n<C>\nint a = 2147483647;\na = a + 1;\nprintf(\"%d\", a);\n</C>",
+                "question": "在VC++2010（32位补码）环境下，以下代码的输出是什么？\n\n<C>\nint a = 2147483647;\na = a + 1;\nprintf(\"%d\", a);\n</C>",
         "options": ["`2147483648`", "`-2147483648`", "`0`", "未定义行为"],
         "correctAnswer": 1,
-        "explanation": "这是「有符号整数溢出」的经典陷阱！`int`在32位系统上最大值是2147483647（`INT_MAX`），加1后发生溢出，结果回绕到最小值-2147483648（`INT_MIN`）。「易错点」：1) 有符号整数溢出在C标准中是未定义行为，但大多数系统采用补码表示，结果回绕；2) 无符号整数溢出则是明确定义的回绕行为；3) 这种bug很难发现，因为编译器通常不会警告。",
+                "explanation": "这是「有符号整数溢出」的经典陷阱！`int`在32位系统上最大值是2147483647（`INT_MAX`），加1后在VC补码机上回绕到-2147483648（`INT_MIN`）。注意：C标准中这属于未定义行为，不可移植依赖；无符号整数溢出才是明确定义的回绕。",
         "codeExample": "#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    int a = INT_MAX;  /* 2147483647 */\n    printf(\"INT_MAX = %d\\n\", a);\n    printf(\"INT_MAX+1 = %d\\n\", a+1);  /* -2147483648! 回绕 */\n    \n    /* 无符号溢出是明确定义的 */\n    unsigned int b = UINT_MAX;  /* 4294967295 */\n    printf(\"UINT_MAX+1 = %u\\n\", b+1);  /* 0 回绕 */\n    \n    return 0;\n}"
     },
             {
                 "id": 3,
-                "question": "以下代码的输出结果是什么？\n\n<C>\nchar c = 200;\nprintf(\"%d\", c);\n</C>",
+                "question": "假设`char`为有符号（VC默认），以下代码的输出结果是什么？\n\n<C>\nchar c = 200;\nprintf(\"%d\", c);\n</C>",
                 "options": ["`200`", "`-56`", "编译错误", "未定义行为"],
                 "correctAnswer": 1,
                 "explanation": "`char`类型的范围取决于是否有符号。在有符号`char`（大多数平台默认）中，范围是-128到127。200超出了这个范围，发生溢出。200 - 256 = -56，所以输出-56。这是「整数溢出与符号」的经典陷阱。",
@@ -116,9 +159,9 @@ class TemplateLoader {
             {
                 "id": 10,
                 "question": "以下哪个是正确的浮点数常量？",
-                "options": ["`3.14f`", "`3.14d`", "`f3.14`", "`3.14F`"],
+                "options": ["`3.14f`", "`3.14d`", "`f3.14`", "`3.14ff`"],
                 "correctAnswer": 0,
-                "explanation": "`3.14f`是正确的`float`类型常量。`f`或`F`后缀表示`float`类型，不加后缀默认是`double`类型。`d`或`D`后缀不是C语言的合法后缀（那是Java的语法）。",
+                "explanation": "`3.14f`是正确的`float`类型常量（大写F同样合法，故本题D项用双写ff设为干扰）。`f`/`F`后缀表示`float`，不加后缀默认是`double`。`d`/`D`后缀不是C语言合法后缀（那是Java语法）。",
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    float f1 = 3.14f;     /* float常量 */\n    float f2 = 3.14F;     /* 也可以 */\n    double d1 = 3.14;     /* double常量（默认） */\n    double d2 = 3.14l;    /* long double */\n    \n    printf(\"float: %f\\n\", f1);\n    printf(\"double: %lf\\n\", d1);\n    \n    /* sizeof验证 */\n    printf(\"sizeof(3.14f) = %lu\\n\", sizeof(3.14f));  /* 4 */\n    printf(\"sizeof(3.14) = %lu\\n\", sizeof(3.14));    /* 8 */\n    \n    return 0;\n}"
             },
             {
@@ -268,9 +311,9 @@ class TemplateLoader {
             {
                 "id": 29,
                 "question": "以下代码中，哪种初始化方式是错误的？",
-                "options": ["`int a = 0;`", "`int a = {0};`", "`int a(0);`", "`int a{};`（C99后）"],
+                "options": ["`int a = 0;`", "`int a = {0};`", "`int a(0);`", "`int 0a = 0;`"],
                 "correctAnswer": 2,
-                "explanation": "`int a(0);`是C++的初始化语法，不是C语言的语法。C语言使用`=`赋值初始化、`{}`列表初始化。C99后支持`int a = {0};`和`int a = 0;`。",
+                "explanation": "`int a(0);`是C++的初始化语法，不是C语言的语法；`int 0a = 0;`以数字开头同样非法。本题C项最具迷惑性。C语言用`=`或`={}`初始化，如`int a = 0;`和`int a = {0};`都合法。",
                 "codeExample": "#include <stdio.h>\n\nint main() {\n    int a = 0;     /* C语言标准赋值初始化 */\n    int b = {0};   /* C语言列表初始化 */\n    /* int c(0); */ /* C++语法，C语言不支持 */\n    \n    /* C99指定初始化器 */\n    int arr[5] = {[2] = 10};  /* 第3个元素为10，其余为0 */\n    \n    printf(\"a=%d, b=%d\\n\", a, b);\n    printf(\"arr[2]=%d\\n\", arr[2]);\n    \n    return 0;\n}"
             },
             {
@@ -397,12 +440,10 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
-            return true;
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }

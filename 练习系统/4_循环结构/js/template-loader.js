@@ -5,21 +5,20 @@ class TemplateLoader {
         // 移除外部JSON依赖，不再需要dataPath
     }
 
-    // 简化loadQuestions方法，直接使用内置题库
-    loadQuestions() {
+    // 加载题库数据
+    async loadQuestions() {
         try {
-            const questions = this.getBuiltInQuestions();
-            this.validateQuestions(questions);
-            this.questions = questions;
+            this.questions = this.getBuiltInQuestions();
             // 打乱题库顺序
             this.shuffleQuestions();
             // 重新分配题目ID（保持1到n的顺序）
             this.reassignQuestionIds();
-            console.log('成功加载内置题库，共', this.questions.length, '题');
-            return this.questions; // 返回题库数组而不是布尔值
+            // 规范化题目数据（统一为数组格式）
+            this.normalizeQuestions(this.questions);
+            return this.questions;
         } catch (error) {
-            console.error('加载题库失败:', error);
-            throw error; // 抛出错误以便上层处理
+            console.error('[TemplateLoader] 加载题库失败:', error);
+            return [];
         }
     }
 
@@ -38,7 +37,52 @@ class TemplateLoader {
         });
     }
 
-    // 获取内置题库 - 专注于while/do-while循环、break/continue、循环嵌套
+    // 规范化题目：将对象格式的 options 转为数组格式，正确答案转为索引
+    normalizeQuestions(questions) {
+        if (!Array.isArray(questions)) return;
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        
+        this.questions = questions.map(q => {
+            if (!q || !q.options) return q;
+            // 已经是数组格式，仅规范正确答案并转字符串选项
+            if (Array.isArray(q.options)) {
+                let correct = q.correctAnswer;
+                if (typeof correct === 'string') {
+                    correct = letters.indexOf(correct.trim().toUpperCase());
+                    correct = correct !== -1 ? correct : 0;
+                }
+                return Object.assign({}, q, {
+                    options: q.options.map(v => String(v)),
+                    correctAnswer: correct
+                });
+            }
+
+            // 对象格式：键归一化（大小写/空格不敏感）后按 A/B/C/D 顺序转为数组
+            const optsObj = q.options;
+            const norm = {};
+            for (const [k, v] of Object.entries(optsObj)) {
+                norm[String(k).trim().toUpperCase()] = v;
+            }
+            const arr = [];
+            for (const k of letters) {
+                if (Object.hasOwn(norm, k)) arr.push(String(norm[k]));
+            }
+            if (arr.length === 0) {
+                Object.values(norm).forEach(v => arr.push(String(v)));
+            }
+
+            // 正确答案字母转为索引
+            let correct = q.correctAnswer;
+            if (typeof correct === 'string') {
+                const idx = letters.indexOf(correct.trim().toUpperCase());
+                correct = idx !== -1 ? idx : 0;
+            }
+
+            return Object.assign({}, q, { options: arr, correctAnswer: correct });
+        });
+    }
+
+// 获取内置题库 - 专注于while/do-while循环、break/continue、循环嵌套
     getBuiltInQuestions() {
         return [
             // ========== 第1-8题：while循环基础 ==========
@@ -152,8 +196,8 @@ class TemplateLoader {
                 id: 14,
                 question: "以下代码的输出结果是什么？\n\n<C>\nint i = 10;\ndo {\n    printf(\"%d \", i);\n    i -= 3;\n} while (i > 0);\n</C>",
                 options: ["10 7 4 1", "10 7 4", "10 7", "10"],
-                correctAnswer: 1,
-                explanation: "i从10开始，每次减3。输出10(i = 7>0继续)，输出7(i = 4>0继续)，输出4(i = 1>0继续)，输出1(i=-2不大于0停止)。等等重新分析：i = 10输出10，i = 7>0继续输出7，i = 4>0继续输出4，i = 1>0继续输出1，i=-2<=0停止。所以输出10 7 4 1。不对，让我再看：do{print i; i-=3}while(i>0)。i = 10打印10，i变7，7>0继续；i = 7打印7，i变4，4>0继续；i = 4打印4，i变1，1>0继续；i = 1打印1，i变-2，-2不>0停止。输出10 7 4 1。",
+                correctAnswer: 0,
+                explanation: "do-while先执行后判断：i=10打印10→i=7>0继续；i=7打印7→i=4>0继续；i=4打印4→i=1>0继续；i=1打印1→i=-2不>0停止。所以输出10 7 4 1。注意i=1时1>0仍成立，会多打印一次1。",
                 codeExample: "#include <stdio.h>\nint main() {\n    int i = 10;\n    do {\n        printf(\"%d \", i);\n        i -= 3;\n    } while (i > 0);\n    // 输出：10 7 4 1\n    return 0;\n}"
             },
             {
@@ -378,12 +422,10 @@ class TemplateLoader {
     importQuestions(jsonData) {
         try {
             const questions = JSON.parse(jsonData);
-            this.validateQuestions(questions);
-            this.questions = questions;
-            return true;
+            this.normalizeQuestions(questions);
+            this.validateQuestions(this.questions);
         } catch (error) {
-            console.error('导入题库数据失败:', error);
-            return false;
+            console.error('导入题库失败:', error);
         }
     }
 }
