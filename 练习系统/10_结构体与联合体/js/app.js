@@ -9,7 +9,12 @@ class PracticeApp {
         this.isAnswered = false;
         this.currentCodeText = '';
         this.loadFailed = false; // 题库加载失败时重新加载页面
-        this.storageKey = 'c-practice-progress-v1'; // 本页面进度缓存键
+        // 进度缓存键按页面区分，避免多个模块同源部署时互相覆盖
+        let pageKey = 'default';
+        try {
+            pageKey = (location.pathname || document.title || 'default').split('/').filter(Boolean).join('_') || document.title || 'default';
+        } catch (e) { /* file:// 等异常时回退 */ }
+        this.storageKey = 'c-practice-progress-v1:' + pageKey; // 本页面进度缓存键
         
         // 初始化DOM元素
         console.log('[PracticeApp] 初始化DOM元素...');
