@@ -177,7 +177,7 @@
 
 <span class="c-comment">// 示例：定义一个求两数最大值的函数</span>
 <span class="c-keyword">int</span> <span class="c-function">getMax</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
-    <span class="c-keyword">if</span> (a > b) {
+    <span class="c-keyword">if</span> (a &gt; b) {
         <span class="c-keyword">return</span> a;
     } <span class="c-keyword">else</span> {
         <span class="c-keyword">return</span> b;
@@ -200,13 +200,13 @@
 <span class="c-comment">// 2. 无参数、有返回值</span>
 <span class="c-keyword">int</span> <span class="c-function">getInput</span>() {
     <span class="c-keyword">int</span> x;
-    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &x);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;x);
     <span class="c-keyword">return</span> x;
 }
 
 <span class="c-comment">// 3. 有参数、无返回值</span>
 <span class="c-keyword">void</span> <span class="c-function">printLine</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"-"</span>);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -248,7 +248,7 @@
 
 <span class="c-comment">// 函数定义：用指定字符打印分隔线</span>
 <span class="c-keyword">void</span> <span class="c-function">printSeparator</span>(<span class="c-keyword">char</span> ch, <span class="c-keyword">int</span> count) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < count; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; count; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%c"</span>, ch);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -326,8 +326,8 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">isPrime</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">if</span> (n <= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i <= n; i++) {
+    <span class="c-keyword">if</span> (n &lt;= <span class="c-number">1</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i &lt;= n; i++) {
         <span class="c-keyword">if</span> (n % i == <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
     }
     <span class="c-keyword">return</span> <span class="c-number">1</span>;
@@ -498,8 +498,8 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">void</span> <span class="c-function">printTriangle</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= n; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j <= i; j++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt;= n; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">1</span>; j &lt;= i; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"*"</span>);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -612,7 +612,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 <span class="c-comment">// int arr[] 表示接收一个整型数组</span>
 <span class="c-comment">// int n 表示数组长度（数组传参时丢失长度信息，必须额外传入）</span>
 <span class="c-keyword">void</span> <span class="c-function">printArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -621,7 +621,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 <span class="c-comment">// 函数：给数组每个元素翻倍</span>
 <span class="c-comment">// 注意：修改会影响到原数组！这和普通变量的值传递不同</span>
 <span class="c-keyword">void</span> <span class="c-function">doubleArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         arr[i] *= <span class="c-number">2</span>;
     }
 }
@@ -709,7 +709,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 
 <span class="c-comment">// 返回两个数中较大的那个</span>
 <span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
-    <span class="c-keyword">return</span> (a > b) ? a : b;  <span class="c-comment">// return会立即结束函数</span>
+    <span class="c-keyword">return</span> (a &gt; b) ? a : b;  <span class="c-comment">// return会立即结束函数</span>
 }
 
 <span class="c-comment">// 判断是否为偶数</span>
@@ -752,7 +752,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
-    <span class="c-keyword">return</span> (a > b) ? a : b;
+    <span class="c-keyword">return</span> (a &gt; b) ? a : b;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
@@ -774,7 +774,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                 <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
                 <strong>手动模拟递归（二级程序题必备）：</strong>
                 <pre><code>int f(int n) {
-    if (n <= 1) return 1;
+    if (n &lt;= 1) return 1;
     return n * f(n-1);
 }
 // f(4) = 4*f(3) = 4*3*f(2) = 4*3*2*f(1) = 4*3*2*1 = 24</code></pre>
@@ -810,7 +810,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 <span class="c-comment">// 递归求阶乘</span>
 <span class="c-keyword">int</span> <span class="c-function">factorial</span>(<span class="c-keyword">int</span> n) {
     <span class="c-comment">// 终止条件：0! = 1</span>
-    <span class="c-keyword">if</span> (n <= <span class="c-number">1</span>) {
+    <span class="c-keyword">if</span> (n &lt;= <span class="c-number">1</span>) {
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
     <span class="c-comment">// 递归体：n! = n * (n-1)!</span>
@@ -887,7 +887,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 <span class="c-comment">// 斐波那契数列：1, 1, 2, 3, 5, 8, 13, 21, ...</span>
 <span class="c-comment">// 规则：第n项 = 第n-1项 + 第n-2项</span>
 <span class="c-keyword">int</span> <span class="c-function">fibonacci</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">if</span> (n <= <span class="c-number">2</span>) {
+    <span class="c-keyword">if</span> (n &lt;= <span class="c-number">2</span>) {
         <span class="c-keyword">return</span> <span class="c-number">1</span>;  <span class="c-comment">// 前两项都是1</span>
     }
     <span class="c-keyword">return</span> <span class="c-function">fibonacci</span>(n - <span class="c-number">1</span>) + <span class="c-function">fibonacci</span>(n - <span class="c-number">2</span>);
@@ -895,7 +895,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 输出前10项</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt;= <span class="c-number">10</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, <span class="c-function">fibonacci</span>(i));
     }
     <span class="c-comment">// 输出: 1 1 2 3 5 8 13 21 34 55</span>
@@ -922,7 +922,7 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">countDigits</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">if</span> (n < <span class="c-number">10</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;        <span class="c-comment">// 终止条件</span>
+    <span class="c-keyword">if</span> (n &lt; <span class="c-number">10</span>) <span class="c-keyword">return</span> <span class="c-number">1</span>;        <span class="c-comment">// 终止条件</span>
     <span class="c-keyword">return</span> <span class="c-number">1</span> + <span class="c-function">countDigits</span>(n / <span class="c-number">10</span>);  <span class="c-comment">// 去掉最后一位继续数</span>
 }
 
@@ -1100,10 +1100,10 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
 <span class="c-keyword">void</span> <span class="c-function">processScore</span>() {
     <span class="c-keyword">int</span> score;
     <span class="c-function">printf</span>(<span class="c-string">"输入成绩: "</span>);
-    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &score);
+    <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;score);
     <span class="c-keyword">char</span> grade;
-    <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) grade = <span class="c-string">'A'</span>;
-    <span class="c-keyword">else if</span> (score >= <span class="c-number">60</span>) grade = <span class="c-string">'B'</span>;
+    <span class="c-keyword">if</span> (score &gt;= <span class="c-number">90</span>) grade = <span class="c-string">'A'</span>;
+    <span class="c-keyword">else if</span> (score &gt;= <span class="c-number">60</span>) grade = <span class="c-string">'B'</span>;
     <span class="c-keyword">else</span> grade = <span class="c-string">'F'</span>;
     <span class="c-function">printf</span>(<span class="c-string">"等级: %c\n"</span>, grade);
 }</code></pre>
@@ -1114,8 +1114,8 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                         <div class="code-block-title">好的设计</div>
                         <pre><code><span class="c-comment">// 每个函数只做一件事</span>
 <span class="c-keyword">char</span> <span class="c-function">getGrade</span>(<span class="c-keyword">int</span> score) {
-    <span class="c-keyword">if</span> (score >= <span class="c-number">90</span>) <span class="c-keyword">return</span> <span class="c-string">'A'</span>;
-    <span class="c-keyword">else if</span> (score >= <span class="c-number">60</span>) <span class="c-keyword">return</span> <span class="c-string">'B'</span>;
+    <span class="c-keyword">if</span> (score &gt;= <span class="c-number">90</span>) <span class="c-keyword">return</span> <span class="c-string">'A'</span>;
+    <span class="c-keyword">else if</span> (score &gt;= <span class="c-number">60</span>) <span class="c-keyword">return</span> <span class="c-string">'B'</span>;
     <span class="c-keyword">else</span> <span class="c-keyword">return</span> <span class="c-string">'F'</span>;
 }
 
@@ -1192,15 +1192,15 @@ int add(int, int);       // 省略参数名，合法！</code></pre>
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">isPrime</span>(<span class="c-keyword">int</span> n) {
-    <span class="c-keyword">if</span> (n < <span class="c-number">2</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i <= n; i++) {
+    <span class="c-keyword">if</span> (n &lt; <span class="c-number">2</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">2</span>; i * i &lt;= n; i++) {
         <span class="c-keyword">if</span> (n % i == <span class="c-number">0</span>) <span class="c-keyword">return</span> <span class="c-number">0</span>;
     }
     <span class="c-keyword">return</span> <span class="c-number">1</span>;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">50</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt;= <span class="c-number">50</span>; i++) {
         <span class="c-keyword">if</span> (<span class="c-function">isPrime</span>(i)) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, i);
     }
     <span class="c-keyword">return</span> <span class="c-number">0</span>;

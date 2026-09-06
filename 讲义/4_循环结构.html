@@ -571,7 +571,7 @@ for (;;) { }  // 等价于 while(1) { }</code></pre>
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
 
     <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">100</span>; i &lt;= <span class="c-number">200</span>; i++) {
-        <span class="c-keyword">if</span> (i % <span class="c-number">3</span> == <span class="c-number">0</span> && i % <span class="c-number">5</span> != <span class="c-number">0</span>) {
+        <span class="c-keyword">if</span> (i % <span class="c-number">3</span> == <span class="c-number">0</span> &amp;&amp; i % <span class="c-number">5</span> != <span class="c-number">0</span>) {
             <span class="c-function">printf</span>(<span class="c-string">"%-6d"</span>, i);
             count++;
             <span class="c-keyword">if</span> (count % <span class="c-number">5</span> == <span class="c-number">0</span>) {
@@ -1359,7 +1359,7 @@ for (i = 1; i &lt;= 5; i++) {
                     <div class="code-block">
                         <div class="code-block-title">计数循环模式</div>
                         <pre><code><span class="c-comment">// 模式：重复N次</span>
-<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < N; i++) {
+<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; N; i++) {
     <span class="c-comment">// 重复执行的操作</span>
 }</code></pre>
                     </div>
@@ -1376,7 +1376,7 @@ for (i = 1; i &lt;= 5; i++) {
 
 <span class="c-comment">// 常见：读取输入直到特定值</span>
 <span class="c-keyword">int</span> num;
-<span class="c-keyword">while</span> (<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num) == <span class="c-number">1</span> && num != <span class="c-number">-1</span>) {
+<span class="c-keyword">while</span> (<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;num) == <span class="c-number">1</span> &amp;&amp; num != <span class="c-number">-1</span>) {
     <span class="c-comment">// 处理num</span>
 }</code></pre>
                     </div>
@@ -1386,7 +1386,7 @@ for (i = 1; i &lt;= 5; i++) {
                     <div class="code-block">
                         <div class="code-block-title">枚举循环模式</div>
                         <pre><code><span class="c-comment">// 模式：找出1-100中所有7的倍数</span>
-<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">100</span>; i++) {
+<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt;= <span class="c-number">100</span>; i++) {
     <span class="c-keyword">if</span> (i % <span class="c-number">7</span> == <span class="c-number">0</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, i);
     }
@@ -1402,11 +1402,11 @@ for (i = 1; i &lt;= 5; i++) {
                     <div class="code-block">
                         <div class="code-block-title">循环优化示例</div>
                         <pre><code><span class="c-comment">// 不好的写法：每次循环都计算strlen</span>
-<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-function">strlen</span>(str); i++) { ... }
+<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-function">strlen</span>(str); i++) { ... }
 
 <span class="c-comment">// 好的写法：提前计算长度</span>
 <span class="c-keyword">int</span> len = <span class="c-function">strlen</span>(str);
-<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < len; i++) { ... }</code></pre>
+<span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; len; i++) { ... }</code></pre>
                     </div>
 
                     <div class="callout-tip">
@@ -1432,7 +1432,7 @@ for (i = 1; i &lt;= 5; i++) {
                                 <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> num = <span class="c-number">100</span>; num <= <span class="c-number">999</span>; num++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> num = <span class="c-number">100</span>; num &lt;= <span class="c-number">999</span>; num++) {
         <span class="c-keyword">int</span> a = num / <span class="c-number">100</span>;         <span class="c-comment">// 百位</span>
         <span class="c-keyword">int</span> b = num / <span class="c-number">10</span> % <span class="c-number">10</span>;     <span class="c-comment">// 十位</span>
         <span class="c-keyword">int</span> c = num % <span class="c-number">10</span>;          <span class="c-comment">// 个位</span>
@@ -1460,8 +1460,8 @@ for (i = 1; i &lt;= 5; i++) {
     <span class="c-keyword">int</span> num, pos_sum = <span class="c-number">0</span>, neg_sum = <span class="c-number">0</span>;
 
     <span class="c-function">printf</span>(<span class="c-string">"输入整数(0结束): "</span>);
-    <span class="c-keyword">while</span> (<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &num) == <span class="c-number">1</span> && num != <span class="c-number">0</span>) {
-        <span class="c-keyword">if</span> (num > <span class="c-number">0</span>) pos_sum += num;
+    <span class="c-keyword">while</span> (<span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;num) == <span class="c-number">1</span> &amp;&amp; num != <span class="c-number">0</span>) {
+        <span class="c-keyword">if</span> (num &gt; <span class="c-number">0</span>) pos_sum += num;
         <span class="c-keyword">else</span> neg_sum += num;
     }
 

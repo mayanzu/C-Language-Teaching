@@ -106,8 +106,9 @@
 #define PINT2 int*
 
 PINT a, b;     // a和b都是 int*（指针）
-PINT2 a, b;    // a是 int*（指针），b是 int（普通变量！）
-// 因为 #define 是文本替换：int* a, b → int *a, b</code></pre>
+PINT2 c, d;    // c是 int*（指针），d是 int（普通变量！）
+// 因为 #define 是文本替换：int* c, d → int *c, d
+// 注：上下两组请分开理解，写在一起会因a、b重定义而编译报错</code></pre>
             </div>
 
             <div class="callout-warning">
@@ -248,15 +249,15 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">struct</span> <span class="c-variable">Point</span> p1 = {<span class="c-number">3</span>, <span class="c-number">4</span>};
-    <span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p2 = <span class="c-operator">&</span>p1;
+    <span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p2 = <span class="c-operator">&amp;</span>p1;
 
     <span class="c-comment">// 通过变量访问：用 .</span>
     <span class="c-function">printf</span>(<span class="c-string">"p1.x = %d, p1.y = %d\n"</span>, p1.x, p1.y);
 
-    <span class="c-comment">// 通过指针访问：用 -></span>
-    <span class="c-function">printf</span>(<span class="c-string">"p2->x = %d, p2->y = %d\n"</span>, p2->x, p2->y);
+    <span class="c-comment">// 通过指针访问：用 -&gt;</span>
+    <span class="c-function">printf</span>(<span class="c-string">"p2-&gt;x = %d, p2-&gt;y = %d\n"</span>, p2-&gt;x, p2-&gt;y);
 
-    <span class="c-comment">// p2->x 等价于 (*p2).x</span>
+    <span class="c-comment">// p2-&gt;x 等价于 (*p2).x</span>
     <span class="c-function">printf</span>(<span class="c-string">"(*p2).x = %d\n"</span>, (<span class="c-operator">*</span>p2).x);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -332,16 +333,16 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">struct</span> <span class="c-variable">Book</span> books[<span class="c-number">3</span>];
 
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d本书:\n"</span>, i + <span class="c-number">1</span>);
         <span class="c-function">printf</span>(<span class="c-string">"  书名: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%49s"</span>, books[i].title);
         <span class="c-function">printf</span>(<span class="c-string">"  作者: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%29s"</span>, books[i].author);
-        <span class="c-function">printf</span>(<span class="c-string">"  价格: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, <span class="c-operator">&</span>books[i].price);
-        <span class="c-function">printf</span>(<span class="c-string">"  页数: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&</span>books[i].pages);
+        <span class="c-function">printf</span>(<span class="c-string">"  价格: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%f"</span>, <span class="c-operator">&amp;</span>books[i].price);
+        <span class="c-function">printf</span>(<span class="c-string">"  页数: "</span>); <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, <span class="c-operator">&amp;</span>books[i].pages);
     }
 
     <span class="c-function">printf</span>(<span class="c-string">"\n图书列表:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%s - %s, %.2f元, %d页\n"</span>,
             books[i].title, books[i].author,
             books[i].price, books[i].pages);
@@ -389,7 +390,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
     <span class="c-comment">// 遍历输出所有学生信息</span>
     <span class="c-function">printf</span>(<span class="c-string">"姓名\t年龄\t成绩\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%s\t%d\t%.1f\n"</span>, class[i].name, class[i].age, class[i].score);
     }
 
@@ -423,9 +424,9 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
     <span class="c-keyword">int</span> n = <span class="c-keyword">sizeof</span>(class) / <span class="c-keyword">sizeof</span>(class[<span class="c-number">0</span>]);
 
     <span class="c-comment">// 冒泡排序：按成绩降序</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
-            <span class="c-keyword">if</span> (class[j].score < class[j + <span class="c-number">1</span>].score) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (class[j].score &lt; class[j + <span class="c-number">1</span>].score) {
                 <span class="c-comment">// 交换整个结构体</span>
                 <span class="c-keyword">struct</span> <span class="c-variable">Student</span> temp = class[j];
                 class[j] = class[j + <span class="c-number">1</span>];
@@ -435,7 +436,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
     }
 
     <span class="c-function">printf</span>(<span class="c-string">"成绩排名:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"第%d名: %s %.1f分\n"</span>, i + <span class="c-number">1</span>, class[i].name, class[i].score);
     }
 
@@ -475,15 +476,15 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">struct</span> <span class="c-variable">Student</span> stu = {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>};
-    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>p = <span class="c-operator">&</span>stu;
+    <span class="c-keyword">struct</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>p = <span class="c-operator">&amp;</span>stu;
 
     <span class="c-comment">// 通过指针访问成员（两种方式等价）</span>
-    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, p->name);      <span class="c-comment">// 推荐用 -></span>
+    <span class="c-function">printf</span>(<span class="c-string">"姓名: %s\n"</span>, p-&gt;name);      <span class="c-comment">// 推荐用 -&gt;</span>
     <span class="c-function">printf</span>(<span class="c-string">"年龄: %d\n"</span>, (<span class="c-operator">*</span>p).age);    <span class="c-comment">// 等价写法</span>
-    <span class="c-function">printf</span>(<span class="c-string">"成绩: %.1f\n"</span>, p->score);
+    <span class="c-function">printf</span>(<span class="c-string">"成绩: %.1f\n"</span>, p-&gt;score);
 
     <span class="c-comment">// 通过指针修改成员</span>
-    p->age = <span class="c-number">21</span>;
+    p-&gt;age = <span class="c-number">21</span>;
     <span class="c-function">printf</span>(<span class="c-string">"修改后年龄: %d\n"</span>, stu.age);  <span class="c-comment">// 输出: 21</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -516,11 +517,11 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
         <span class="c-keyword">return</span> <span class="c-number">1</span>;
     }
 
-    <span class="c-function">strcpy</span>(p->name, <span class="c-string">"张三"</span>);
-    p->age = <span class="c-number">20</span>;
-    p->score = <span class="c-number">89.5</span>;
+    <span class="c-function">strcpy</span>(p-&gt;name, <span class="c-string">"张三"</span>);
+    p-&gt;age = <span class="c-number">20</span>;
+    p-&gt;score = <span class="c-number">89.5</span>;
 
-    <span class="c-function">printf</span>(<span class="c-string">"%s, %d岁, %.1f分\n"</span>, p->name, p->age, p->score);
+    <span class="c-function">printf</span>(<span class="c-string">"%s, %d岁, %.1f分\n"</span>, p-&gt;name, p-&gt;age, p-&gt;score);
 
     <span class="c-function">free</span>(p);
     p = <span class="c-keyword">NULL</span>;
@@ -549,8 +550,8 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
 <span class="c-keyword">float</span> <span class="c-function">average</span>(<span class="c-keyword">const</span> <span class="c-variable">Student</span> <span class="c-operator">*</span>students, <span class="c-keyword">int</span> n) {
     <span class="c-keyword">float</span> sum = <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
-        sum += (students + i)->score;
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
+        sum += (students + i)-&gt;score;
     }
     <span class="c-keyword">return</span> sum / n;
 }
@@ -600,22 +601,22 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
 <span class="c-comment">// 方式2：指针传递 — 只传地址（效率高，推荐）</span>
 <span class="c-keyword">void</span> <span class="c-function">print_point_ptr</span>(<span class="c-keyword">const</span> <span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p) {
-    <span class="c-function">printf</span>(<span class="c-string">"(%d, %d)\n"</span>, p->x, p->y);
+    <span class="c-function">printf</span>(<span class="c-string">"(%d, %d)\n"</span>, p-&gt;x, p-&gt;y);
 }
 
 <span class="c-comment">// 方式3：通过指针修改结构体</span>
 <span class="c-keyword">void</span> <span class="c-function">move_point</span>(<span class="c-keyword">struct</span> <span class="c-variable">Point</span> <span class="c-operator">*</span>p, <span class="c-keyword">int</span> dx, <span class="c-keyword">int</span> dy) {
-    p->x += dx;
-    p->y += dy;
+    p-&gt;x += dx;
+    p-&gt;y += dy;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">struct</span> <span class="c-variable">Point</span> p = {<span class="c-number">3</span>, <span class="c-number">4</span>};
 
     <span class="c-function">print_point_value</span>(p);    <span class="c-comment">// 值传递</span>
-    <span class="c-function">print_point_ptr</span>(<span class="c-operator">&</span>p);     <span class="c-comment">// 指针传递</span>
+    <span class="c-function">print_point_ptr</span>(<span class="c-operator">&amp;</span>p);     <span class="c-comment">// 指针传递</span>
 
-    <span class="c-function">move_point</span>(<span class="c-operator">&</span>p, <span class="c-number">10</span>, <span class="c-number">20</span>);
+    <span class="c-function">move_point</span>(<span class="c-operator">&amp;</span>p, <span class="c-number">10</span>, <span class="c-number">20</span>);
     <span class="c-function">printf</span>(<span class="c-string">"移动后: (%d, %d)\n"</span>, p.x, p.y);  <span class="c-comment">// 输出: (13, 24)</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -712,7 +713,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
                     </div>
 
                     <div class="callout-tip">
-                        <strong>建议：</strong>结构体成员按大小从大到小排列（double → int → short → char），可以最大程度减少填充字节。</p>
+                        <strong>建议：</strong><p>结构体成员按大小从大到小排列（double → int → short → char），可以最大程度减少填充字节。</p>
                     </div>
                 </div>
             </div>
@@ -805,18 +806,18 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
     <span class="c-variable">Node</span> <span class="c-operator">*</span>n3 = (<span class="c-variable">Node</span> <span class="c-operator">*</span>)<span class="c-function">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-variable">Node</span>));
 
     <span class="c-comment">// 设置数据和连接</span>
-    n1->data = <span class="c-number">10</span>;  n1->next = n2;
-    n2->data = <span class="c-number">20</span>;  n2->next = n3;
-    n3->data = <span class="c-number">30</span>;  n3->next = <span class="c-number">NULL</span>;  <span class="c-comment">// 最后一个节点的next为NULL</span>
+    n1-&gt;data = <span class="c-number">10</span>;  n1-&gt;next = n2;
+    n2-&gt;data = <span class="c-number">20</span>;  n2-&gt;next = n3;
+    n3-&gt;data = <span class="c-number">30</span>;  n3-&gt;next = <span class="c-number">NULL</span>;  <span class="c-comment">// 最后一个节点的next为NULL</span>
 
     <span class="c-comment">// 遍历链表</span>
     <span class="c-variable">Node</span> <span class="c-operator">*</span>p = n1;  <span class="c-comment">// 从头节点开始</span>
     <span class="c-keyword">while</span> (p != <span class="c-number">NULL</span>) {
-        <span class="c-function">printf</span>(<span class="c-string">"%d -> "</span>, p->data);
-        p = p->next;  <span class="c-comment">// 移动到下一个节点</span>
+        <span class="c-function">printf</span>(<span class="c-string">"%d -&gt; "</span>, p-&gt;data);
+        p = p-&gt;next;  <span class="c-comment">// 移动到下一个节点</span>
     }
     <span class="c-function">printf</span>(<span class="c-string">"NULL\n"</span>);
-    <span class="c-comment">// 输出: 10 -> 20 -> 30 -> NULL</span>
+    <span class="c-comment">// 输出: 10 -&gt; 20 -&gt; 30 -&gt; NULL</span>
 
     <span class="c-comment">// 释放内存</span>
     <span class="c-function">free</span>(n1); <span class="c-function">free</span>(n2); <span class="c-function">free</span>(n3);
@@ -948,10 +949,10 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 } <span class="c-variable">Value</span>;
 
 <span class="c-keyword">void</span> <span class="c-function">print_value</span>(<span class="c-keyword">const</span> <span class="c-variable">Value</span> <span class="c-operator">*</span>v) {
-    <span class="c-keyword">switch</span> (v->type) {
-        <span class="c-keyword">case</span> TYPE_INT:    <span class="c-function">printf</span>(<span class="c-string">"int: %d\n"</span>, v->data.i_val); <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> TYPE_FLOAT:  <span class="c-function">printf</span>(<span class="c-string">"float: %.2f\n"</span>, v->data.f_val); <span class="c-keyword">break</span>;
-        <span class="c-keyword">case</span> TYPE_STRING: <span class="c-function">printf</span>(<span class="c-string">"string: %s\n"</span>, v->data.str); <span class="c-keyword">break</span>;
+    <span class="c-keyword">switch</span> (v-&gt;type) {
+        <span class="c-keyword">case</span> TYPE_INT:    <span class="c-function">printf</span>(<span class="c-string">"int: %d\n"</span>, v-&gt;data.i_val); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> TYPE_FLOAT:  <span class="c-function">printf</span>(<span class="c-string">"float: %.2f\n"</span>, v-&gt;data.f_val); <span class="c-keyword">break</span>;
+        <span class="c-keyword">case</span> TYPE_STRING: <span class="c-function">printf</span>(<span class="c-string">"string: %s\n"</span>, v-&gt;data.str); <span class="c-keyword">break</span>;
     }
 }
 
@@ -960,7 +961,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 
     v.type = TYPE_STRING;
     <span class="c-function">strcpy</span>(v.data.str, <span class="c-string">"hello union"</span>);
-    <span class="c-function">print_value</span>(&v);
+    <span class="c-function">print_value</span>(&amp;v);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -1034,9 +1035,9 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
 <span class="c-keyword">typedef</span> <span class="c-keyword">enum</span> { SPRING, SUMMER, AUTUMN, WINTER } <span class="c-variable">Season</span>;
 
 <span class="c-variable">Season</span> <span class="c-function">get_season</span>(<span class="c-keyword">int</span> month) {
-    <span class="c-keyword">if</span> (month >= <span class="c-number">3</span> && month <= <span class="c-number">5</span>)  <span class="c-keyword">return</span> SPRING;
-    <span class="c-keyword">if</span> (month >= <span class="c-number">6</span> && month <= <span class="c-number">8</span>)  <span class="c-keyword">return</span> SUMMER;
-    <span class="c-keyword">if</span> (month >= <span class="c-number">9</span> && month <= <span class="c-number">11</span>) <span class="c-keyword">return</span> AUTUMN;
+    <span class="c-keyword">if</span> (month &gt;= <span class="c-number">3</span> &amp;&amp; month &lt;= <span class="c-number">5</span>)  <span class="c-keyword">return</span> SPRING;
+    <span class="c-keyword">if</span> (month &gt;= <span class="c-number">6</span> &amp;&amp; month &lt;= <span class="c-number">8</span>)  <span class="c-keyword">return</span> SUMMER;
+    <span class="c-keyword">if</span> (month &gt;= <span class="c-number">9</span> &amp;&amp; month &lt;= <span class="c-number">11</span>) <span class="c-keyword">return</span> AUTUMN;
     <span class="c-keyword">return</span> WINTER;
 }
 
@@ -1089,7 +1090,7 @@ sizeof(s2) = 8（调整成员顺序可以节省空间）</code></pre>
     <span class="c-comment">// 不用再写 struct 关键字！</span>
     <span class="c-variable">Student</span> stu = {<span class="c-string">"张三"</span>, <span class="c-number">20</span>, <span class="c-number">89.5</span>};
     <span class="c-variable">Color</span> c = GREEN;
-    <span class="c-variable">IntPtr</span> p = <span class="c-operator">&</span>stu.age;
+    <span class="c-variable">IntPtr</span> p = <span class="c-operator">&amp;</span>stu.age;
 
     <span class="c-function">printf</span>(<span class="c-string">"%s, %d岁, %.1f分\n"</span>, stu.name, stu.age, stu.score);
     <span class="c-function">printf</span>(<span class="c-string">"颜色: %d\n"</span>, c);

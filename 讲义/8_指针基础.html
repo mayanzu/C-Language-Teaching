@@ -20,7 +20,7 @@
             <li><a href="#intro" class="active">简介</a></li>
             <li><a href="#concept">指针的概念</a></li>
             <li><a href="#declaration">指针声明与初始化</a></li>
-            <li><a href="#address-operator">&运算符</a></li>
+            <li><a href="#address-operator">&amp;运算符</a></li>
             <li><a href="#dereference-operator">*运算符</a></li>
             <li><a href="#pointer-array">指针与数组</a></li>
             <li><a href="#pointer-parameter">指针作为函数参数</a></li>
@@ -95,7 +95,7 @@
         <section id="concept" class="section">
             <h2 class="section-title">指针的概念</h2>
             <div class="callout-note">
-                <strong>NULL 指针：</strong><code>int *p = NULL;</code> 等价于 <code>int *p = 0;</code>。NULL 就是0，表示指针不指向任何有效地址。使用前必须检查：<code>if (p != NULL) { *p = 5; }</code>
+                <strong>NULL 指针：</strong><code>int *p = NULL;</code> 比较时与 <code>0</code> 相等，但类型是空指针常量（常为 <code>(void*)0</code>）。它表示指针不指向任何有效地址。使用前必须检查：<code>if (p != NULL) { *p = 5; }</code>
             </div>
 
 
@@ -120,7 +120,7 @@
 <span class="c-comment">// 0x1002: [第3个字节]</span>
 <span class="c-comment">// 0x1003: [第4个字节]</span>
 
-<span class="c-comment">// &a 就是 0x1000（变量a的起始地址）</span></code></pre>
+<span class="c-comment">// &amp;a 就是 0x1000（变量a的起始地址）</span></code></pre>
                     </div>
                 </div>
             </div>
@@ -232,11 +232,11 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
     <span class="c-keyword">int</span> *p;          <span class="c-comment">// 声明指针（未初始化，危险！）</span>
-    p = &a;             <span class="c-comment">// 初始化：让p指向a的地址</span>
+    p = &amp;a;             <span class="c-comment">// 初始化：让p指向a的地址</span>
 
     <span class="c-comment">// 也可以声明时直接初始化</span>
     <span class="c-keyword">int</span> b = <span class="c-number">20</span>;
-    <span class="c-keyword">int</span> *ptr = &b;  <span class="c-comment">// 推荐写法：声明和初始化一起</span>
+    <span class="c-keyword">int</span> *ptr = &amp;b;  <span class="c-comment">// 推荐写法：声明和初始化一起</span>
 
     <span class="c-comment">// 空指针：暂时不指向任何地址</span>
     <span class="c-keyword">int</span> *empty = <span class="c-number">NULL</span>;  <span class="c-comment">// NULL表示"空"，不指向任何有效地址</span>
@@ -267,8 +267,8 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">5</span>, b = <span class="c-number">10</span>;
-    <span class="c-keyword">int</span> *p1 = &a;
-    <span class="c-keyword">int</span> *p2 = &b;
+    <span class="c-keyword">int</span> *p1 = &amp;a;
+    <span class="c-keyword">int</span> *p2 = &amp;b;
 
     <span class="c-function">printf</span>(<span class="c-string">"*p1 + *p2 = %d\n"</span>, *p1 + *p2);
     <span class="c-function">printf</span>(<span class="c-string">"*p1 * *p2 = %d\n"</span>, *p1 * *p2);
@@ -291,25 +291,25 @@
              取地址运算符 &
              ============================================================ -->
         <section id="address-operator" class="section">
-            <h2 class="section-title">取地址运算符 &</h2>
+            <h2 class="section-title">取地址运算符 &amp;</h2>
 
             <div class="subsection">
-                <h3 class="subsection-title">&运算符</h3>
+                <h3 class="subsection-title">&amp;运算符</h3>
                 <div class="subsection-content">
                     <p><code>&amp;</code> 是一元运算符，放在变量前面，返回该变量的<strong>内存地址</strong>。</p>
 
                     <div class="code-block">
-                        <div class="code-block-title">&运算符使用</div>
+                        <div class="code-block-title">&amp;运算符使用</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">100</span>;
-    <span class="c-keyword">int</span> *p = &a;  <span class="c-comment">// &a 取得变量a的地址，赋值给指针p</span>
+    <span class="c-keyword">int</span> *p = &amp;a;  <span class="c-comment">// &amp;a 取得变量a的地址，赋值给指针p</span>
 
     <span class="c-function">printf</span>(<span class="c-string">"变量a的值: %d\n"</span>, a);
-    <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&a);
+    <span class="c-function">printf</span>(<span class="c-string">"变量a的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&amp;a);
     <span class="c-function">printf</span>(<span class="c-string">"指针p的值(存的地址): %p\n"</span>, (<span class="c-keyword">void</span> *)p);
-    <span class="c-function">printf</span>(<span class="c-string">"指针p的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&p);
+    <span class="c-function">printf</span>(<span class="c-string">"指针p的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&amp;p);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -326,7 +326,7 @@
             </div>
         </section>
             <div class="practice-box">
-                <div class="practice-box-title">边学边练 - 取地址运算符 &</div>
+                <div class="practice-box-title">边学边练 - 取地址运算符 &amp;</div>
 
 <div class="question-item">
                     <p><strong>练习2：</strong> 声明一个int变量，使用 <code>&amp;</code> 获取它的地址，定义指针保存该地址，并输出变量值、变量地址、指针值和解引用结果。</p>
@@ -338,10 +338,10 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> num = <span class="c-number">100</span>;
-    <span class="c-keyword">int</span> *ptr = &num;
+    <span class="c-keyword">int</span> *ptr = &amp;num;
 
     <span class="c-function">printf</span>(<span class="c-string">"num = %d\n"</span>, num);
-    <span class="c-function">printf</span>(<span class="c-string">"&num = %p\n"</span>, (<span class="c-keyword">void</span> *)&num);
+    <span class="c-function">printf</span>(<span class="c-string">"&amp;num = %p\n"</span>, (<span class="c-keyword">void</span> *)&amp;num);
     <span class="c-function">printf</span>(<span class="c-string">"ptr = %p\n"</span>, (<span class="c-keyword">void</span> *)ptr);
     <span class="c-function">printf</span>(<span class="c-string">"*ptr = %d\n"</span>, *ptr);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -378,7 +378,7 @@
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">100</span>;
-    <span class="c-keyword">int</span> *p = &a;
+    <span class="c-keyword">int</span> *p = &amp;a;
 
     <span class="c-function">printf</span>(<span class="c-string">"a的值: %d\n"</span>, a);       <span class="c-comment">// 直接访问a：100</span>
     <span class="c-function">printf</span>(<span class="c-string">"*p的值: %d\n"</span>, *p);      <span class="c-comment">// 解引用p：也是100</span>
@@ -400,7 +400,7 @@
             </div>
 
             <div class="subsection">
-                <h3 class="subsection-title">&和*的关系</h3>
+                <h3 class="subsection-title">&amp;和*的关系</h3>
                 <div class="subsection-content">
                     <div class="table-container">
                         <table>
@@ -437,15 +437,15 @@
                     </div>
 
                     <div class="code-block">
-                        <div class="code-block-title">&和*互为逆运算</div>
+                        <div class="code-block-title">&amp;和*互为逆运算</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>;
-    <span class="c-keyword">int</span> *p = &a;
+    <span class="c-keyword">int</span> *p = &amp;a;
 
-    <span class="c-function">printf</span>(<span class="c-string">"*&a = %d\n"</span>, *&a);  <span class="c-comment">// 等于a的值：10</span>
-    <span class="c-function">printf</span>(<span class="c-string">"&*p = %p\n"</span>, (<span class="c-keyword">void</span> *)&*p);   <span class="c-comment">// 等于p的值：a的地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"*&amp;a = %d\n"</span>, *&amp;a);  <span class="c-comment">// 等于a的值：10</span>
+    <span class="c-function">printf</span>(<span class="c-string">"&amp;*p = %p\n"</span>, (<span class="c-keyword">void</span> *)&amp;*p);   <span class="c-comment">// 等于p的值：a的地址</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -491,11 +491,11 @@ p[i]       // 指针下标法
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">10</span>, <span class="c-number">20</span>, <span class="c-number">30</span>, <span class="c-number">40</span>, <span class="c-number">50</span>};
 
     <span class="c-function">printf</span>(<span class="c-string">"arr = %p\n"</span>, (<span class="c-keyword">void</span> *)arr);        <span class="c-comment">// 数组首地址</span>
-    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] = %p\n"</span>, (<span class="c-keyword">void</span> *)&arr[<span class="c-number">0</span>]);  <span class="c-comment">// 第一个元素的地址</span>
+    <span class="c-function">printf</span>(<span class="c-string">"&amp;arr[0] = %p\n"</span>, (<span class="c-keyword">void</span> *)&amp;arr[<span class="c-number">0</span>]);  <span class="c-comment">// 第一个元素的地址</span>
     <span class="c-comment">// 两者相等！</span>
 
     <span class="c-comment">// 指针p指向数组首元素</span>
-    <span class="c-keyword">int</span> *p = arr;  <span class="c-comment">// 等价于 int *p = &arr[0];</span>
+    <span class="c-keyword">int</span> *p = arr;  <span class="c-comment">// 等价于 int *p = &amp;arr[0];</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -559,14 +559,14 @@ p[i]       // 指针下标法
 
     <span class="c-comment">// 方法1：用下标访问</span>
     <span class="c-function">printf</span>(<span class="c-string">"方法1: "</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
 
     <span class="c-comment">// 方法2：用指针遍历</span>
     <span class="c-function">printf</span>(<span class="c-string">"方法2: "</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, *(p + i));  <span class="c-comment">// 等价于arr[i]</span>
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -618,7 +618,7 @@ p[i]       // 指针下标法
     <span class="c-keyword">int</span> *p = arr;
 
     <span class="c-function">printf</span>(<span class="c-string">"sizeof(arr) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(arr));  <span class="c-comment">// 20 (5个int × 4字节)</span>
-    <span class="c-function">printf</span>(<span class="c-string">"sizeof(p) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(p));        <span class="c-comment">// 8 (指针大小，64位系统)</span>
+    <span class="c-function">printf</span>(<span class="c-string">"sizeof(p) = %zu\n"</span>, <span class="c-keyword">sizeof</span>(p));        <span class="c-comment">// 4 (VC++2010按32位计；本机64位编译则为8)</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -642,7 +642,7 @@ p[i]       // 指针下标法
     <span class="c-keyword">int</span> *p = arr;
     <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
 
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         sum += *(p + i);
     }
 
@@ -693,7 +693,7 @@ p[i]       // 指针下标法
     <span class="c-keyword">int</span> a = <span class="c-number">3</span>, b = <span class="c-number">5</span>;
     <span class="c-function">printf</span>(<span class="c-string">"交换前: a = %d, b = %d\n"</span>, a, b);
 
-    <span class="c-function">swap</span>(&a, &b);  <span class="c-comment">// 传地址过去</span>
+    <span class="c-function">swap</span>(&amp;a, &amp;b);  <span class="c-comment">// 传地址过去</span>
 
     <span class="c-function">printf</span>(<span class="c-string">"交换后: a = %d, b = %d\n"</span>, a, b);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -725,7 +725,7 @@ p[i]       // 指针下标法
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> q, r;
-    <span class="c-function">divide</span>(<span class="c-number">17</span>, <span class="c-number">5</span>, &q, &r);
+    <span class="c-function">divide</span>(<span class="c-number">17</span>, <span class="c-number">5</span>, &amp;q, &amp;r);
     <span class="c-function">printf</span>(<span class="c-string">"17 ÷ 5 = %d ... %d\n"</span>, q, r);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -744,7 +744,7 @@ p[i]       // 指针下标法
 
 <span class="c-keyword">int</span> *<span class="c-function">getPointer</span>() {
     <span class="c-keyword">int</span> num = <span class="c-number">42</span>;
-    <span class="c-keyword">return</span> &num;
+    <span class="c-keyword">return</span> &amp;num;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
@@ -896,14 +896,14 @@ p[i]       // 指针下标法
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">20</span>;
 
     <span class="c-comment">// 1. 指向常量的指针：不能通过p修改a</span>
-    <span class="c-keyword">const</span> <span class="c-keyword">int</span> <span class="c-operator">*</span>p1 = &a;
+    <span class="c-keyword">const</span> <span class="c-keyword">int</span> <span class="c-operator">*</span>p1 = &amp;a;
     <span class="c-comment">// *p1 = 30;  // 错误！不能通过p1修改</span>
-    p1 = &b;      <span class="c-comment">// 正确！可以改变指向</span>
+    p1 = &amp;b;      <span class="c-comment">// 正确！可以改变指向</span>
 
     <span class="c-comment">// 2. 常量指针：p2永远指向a</span>
-    <span class="c-keyword">int</span> <span class="c-operator">*</span> <span class="c-keyword">const</span> p2 = &a;
+    <span class="c-keyword">int</span> <span class="c-operator">*</span> <span class="c-keyword">const</span> p2 = &amp;a;
     <span class="c-operator">*</span>p2 = <span class="c-number">30</span>;    <span class="c-comment">// 正确！可以修改指向的数据</span>
-    <span class="c-comment">// p2 = &b;  // 错误！不能改变指向</span>
+    <span class="c-comment">// p2 = &amp;b;  // 错误！不能改变指向</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -998,7 +998,7 @@ p[i]       // 指针下标法
 <span class="c-comment">// 错误3：返回局部变量地址</span>
 <span class="c-keyword">int</span> *<span class="c-function">badFunc</span>() {
     <span class="c-keyword">int</span> local = <span class="c-number">100</span>;
-    <span class="c-keyword">return</span> &local;  <span class="c-comment">// 危险！函数结束后local被销毁</span>
+    <span class="c-keyword">return</span> &amp;local;  <span class="c-comment">// 危险！函数结束后local被销毁</span>
 }</code></pre>
                     </div>
                 </div>
@@ -1052,16 +1052,16 @@ p[i]       // 指针下标法
 <span class="c-keyword">void</span> <span class="c-function">findMinMax</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n, <span class="c-keyword">int</span> *pMax, <span class="c-keyword">int</span> *pMin) {
     *pMax = arr[<span class="c-number">0</span>];
     *pMin = arr[<span class="c-number">0</span>];
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i < n; i++) {
-        <span class="c-keyword">if</span> (arr[i] > *pMax) *pMax = arr[i];
-        <span class="c-keyword">if</span> (arr[i] < *pMin) *pMin = arr[i];
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt; n; i++) {
+        <span class="c-keyword">if</span> (arr[i] &gt; *pMax) *pMax = arr[i];
+        <span class="c-keyword">if</span> (arr[i] &lt; *pMin) *pMin = arr[i];
     }
 }
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">3</span>, <span class="c-number">7</span>, <span class="c-number">1</span>, <span class="c-number">9</span>, <span class="c-number">4</span>};
     <span class="c-keyword">int</span> max, min;
-    <span class="c-function">findMinMax</span>(arr, <span class="c-number">5</span>, &max, &min);
+    <span class="c-function">findMinMax</span>(arr, <span class="c-number">5</span>, &amp;max, &amp;min);
     <span class="c-function">printf</span>(<span class="c-string">"最大值: %d, 最小值: %d\n"</span>, max, min);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -1084,7 +1084,7 @@ p[i]       // 指针下标法
 
     <span class="c-comment">// 用指针遍历数组</span>
     <span class="c-keyword">int</span> *p;
-    <span class="c-keyword">for</span> (p = arr; p < arr + n; p++) {
+    <span class="c-keyword">for</span> (p = arr; p &lt; arr + n; p++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, *p);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -1111,9 +1111,9 @@ p[i]       // 指针下标法
 
 <span class="c-comment">// 用指针参数实现冒泡排序</span>
 <span class="c-keyword">void</span> <span class="c-function">bubbleSort</span>(<span class="c-keyword">int</span> *arr, <span class="c-keyword">int</span> n) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
-            <span class="c-keyword">if</span> (*(arr + j) > *(arr + j + <span class="c-number">1</span>)) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (*(arr + j) &gt; *(arr + j + <span class="c-number">1</span>)) {
                 <span class="c-keyword">int</span> temp = *(arr + j);
                 *(arr + j) = *(arr + j + <span class="c-number">1</span>);
                 *(arr + j + <span class="c-number">1</span>) = temp;
@@ -1125,7 +1125,7 @@ p[i]       // 指针下标法
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">5</span>, <span class="c-number">2</span>, <span class="c-number">8</span>, <span class="c-number">1</span>, <span class="c-number">9</span>};
     <span class="c-function">bubbleSort</span>(arr, <span class="c-number">5</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1149,7 +1149,7 @@ p[i]       // 指针下标法
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">10</span>, y = <span class="c-number">20</span>;
-    <span class="c-function">swap</span>(&x, &y);
+    <span class="c-function">swap</span>(&amp;x, &amp;y);
     <span class="c-function">printf</span>(<span class="c-string">"x=%d, y=%d\n"</span>, x, y);  <span class="c-comment">// x=20, y=10</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -1169,7 +1169,7 @@ p[i]       // 指针下标法
 <span class="c-keyword">void</span> <span class="c-function">reverse</span>(<span class="c-keyword">int</span> *arr, <span class="c-keyword">int</span> n) {
     <span class="c-keyword">int</span> *start = arr;
     <span class="c-keyword">int</span> *end = arr + n - <span class="c-number">1</span>;
-    <span class="c-keyword">while</span> (start < end) {
+    <span class="c-keyword">while</span> (start &lt; end) {
         <span class="c-keyword">int</span> temp = *start;
         *start = *end;
         *end = temp;
@@ -1181,7 +1181,7 @@ p[i]       // 指针下标法
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>};
     <span class="c-function">reverse</span>(arr, <span class="c-number">5</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }  <span class="c-comment">// 输出: 5 4 3 2 1</span>
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1218,7 +1218,7 @@ p[i]       // 指针下标法
                         <strong>掌握检查清单</strong>
                         <ul>
                             <li>能正确声明和初始化指针</li>
-                            <li>理解 & 和 * 的作用</li>
+                            <li>理解 &amp; 和 * 的作用</li>
                             <li>能用指针遍历数组</li>
                             <li>能用指针实现值交换</li>
                             <li>知道什么是野指针和空指针</li>

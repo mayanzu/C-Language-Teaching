@@ -137,7 +137,7 @@
 
             <!-- 按位与 -->
             <div class="subsection">
-                <h3 class="subsection-title">1. 按位与运算符（&）</h3>
+                <h3 class="subsection-title">1. 按位与运算符（&amp;）</h3>
                 <div class="subsection-content">
                     <p><strong>运算规则：</strong>对应位都是1时结果为1，否则为0。就像两个人都同意才能通过。</p>
                     <p><strong>应用场景：</strong>提取特定位、检查标志位、清零某些位</p>
@@ -147,12 +147,12 @@
                         <p><code>0 &amp; 0 = 0</code>，<code>0 &amp; 1 = 0</code>，<code>1 &amp; 0 = 0</code>，<code>1 &amp; 1 = 1</code></p>
                         <p><strong>示例：</strong><code>5 &amp; 3</code> 的计算过程</p>
                         <pre>  0101  (5)
-& 0011  (3)
+&amp; 0011  (3)
 --------
   0001  (1)</pre>
                     </div>
 
-                    <div class="concept-visual interactive-visual" data-visual="bitwise-playground" data-a="12" data-b="10" data-op="&">
+                    <div class="concept-visual interactive-visual" data-visual="bitwise-playground" data-a="12" data-b="10" data-op="&amp;">
                         <div class="visual-caption"><code>12 &amp; 10</code>：逐位对齐后运算</div>
                         <div class="visual-host" data-visual-host></div>
                     </div>
@@ -171,7 +171,7 @@
         <span class="c-function">printf</span>(<span class="c-string">"%d 是偶数\n"</span>, num);
     }
 
-    <span class="c-comment">// 清零低4位：与 0xFFFFFFF0 按位与</span>
+    <span class="c-comment">// 清零低4位（以8位为例：与 0xF0 按位与；32位则用 0xFFFFFFF0）</span>
     <span class="c-keyword">int</span> cleared = num &amp; <span class="c-number">0xF0</span>;  <span class="c-comment">// 保留高4位，清零低4位</span>
     <span class="c-function">printf</span>(<span class="c-string">"清零低4位: %d\n"</span>, cleared);
 
@@ -374,9 +374,9 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">5</span>;  <span class="c-comment">// 二进制: 0101</span>
 
-    <span class="c-function">printf</span>(<span class="c-string">"a << 1 = %d\n"</span>, a &lt;&lt; <span class="c-number">1</span>);  <span class="c-comment">// 10 (01010)，相当于 5*2</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a << 2 = %d\n"</span>, a &lt;&lt; <span class="c-number">2</span>);  <span class="c-comment">// 20 (10100)，相当于 5*4</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a << 3 = %d\n"</span>, a &lt;&lt; <span class="c-number">3</span>);  <span class="c-comment">// 40，相当于 5*8</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &lt;&lt; 1 = %d\n"</span>, a &lt;&lt; <span class="c-number">1</span>);  <span class="c-comment">// 10 (01010)，相当于 5*2</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &lt;&lt; 2 = %d\n"</span>, a &lt;&lt; <span class="c-number">2</span>);  <span class="c-comment">// 20 (10100)，相当于 5*4</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &lt;&lt; 3 = %d\n"</span>, a &lt;&lt; <span class="c-number">3</span>);  <span class="c-comment">// 40，相当于 5*8</span>
 
     <span class="c-comment">// 实际应用：快速计算 5 * 8</span>
     <span class="c-keyword">int</span> result = (a &lt;&lt; <span class="c-number">3</span>);  <span class="c-comment">// 比 5 * 8 更快</span>
@@ -409,8 +409,8 @@
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">unsigned int</span> a = <span class="c-number">20</span>;  <span class="c-comment">// 二进制: 10100</span>
 
-    <span class="c-function">printf</span>(<span class="c-string">"a >> 1 = %u\n"</span>, a &gt;&gt; <span class="c-number">1</span>);  <span class="c-comment">// 10，相当于 20/2</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a >> 2 = %u\n"</span>, a &gt;&gt; <span class="c-number">2</span>);  <span class="c-comment">// 5，相当于 20/4</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &gt;&gt; 1 = %u\n"</span>, a &gt;&gt; <span class="c-number">1</span>);  <span class="c-comment">// 10，相当于 20/2</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &gt;&gt; 2 = %u\n"</span>, a &gt;&gt; <span class="c-number">2</span>);  <span class="c-comment">// 5，相当于 20/4</span>
 
     <span class="c-comment">// 移位实现快速除法</span>
     <span class="c-keyword">int</span> num = <span class="c-number">100</span>;
@@ -559,14 +559,14 @@
                 <h3 class="subsection-title">计算二进制中1的个数</h3>
                 <div class="subsection-content">
                     <div class="callout-tip">
-                        <strong>n & (n-1) 技巧：</strong>这个经典技巧可以清除二进制数中最右边的1，常用于高效计算1的个数和判断2的幂。
+                        <strong>n &amp; (n-1) 技巧：</strong>这个经典技巧可以清除二进制数中最右边的1，常用于高效计算1的个数和判断2的幂。
                     </div>
 
                     <div class="code-block">
                         <div class="code-block-title">计算1的个数（汉明权重）</div>
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
-<span class="c-comment">// n & (n-1) 每次清除最低位的1</span>
+<span class="c-comment">// n &amp; (n-1) 每次清除最低位的1</span>
 <span class="c-keyword">int</span> <span class="c-function">count_ones</span>(<span class="c-keyword">unsigned int</span> n) {
     <span class="c-keyword">int</span> count = <span class="c-number">0</span>;
     <span class="c-keyword">while</span> (n) {
@@ -790,8 +790,9 @@
 int ch;
 while ((ch = fgetc(fp)) != EOF) { }
 
-// 错误：用 char 接收会导致死循环！
-// 因为读到值255的字节时，char解释为-1，误判为EOF</code></pre>
+// 错误：必须用 int 接收，不能用 char！
+// signed char读到0xFF会提前误判为EOF而提前结束；
+// unsigned char则永远不等于EOF(-1)而可能死循环</code></pre>
             </div>
 
                 <div class="subsection-content">
@@ -1024,6 +1025,7 @@ fclose(fp);</code></pre>
                                 <td>配置文件、日志</td>
                                 <td>图片、音频、结构体存储</td>
                             </tr>
+                        </tbody>
                         </table>
                     </div>
                 </div>

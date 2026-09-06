@@ -452,7 +452,7 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
 <span class="c-preprocessor">#define</span> YEAR <span class="c-number">2024</span>
 
 <span class="c-comment">// 定义带参数的宏（宏函数）</span>
-<span class="c-preprocessor">#define</span> <span class="c-function">MAX</span>(a, b) ((a) > (b) ? (a) : (b))
+<span class="c-preprocessor">#define</span> <span class="c-function">MAX</span>(a, b) ((a) &gt; (b) ? (a) : (b))
 <span class="c-preprocessor">#define</span> <span class="c-function">SQUARE</span>(x) ((x) * (x))
 <span class="c-preprocessor">#define</span> <span class="c-function">IS_EVEN</span>(n) ((n) % <span class="c-number">2</span> == <span class="c-number">0</span>)
 
@@ -489,10 +489,12 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
                     <div class="code-block">
                         <div class="code-block-title">多行宏示例</div>
                         <pre><code><span class="c-preprocessor">#define</span> <span class="c-function">PRINT_ARRAY</span>(arr, n) \
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < (n); i++) { \
-        <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, (arr)[i]); \
-    } \
-    <span class="c-function">printf</span>(<span class="c-string">"\n"</span>)</code></pre>
+    <span class="c-keyword">do</span> { \
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; (n); i++) { \
+            <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, (arr)[i]); \
+        } \
+        <span class="c-function">printf</span>(<span class="c-string">"\n"</span>); \
+    } <span class="c-keyword">while</span> (<span class="c-number">0</span>)  <span class="c-comment">// do-while(0)包裹，避免if-else悬空else问题</span></code></pre>
                     </div>
                 </div>
             </div>
@@ -617,7 +619,7 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
                         <div class="code-block">
                             <div class="code-block-title">utils.c</div>
                             <pre><code><span class="c-keyword">int</span> <span class="c-function">isLeapYear</span>(<span class="c-keyword">int</span> year) {
-    <span class="c-keyword">return</span> (year % <span class="c-number">4</span> == <span class="c-number">0</span> && year % <span class="c-number">100</span> != <span class="c-number">0</span>) || (year % <span class="c-number">400</span> == <span class="c-number">0</span>);
+    <span class="c-keyword">return</span> (year % <span class="c-number">4</span> == <span class="c-number">0</span> &amp;&amp; year % <span class="c-number">100</span> != <span class="c-number">0</span>) || (year % <span class="c-number">400</span> == <span class="c-number">0</span>);
 }</code></pre>
                         </div>
                         <div class="code-block">
@@ -762,7 +764,7 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i <= <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt;= <span class="c-number">5</span>; i++) {
         sum += i;
 <span class="c-preprocessor">#ifdef</span> DEBUG
         <span class="c-function">printf</span>(<span class="c-string">"DEBUG: i = %d, sum = %d\n"</span>, i, sum);
@@ -863,6 +865,7 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
 <span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">extern</span> <span class="c-keyword">int</span> globalCount;  <span class="c-comment">// 声明：变量在别处定义（不分配内存）</span>
+<span class="c-keyword">void</span> <span class="c-function">increment</span>(<span class="c-keyword">void</span>);  <span class="c-comment">// 函数声明：C99起调用前必须声明</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-function">increment</span>();
@@ -1177,7 +1180,7 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
                     <p><strong>练习7：</strong> 以下宏定义有什么问题？请改正：</p>
                     <div class="code-block">
                         <pre><code><span class="c-preprocessor">#define</span> <span class="c-function">DOUBLE</span>(x) x + x
-<span class="c-preprocessor">#define</span> <span class="c-function">MAX</span>(a, b) a > b ? a : b</code></pre>
+<span class="c-preprocessor">#define</span> <span class="c-function">MAX</span>(a, b) a &gt; b ? a : b</code></pre>
                     </div>
                     <details>
                         <summary>参考答案</summary>
@@ -1233,11 +1236,11 @@ int s = SQUARE(3+1);   // 3+1*3+1 = 7（不是 16！）
                         <pre><code><span class="c-keyword">#include</span> <span class="c-string">"math_utils.h"</span>
 
 <span class="c-keyword">int</span> <span class="c-function">max</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
-    <span class="c-keyword">return</span> a > b ? a : b;
+    <span class="c-keyword">return</span> a &gt; b ? a : b;
 }
 
 <span class="c-keyword">int</span> <span class="c-function">min</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {
-    <span class="c-keyword">return</span> a < b ? a : b;
+    <span class="c-keyword">return</span> a &lt; b ? a : b;
 }
 
 <span class="c-keyword">double</span> <span class="c-function">average</span>(<span class="c-keyword">int</span> a, <span class="c-keyword">int</span> b) {

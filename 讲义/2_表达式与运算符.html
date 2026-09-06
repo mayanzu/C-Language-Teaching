@@ -64,7 +64,7 @@
                     <pre><code><span class="c-keyword">int</span> a = <span class="c-number">8</span>, b = <span class="c-number">3</span>;
 
 <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a + b);      <span class="c-comment">// 11：算术表达式</span>
-<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a > b);      <span class="c-comment">// 1：关系表达式，真为1</span>
+<span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a &gt; b);      <span class="c-comment">// 1：关系表达式，真为1</span>
 <span class="c-function">printf</span>(<span class="c-string">"%d\n"</span>, a % b);      <span class="c-comment">// 2：取余</span>
 
 a += <span class="c-number">2</span>;                       <span class="c-comment">// 等价于 a = a + 2</span>
@@ -128,7 +128,7 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 表达式的值可以直接使用</span>
     <span class="c-function">printf</span>(<span class="c-string">"3 + 5 = %d\n"</span>, <span class="c-number">3</span> + <span class="c-number">5</span>);        <span class="c-comment">// 输出: 8</span>
-    <span class="c-function">printf</span>(<span class="c-string">"10 > 5 = %d\n"</span>, <span class="c-number">10</span> > <span class="c-number">5</span>);      <span class="c-comment">// 输出: 1（真）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"10 &gt; 5 = %d\n"</span>, <span class="c-number">10</span> &gt; <span class="c-number">5</span>);      <span class="c-comment">// 输出: 1（真）</span>
     
     <span class="c-comment">// 赋值表达式的值</span>
     <span class="c-keyword">int</span> a;
@@ -331,7 +331,7 @@ a = b = c = 5;   // 等价于 a = (b = (c = 5))
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> a = <span class="c-number">10</span>, b = <span class="c-number">3</span>;
 
-    <span class="c-comment">// 整数除法：结果向下取整，小数部分丢弃</span>
+    <span class="c-comment">// 整数除法：向零截断（丢弃小数部分，不是向下取整）</span>
     <span class="c-function">printf</span>(<span class="c-string">"整数除法: %d / %d = %d\n"</span>, a, b, a / b);  <span class="c-comment">// 输出: 3</span>
 
     <span class="c-comment">// 想得到小数结果？至少有一个操作数是浮点数</span>
@@ -415,7 +415,7 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
                         <strong>注意：</strong>
                         <ul>
                             <li><code>%</code> 只能用于整数，不能用于浮点数！<code>5.0 % 2</code> 是错误的</li>
-                            <li>负数取模的结果符号取决于编译器实现，建议避免对负数取模</li>
+                            <li>C99起负数取模向零截断，余数符号跟被除数（如<code>-7 % 3 == -1</code>），仍建议避免对负数取模</li>
                         </ul>
                     </div>
                 </div>
@@ -490,7 +490,7 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-comment">// 关系表达式的结果是0或1</span>
-    <span class="c-function">printf</span>(<span class="c-string">"5 > 3 = %d\n"</span>, <span class="c-number">5</span> > <span class="c-number">3</span>);    <span class="c-comment">// 输出: 1（真）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"5 &gt; 3 = %d\n"</span>, <span class="c-number">5</span> &gt; <span class="c-number">3</span>);    <span class="c-comment">// 输出: 1（真）</span>
     <span class="c-function">printf</span>(<span class="c-string">"5 &lt; 3 = %d\n"</span>, <span class="c-number">5</span> &lt; <span class="c-number">3</span>);    <span class="c-comment">// 输出: 0（假）</span>
     
     <span class="c-comment">// 任何非0值都是"真"</span>
@@ -578,7 +578,7 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
 
                     <h4>三种逻辑运算符详解</h4>
 
-                    <p><strong>1. 逻辑与 &&</strong></p>
+                    <p><strong>1. 逻辑与 &amp;&amp;</strong></p>
                     <p>逻辑与要求<strong>所有条件都为真</strong>，结果才为真。</p>
                     <ul>
                         <li><strong>语法：</strong><code>条件1 &amp;&amp; 条件2</code></li>
@@ -691,7 +691,7 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
     <span class="c-function">printf</span>(<span class="c-string">"是否及格: %d\n"</span>, score &gt;= <span class="c-number">60</span>);  <span class="c-comment">// 输出: 1（真）</span>
 
     <span class="c-comment">// 组合判断：是否在80~90之间</span>
-    <span class="c-function">printf</span>(<span class="c-string">"是否良好: %d\n"</span>, score &gt;= <span class="c-number">80</span> && score &lt; <span class="c-number">90</span>);  <span class="c-comment">// 输出: 1（真）</span>
+    <span class="c-function">printf</span>(<span class="c-string">"是否良好: %d\n"</span>, score &gt;= <span class="c-number">80</span> &amp;&amp; score &lt; <span class="c-number">90</span>);  <span class="c-comment">// 输出: 1（真）</span>
 
     <span class="c-comment">// 逻辑非：是否不及格</span>
     <span class="c-function">printf</span>(<span class="c-string">"是否不及格: %d\n"</span>, !(score &gt;= <span class="c-number">60</span>));  <span class="c-comment">// 输出: 0（假）</span>
@@ -708,14 +708,14 @@ double avg2 = (score1 + score2 + score3) / 3.0;  // avg2 = 84.33（正确）</co
 
                     <div class="code-block">
                         <div class="code-block-title">逻辑运算符优先级示例</div>
-                        <pre><code><span class="c-comment">// !a || b && !c 等价于 (!a) || (b && (!c))</span>
+                        <pre><code><span class="c-comment">// !a || b &amp;&amp; !c 等价于 (!a) || (b &amp;&amp; (!c))</span>
 <span class="c-keyword">int</span> a = <span class="c-number">1</span>, b = <span class="c-number">2</span>, c = <span class="c-number">3</span>;
-<span class="c-keyword">int</span> result = !a || b && !c;
+<span class="c-keyword">int</span> result = !a || b &amp;&amp; !c;
 
 <span class="c-comment">// 分析过程:</span>
 <span class="c-comment">// !a = !1 = 0</span>
 <span class="c-comment">// !c = !3 = 0</span>
-<span class="c-comment">// b && !c = 2 && 0 = 0</span>
+<span class="c-comment">// b &amp;&amp; !c = 2 &amp;&amp; 0 = 0</span>
 <span class="c-comment">// 0 || 0 = 0</span>
 <span class="c-function">printf</span>(<span class="c-string">"result = %d\n"</span>, result);  <span class="c-comment">// 输出: 0</span></code></pre>
                     </div>
@@ -1235,10 +1235,10 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
     <span class="c-function">printf</span>(<span class="c-string">"a + b * c = %d\n"</span>, r1);  <span class="c-comment">// 输出: 7</span>
 
     <span class="c-comment">// 示例2：关系与逻辑混合</span>
-    <span class="c-keyword">int</span> r2 = a + b &gt; c && c != <span class="c-number">0</span>;
+    <span class="c-keyword">int</span> r2 = a + b &gt; c &amp;&amp; c != <span class="c-number">0</span>;
     <span class="c-comment">// 分析: (a+b) &gt; c → 3 &gt; 3 → 0</span>
     <span class="c-comment">//       c != 0 → 1</span>
-    <span class="c-comment">//       0 && 1 → 0</span>
+    <span class="c-comment">//       0 &amp;&amp; 1 → 0</span>
     <span class="c-function">printf</span>(<span class="c-string">"结果 = %d\n"</span>, r2);  <span class="c-comment">// 输出: 0</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1269,8 +1269,8 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
                     </ul>
 
                     <div class="flow-diagram execution-flow">
-                        <div class="flow-step"><code>char</code> / <code>short</code> → <code>int</code> → <code>unsigned int</code> → <code>long</code> → <code>double</code></div>
-                        <div class="flow-step"><code>float</code> → <code>double</code></div>
+                        <div class="flow-step"><code>char</code> / <code>short</code> → <code>int</code> → <code>unsigned int</code> → <code>long</code> → <code>unsigned long</code> → <code>long long</code> → <code>unsigned long long</code> → <code>float</code> → <code>double</code> → <code>long double</code></div>
+                        <div class="flow-step"><code>float</code> → <code>double</code>（已包含在上链中）</div>
                     </div>
 
                     <div class="callout-tip">
@@ -1402,19 +1402,19 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
     <span class="c-comment">// 场景1：避免除零错误</span>
     <span class="c-keyword">int</span> x = <span class="c-number">0</span>;
     <span class="c-comment">// 如果 x != 0 为假，就不会执行 10/x，避免除零崩溃</span>
-    <span class="c-keyword">if</span> (x != <span class="c-number">0</span> && <span class="c-number">10</span> / x &gt; <span class="c-number">5</span>) {
+    <span class="c-keyword">if</span> (x != <span class="c-number">0</span> &amp;&amp; <span class="c-number">10</span> / x &gt; <span class="c-number">5</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"条件成立\n"</span>);
     } <span class="c-keyword">else</span> {
         <span class="c-function">printf</span>(<span class="c-string">"条件不成立\n"</span>);  <span class="c-comment">// 输出这个</span>
     }
 
     <span class="c-comment">// 场景2：指针保护（后续章节会学）</span>
-    <span class="c-comment">// if (ptr != NULL && *ptr &gt; 0) { ... }</span>
+    <span class="c-comment">// if (ptr != NULL &amp;&amp; *ptr &gt; 0) { ... }</span>
     <span class="c-comment">// 如果指针为空，就不会去解引用，避免崩溃</span>
 
     <span class="c-comment">// 场景3：注意自增在短路中的行为</span>
     <span class="c-keyword">int</span> a = <span class="c-number">5</span>, b = <span class="c-number">0</span>;
-    <span class="c-keyword">int</span> result = (b != <span class="c-number">0</span>) && (a++ &gt; <span class="c-number">0</span>);
+    <span class="c-keyword">int</span> result = (b != <span class="c-number">0</span>) &amp;&amp; (a++ &gt; <span class="c-number">0</span>);
     <span class="c-function">printf</span>(<span class="c-string">"a = %d\n"</span>, a);  <span class="c-comment">// 输出: 5（短路了，a++没有执行！）</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1504,10 +1504,10 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> x = <span class="c-number">0</span>;
 
-    <span class="c-keyword">if</span> (x != <span class="c-number">0</span> && <span class="c-number">10</span> / x > <span class="c-number">1</span>) {
+    <span class="c-keyword">if</span> (x != <span class="c-number">0</span> &amp;&amp; <span class="c-number">10</span> / x &gt; <span class="c-number">1</span>) {
         <span class="c-function">printf</span>(<span class="c-string">"条件成立\n"</span>);
     } <span class="c-keyword">else</span> {
-        <span class="c-function">printf</span>(<span class="c-string">"x为0，&&右侧表达式不会执行，因此不会除零。\n"</span>);
+        <span class="c-function">printf</span>(<span class="c-string">"x为0，&amp;&amp;右侧表达式不会执行，因此不会除零。\n"</span>);
     }
     
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1538,10 +1538,10 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
     <span class="c-keyword">int</span> result = (<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>);
     <span class="c-function">printf</span>(<span class="c-string">"result = %d\n"</span>, result);  <span class="c-comment">// 输出: result = 3</span>
 
-    <span class="c-comment">// 常见用法：for循环中同时操作多个变量</span>
+    <span class="c-comment">// 常见用法：for循环中同时操作多个变量（注意更新顺序：先累加再自增）</span>
     <span class="c-keyword">int</span> sum = <span class="c-number">0</span>, i;
-    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i <= <span class="c-number">10</span>; i++, sum += i)
-        ;  <span class="c-comment">// 空循环体，逗号表达式在更新部分同时执行两个操作</span>
+    <span class="c-keyword">for</span> (i = <span class="c-number">1</span>; i &lt;= <span class="c-number">10</span>; sum += i, i++)
+        ;  <span class="c-comment">// 空循环体，逗号表达式在更新部分同时执行两个操作，求和1..10得55</span>
     <span class="c-function">printf</span>(<span class="c-string">"sum = %d\n"</span>, sum);
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1695,11 +1695,11 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
     <span class="c-keyword">unsigned int</span> a = <span class="c-number">5</span>;  <span class="c-comment">// 二进制: 0101</span>
     <span class="c-keyword">unsigned int</span> b = <span class="c-number">3</span>;  <span class="c-comment">// 二进制: 0011</span>
 
-    <span class="c-function">printf</span>(<span class="c-string">"a & b = %d\n"</span>, a & b);   <span class="c-comment">// 0001 = 1</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &amp; b = %d\n"</span>, a &amp; b);   <span class="c-comment">// 0001 = 1</span>
     <span class="c-function">printf</span>(<span class="c-string">"a | b = %d\n"</span>, a | b);   <span class="c-comment">// 0111 = 7</span>
     <span class="c-function">printf</span>(<span class="c-string">"a ^ b = %d\n"</span>, a ^ b);   <span class="c-comment">// 0110 = 6</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a << 1 = %d\n"</span>, a << <span class="c-number">1</span>); <span class="c-comment">// 1010 = 10</span>
-    <span class="c-function">printf</span>(<span class="c-string">"a >> 1 = %d\n"</span>, a >> <span class="c-number">1</span>); <span class="c-comment">// 0010 = 2</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &lt;&lt; 1 = %d\n"</span>, a &lt;&lt; <span class="c-number">1</span>); <span class="c-comment">// 1010 = 10</span>
+    <span class="c-function">printf</span>(<span class="c-string">"a &gt;&gt; 1 = %d\n"</span>, a &gt;&gt; <span class="c-number">1</span>); <span class="c-comment">// 0010 = 2</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
@@ -1727,7 +1727,7 @@ int c = ++a;  // a = 7，c = 7（先自增后赋值）</code></pre>
                             <pre><code>  12 = 1100
   10 = 1010
   ---------
-  &   = 1000 = 8</code></pre>
+  &amp;   = 1000 = 8</code></pre>
                             <p>所以 <code>12 &amp; 10 = 8</code></p>
                         </div>
                     </details>

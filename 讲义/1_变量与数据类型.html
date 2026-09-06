@@ -405,7 +405,7 @@ average = total_score / student_count;  // 计算平均分</code></pre>
                         <p>int类型有范围限制（通常是-2147483648到2147483647）。如果计算结果超出这个范围，就会发生<strong>溢出</strong>，导致结果错误。</p>
                         <pre><code>int a = 2000000000;
 int b = 2000000000;
-int c = a + b;  // 结果溢出！变成负数</code></pre>
+int c = a + b;  // 有符号溢出属未定义行为！VC补码机上通常回绕为负数，不要依赖</code></pre>
                         <p><strong>解决方法：</strong>使用更大范围的类型如<code>long long</code>，或在计算前检查数值范围。</p>
                     </div>
                 </div>
@@ -611,7 +611,7 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
     <span class="c-keyword">int</span> max = <span class="c-function">INT_MAX</span>;  <span class="c-comment">// 2147483647</span>
     <span class="c-function">printf</span>(<span class="c-string">"int最大值: %d\n"</span>, max);
-    <span class="c-function">printf</span>(<span class="c-string">"最大值+1: %d\n"</span>, max + <span class="c-number">1</span>);  <span class="c-comment">// 溢出！变成负数</span>
+    <span class="c-function">printf</span>(<span class="c-string">"最大值+1: %d\n"</span>, max + <span class="c-number">1</span>);  <span class="c-comment">// 有符号溢出属未定义行为！VC补码机上通常回绕为-2147483648，不要依赖</span>
 
     <span class="c-comment">// 用long long安全地存放大数</span>
     <span class="c-keyword">long long</span> big = (<span class="c-keyword">long long</span>)max + <span class="c-number">1</span>;
@@ -796,7 +796,7 @@ int c = a + b;  // 结果溢出！变成负数</code></pre>
                         <pre><code>#include &lt;math.h&gt;  // 需要包含数学库
 
 // 判断两个浮点数是否相等
-if (fabs(a - b) < 0.000001) {
+if (fabs(a - b) &lt; 0.000001) {
     printf("a和b相等\n");
 }</code></pre>
                     </div>
@@ -895,10 +895,11 @@ if (fabs(a - b) < 0.000001) {
                         <svg class="icon" width="16" height="16"><use href="icons.svg#icon-warning"></use></svg>
                         <strong>signed char 溢出陷阱（二级考点）：</strong>
                         <p>signed char 的范围是 -128 到 127（不是 -127 到 127！）。当赋值超出范围时，会发生溢出：</p>
-                        <pre><code>signed char c = 200;   // 200 超出127，溢出！实际值 = 200 - 256 = -56
-signed char c = 128;   // 128 超出127，溢出！实际值 = 128 - 256 = -128
-signed char c = 255;   // 溢出！实际值 = 255 - 256 = -1
-unsigned char c = -1;  // -1 转无符号：实际值 = 256 - 1 = 255</code></pre>
+                        <pre><code>signed char c1 = 200;   // 200 超出127，溢出！实际值 = 200 - 256 = -56
+signed char c2 = 128;   // 128 超出127，溢出！实际值 = 128 - 256 = -128
+signed char c3 = 255;   // 溢出！实际值 = 255 - 256 = -1
+unsigned char c4 = -1;  // -1 转无符号：实际值 = 256 - 1 = 255</code></pre>
+                        <p>注：以上4行请分开单独编译验证，写在同一作用域会重定义报错。</p>
                         <p>原理：char 只有1字节（8位），存不下就丢弃高位，按补码解释结果。</p>
                     </div>
 
@@ -1410,10 +1411,10 @@ unsigned char c = -1;  // -1 转无符号：实际值 = 256 - 1 = 255</code></pr
                             <pre><code><span class="c-keyword">#include</span> <span class="c-string">&lt;stdio.h&gt;</span>
 
 <span class="c-keyword">int</span> <span class="c-function">main</span>() {
-    <span class="c-keyword">_Bool</span> is_greater = <span class="c-number">5</span> > <span class="c-number">3</span>;    <span class="c-comment">// 5大于3，结果为真(1)</span>
+    <span class="c-keyword">_Bool</span> is_greater = <span class="c-number">5</span> &gt; <span class="c-number">3</span>;    <span class="c-comment">// 5大于3，结果为真(1)</span>
     <span class="c-keyword">_Bool</span> is_equal = <span class="c-number">10</span> == <span class="c-number">20</span>;   <span class="c-comment">// 10等于20，结果为假(0)</span>
     
-    <span class="c-function">printf</span>(<span class="c-string">"5 > 3 的结果是: %d\n"</span>, is_greater);
+    <span class="c-function">printf</span>(<span class="c-string">"5 &gt; 3 的结果是: %d\n"</span>, is_greater);
     <span class="c-function">printf</span>(<span class="c-string">"10 == 20 的结果是: %d\n"</span>, is_equal);
     <span class="c-function">printf</span>(<span class="c-string">"非0值-1的布尔值: %d\n"</span>, (<span class="c-keyword">_Bool</span>)(-<span class="c-number">1</span>));
     <span class="c-function">printf</span>(<span class="c-string">"0的布尔值: %d\n"</span>, (<span class="c-keyword">_Bool</span>)<span class="c-number">0</span>);

@@ -191,7 +191,7 @@ int a[5];                // 垃圾值，不是0！</code></pre>
     scores[<span class="c-number">2</span>] = <span class="c-number">80</span>;  <span class="c-comment">// 将第三个成绩改为80</span>
 
     <span class="c-comment">// 遍历数组</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"成绩%d: %d\n"</span>, i + <span class="c-number">1</span>, scores[i]);
     }
 
@@ -257,7 +257,7 @@ int a[5];                // 垃圾值，不是0！</code></pre>
 
     <span class="c-comment">// 数组名就是首元素的地址</span>
     <span class="c-function">printf</span>(<span class="c-string">"arr 的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)arr);
-    <span class="c-function">printf</span>(<span class="c-string">"&arr[0] 的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&arr[<span class="c-number">0</span>]);
+    <span class="c-function">printf</span>(<span class="c-string">"&amp;arr[0] 的地址: %p\n"</span>, (<span class="c-keyword">void</span> *)&amp;arr[<span class="c-number">0</span>]);
     <span class="c-comment">// 两者输出相同！</span>
 
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -282,13 +282,13 @@ int a[5];                // 垃圾值，不是0！</code></pre>
 
     <span class="c-comment">// 输入5个数</span>
     <span class="c-function">printf</span>(<span class="c-string">"请输入5个整数:\n"</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">5</span>; i++) {
-        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &arr[i]);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">5</span>; i++) {
+        <span class="c-function">scanf</span>(<span class="c-string">"%d"</span>, &amp;arr[i]);
     }
 
     <span class="c-comment">// 逆序输出</span>
     <span class="c-function">printf</span>(<span class="c-string">"逆序输出: "</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">4</span>; i >= <span class="c-number">0</span>; i--) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">4</span>; i &gt;= <span class="c-number">0</span>; i--) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -337,8 +337,8 @@ int a[5];                // 垃圾值，不是0！</code></pre>
     <span class="c-function">printf</span>(<span class="c-string">"第3行第4列: %d\n"</span>, matrix[<span class="c-number">2</span>][<span class="c-number">3</span>]);  <span class="c-comment">// 12</span>
 
     <span class="c-comment">// 用双重循环遍历</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < <span class="c-number">4</span>; j++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; <span class="c-number">4</span>; j++) {
             <span class="c-function">printf</span>(<span class="c-string">"%4d"</span>, matrix[i][j]);
         }
         <span class="c-function">printf</span>(<span class="c-string">"\n"</span>);
@@ -375,9 +375,9 @@ int a[5];                // 垃圾值，不是0！</code></pre>
     };
 
     <span class="c-comment">// 计算每个学生的平均分</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
         <span class="c-keyword">float</span> sum = <span class="c-number">0</span>;
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < <span class="c-number">3</span>; j++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; <span class="c-number">3</span>; j++) {
             sum += scores[i][j];
         }
         <span class="c-function">printf</span>(<span class="c-string">"学生%d的平均分: %.1f\n"</span>, i + <span class="c-number">1</span>, sum / <span class="c-number">3</span>);
@@ -407,9 +407,9 @@ int a[5];                // 垃圾值，不是0！</code></pre>
         {<span class="c-number">76</span>, <span class="c-number">81</span>, <span class="c-number">79</span>}
     };
 
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < <span class="c-number">3</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; <span class="c-number">3</span>; i++) {
         <span class="c-keyword">int</span> sum = <span class="c-number">0</span>;
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < <span class="c-number">3</span>; j++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; <span class="c-number">3</span>; j++) {
             sum += scores[i][j];
         }
         <span class="c-function">printf</span>(<span class="c-string">"学生%d平均分: %.1f\n"</span>, i + <span class="c-number">1</span>, sum / <span class="c-number">3.0</span>);
@@ -764,9 +764,9 @@ strlen(s2);  // 不确定（越界！）</code></pre>
 
     <span class="c-comment">// 冒泡排序：从大到小排？还是从小到大？</span>
     <span class="c-comment">// 这里是从小到大（升序）</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {          <span class="c-comment">// 外层：控制轮数</span>
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {    <span class="c-comment">// 内层：相邻比较</span>
-            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {         <span class="c-comment">// 前面比后面大？</span>
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n - <span class="c-number">1</span>; i++) {          <span class="c-comment">// 外层：控制轮数</span>
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; n - <span class="c-number">1</span> - i; j++) {    <span class="c-comment">// 内层：相邻比较</span>
+            <span class="c-keyword">if</span> (arr[j] &gt; arr[j + <span class="c-number">1</span>]) {         <span class="c-comment">// 前面比后面大？</span>
                 <span class="c-comment">// 交换！借助临时变量</span>
                 <span class="c-keyword">int</span> temp = arr[j];
                 arr[j] = arr[j + <span class="c-number">1</span>];
@@ -777,7 +777,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
 
     <span class="c-comment">// 输出排序结果</span>
     <span class="c-function">printf</span>(<span class="c-string">"排序后: "</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-comment">// 输出: 排序后: 11 12 22 25 34 64 90</span>
@@ -804,7 +804,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     <span class="c-keyword">int</span> found = <span class="c-number">-1</span>;   <span class="c-comment">// 记录找到的位置，-1表示没找到</span>
 
     <span class="c-comment">// 顺序查找：逐个比较</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-keyword">if</span> (arr[i] == target) {
             found = i;
             <span class="c-keyword">break</span>;  <span class="c-comment">// 找到就退出循环</span>
@@ -862,9 +862,9 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     <span class="c-keyword">int</span> max = arr[<span class="c-number">0</span>], min = arr[<span class="c-number">0</span>];
     <span class="c-keyword">int</span> maxIdx = <span class="c-number">0</span>, minIdx = <span class="c-number">0</span>;
 
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i < n; i++) {
-        <span class="c-keyword">if</span> (arr[i] > max) { max = arr[i]; maxIdx = i; }
-        <span class="c-keyword">if</span> (arr[i] < min) { min = arr[i]; minIdx = i; }
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">1</span>; i &lt; n; i++) {
+        <span class="c-keyword">if</span> (arr[i] &gt; max) { max = arr[i]; maxIdx = i; }
+        <span class="c-keyword">if</span> (arr[i] &lt; min) { min = arr[i]; minIdx = i; }
     }
 
     <span class="c-function">printf</span>(<span class="c-string">"最大值: %d (下标%d)\n"</span>, max, maxIdx);
@@ -991,9 +991,9 @@ strlen(s2);  // 不确定（越界！）</code></pre>
 <span class="c-comment">// 打印整型数组的辅助函数</span>
 <span class="c-keyword">void</span> <span class="c-function">printArray</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n) {
     <span class="c-function">printf</span>(<span class="c-string">"数组内容: ["</span>);
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d"</span>, arr[i]);
-        <span class="c-keyword">if</span> (i < n - <span class="c-number">1</span>) <span class="c-function">printf</span>(<span class="c-string">", "</span>);
+        <span class="c-keyword">if</span> (i &lt; n - <span class="c-number">1</span>) <span class="c-function">printf</span>(<span class="c-string">", "</span>);
     }
     <span class="c-function">printf</span>(<span class="c-string">"]\n"</span>);
 }
@@ -1053,9 +1053,9 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
 
     <span class="c-comment">// 冒泡排序：外层控制轮数，内层控制比较</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j < n - <span class="c-number">1</span> - i; j++) {
-            <span class="c-keyword">if</span> (arr[j] > arr[j + <span class="c-number">1</span>]) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n - <span class="c-number">1</span>; i++) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = <span class="c-number">0</span>; j &lt; n - <span class="c-number">1</span> - i; j++) {
+            <span class="c-keyword">if</span> (arr[j] &gt; arr[j + <span class="c-number">1</span>]) {
                 <span class="c-comment">// 交换相邻元素</span>
                 <span class="c-keyword">int</span> temp = arr[j];
                 arr[j] = arr[j + <span class="c-number">1</span>];
@@ -1065,7 +1065,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     }
 
     <span class="c-comment">// 输出排序结果</span>
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     }
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
@@ -1101,11 +1101,11 @@ strlen(s2);  // 不确定（越界！）</code></pre>
     <span class="c-keyword">int</span> arr[] = {<span class="c-number">64</span>, <span class="c-number">25</span>, <span class="c-number">12</span>, <span class="c-number">22</span>, <span class="c-number">11</span>};
     <span class="c-keyword">int</span> n = <span class="c-number">5</span>;
 
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n - <span class="c-number">1</span>; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n - <span class="c-number">1</span>; i++) {
         <span class="c-keyword">int</span> min_idx = i;
         <span class="c-comment">// 找未排序部分的最小值下标</span>
-        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = i + <span class="c-number">1</span>; j < n; j++) {
-            <span class="c-keyword">if</span> (arr[j] < arr[min_idx]) {
+        <span class="c-keyword">for</span> (<span class="c-keyword">int</span> j = i + <span class="c-number">1</span>; j &lt; n; j++) {
+            <span class="c-keyword">if</span> (arr[j] &lt; arr[min_idx]) {
                 min_idx = j;
             }
         }
@@ -1117,7 +1117,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
         }
     }
 
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) <span class="c-function">printf</span>(<span class="c-string">"%d "</span>, arr[i]);
     <span class="c-keyword">return</span> <span class="c-number">0</span>;
 }</code></pre>
                     </div>
@@ -1139,7 +1139,7 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                         <div class="code-block-title">线性查找</div>
                         <pre><code><span class="c-comment">// 在数组中查找目标值，返回下标（找不到返回-1）</span>
 <span class="c-keyword">int</span> <span class="c-function">search</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n, <span class="c-keyword">int</span> target) {
-    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i < n; i++) {
+    <span class="c-keyword">for</span> (<span class="c-keyword">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
         <span class="c-keyword">if</span> (arr[i] == target) <span class="c-keyword">return</span> i;
     }
     <span class="c-keyword">return</span> -<span class="c-number">1</span>;
@@ -1159,10 +1159,10 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                         <pre><code><span class="c-comment">// 在已排序数组中查找，返回下标（找不到返回-1）</span>
 <span class="c-keyword">int</span> <span class="c-function">binarySearch</span>(<span class="c-keyword">int</span> arr[], <span class="c-keyword">int</span> n, <span class="c-keyword">int</span> target) {
     <span class="c-keyword">int</span> left = <span class="c-number">0</span>, right = n - <span class="c-number">1</span>;
-    <span class="c-keyword">while</span> (left <= right) {
+    <span class="c-keyword">while</span> (left &lt;= right) {
         <span class="c-keyword">int</span> mid = (left + right) / <span class="c-number">2</span>;
         <span class="c-keyword">if</span> (arr[mid] == target) <span class="c-keyword">return</span> mid;
-        <span class="c-keyword">else if</span> (arr[mid] < target) left = mid + <span class="c-number">1</span>;
+        <span class="c-keyword">else if</span> (arr[mid] &lt; target) left = mid + <span class="c-number">1</span>;
         <span class="c-keyword">else</span> right = mid - <span class="c-number">1</span>;
     }
     <span class="c-keyword">return</span> -<span class="c-number">1</span>;
@@ -1202,8 +1202,8 @@ strlen(s2);  // 不确定（越界！）</code></pre>
                     <details>
                         <summary>参考答案</summary>
                         <div class="callout-tip">
-                            <pre><code>初始: left=0, right=9, mid=4 → arr[4]=16 < 23 → left=5
-第2步: left=5, right=9, mid=7 → arr[7]=56 > 23 → right=6
+                            <pre><code>初始: left=0, right=9, mid=4 → arr[4]=16 &lt; 23 → left=5
+第2步: left=5, right=9, mid=7 → arr[7]=56 &gt; 23 → right=6
 第3步: left=5, right=6, mid=5 → arr[5]=23 == 23 → 找到！下标=5</code></pre>
                         </div>
                     </details>
